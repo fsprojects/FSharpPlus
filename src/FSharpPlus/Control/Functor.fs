@@ -158,7 +158,7 @@ type Unzip =
     #endif
 
     static member        Unzip ((source: Async<'T * 'U>                    , _output: Async<'T> * Async<'U>                                ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    static member        Unzip ((source: Result<'T * 'U, 'E>               , _output: Result<'T,'E> * Result<'U,'E>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: Result<'T * 'U, 'E>               , _output: Result<'T,'E> * Result<'U,'E>                        ) , _mthd: Unzip   ) = Result.unzip source
     static member        Unzip ((source: Choice<'T * 'U, 'E>               , _output: Choice<'T,'E> * Choice<'U,'E>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip ((source: KeyValuePair<'Key, 'T * 'U>       , _output: KeyValuePair<_, 'T> * KeyValuePair<_, 'U>            ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     static member        Unzip ((source: Map<'Key, 'T * 'U>                , _output: Map<_, 'T> * Map<_, 'U>                              ) , _mthd: Unzip   ) = Map.unzip    source
@@ -205,6 +205,7 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zipShortest       x y
     static member Zip ((x: ResizeArray<'T>            , y: ResizeArray<'U>           , _output: ResizeArray<'T*'U>           ), _mthd: Zip) = ResizeArray.zipShortest x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip              x y
+    static member Zip ((x: Result<'T, 'Error>         , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.zip              x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y

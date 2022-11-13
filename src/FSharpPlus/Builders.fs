@@ -125,7 +125,11 @@ module GenericBuilders =
         member        _.ReturnFrom (expr) = expr                                        : '``monad<'t>``
         member inline _.Return (x: 'T) = result x                                       : '``Monad<'T>``
         member inline _.Yield  (x: 'T) = result x                                       : '``Monad<'T>``
+        #if !NET45
+        member inline _.Bind (p: '``Monad<'T>``, [<InlineIfLambda>]rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
+        #else
         member inline _.Bind (p: '``Monad<'T>``, rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
+        #endif
         member inline _.MergeSources  (t1: '``Monad<'T>``, t2: '``Monad<'U>``)          : '``Monad<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
         member inline _.MergeSources3 (t1: '``Monad<'T>``, t2: '``Monad<'U>``, t3: '``Monad<'V>``) : '``Monad<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
 
@@ -149,32 +153,61 @@ module GenericBuilders =
 
     type StrictBuilder<'``monad<'t>``> () =
         inherit Builder<'``monad<'t>``> ()
-        member        _.Delay expr = expr : unit -> '``Monad<'T>``
-        member        _.Run f = f ()              : '``monad<'t>``
+        #if !NET45
+        member inline _.Delay ([<InlineIfLambda>]expr) = expr : unit -> '``Monad<'T>``
+        member inline _.Run ([<InlineIfLambda>]f) = f ()              : '``monad<'t>``
+        member inline _.TryWith    ([<InlineIfLambda>]expr, [<InlineIfLambda>]handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
+        member inline _.TryFinally ([<InlineIfLambda>]expr, [<InlineIfLambda>]compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
+        
+        member inline _.Using (disposable: #IDisposable, [<InlineIfLambda>]body) = Using.Invoke disposable body
+        #else
+        member inline _.Delay (expr) = expr : unit -> '``Monad<'T>``
+        member inline _.Run (f) = f ()              : '``monad<'t>``
         member inline _.TryWith    (expr, handler)      = TryWith.InvokeForStrict    expr handler      : '``Monad<'T>``
         member inline _.TryFinally (expr, compensation) = TryFinally.InvokeForStrict expr compensation : '``Monad<'T>``
         
         member inline _.Using (disposable: #IDisposable, body) = Using.Invoke disposable body
+        #endif
 
     type DelayedBuilder<'``monad<'t>``> () =
         inherit Builder<'``monad<'t>``> ()
+        #if !NET45
+        member inline _.Delay ([<InlineIfLambda>]expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
+        member        _.Run f = f                                           : '``monad<'t>``
+        member inline _.TryWith    (expr, [<InlineIfLambda>]handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
+        member inline _.TryFinally (expr, [<InlineIfLambda>]compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
+        member inline _.Using (disposable: #IDisposable, [<InlineIfLambda>]body) = Using.Invoke disposable body : '``Monad<'T>``
+        #else
         member inline _.Delay (expr: _->'``Monad<'T>``) = Delay.Invoke expr : '``Monad<'T>``
         member        _.Run f = f                                           : '``monad<'t>``
         member inline _.TryWith    (expr, handler     ) = TryWith.Invoke    expr handler      : '``Monad<'T>``
         member inline _.TryFinally (expr, compensation) = TryFinally.Invoke expr compensation : '``Monad<'T>``
         member inline _.Using (disposable: #IDisposable, body) = Using.Invoke disposable body : '``Monad<'T>``
+        #endif
 
     type MonadPlusStrictBuilder<'``monad<'t>``> () =
         inherit StrictBuilder<'``monad<'t>``> ()
         member        _.YieldFrom expr = expr                           : '``monad<'t>``
         member inline _.Zero () = Empty.Invoke ()                       : '``MonadPlus<'T>``
+        #if !NET45
+        member inline _.Combine (a: '``MonadPlus<'T>``, [<InlineIfLambda>]b) = a <|> b () : '``MonadPlus<'T>``
+        #else
         member inline _.Combine (a: '``MonadPlus<'T>``, b) = a <|> b () : '``MonadPlus<'T>``
+        #endif
+        #if !NET45
+        member inline _.While ([<InlineIfLambda>]guard, [<InlineIfLambda>]body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+        #else
         member inline _.While (guard, body: unit -> '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+        #endif
             let rec loop guard body =
                 if guard () then body () <|> loop guard body
                 else Empty.Invoke ()
             loop guard body
+        #if !NET45
+        member inline this.For (p: #seq<'T>, [<InlineIfLambda>]rest: 'T->'``MonadPlus<'U>``) =
+        #else
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) =
+        #endif
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``MonadPlus<'U>``)
@@ -183,14 +216,26 @@ module GenericBuilders =
         inherit StrictBuilder<'``monad<'t>``> ()
         
         member inline _.Zero () = result ()                                       : '``Monad<unit>``
+        #if !NET45
+        member inline _.Combine (a: '``Monad<unit>``, [<InlineIfLambda>]b) = a >>= (fun () -> b ()) : '``Monad<'T>``
+        #else
         member inline _.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b ()) : '``Monad<'T>``
+        #endif
         
+        #if !NET45
+        member inline _.While ([<InlineIfLambda>]guard, [<InlineIfLambda>]body: unit -> '``Monad<unit>``)             : '``Monad<unit>`` =
+        #else
         member inline _.While (guard, body: unit -> '``Monad<unit>``)             : '``Monad<unit>`` =
+        #endif
             let rec loop guard body =
                 if guard () then body () >>= fun () -> loop guard body
                 else result ()
             loop guard body
+        #if !NET45
+        member inline this.For (p: #seq<'T>, [<InlineIfLambda>]rest: 'T->'``Monad<unit>``) =
+        #else
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) =
+        #endif
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
                 let enum = enum :?> IEnumerator<_>
                 this.While (enum.MoveNext, fun () -> rest enum.Current) : '``Monad<unit>``)
@@ -202,17 +247,29 @@ module GenericBuilders =
         member inline _.Zero () = Empty.Invoke ()                    : '``MonadPlus<'T>``
         member inline _.Combine (a: '``MonadPlus<'T>``, b) = a <|> b : '``MonadPlus<'T>``
 
+        #if !NET45
+        member inline _.WhileImpl ([<InlineIfLambda>]guard, body: '``MonadPlus<'T>``)  : '``MonadPlus<'T>`` =
+        #else
         member inline _.WhileImpl (guard, body: '``MonadPlus<'T>``)  : '``MonadPlus<'T>`` =
+        #endif
             let rec fix () = Delay.Invoke (fun () -> if guard () then body <|> fix () else Empty.Invoke ())
             fix ()
         
+        #if !NET45
+        member inline this.While ([<InlineIfLambda>]guard, body: '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+        #else
         member inline this.While (guard, body: '``MonadPlus<'T>``) : '``MonadPlus<'T>`` =
+        #endif
             // Check the type is lazy, otherwise display a warning.
             let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``MonadPlus<'T>``>) (fun (_: exn) -> Unchecked.defaultof<'``MonadPlus<'T>``>) : '``MonadPlus<'T>``
 
             this.WhileImpl (guard, body)
 
+        #if !NET45
+        member inline this.For (p: #seq<'T>, [<InlineIfLambda>]rest: 'T->'``MonadPlus<'U>``) : '``MonadPlus<'U>`` =
+        #else
         member inline this.For (p: #seq<'T>, rest: 'T->'``MonadPlus<'U>``) : '``MonadPlus<'U>`` =
+        #endif
             let mutable isReallyDelayed = true
             Delay.Invoke (fun () -> isReallyDelayed <- false; Empty.Invoke () : '``MonadPlus<'U>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
@@ -240,18 +297,30 @@ module GenericBuilders =
 
         member inline _.Combine (a: '``Monad<unit>``, b) = a >>= (fun () -> b) : '``Monad<'T>``
         
+        #if !NET45
+        member inline _.WhileImpl ([<InlineIfLambda>]guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+        #else
         member inline _.WhileImpl (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+        #endif
             let rec loop guard body =
                 if guard () then body >>= (fun () -> loop guard body)
                 else result ()
             loop guard body
 
+        #if !NET45
+        member inline this.While ([<InlineIfLambda>]guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+        #else
         member inline this.While (guard, body: '``Monad<unit>``) : '``Monad<unit>`` =
+        #endif
             // Check the type is lazy, otherwise display a warning.
             let __ ()  = TryWith.InvokeForWhile (Unchecked.defaultof<'``Monad<unit>``>) (fun (_: exn) -> Unchecked.defaultof<'``Monad<unit>``>) : '``Monad<unit>``
             this.WhileImpl (guard, body)
 
+        #if !NET45
+        member inline this.For (p: #seq<'T>, [<InlineIfLambda>]rest: 'T->'``Monad<unit>``) : '``Monad<unit>``=
+        #else
         member inline this.For (p: #seq<'T>, rest: 'T->'``Monad<unit>``) : '``Monad<unit>``=
+        #endif
             let mutable isReallyDelayed = true
             Delay.Invoke (fun () -> isReallyDelayed <- false; Return.Invoke () : '``Monad<unit>``) |> ignore
             Using.Invoke (p.GetEnumerator () :> IDisposable) (fun enum ->
@@ -265,7 +334,11 @@ module GenericBuilders =
         member        _.ReturnFrom (expr) = expr   : '``applicative<'t>``
         member inline _.Return (x: 'T) = result x  : '``Applicative<'T>``
         member inline _.Yield  (x: 'T) = result x  : '``Applicative<'T>``
+        #if !NET45
+        member inline _.BindReturn(x, [<InlineIfLambda>]f) = map f x : '``Applicative<'U>``
+        #else
         member inline _.BindReturn(x, f) = map f x : '``Applicative<'U>``
+        #endif
         member inline _.MergeSources  (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``) : '``Applicative<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
         member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
         member        _.Run f = f : '``applicative<'t>``
@@ -275,7 +348,11 @@ module GenericBuilders =
         member        _.ReturnFrom expr : '``applicative1<applicative2<'t>>`` = expr
         member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (result >> result) x
         member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (result >> result) x
+        #if !NET45
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        #else
         member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        #endif
         member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (lift2 >> lift2) tuple2 t1 t2
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (lift3 >> lift3) tuple3 t1 t2 t3
         member        _.Run x : '``applicative1<applicative2<'t>>`` = x
@@ -285,7 +362,11 @@ module GenericBuilders =
         member        _.ReturnFrom expr : '``applicative1<applicative2<applicative3<'t>>>`` = expr
         member inline _.Return (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (result >> result >> result) x
         member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (result >> result >> result) x
+        #if !NET45
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        #else
         member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        #endif
         member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift2 >> lift2 >> lift2) tuple2 t1 t2
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift3 >> lift3 >> lift3) tuple3 t1 t2 t3
         member        _.Run x : '``applicative1<applicative2<applicative3<'t>>>`` = x
