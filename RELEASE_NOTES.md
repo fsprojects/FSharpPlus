@@ -1,3 +1,17 @@
+#### 1.3.0  - November 13 2022
+ - Proper SeqT implementation
+ - Applicative Computation Expressions
+ - Use F# Core 6.0.6
+ - Speed up List and Array extensions using Collectors
+ - Use FSharp.Core implementations for old functions that were adopted there
+ - Add some missing Option, Result zip functions
+ - Add explicit type parameters
+ - Use InlineIfLambda attribute in CEs
+ - Some missing Option, Result zip functions
+ - Add NonEmptyList.sequence
+ - Improve null handling
+ - Fix: Free.map3
+
 #### 1.2.4  - May 5 2022
 - Fix: Fable regressions
 - Add additional applicative operators directly to types
