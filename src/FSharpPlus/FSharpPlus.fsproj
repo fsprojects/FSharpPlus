@@ -14,10 +14,7 @@
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags>--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -125,6 +122,7 @@
     <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="4.6.2" Condition=" '$(TargetFramework)' == 'net45'" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" Condition=" '$(TargetFramework)' != 'net45'" />
   </ItemGroup>
 </Project>

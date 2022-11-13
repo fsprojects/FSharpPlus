@@ -296,7 +296,7 @@ module Operators =
     /// Combines two monoids in one.
     /// </summary>
     /// <category index="4">Monoid</category>
-    let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
+    let inline plus< ^Monoid when (Plus or ^Monoid) : (static member ``+`` : ^Monoid * ^Monoid * Plus -> ^Monoid)> (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
 
     
     module Seq =
@@ -304,7 +304,7 @@ module Operators =
         /// Folds all values in the sequence using the monoidal addition.
         /// </summary>
         /// <category index="4">Monoid</category>
-        let inline sum (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
+        let inline sum< ^Monoid when (Sum or seq< ^Monoid> or ^Monoid) : (static member Sum: seq<'Monoid> * 'Monoid * Sum -> 'Monoid)> (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -335,7 +335,9 @@ module Operators =
     /// Common uses of guard include conditionally signaling an error in an error monad and conditionally rejecting the current choice in an Alternative-based parser.
     /// </summary>
     /// <category index="5">Alternative/Monadplus/Arrowplus</category>
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
+    let inline guard< ^``MonadPlus<unit>`` when (Return or ^``MonadPlus<unit>``) :
+        (static member Return: ^``MonadPlus<unit>`` * Return -> (unit -> ^``MonadPlus<unit>``)) and
+        (Empty or ^``MonadPlus<unit>``) : (static member Empty: ^``MonadPlus<unit>`` * Empty -> ^``MonadPlus<unit>``)> x : '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
     
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
@@ -1335,19 +1337,19 @@ module Operators =
     /// Convert from a byte array value, given options of little-endian, and startIndex
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
+    let inline ofBytesWithOptions< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (isLtEndian: bool) (startIndex: int) (value: byte[]) : 'T = OfBytes.Invoke isLtEndian startIndex value
 
     /// <summary>
     /// Convert from a byte array value, assuming little-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytes (value: byte[]) = OfBytes.Invoke true 0 value
+    let inline ofBytes< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke true 0 value
 
     /// <summary>
     /// Convert from a byte array value, assuming big-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
+    let inline ofBytesBE< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke false 0 value
 
     /// <summary>
     /// Convert to a byte array value, assuming little endian
@@ -1369,13 +1371,13 @@ module Operators =
     /// Converts to a value from its string representation.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline parse (value: string) = Parse.Invoke value
+    let inline parse< ^T when (Parse or ^T) : (static member Parse: ^T * Parse -> (string -> ^T))> (value: string) : 'T = Parse.Invoke value
 
     /// <summary>
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline tryParse (value: string) = TryParse.Invoke value
+    let inline tryParse< ^T when (TryParse or ^T) : (static member TryParse: ^T * TryParse -> (string -> ^T option))> (value: string) : 'T option = TryParse.Invoke value
 
 
     // Numerics
