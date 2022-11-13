@@ -47,7 +47,7 @@ module Errors =
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
 
-    let inline raiseIfNull paramName (paramValue: _ seq) =
+    let inline raiseIfNull paramName paramValue =
         if isNull paramValue then
             nullArg paramName
 
