@@ -20,7 +20,26 @@ module Result =
     /// <returns>An Ok of the function applied to the value, or the first <c>Error</c> if either the function or the value is <c>Error</c>.</returns>
     let apply f (x: Result<'T,'Error>) : Result<'U,'Error> = match f, x with Ok a, Ok b -> Ok (a b) | Error e, _ | _, Error e -> Error e
 
+    /// <summary>If value is Ok, returns both of them tupled. Otherwise it returns the Error value twice in a tuple.</summary>
+    /// <param name="v">The value.</param>
+    /// <returns>The resulting tuple.</returns>
+    let unzip (source: Result<'T * 'U, 'Error>) : Result<'T, 'Error> * Result<'U, 'Error> = match source with Ok (x, y) -> Ok x, Ok y | Error e -> Error e, Error e
     
+    /// <summary>Creates a Result value from a pair of Result values.</summary>
+    /// <param name="x">The first Result value.</param>
+    /// <param name="y">The second Result value.</param>
+    ///
+    /// <returns>The tupled value, or the first Error.</returns>
+    let zip (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) : Result<'T * 'U, 'Error> = match x, y with Ok a, Ok b -> Ok (a, b) | Error e, _ | _, Error e -> Error e
+
+    /// <summary>Creates a Result value from a three Result values.</summary>
+    /// <param name="x">The first Result value.</param>
+    /// <param name="y">The second Result value.</param>
+    /// <param name="z">The third Result value.</param>
+    ///
+    /// <returns>The tupled value, or the first Error.</returns>
+    let zip3 (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>) : Result<'T * 'U * 'V, 'Error> = match x, y, z with Ok a, Ok b, Ok c -> Ok (a, b, c) | Error e, _, _ | _, Error e, _ | _, _, Error e -> Error e
+
     /// <summary>Creates a Result value from a pair of Result values, using a function to combine them.</summary>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The first Result value.</param>
