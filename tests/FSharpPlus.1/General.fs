@@ -211,7 +211,7 @@ type Monoid() =
         let quotLst123  = plus zero (ZipList [ [1];[2];[3] ])
 
         Assert.AreEqual (quotLst123 |> toList, [[1]; [2]; [3]])
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
 
         let quotLst123' = Seq.sum [zero; zero; ZipList' [ [1];[2];[3] ]]
 
@@ -245,7 +245,7 @@ type Functor() =
         Assert.IsInstanceOf<Option<IDictionary<string,int>>> (Some testVal3)
 
         // WrappedSeqD is Applicative. Applicatives are Functors => map should work
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
         let testVal4 = map ((+) 1) (WrappedSeqD [1..3])
         Assert.IsInstanceOf<Option<WrappedSeqD<int>>> (Some testVal4)
         areEquivalent ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Return"] (SideEffects.get())
@@ -256,7 +256,7 @@ type Functor() =
         Assert.IsInstanceOf<Option<WrappedListE<int>>> (Some testVal5)
 
         // Same with WrappedListD but WrappedListD is also IEnumerable<_>
-        Assert.AreEqual (SideEffects.get(), [])
+        Assert.AreEqual (list<string>.Empty, SideEffects.get ())
         let testVal6 = map ((+) 1) (WrappedListD [1..3])
         Assert.IsInstanceOf<Option<WrappedListD<int>>> (Some testVal6)
         Assert.AreEqual (SideEffects.get(), ["Using WrappedListD's Bind"; "Using WrappedListD's Return"; "Using WrappedListD's Return"; "Using WrappedListD's Return"])
@@ -606,7 +606,7 @@ type Traversable() =
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.True ((Choice2Of2 "This is a failure" = c))
-        Assert.AreEqual ([], d)
+        areEquivalent Seq.empty<int> d
         let resNone   = traverse (fun x -> if x > 4 then Some x else None) (Seq.initInfinite id) // optimized method, otherwise it doesn't end
         ()
         
