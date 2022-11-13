@@ -5,6 +5,7 @@ namespace FSharpPlus
 module Array =
 
     open System
+    open FSharp.Core.CompilerServices
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
@@ -19,12 +20,12 @@ module Array =
     /// </example>
     let apply f x =
         let lenf, lenx = Array.length f, Array.length x
-        Array.init (lenf * lenx) (fun i -> f.[i / lenx] x.[i % lenx])
+        Array.init (lenf * lenx) (fun i -> let (d, r) = Math.DivRem (i, lenx) in f.[d] x.[r])
 
     /// Combines all values from the first array with the second, using the supplied mapping function.
     let lift2 f x y =
         let lenx, leny = Array.length x, Array.length y
-        Array.init (lenx * leny) (fun i -> f x.[i / leny] y.[i % leny])
+        Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in f x.[d] y.[r])
         
         
     /// <summary>Combines all values from three arrays and calls a mapping function on this combination.</summary>
@@ -36,22 +37,89 @@ module Array =
     /// <returns>Array with values returned from mapping function.</returns>
     let lift3 mapping list1 list2 list3 =
         let lenx, leny, lenz = Array.length list1, Array.length list2, Array.length list3
-        let combinedFirstTwo = Array.init (lenx * leny) (fun i -> (list1.[i / leny], list2.[i % leny]))
+        let combinedFirstTwo = Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in (list1.[d], list2.[r]))
 
-        Array.init (lenx * leny * lenz) (fun i -> combinedFirstTwo.[i/leny], list3.[i%leny])
+        Array.init (lenx * leny * lenz) (fun i -> let (d, r) = Math.DivRem (i, leny) in combinedFirstTwo.[d], list3.[r])
         |> Array.map (fun x -> mapping (fst (fst x)) (snd (fst x)) (snd x))
 
     /// Concatenates all elements, using the specified separator between each element.
-    let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
+    let intercalate (separator: 'T []) (source: seq<'T []>) =
+    #if FABLE_COMPILER || NET45
+        source |> Seq.intercalate separator |> Seq.toArray
+    #else
+        let mutable coll = new ArrayCollector<'T> ()
+        let mutable notFirst = false
+        source |> Seq.iter (fun element ->
+            if notFirst then coll.AddMany separator
+            coll.AddMany element
+            notFirst <- true)
+        coll.Close ()
+    #endif
 
     /// Inserts a separator element between each element in the source array.
-    let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
+    let intersperse element (source: 'T []) =
+        match source with
+        | [||] -> [||]
+        | _ ->
+            let finalLength = Array.length source * 2 - 1
+            Array.init finalLength (fun i ->
+                match Math.DivRem (i, 2) with
+                | i, 0 -> source.[i]
+                | _    ->  element)
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
     /// Replaces a subsequence of the source array with the given replacement array.
-    let replace oldValue newValue source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray                : 'T []
+    let replace (oldValue: 'T seq) (newValue: 'T seq) (source: 'T[]) : 'T[] =
+    #if FABLE_COMPILER || NET45
+        source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray: 'T []
+    #else
+        let oldValueArray = oldValue |> Seq.toArray
+        let newValueArray = newValue |> Seq.toArray
+        match source with
+        | [||] -> [||]
+        | _ ->
+            let mutable candidate = new ArrayCollector<'T>()
+            let mutable sourceIndex = 0
+
+            while sourceIndex < source.Length do
+                let sourceItem = source.[sourceIndex]
+
+                if sourceItem = oldValueArray.[0]
+                    && sourceIndex + newValueArray.Length <= source.Length then
+                    let middleIndex = (oldValueArray.Length - 1) / 2
+                    let mutable oldValueIndexLeft = 0
+
+                    let mutable oldValueIndexRight =
+                        oldValueArray.Length - 1
+
+                    let mutable matchingElements =
+                        source.[sourceIndex + oldValueIndexLeft] = oldValueArray.[oldValueIndexLeft]
+                        && source.[sourceIndex + oldValueIndexRight] = oldValueArray.[oldValueIndexRight]
+
+                    while oldValueIndexLeft <= middleIndex
+                            && oldValueIndexRight >= middleIndex
+                            && matchingElements do
+                        matchingElements <-
+                            source.[sourceIndex + oldValueIndexLeft] = oldValueArray.[oldValueIndexLeft]
+                            && source.[sourceIndex + oldValueIndexRight] = oldValueArray.[oldValueIndexRight]
+
+                        oldValueIndexLeft <- oldValueIndexLeft + 1
+                        oldValueIndexRight <- oldValueIndexRight - 1
+
+                    if matchingElements then
+                        candidate.AddMany newValueArray
+                        sourceIndex <- sourceIndex + oldValueArray.Length
+                    else
+                        candidate.Add sourceItem
+                        sourceIndex <- sourceIndex + 1
+                else
+                    sourceIndex <- sourceIndex + 1
+                    candidate.Add sourceItem
+
+            candidate.Close()
+    #endif
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
