@@ -5,6 +5,7 @@ namespace FSharpPlus
 module List =
 
     open System
+    open FSharp.Core.CompilerServices
 
     /// Creates a list with a single element.
     let singleton x = [x]
@@ -26,10 +27,28 @@ module List =
     /// val it : int list = [2; 4; 6; 3; 6; 9]
     /// </code>
     /// </example>
-    let apply f x = List.collect (fun f -> List.map ((<|) f) x) f
+    let apply (f: list<'T -> 'U>) (x: list<'T>) : list<'U> =
+    #if FABLE_COMPILER || NET45
+        List.collect (fun f -> List.map ((<|) f) x) f
+    #else
+        let mutable coll = ListCollector<'U> ()
+        f |> List.iter (fun f ->
+            x |> List.iter (fun x ->
+                coll.Add (f x)))
+        coll.Close ()
+    #endif
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
-    let lift2 f x1 x2 = List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
+    let lift2 (f: 'T1 -> 'T2 -> 'U) (x1: list<'T1>) (x2: list<'T2>) =
+    #if FABLE_COMPILER || NET45
+        List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
+    #else
+        let mutable coll = ListCollector<'U> ()
+        x1 |> List.iter (fun x1 ->
+            x2 |> List.iter (fun x2 ->
+                coll.Add (f x1 x2)))
+        coll.Close ()
+    #endif
     
     /// <summary>Combines values from three list and calls a mapping function on this combination.</summary>
     /// <param name="f">Mapping function taking three element combination as input.</param>
@@ -39,10 +58,19 @@ module List =
     ///
     /// <returns>List with values returned from mapping function.</returns>
     let lift3 f x1 x2 x3 =
+    #if !FABLE_COMPILER || FABLE_COMPILER_3 || NET45
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
         |> List.map (fun (x, y, z) -> f x y z)
+    #else
+        let mutable coll = ListCollector<'U> ()
+        x1 |> List.iter (fun x1 ->
+            x2 |> List.iter (fun x2 ->
+                x3 |> List.iter (fun x3 ->
+                    coll.Add (f x1 x2 x3))))
+        coll.Close ()
+    #endif
 
     /// Returns a list with all possible tails of the source list.
     let tails x = let rec loop = function [] -> [] | _::xs as s -> s::(loop xs) in loop x
@@ -72,10 +100,32 @@ module List =
         if count > 0 then loop count source else source
 
     /// Concatenates all elements, using the specified separator between each element.
-    let intercalate (separator: list<_>) (source: seq<list<_>>) = source |> Seq.intercalate separator |> Seq.toList
+    let intercalate (separator: list<'T>) (source: seq<list<'T>>) =
+    #if FABLE_COMPILER || NET45
+        source |> Seq.intercalate separator |> Seq.toList
+    #else
+        let mutable coll = new ListCollector<'T> ()
+        let mutable notFirst = false
+        source |> Seq.iter (fun element ->
+            if notFirst then coll.AddMany separator
+            coll.AddMany element
+            notFirst <- true)
+        coll.Close ()
+    #endif
 
     /// Inserts a separator element between each element in the source list.
-    let intersperse element source = source |> List.toSeq |> Seq.intersperse element |> Seq.toList : list<'T>
+    let intersperse separator (source: list<'T>) =
+    #if FABLE_COMPILER || NET45
+        source |> List.toSeq |> Seq.intersperse separator |> Seq.toList
+    #else
+        let mutable coll = new ListCollector<'T> ()
+        let mutable notFirst = false
+        source |> List.iter (fun element ->
+            if notFirst then coll.Add separator
+            coll.Add element
+            notFirst <- true)
+        coll.Close ()
+    #endif
 
     /// Creates a sequence of lists by splitting the source list on any of the given separators.
     let split (separators: seq<list<_>>) (source: list<_>) = source |> List.toSeq |> Seq.split separators |> Seq.map Seq.toList
@@ -130,23 +180,44 @@ module List =
     /// <returns>
     /// A tuple with both resulting lists.
     /// </returns>
-    let partitionMap (mapping: 'T -> Choice<'T1,'T2>) (source: list<'T>) =
+    let partitionMap (mapping: 'T -> Choice<'T1, 'T2>) (source: list<'T>) =
+    #if FABLE_COMPILER || NET45
         let rec loop ((acc1, acc2) as acc) = function
-            | [] -> acc
+            | []    -> acc
             | x::xs ->
                 match mapping x with
                 | Choice1Of2 x -> loop (x::acc1, acc2) xs
                 | Choice2Of2 x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
+    #else
+        let mutable coll1 = new ListCollector<'T1> ()
+        let mutable coll2 = new ListCollector<'T2> ()
+        List.iter (mapping >> function Choice1Of2 e -> coll1.Add e | Choice2Of2 e -> coll2.Add e) source
+        coll1.Close (), coll2.Close ()
+    #endif
 
     /// <summary>Safely build a new list whose elements are the results of applying the given function
     /// to each of the elements of the two lists pairwise.</summary>
+    /// <param name="mapping">Mapping function.</param>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
+    /// <returns>List with corresponding results of applying the mapping function pairwise over both input lists elments.</returns>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
-    let map2Shortest f (l1: list<_>) (l2: list<_>) =
+    let map2Shortest mapping (list1: list<'T1>) (list2: list<'T2>) : list<'U> =
+    #if FABLE_COMPILER || NET45
         let rec loop acc = function
-            | (l::ls,r::rs) -> loop ((f l r)::acc) (ls,rs)
-            | (_,_) -> acc
-        loop [] (l1,l2) |> List.rev
+            | (l::ls, r::rs) -> loop ((mapping l r)::acc) (ls, rs)
+            | (_, _)         -> acc
+        loop [] (list1, list2) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'U> ()
+        let rec loop = function
+            | ([], _) | (_, []) -> coll.Close ()
+            | (l::ls, r::rs)    ->
+                coll.Add (mapping l r)
+                loop (ls, rs)
+        loop (list1, list2)
+    #endif
         
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
@@ -154,11 +225,21 @@ module List =
     /// <param name="list1">First input list.</param>
     /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
-    let zipShortest (list1: list<'T1>) (list2: list<'T2>) =
+    let zipShortest (list1: list<'T1>) (list2: list<'T2>) : list<'T1 * 'T2> =
+    #if FABLE_COMPILER || NET45
         let rec loop acc = function
             | (l::ls, r::rs) -> loop ((l, r)::acc) (ls, rs)
             | (_, _)         -> acc
         loop [] (list1, list2) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'T1 * 'T2> ()
+        let rec loop = function
+            | ([], _) | (_, []) -> coll.Close ()
+            | (l::ls,r::rs) ->
+                coll.Add (l, r)
+                loop (ls,rs)
+        loop (list1, list2)
+    #endif
         
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>

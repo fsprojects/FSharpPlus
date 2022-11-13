@@ -3,6 +3,7 @@ namespace FSharpPlus
 /// Additional operations on Result<'T,'Error>
 [<RequireQualifiedAccess>]
 module Result =
+    open FSharp.Core.CompilerServices
     
     /// Creates an Ok with the supplied value.
     let result value : Result<'T,'Error> = Ok value
@@ -94,7 +95,8 @@ module Result =
     /// <returns>
     /// A tuple with both resulting lists, Oks are in the first list.
     /// </returns>
-    let partition (source: list<Result<'T,'Error>>) =
+    let partition (source: list<Result<'T, 'Error>>) =
+    #if FABLE_COMPILER || NET45
         let rec loop ((acc1, acc2) as acc) = function
             | [] -> acc
             | x::xs ->
@@ -102,3 +104,9 @@ module Result =
                 | Ok x -> loop (x::acc1, acc2) xs
                 | Error x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
+    #else
+        let mutable coll1 = new ListCollector<'T> ()
+        let mutable coll2 = new ListCollector<'Error> ()
+        List.iter (function Ok e -> coll1.Add e | Error e -> coll2.Add e) source
+        coll1.Close (), coll2.Close ()
+    #endif

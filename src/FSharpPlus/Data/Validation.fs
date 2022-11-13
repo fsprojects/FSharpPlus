@@ -27,6 +27,7 @@ type Validation<'error, 't> =
   | Success of 't
 
 module Validation =
+    open FSharp.Core.CompilerServices
 
     let map (f: 'T->'U) (source: Validation<'Error,'T>) =
         match source with
@@ -228,6 +229,7 @@ module Validation =
     /// A tuple with both resulting lists, Success are in the first list.
     /// </returns>
     let partition (source: list<Validation<'TErrors, 'T>>) =
+    #if FABLE_COMPILER || NET45
         let rec loop ((acc1, acc2) as acc) = function
             | [] -> acc
             | x::xs ->
@@ -235,6 +237,12 @@ module Validation =
                 | Success x -> loop (x::acc1, acc2) xs
                 | Failure x -> loop (acc1, x::acc2) xs
         loop ([], []) (List.rev source)
+    #else
+        let mutable coll1 = new ListCollector<'T> ()
+        let mutable coll2 = new ListCollector<'TErrors> ()
+        List.iter (function Success e -> coll1.Add e | Failure e -> coll2.Add e) source
+        coll1.Close (), coll2.Close ()
+    #endif
 
 
 type Validation<'err,'a> with
