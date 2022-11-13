@@ -13,7 +13,7 @@ type System.Net.WebClient with member wc.AsyncDownloadString (uri: System.Uri) =
 SeqT&lt;Monad&lt;bool&gt;, 'T&gt;
 =====================
 
-This is the the Monad Transformer for `seq<'T>` so it adds sequencing to existing monads by composing then with `seq<'T>`.
+This is the the Monad Transformer for `seq<'T>` so it adds sequencing to existing monads by composing them with `seq<'T>`.
 
 Any monad can be composed, but a very typical usage is when combined with `Async` or `Task`, which gives rise to what's called async sequences.
 
@@ -34,7 +34,7 @@ body #fsdocs-content table code { word-break: normal; }
 |`asyncSeq { .. }`              |`monad.plus { .. }`                    | At some point it needs to be inferred as `SeqT<Async<bool>, 'T>`, or it can be specified with type parameters: `monad<SeqT<Async<bool>, 'T>>.plus` |
 |`let! x = y`                   |`let! x = SeqT.lift y`                 | No auto lifting. Lifting should be explicit. |
 |`do! x`                        |`do! SeqT.lift x`                      | ''        |
-|`for x in s`                   |`let! x = s`                           | When `s: AsyncSeq<'T>` otherwise `for` is still ok with regular sequences. |
+|`for x in s`                   |`let! x = s`                           | When `s: SeqT` otherwise `for` is still ok with regular sequences. |
 |`AsyncSeq.[function]`          |`SeqT.[function]`                      | See differences in functions below. |
 |`AsyncSeq.[function]Async`     |`SeqT.[function]M`                     | ''        |
 |`AsyncSeq.skip`                |`SeqT.drop`                            | `.skip` is available but consistently with F# collections, it throws when the sequence doesn't have enough elements. |
@@ -51,7 +51,7 @@ Examples
 --------
 *)
 
-#r "nuget: FSharpPlus"
+#r "nuget: FSharpPlus,1.3.0-CI02744" // still as pre-release
 
 open System
 open System.Net
@@ -91,7 +91,7 @@ These samples above and below come from the [original AsyncSeq post](http://toma
 
 // A simple webcrawler
 
-#r "nuget: FSharpPlus"
+#r "nuget: FSharpPlus,1.3.0-CI02744"
 #r "nuget: HtmlAgilityPack"
 
 open System

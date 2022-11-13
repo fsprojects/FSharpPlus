@@ -280,8 +280,7 @@ module SeqT_V2 =
     /// An alias of `ofSeq`.
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = ofSeq source
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    let inline runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
+    let inline internal runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
         let ra = new ResizeArray<_> ()
         Using.Invoke
             ((source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ())
@@ -334,8 +333,7 @@ module SeqT_V2 =
                             else invalidOp enumNotStarted
                         member _.Dispose () = () } }
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    let inline make (f: unit -> '``Monad<SeqT<'Monad<bool>, 'T>>``) : SeqT<'``Monad<bool>``, 'T> =
+    let inline internal make (f: unit -> '``Monad<SeqT<'Monad<bool>, 'T>>``) : SeqT<'``Monad<bool>``, 'T> =
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () = 
@@ -1006,8 +1004,7 @@ module SeqT_V2 =
                                 result false
                         member _.Dispose () = dispose e } }
     
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
-    let inline skipImpl throw count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
+    let inline internal skipImpl throw count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
         if (count < 0) then invalidArg "count" "must be non-negative"
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
