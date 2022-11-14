@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>AsyncSequences.Benchmarks-20221114-130118</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=arch 
+Intel Core i5-10210U CPU 1.60GHz, 1 CPU, 8 logical and 4 physical cores
+.NET Core SDK=7.0.100-preview.7.22377.5
+  [Host]     : .NET Core 6.0.9 (CoreCLR 6.0.922.41905, CoreFX 6.0.922.41905), X64 RyuJIT DEBUG
+  DefaultJob : .NET Core 6.0.9 (CoreCLR 6.0.922.41905, CoreFX 6.0.922.41905), X64 RyuJIT
+</code></pre>
+<pre><code></code></pre>
+
+<table>
+<thead><tr><th>        Method</th><th>times</th><th>threads</th><th> Mean</th><th>Error</th><th>StdDev</th><th>Ratio</th><th>RatioSD</th>
+</tr>
+</thead><tbody><tr><td>Base</td><td>10</td><td>2</td><td>133.3 ms</td><td>0.43 ms</td><td>0.40 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>StartImmediateAsTask</td><td>10</td><td>2</td><td>133.2 ms</td><td>0.24 ms</td><td>0.21 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>ManualResetEventSlim</td><td>10</td><td>2</td><td>134.4 ms</td><td>2.35 ms</td><td>2.09 ms</td><td>1.01</td><td>0.02</td>
+</tr><tr><td>Base</td><td>10</td><td>3</td><td>133.2 ms</td><td>0.33 ms</td><td>0.30 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>StartImmediateAsTask</td><td>10</td><td>3</td><td>133.4 ms</td><td>0.43 ms</td><td>0.38 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>ManualResetEventSlim</td><td>10</td><td>3</td><td>133.3 ms</td><td>0.36 ms</td><td>0.34 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>Base</td><td>100</td><td>2</td><td>1,332.8 ms</td><td>1.22 ms</td><td>1.14 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>StartImmediateAsTask</td><td>100</td><td>2</td><td>1,331.9 ms</td><td>0.93 ms</td><td>0.83 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>ManualResetEventSlim</td><td>100</td><td>2</td><td>1,333.3 ms</td><td>1.14 ms</td><td>1.06 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>Base</td><td>100</td><td>3</td><td>1,332.7 ms</td><td>1.48 ms</td><td>1.16 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>StartImmediateAsTask</td><td>100</td><td>3</td><td>1,332.5 ms</td><td>1.20 ms</td><td>1.13 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>ManualResetEventSlim</td><td>100</td><td>3</td><td>1,333.0 ms</td><td>1.45 ms</td><td>1.36 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>Base</td><td>1000</td><td>2</td><td>13,334.9 ms</td><td>2.62 ms</td><td>2.32 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>StartImmediateAsTask</td><td>1000</td><td>2</td><td>13,334.8 ms</td><td>2.39 ms</td><td>1.99 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>ManualResetEventSlim</td><td>1000</td><td>2</td><td>13,333.9 ms</td><td>2.24 ms</td><td>1.99 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>Base</td><td>1000</td><td>3</td><td>13,335.0 ms</td><td>2.47 ms</td><td>2.19 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>StartImmediateAsTask</td><td>1000</td><td>3</td><td>13,334.8 ms</td><td>2.74 ms</td><td>2.29 ms</td><td>1.00</td><td>0.00</td>
+</tr><tr><td>ManualResetEventSlim</td><td>1000</td><td>3</td><td>13,334.4 ms</td><td>2.64 ms</td><td>2.21 ms</td><td>1.00</td><td>0.00</td>
+</tr></tbody></table>
+</body>
+</html>

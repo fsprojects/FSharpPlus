@@ -1,9 +1,8 @@
-﻿module sequence
+﻿module AsyncSequences
 
 open BenchmarkDotNet.Attributes
 open System.Threading
 open System.Threading.Tasks
-open Diagnosers
 
 type AsyncSeqTaskState<'t> =
     | Idle
@@ -81,8 +80,6 @@ let SyncAsyncSleepOverAsync = async {
     return 1 + 1
 }
 
-[<CustomerThreadingDiagnoser>]
-[<ThreadingDiagnoser>]
 type Benchmarks() =
     [<Params(10, 100, 1000)>]
     member val public times = 0 with get, set
@@ -94,19 +91,6 @@ type Benchmarks() =
     member self.GlobalSetup() =
         ThreadPool.SetMinThreads (self.threads, self.threads) |> ignore
         ThreadPool.SetMaxThreads (self.threads, self.threads) |> ignore
-    //
-    // [<GlobalCleanup>]
-    // member self.GlobalCleanup() =
-    //     printfn "Global Cleanup"
-
-    // [<IterationSetup>]
-    // member self.IterationSetup() =
-    //     ThreadPool.SetMinThreads (self.threads, self.threads) |> ignore
-    //     ThreadPool.SetMaxThreads (self.threads, self.threads) |> ignore
-
-    // [<IterationCleanup>]
-    // member self.IterationCleanup() =
-    //     printfn "%s" "Iteration Cleanup"
 
     [<Benchmark(Baseline = true)>]
     member this.Base() =
