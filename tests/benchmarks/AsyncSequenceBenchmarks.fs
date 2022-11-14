@@ -71,7 +71,7 @@ let SyncSum = async {
 }
 
 let AsyncWith1SecSleep = async {
-    do! Async.Sleep 5
+    do! Async.Sleep 1
     return 1 + 1
 }
 
@@ -84,16 +84,19 @@ type Benchmarks() =
     [<Params(10, 100, 1000)>]
     member val public times = 0 with get, set
     
-    [<Params(2, 3)>]
+    [<Params(1)>]
     member val public threads = 0 with get, set
 
     [<GlobalSetup>]
     member self.GlobalSetup() =
-        ThreadPool.SetMinThreads (self.threads, self.threads) |> ignore
-        ThreadPool.SetMaxThreads (self.threads, self.threads) |> ignore
+        if self.threads > 0 then
+            ThreadPool.SetMinThreads (self.threads, self.threads) |> ignore
+            ThreadPool.SetMaxThreads (self.threads, self.threads) |> ignore
 
     [<Benchmark(Baseline = true)>]
     member this.Base() =
+        if this.threads = 1 then
+            failwith "This function will fail with just one available thread."
         seq {
             for _ = 1 to this.times do
                 yield SyncSum
