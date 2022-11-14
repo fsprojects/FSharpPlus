@@ -2,8 +2,6 @@ namespace FSharpPlus.Tests
 
 #nowarn "44"
 
-open System.ComponentModel.DataAnnotations
-
 module Validation =
 
   open System
