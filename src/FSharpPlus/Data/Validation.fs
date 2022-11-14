@@ -243,6 +243,29 @@ module Validation =
         List.iter (function Success e -> coll1.Add e | Failure e -> coll2.Add e) source
         coll1.Close (), coll2.Close ()
     #endif
+    
+    [<AutoOpen>]
+    module ComputationExpression =
+        type ValidationBuilder() =
+            member _.Bind(x, f) =
+                match x with
+                | Failure e -> Failure e
+                | Success a -> f a
+
+            member _.MergeSources(left : Validation<list<string>, _>, right : Validation<list<string>, _>) =
+                match left, right with
+                | Success l, Success r -> Success (l, r)
+                | Failure l, Success _ -> Failure l
+                | Success _, Failure r -> Failure r
+                | Failure r, Failure l -> List.append r l |> Failure
+
+            member _.Return(x) =
+                Success x
+                
+            member _.ReturnFrom(x) =
+                x
+
+        let validator = ValidationBuilder()
 
 
 type Validation<'err,'a> with
