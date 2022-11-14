@@ -143,92 +143,21 @@ type Lift3 with
     static member inline Lift3 (_, (_:'t when 't: null and 't: struct, _: ^u when ^u : null and ^u: struct, _: ^v when ^v : null and ^v: struct), _mthd: Default1) = id
     static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, (x: '``Applicative<'T>``, y: '``Applicative<'U>``, z: '``Applicative<'V>``)            , _mthd: Default1) = ((^``Applicative<'T>`` or ^``Applicative<'U>`` or ^``Applicative<'V>`` ) : (static member Lift3 : _*_*_*_ -> _) f, x, y, z)
 
-type IsLeftZeroHelper =
-    static member Seq (xs: seq<'t>) = Seq.isEmpty xs
-    static member NonEmptySeq (_: NonEmptySeq<'t>) = false
-    static member List (xs: list<'t>) = List.isEmpty xs
-    static member Array (xs: array<'t>) = Array.isEmpty xs
-    static member Option (x: option<'t>) = Option.isNone x
-    static member Result (x: Result<'t, 'u>) = match x with Error _ -> true | _ -> false
-    static member Choice (x: Choice<'t, 'u>) = match x with Choice2Of2 _ -> true | _ -> false
-
-#if !FABLE_COMPILER
-type IsLeftZeroHelper<'a>() =
-    /// turns false if
-    /// - it should always return false because neither `IsLeftZero` nor `Empty` are present
-    /// - the target method is inlined and cannot be called through reflection
-    static let mutable isValid = true
-
-    static let isLeftZero =
-        let ty = typeof<'a>
-        let check typedef = ty.IsGenericType && (ty.GetGenericTypeDefinition() = typedef)
-        let helperTy = typeof<IsLeftZeroHelper>
-        let helper helperName tprms : 'a -> bool =
-            let meth = helperTy.GetMethod(helperName).MakeGenericMethod(tprms)
-            fun x -> meth.Invoke(null, [|box x|]) |> unbox
-        let targs = ty.GetGenericArguments()
-        if check typedefof<seq<_>> then helper "Seq" targs
-        elif check typedefof<NonEmptySeq<_>> then helper "NonEmptySeq" targs
-        elif check typedefof<list<_>> then helper "List" targs
-        elif ty.IsArray then helper "Array" [| ty.GetElementType() |]
-        elif check typedefof<option<_>> then helper "Option" targs
-        elif check typedefof<Result<_, _>> then helper "Result" targs
-        elif check typedefof<Choice<_, _>> then helper "Choice" targs
-        else
-            let makeGeneric (mi: Reflection.MethodInfo) =
-                if Array.isEmpty targs || not mi.ContainsGenericParameters then mi
-                else mi.MakeGenericMethod(targs)
-            let isInlineError (e: Reflection.TargetInvocationException) =
-                match e.InnerException with
-                | :? NotSupportedException -> true
-                | _ -> false
-            let isLeftZero = ty.GetMethod("IsLeftZero")
-            if not (isNull isLeftZero) then
-                let isLeftZero = makeGeneric isLeftZero
-                (fun x ->
-                    try
-                       isLeftZero.Invoke(null, [| box x |]) |> unbox
-                    with
-                    | :? Reflection.TargetInvocationException as e when isInlineError e ->
-                        isValid <- false; false)
-            else
-                let fallback = fun _ -> false
-                let compareWith (obj: obj) = fun (x: 'a) -> obj.Equals(x)
-                try
-                    let emptyProp = ty.GetProperty("Empty")
-                    if not (isNull emptyProp) then emptyProp.GetValue(null) |> compareWith
-                    else
-                        let emptyMeth = ty.GetMethod("get_Empty", [||])
-                        if not (isNull emptyMeth) then
-                            let emptyMeth = makeGeneric emptyMeth
-                            emptyMeth.Invoke(null, [||]) |> compareWith
-                        else isValid <- false; fallback
-                with
-                | :? Reflection.TargetInvocationException as e when isInlineError e -> isValid <- false; fallback
-
-    static member Invoke(x: 'a) = isValid && isLeftZero x
-#endif
-
 type IsLeftZero =
     inherit Default1
 
-    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = IsLeftZeroHelper.Seq t.Value
-    static member IsLeftZero (t: ref<NonEmptySeq<_>>, _mthd: IsLeftZero) = IsLeftZeroHelper.NonEmptySeq t.Value
-    static member IsLeftZero (t: ref<list<_>>     , _mthd: IsLeftZero) = IsLeftZeroHelper.List t.Value
-    static member IsLeftZero (t: ref<array<_>>    , _mthd: IsLeftZero) = IsLeftZeroHelper.Array t.Value
-    static member IsLeftZero (t: ref<option<_>>   , _mthd: IsLeftZero) = IsLeftZeroHelper.Option t.Value
-    static member IsLeftZero (t: ref<Result<_,_>> , _mthd: IsLeftZero) = IsLeftZeroHelper.Result t.Value
-    static member IsLeftZero (t: ref<Choice<_,_>> , _mthd: IsLeftZero) = IsLeftZeroHelper.Choice t.Value
+    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = Seq.isEmpty t.Value
+    static member IsLeftZero (_: ref<NonEmptySeq<_>>, _mthd: IsLeftZero) = false
+    static member IsLeftZero (t: ref<list<_>>     , _mthd: IsLeftZero) = List.isEmpty t.Value
+    static member IsLeftZero (t: ref<array<_>>    , _mthd: IsLeftZero) = Array.isEmpty t.Value
+    static member IsLeftZero (t: ref<option<_>>   , _mthd: IsLeftZero) = Option.isNone t.Value
+    static member IsLeftZero (t: ref<Result<_,_>> , _mthd: IsLeftZero) = match t.Value with Error _      -> true | _ -> false
+    static member IsLeftZero (t: ref<Choice<_,_>> , _mthd: IsLeftZero) = match t.Value with Choice2Of2 _ -> true | _ -> false
 
-    #if !FABLE_COMPILER
-    static member        Invoke (x: '``Applicative<'T>``) : bool =
-        IsLeftZeroHelper<'``Applicative<'T>``>.Invoke(x)
-    #else
     static member inline Invoke (x: '``Applicative<'T>``) : bool =
         let inline call (mthd : ^M, input: ^I) =
             ((^M or ^I) : (static member IsLeftZero : _*_ -> _) ref input, mthd)
         call(Unchecked.defaultof<IsLeftZero>, x)
-    #endif
 
     static member inline InvokeOnInstance (x: '``Applicative<'T>``) : bool =
         ((^``Applicative<'T>``) : (static member IsLeftZero : _ -> _) x)
