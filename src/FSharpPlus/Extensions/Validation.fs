@@ -5,34 +5,22 @@ module Validations =
     open System
     open FSharpPlus.Data
     
-    let inline validate errorMessage f v =
+    let inline validate error f v =
         if f v then
             Success v
         else
-            Failure [ errorMessage ]
+            Failure [ error ]
 
-    let inline requireString propName =
-        let errorMessage =
-            sprintf "%s cannot be null, empty or whitespace." propName
+    let inline requireString error =
+        validate error (String.IsNullOrWhiteSpace >> not)
 
-        validate errorMessage (String.IsNullOrWhiteSpace >> not)
-
-    let inline requireGreaterThan propName min =
-        let errorMessage =
-            sprintf "%s have to be greater or equal to '%d'." propName min
-
-        validate errorMessage (flip (>) min)
+    let inline requireGreaterThan error min =
+        validate error (flip (>) min)
         
-    let inline requireGreaterOrEqualThan propName min =
-        let errorMessage =
-            sprintf "%s have to be greater or equal to '%d'." propName min
+    let inline requireGreaterOrEqualThan error min =
+        validate error (flip (>=) min)
 
-        validate errorMessage (flip (>=) min)
-
-    let inline requireEmail propName =
-        let errorMessage =
-            sprintf "%s is not a valid email address." propName
-
+    let inline requireEmail error =
         let check (v: string) =
             try
                 let _ = Net.Mail.MailAddress(v)
@@ -40,14 +28,14 @@ module Validations =
             with
             | ex -> false
 
-        validate errorMessage check
+        validate error check
 
-    let inline requireGuid propName =
-        validate (sprintf "%s is required" propName) (fun v -> v <> Guid.Empty)
+    let inline requireGuid error =
+        validate error (fun v -> v <> Guid.Empty)
 
-    let inline requireObject propName =
+    let inline requireObject error =
         let check value = box value <> null
-        validate (sprintf "%s is required" propName) check
+        validate error check
 
     let inline requireWhenSome value checkWhenSome =
         match value with
@@ -70,11 +58,8 @@ module Validations =
         |> sequence
         |> Validation.map Seq.toArray
 
-    let inline requireAtLeastOne propName =
+    let inline requireAtLeastOne error =
         let check values =
             Seq.isEmpty values |> not
 
-        let errorMessage =
-            sprintf "%s should have at least one element'." propName
-
-        validate errorMessage check
+        validate error check

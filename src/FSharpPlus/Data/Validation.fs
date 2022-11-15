@@ -246,27 +246,7 @@ module Validation =
     
     [<AutoOpen>]
     module ComputationExpression =
-        type ValidationBuilder() =
-            member _.Bind(x, f) =
-                match x with
-                | Failure e -> Failure e
-                | Success a -> f a
-
-            member _.MergeSources(left : Validation<list<string>, _>, right : Validation<list<string>, _>) =
-                match left, right with
-                | Success l, Success r -> Success (l, r)
-                | Failure l, Success _ -> Failure l
-                | Success _, Failure r -> Failure r
-                | Failure r, Failure l -> List.append r l |> Failure
-
-            member _.Return(x) =
-                Success x
-                
-            member _.ReturnFrom(x) =
-                x
-
-        let validator = ValidationBuilder()
-
+        let validator<'Error,'T> = applicative<Validation<list<'Error>, 'T>>
 
 type Validation<'err,'a> with
 
