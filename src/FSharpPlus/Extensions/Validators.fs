@@ -63,3 +63,13 @@ module RequiredValidation =
             Seq.isEmpty values |> not
 
         validate error check
+        
+    let RequiredValidation.isSuccess =
+        function
+        | Success _ -> true
+        | Failure _ -> false
+      
+    let isFailure =
+        function
+        | Success _ -> false
+        | Failure _ -> true

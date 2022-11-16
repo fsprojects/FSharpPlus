@@ -11,16 +11,6 @@ module Validation =
   open FSharpPlus.Data
   open Validation
   open FSharpPlus.Tests.Helpers
-  
-  let private isSuccess =
-    function
-    | Success _ -> true
-    | Failure _ -> false
-  
-  let private isFailure =
-    function
-    | Success _ -> false
-    | Failure _ -> true
     
   let private getSuccess =
     function
@@ -367,7 +357,7 @@ module Validation =
     let testValidateRequireString (str, success) =
       let error = konst "Str"
       let r = RequiredValidation.string error str
-      areStEqual (isSuccess r) success
+      areStEqual (RequiredValidation.isSuccess r) success
       
       if not success then
         let failure = getFailure r
@@ -383,7 +373,7 @@ module Validation =
     let testValidateRequireGreaterThan (value, limit, success) =
       let error = konst "Int"
       let r = RequiredValidation.greaterThan error limit value
-      areStEqual (isSuccess r) success
+      areStEqual (RequiredValidation.isSuccess r) success
       
       if not success then
         let failure = getFailure r
@@ -399,7 +389,7 @@ module Validation =
     let testValidateRequireGreaterOrEqualThan (value, limit, success) =
       let error = konst "Int"
       let r = RequiredValidation.greaterOrEqualThan error limit value
-      areStEqual (isSuccess r) success
+      areStEqual (RequiredValidation.isSuccess r) success
       
       if not success then
         let failure = getFailure r
