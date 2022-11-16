@@ -14,12 +14,6 @@
 
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Include="Fable.Core" Version="3.1.6" />
-    <PackageReference Include="Fable.React" Version="5.3.6" />
-    <PackageReference Include="FSharp.Formatting.Literate" Version="7.2.9" />
-    <PackageReference Include="FSharp.Formatting" Version="7.2.9" />
-    <PackageReference Include="FSharp.Compiler.Service" Version="36.0.3" />
-    <PackageReference Include="MathNet.Numerics.FSharp" Version="4.9.0" />
   </ItemGroup>
 
   <ItemGroup>

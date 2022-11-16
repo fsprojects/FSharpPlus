@@ -11,7 +11,12 @@ open FSharpPlus.Internals
 // Comonad class ----------------------------------------------------------
 
 type Extract =
-    static member        Extract (x: Async<'T>    ) = Async.RunSynchronously x
+    static member        Extract (x: Async<'T>    ) =
+    #if FABLE_COMPILER_3
+        Async.RunSynchronously x
+    #else
+        Async.StartImmediateAsTask(x).Result
+    #endif
     static member        Extract (x: Lazy<'T>     ) = x.Value
     static member        Extract ((_: 'W, a: 'T)  ) = a    
     static member        Extract (f: 'T Id        ) = f
