@@ -1,7 +1,7 @@
 ﻿namespace FSharpPlus
 
 [<RequireQualifiedAccess>]
-module Validations =
+module RequiredValidation =
     open System
     open FSharpPlus.Data
     
@@ -11,16 +11,16 @@ module Validations =
         else
             Failure [ error ]
 
-    let inline requireString error =
-        validate error (String.IsNullOrWhiteSpace >> not)
+    let inline string error value =
+        validate (error value) (String.IsNullOrWhiteSpace >> not) value
 
-    let inline requireGreaterThan error min =
-        validate error (flip (>) min)
+    let inline greaterThan error min value =
+        validate (error value) (flip (>) min) value
         
-    let inline requireGreaterOrEqualThan error min =
-        validate error (flip (>=) min)
+    let inline greaterOrEqualThan error min value =
+        validate (error value) (flip (>=) min) value
 
-    let inline requireEmail error =
+    let inline email error value =
         let check (v: string) =
             try
                 let _ = Net.Mail.MailAddress(v)
@@ -28,21 +28,21 @@ module Validations =
             with
             | ex -> false
 
-        validate error check
+        validate (error value) check value
 
-    let inline requireGuid error =
-        validate error (fun v -> v <> Guid.Empty)
+    let inline guid error value =
+        validate (error value) (fun v -> v <> Guid.Empty) value
 
-    let inline requireObject error =
+    let inline object error value =
         let check value = box value <> null
-        validate error check
+        validate (error value) check
 
-    let inline requireWhenSome value checkWhenSome =
+    let inline whenSome value checkWhenSome =
         match value with
         | Some v -> checkWhenSome v |> Validation.map Some
         | _ -> Success None
 
-    let inline requireArrayValues values check =
+    let inline arrayValues values check =
         let validated : Validation<_,_> [] =
             values
             |> Array.map check
@@ -50,7 +50,7 @@ module Validations =
         |> sequence
         |> Validation.map Seq.toArray
 
-    let inline requireListValues values check =
+    let inline listValues values check =
         let validated : List<Validation<_,_>> =
             values
             |> List.map check
@@ -58,7 +58,7 @@ module Validations =
         |> sequence
         |> Validation.map Seq.toArray
 
-    let inline requireAtLeastOne error =
+    let inline atLeastOne error =
         let check values =
             Seq.isEmpty values |> not
 

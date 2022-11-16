@@ -365,14 +365,14 @@ module Validation =
     [<TestCase(null, false)>]
     [<TestCase("NotEmpty", true)>]
     let testValidateRequireString (str, success) =
-      let error = "Str"
-      let r = Validations.requireString error str
+      let error = konst "Str"
+      let r = RequiredValidation.string error str
       areStEqual (isSuccess r) success
       
       if not success then
         let failure = getFailure r
         areStEqual failure.Length 1
-        areStEqual failure.[0] error
+        areStEqual failure.[0] (error "")
       else
         ()
         
@@ -381,14 +381,14 @@ module Validation =
     [<TestCase(0, 0, false)>]
     [<TestCase(-1, 0, false)>]
     let testValidateRequireGreaterThan (value, limit, success) =
-      let error = "Int"
-      let r = Validations.requireGreaterThan error limit value
+      let error = konst "Int"
+      let r = RequiredValidation.greaterThan error limit value
       areStEqual (isSuccess r) success
       
       if not success then
         let failure = getFailure r
         areStEqual failure.Length 1
-        areStEqual failure.[0] error
+        areStEqual failure.[0] (error 1)
       else
         ()
         
@@ -397,13 +397,13 @@ module Validation =
     [<TestCase(0, 0, true)>]
     [<TestCase(-1, 0, false)>]
     let testValidateRequireGreaterOrEqualThan (value, limit, success) =
-      let error = "Int"
-      let r = Validations.requireGreaterOrEqualThan error limit value
+      let error = konst "Int"
+      let r = RequiredValidation.greaterOrEqualThan error limit value
       areStEqual (isSuccess r) success
       
       if not success then
         let failure = getFailure r
         areStEqual failure.Length 1
-        areStEqual failure.[0] error
+        areStEqual failure.[0] (error 1)
       else
         ()
