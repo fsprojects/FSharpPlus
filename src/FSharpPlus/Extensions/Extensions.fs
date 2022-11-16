@@ -67,11 +67,11 @@ module Extensions =
         #if !FABLE_COMPILER
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+            let startImmediateAsTask ct a =
+                Async.StartImmediateAsTask(a, ct).Result
+
             let! ct = Async.CancellationToken
-            return seq {
-                use enum = t.GetEnumerator ()
-                while enum.MoveNext() do
-                    yield Async.RunSynchronously (enum.Current, cancellationToken = ct) }}
+            return t |> Seq.map (startImmediateAsTask ct) }
         #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
