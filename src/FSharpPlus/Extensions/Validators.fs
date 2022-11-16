@@ -64,7 +64,7 @@ module RequiredValidation =
 
         validate error check
         
-    let RequiredValidation.isSuccess =
+    let isSuccess =
         function
         | Success _ -> true
         | Failure _ -> false

@@ -243,10 +243,6 @@ module Validation =
         List.iter (function Success e -> coll1.Add e | Failure e -> coll2.Add e) source
         coll1.Close (), coll2.Close ()
     #endif
-    
-    [<AutoOpen>]
-    module ComputationExpression =
-        let validator<'Error,'T> = applicative<Validation<list<'Error>, 'T>>
 
 type Validation<'err,'a> with
 
