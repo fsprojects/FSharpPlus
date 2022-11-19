@@ -10,14 +10,15 @@ namespace FSharpPlus
 /// </namespacedoc>
 
 #nowarn "40"
+#nowarn "44"
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
+open System
+open System.ComponentModel
 
-[<System.Obsolete("Compatibility with v1")>]
+[<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
 module Builders =    
-
     open FSharpPlus.Operators
-    open System.ComponentModel
 
     // Idiom brackets
     type Ii = Ii
@@ -33,15 +34,14 @@ module Builders =
     
     // Workflows
 
-    open System
     open System.Collections.Generic
     open FSharpPlus.Control
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type Builder () =
         member        __.ReturnFrom (expr) = expr                                        : '``Monad<'T>``
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type StrictBuilder () =
         inherit Builder ()
         member        __.Run f = f ()              : '``Monad<'T>``
@@ -52,26 +52,26 @@ module Builders =
             let body = fun () -> body disposable
             rs.TryFinally (body, fun () -> dispose disposable)
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type DelayedBuilder () =
         inherit Builder ()
         member        __.Run f = f                                           : '``Monad<'T>``
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type MonadPlusStrictBuilder () =
         inherit StrictBuilder ()
         member        __.YieldFrom  (expr) = expr                        : '``Monad<'T>``
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type MonadFxStrictBuilder () =
         inherit StrictBuilder ()
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type MonadPlusBuilder () =
         inherit DelayedBuilder()
         member        __.YieldFrom  (expr) = expr                     : '``Monad<'T>``
         member        __.strict = new MonadPlusStrictBuilder ()
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     type MonadFxBuilder () =
         inherit DelayedBuilder ()
         member        __.strict  = new MonadFxStrictBuilder ()
@@ -85,10 +85,10 @@ module Builders =
         member        __.fx'     = new MonadFxStrictBuilder ()
 
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     let monad = new MonadFxBuilder ()
 
-    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    [<Obsolete("Compatibility with v1"); EditorBrowsable(EditorBrowsableState.Never)>]
     let monad' = new MonadFxStrictBuilder ()
 
 #endif
