@@ -30,6 +30,7 @@
   <ItemGroup>
     <Compile Include="Internals.fs" />
     <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions\ValueOption.fs" />
     <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
