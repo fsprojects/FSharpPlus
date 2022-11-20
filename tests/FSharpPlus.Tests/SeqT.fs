@@ -106,6 +106,36 @@ module BasicTests =
         let y = (fn |> SeqT.run |> Reader.run) -1 |> Seq.toList
         areEqual [] y
 
+#nowarn "0025"
+
+module WellBehaved =
+    // from https://wiki.haskell.org/ListT_done_right
+
+    [<Test>]
+    let orderOfPrinting () =
+        let putCharIntoMutable (m: ref<string>) (x: char) = async { m.Value <- m.Value + sprintf "%c" x }
+
+        let m = ref ""
+        let [a;b;c] : SeqT<Async<bool>, unit> list = map (liftAsync << putCharIntoMutable m) ['a'; 'b'; 'c']
+        let t1 = ((a <|> a) *> b) *> c |> SeqT.run |> Async.RunSynchronously
+        let m1 = m.Value
+        m.Value <- ""
+        let t2 = (a <|> a) *> (b *> c) |> SeqT.run |> Async.RunSynchronously
+        let m2 = m.Value
+    
+        areEqual m1 "abcabc"
+        areEqual m1 m2
+
+    [<Test>]
+    let ``Order of ListT []`` () =
+        let v = function
+            | 0 -> SeqT [seq [0 ; 1]]
+            | 1 -> SeqT [seq [0]; [1]]
+
+        let r1 = SeqT.run  <| ((v >=> v) >=> v) 0
+        let r2 = SeqT.run  <| (v >=> (v >=> v)) 0
+        areEqual (List.map toList r1) ([[0; 1; 1; 1]; [0; 1; 1; 1]; [0; 1; 1; 1]; [0; 1; 1; 1]; [0; 1; 1; 1]])
+        areEqual (List.map toList r1) (List.map toList r2)
 
 module ComputationExpressions =
 
@@ -324,5 +354,3 @@ module Applicative =
                     let actual = SeqT.map2M (fun a b -> a + b |> async.Return) a b
                     let expected = Seq.zip la lb |> Seq.map ((<||) (+)) |> SeqT.ofSeq
                     Assert.True (EQ expected actual)
-            
-        
