@@ -120,7 +120,7 @@ module Lens =
         /// None will delete the value at the specified index.  Works well together with non.
         let inline _item i f t = 
             Map.InvokeOnInstance
-                (function | None -> List.removeAt i t | Some x -> List.setAt i x t)
+                (function | None -> FSharp.Collections.List.removeAt i t | Some x -> List.setAt i x t)
                 (f (List.tryItem i t))
 
     [<RequireQualifiedAccess>]
