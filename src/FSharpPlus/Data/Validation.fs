@@ -84,7 +84,7 @@ module Validation =
             -> Failure (e1 + e2)
             #endif
 
-    let inline foldBack (folder: 'T->'State->'State) (source: Validation<'Error,'T>) (state: 'State) =
+    let inline foldBack (folder: 'T -> 'State -> 'State) (source: Validation<'Error, 'T>) (state: 'State) =
         match source with
         | Success a -> folder a state
         | Failure _ -> state
@@ -92,13 +92,13 @@ module Validation =
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// Traverse the Success case with the supplied function.
-    let inline traverse (f: 'T->'``Functor<'U>``) (source: Validation<'Error,'T>) : '``Functor<Validation<'Error,'U>>`` =
+    let inline traverse (f: 'T -> '``Functor<'U>``) (source: Validation<'Error, 'T>) : '``Functor<Validation<'Error, 'U>>`` =
         match source with
         | Success a -> Validation<'Error,'U>.Success <!> f a
         | Failure e -> result (Validation<'Error,'U>.Failure e)
 
     /// Traverse the Success case.
-    let inline sequence (source: Validation<'Error,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = traverse id source
+    let inline sequence (source: Validation<'Error, '``Functor<'T>``>) : '``Functor<Validation<'Error, 'T>>`` = traverse id source
 
     #endif
 
@@ -245,11 +245,11 @@ module Validation =
     #endif
 
 
-type Validation<'err,'a> with
+type Validation<'error, 't> with
 
     // as Applicative
     static member Return x = Success x
-    static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
+    static member inline (<*>)  (f: Validation<'Error, 'T -> 'U>, x: Validation<_, 'T>) : Validation<_, _> = Validation.apply f x
 
     /// <summary>
     /// Sequences two Validations left-to-right, discarding the value of the first argument.
@@ -264,39 +264,39 @@ type Validation<'err,'a> with
     static member inline (<*  ) (x: Validation<'Error, 'U>, y: Validation<'Error, 'T>): Validation<'Error, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Validation.map/> x : Validation<'Error, 'T->'U>) </Validation.apply/> y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift2 (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
+    static member inline Lift2 (f, x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'V> = Validation.map2 f x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift3 (f, x: Validation<_,'T>, y: Validation<_,'U>, z: Validation<_,'V>) : Validation<_,'W> = Validation.map3 f x y z
+    static member inline Lift3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     // as Alternative (inherits from Applicative)
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline get_Empty () = Failure (getEmpty ())
-    static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
+    static member inline (<|>) (x: Validation<'Error, 'T>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
     #endif
 
     // as Functor
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Map (x: Validation<_,_>, f) = Validation.map f x
+    static member Map (x: Validation<'Error, _>, f: 'T -> 'U) = Validation.map f x
     
     /// <summary>Lifts a function into a Validator. Same as map.
     /// To be used in Applicative Style expressions, combined with &lt;*&gt;
     /// </summary>
     /// <category index="1">Functor</category>
-    static member (<!>) (f, x: Validation<_,_>) = Validation.map f x
+    static member (<!>) (f: 'T -> 'U, x: Validation<'Error, _>) = Validation.map f x
 
     // as Bifunctor
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Bimap (x: Validation<'T,'V>, f: 'T->'U, g: 'V->'W) : Validation<'U,'W> = Validation.bimap f g x
+    static member Bimap (x: Validation<'T, 'V>, f: 'T -> 'U, g: 'V -> 'W) : Validation<'U, 'W> = Validation.bimap f g x
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
+    static member inline Traverse (t: Validation<'Error, 'T>, f: 'T -> '``Functor<'U>``) : '``Functor<Validation<'Error, 'U>>`` = Validation.traverse f t
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Sequence (t: Validation<'err,'a>) : 'c = Validation.sequence t
+    static member inline Sequence (t: Validation<'Error, '``Functor<'T>``>) : '``Functor<Validation<'Error, 'T>>`` = Validation.sequence t
 
     #endif
 

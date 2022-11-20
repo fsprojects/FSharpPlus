@@ -76,6 +76,22 @@ module ComputationExpressions =
         testTryFinallyCaught ()
         ()
 
+        // specialized to Validation
+
+        let mk1 (s: string) = if true then  Success '1' else Failure [s]
+        let mk2 (s: string) = if false then Success 1 else Failure [s]
+        let mk3 (s: string) = if false then Success true else Failure [s]
+
+        let f x = applicative<Validation<_,_>> {
+            let! x = mk1 x
+            and! y = mk2 "2"
+            and! z = mk3 "3"
+            return (x, y, z) }
+        let _ = f "1"
+
+        ()
+
+
     [<Test>]
     let monadFx () =
         SideEffects.reset ()

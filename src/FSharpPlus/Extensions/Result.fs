@@ -61,6 +61,16 @@ module Result =
         | Error e, _, _
         | _, Error e, _
         | _, _, Error e -> Error e
+
+    /// <summary>Maps both Ok and Error of a Result.</summary>
+    /// <param name="errorMapper">Function to be applied to source, if it contains an Error value.</param>
+    /// <param name="okMapper">Function to be applied to source, if it contains an Ok value.</param>
+    /// <param name="source">The source value, containing an Ok or an Error.</param>
+    /// <returns>The result of applying the corresponding mapping function.</returns>
+    let bimap (errorMapper: 'TError -> 'UError) (okMapper: 'T -> 'U) source =
+        match source with
+        | Error e -> Error (errorMapper e)
+        | Ok a -> Ok (okMapper a)
     
     /// <summary>Flattens two nested Results.</summary>
     /// <param name="source">The nested Results.</param>
