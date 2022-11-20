@@ -65,7 +65,9 @@ type IsAltLeftZero =
     static member inline IsAltLeftZero (_: ref< ^t> when ^t: null and ^t: struct , _mthd: Default1) = ()
 
     static member        IsAltLeftZero (t: ref<option<_>  > , _mthd: IsAltLeftZero) = Option.isSome t.Value
+    #if !FABLE_COMPILER
     static member        IsAltLeftZero (t: ref<voption<_>  >, _mthd: IsAltLeftZero) = ValueOption.isSome t.Value
+    #endif
     static member        IsAltLeftZero (t: ref<Result<_,_>> , _mthd: IsAltLeftZero) = match t.Value with (Ok _        ) -> true | _ -> false
     static member        IsAltLeftZero (t: ref<Choice<_,_>> , _mthd: IsAltLeftZero) = match t.Value with (Choice1Of2 _) -> true | _ -> false
 

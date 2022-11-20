@@ -68,7 +68,9 @@ type Map =
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
+    #if !FABLE_COMPILER
     static member Map ((x: voption<_>          , f: 'T->'U), _mthd: Map) = ValueOption.map  f x
+    #endif
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
     static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
