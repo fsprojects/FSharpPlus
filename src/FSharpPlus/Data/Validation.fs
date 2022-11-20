@@ -244,7 +244,6 @@ module Validation =
         coll1.Close (), coll2.Close ()
     #endif
 
-
 type Validation<'err,'a> with
 
     // as Applicative

@@ -11,7 +11,17 @@ module Validation =
   open FSharpPlus.Data
   open Validation
   open FSharpPlus.Tests.Helpers
-
+    
+  let private getSuccess =
+    function
+    | Success s -> s
+    | Failure _ -> failwith "It's a failure"
+  
+  let private getFailure =
+    function
+    | Success _ -> failwith "It's a Success"
+    | Failure f -> f   
+  
   let fsCheck s x = Check.One({Config.QuickThrowOnFailure with Name = s}, x)
   module FunctorP =
     [<Test>]
@@ -338,3 +348,52 @@ module Validation =
       let r = Validation.bisequence v
       let subject = Async.RunSynchronously r
       areStEqual subject (Success 42)
+    
+    [<Test>]
+    [<TestCase("", false)>]
+    [<TestCase("   ", false)>]
+    [<TestCase(null, false)>]
+    [<TestCase("NotEmpty", true)>]
+    let testValidateRequireString (str, success) =
+      let error = konst "Str"
+      let r = RequiredValidation.string error str
+      areStEqual (RequiredValidation.isSuccess r) success
+      
+      if not success then
+        let failure = getFailure r
+        areStEqual failure.Length 1
+        areStEqual failure.[0] (error "")
+      else
+        ()
+        
+    [<Test>]
+    [<TestCase(1, 0, true)>]
+    [<TestCase(0, 0, false)>]
+    [<TestCase(-1, 0, false)>]
+    let testValidateRequireGreaterThan (value, limit, success) =
+      let error = konst "Int"
+      let r = RequiredValidation.greaterThan error limit value
+      areStEqual (RequiredValidation.isSuccess r) success
+      
+      if not success then
+        let failure = getFailure r
+        areStEqual failure.Length 1
+        areStEqual failure.[0] (error 1)
+      else
+        ()
+        
+    [<Test>]
+    [<TestCase(1, 0, true)>]
+    [<TestCase(0, 0, true)>]
+    [<TestCase(-1, 0, false)>]
+    let testValidateRequireGreaterOrEqualThan (value, limit, success) =
+      let error = konst "Int"
+      let r = RequiredValidation.greaterOrEqualThan error limit value
+      areStEqual (RequiredValidation.isSuccess r) success
+      
+      if not success then
+        let failure = getFailure r
+        areStEqual failure.Length 1
+        areStEqual failure.[0] (error 1)
+      else
+        ()
