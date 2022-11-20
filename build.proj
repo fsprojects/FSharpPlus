@@ -22,16 +22,12 @@
   <Target Name="AllDocs">
     <Exec Command='dotnet tool restore' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
     <Exec Command='dotnet build FSharpPlus.sln -c Release' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
-    <Exec Command='./docsrc/tools/download_nugets.cmd' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command='./docsrc/tools/download_nugets.sh' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command='dotnet run -c Release --project ./docsrc/tools' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
   <Target Name="ReleaseDocs">
     <Exec Command='dotnet tool restore' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
     <Exec Command='dotnet build FSharpPlus.sln -c Release' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
-    <Exec Command='./docsrc/tools/download_nugets.cmd' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" Condition=" '$(OS)' == 'Windows_NT' " />
-    <Exec Command='./docsrc/tools/download_nugets.sh' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" Condition=" '$(OS)' != 'Windows_NT' " />
     <Exec Command='dotnet run -c Release --project ./docsrc/tools ReleaseDocs' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
