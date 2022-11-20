@@ -187,7 +187,7 @@ module GenericBuilders =
         member inline _.BindReturn(x, [<InlineIfLambda>]f) = map f x : '``Applicative<'U>``
         member inline _.MergeSources  (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``) : '``Applicative<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
         member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
-        member        _.Run f = f : '``applicative<'t>``
+        member        _.Run f = f : '``Applicative<'T>``
     
     /// Generic 2 layers Applicative CE builder.
     type ApplicativeBuilder2<'``applicative1<applicative2<'t>>``> () =
@@ -197,7 +197,7 @@ module GenericBuilders =
         member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
         member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (lift2 >> lift2) tuple2 t1 t2
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (lift3 >> lift3) tuple3 t1 t2 t3
-        member        _.Run x : '``applicative1<applicative2<'t>>`` = x
+        member        _.Run x : '``Applicative1<Applicative2<'T>>`` = x
     
     /// Generic 3 layers Applicative CE builder.
     type ApplicativeBuilder3<'``applicative1<applicative2<applicative3<'t>>>``> () =
@@ -207,7 +207,7 @@ module GenericBuilders =
         member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
         member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift2 >> lift2 >> lift2) tuple2 t1 t2
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (lift3 >> lift3 >> lift3) tuple3 t1 t2 t3
-        member        _.Run x : '``applicative1<applicative2<applicative3<'t>>>`` = x
+        member        _.Run x : '``Applicative1<Applicative2<Applicative3<'T>>>`` = x
 
 
 
