@@ -36,7 +36,6 @@ module internal Prelude =
         System.Tuple<_> x
         #endif
 
-
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
 
@@ -47,6 +46,10 @@ module Errors =
     let exnNoSqrt         = new System.Exception "No square root defined for this value in this domain."
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
+
+    let inline raiseIfNull paramName paramValue =
+        if isNull paramValue then
+            nullArg paramName
 
 module Decimal =
     let inline trySqrt x =
@@ -92,7 +95,7 @@ module Constraints =
 
 type Id<'t> (v: 't) =
    let value = v
-   member __.getValue = value
+   member _.getValue = value
 
 [<RequireQualifiedAccess>]
 module Id =
@@ -102,7 +105,7 @@ module Id =
 
 type Id0 (v: string) =
    let value = v
-   member __.getValue = value
+   member _.getValue = value
 
 type Either<'t,'u> =
     | Left of 't
@@ -339,16 +342,17 @@ module FindSliceIndex =
             | Queue([], []) -> 0
             | Queue(fs, bs) -> List.length bs + List.length fs
     open System.Collections
-    type Queue<'T> ()=
+    type Queue<'T> () =
         let mutable q : Q.queue<'T> = Q.empty
         interface IEnumerable<'T> with
-            member __.GetEnumerator()= let s = Q.toSeq q in s.GetEnumerator()
+            member _.GetEnumerator () = let s = Q.toSeq q in s.GetEnumerator()
         interface IEnumerable with
-            member __.GetEnumerator()= let s = Q.toSeq q in s.GetEnumerator() :> IEnumerator
-        member __.Enqueue (v)= q <- Q.enqueue q v
-        member __.Dequeue ()= let (dequeued, next) = Q.dequeue q in q <- next
-                              match dequeued with | Some v -> v | None -> failwith "Empty queue!"
-        member __.Count = Q.length q
+            member _.GetEnumerator () = let s = Q.toSeq q in s.GetEnumerator() :> IEnumerator
+        member _.Enqueue (v) = q <- Q.enqueue q v
+        member _.Dequeue () =
+            let (dequeued, next) = Q.dequeue q in q <- next
+            match dequeued with | Some v -> v | None -> failwith "Empty queue!"
+        member _.Count = Q.length q
     #endif
 
     let listImpl (slice: _ list) (source: _ list) =

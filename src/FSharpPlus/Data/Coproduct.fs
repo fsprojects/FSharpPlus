@@ -10,7 +10,7 @@ open FSharpPlus.Control
 type CoproductBase<'``functorL<'t>``,'``functorR<'t>``> (left: '``functorL<'t>``, right: '``functorR<'t>``, isLeft: bool) =
     let (left, right, isLeft)    = left, right, isLeft
     with
-        member __.getContents () = left, right, isLeft
+        member _.getContents () = left, right, isLeft
         override x.GetHashCode () = Unchecked.hash (x.getContents ())
         override x.Equals o =
             match o with

@@ -53,13 +53,42 @@ type Const<'t,'u> = Const of 't with
     static member inline get_Zero () = Const (getZero ()) : Const<'T,'U>
     static member inline (+) (Const x: Const<'T,'U>, Const y: Const<'T,'U>) = Const (plus x y) : Const<'T,'U>
 
+/// Basic operations on Const
+[<RequireQualifiedAccess>]
+module Const =
+    let run (Const t) = t
+    let map (_: 'T -> 'U) (Const x: Const<_, 'T>) : Const<'C, 'U> = Const x
+    let inline apply (Const f: Const<'C, 'T -> 'U>) (Const x: Const<'C, 'T>) : Const<'C, 'U> = Const (plus f x)
+
+type Const<'t,'u> with
+
     // Functor
-    static member Map (Const x: Const<_,'T>, _: 'T->'U) = Const x : Const<'C,'U>
+    static member Map (Const x: Const<_, 'T>, _: 'T->'U) = Const x : Const<'C,'U>
+
+    /// <summary>Lifts a function into a Const. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (_: 'T->'U, Const x: Const<_,'T>) : Const<'C, 'U> = Const x
 
     // Applicative
     static member inline Return (_: 'U) = Const (getZero ()) : Const<'T,'U>
     static member inline (<*>) (Const f: Const<'C,'T->'U>, Const x: Const<'C,'T>) = Const (plus f x) : Const<'C,'U>
+
+    /// <summary>
+    /// Sequences two Consts left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (Const x: Const<'C, 'T>, Const y: Const<'C, 'U>) : Const<'C, 'U> = Const (plus x y)
+    
+    /// <summary>
+    /// Sequences two Consts left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (Const x: Const<'C, 'U>, Const y: Const<'C, 'T>) : Const<'C, 'U> = Const (plus x y)
+
     static member inline Lift2 (_: 'T->'U->'V, Const x: Const<'C,'T>, Const y: Const<'C,'U>) = Const (plus x y) : Const<'C,'V>
+    static member inline Lift3 (_: 'T->'U->'V->'W, Const x: Const<'C,'T>, Const y: Const<'C,'U>, Const z: Const<'C,'V>) = Const (x ++ y ++ z) : Const<'C,'W>
 
     // Contravariant
     static member Contramap (Const x: Const<'C,'T>, _: 'U->'T) = Const x     : Const<'C,'U>
@@ -82,10 +111,6 @@ type Const<'t,'u> = Const of 't with
             ()
         (Const : _ -> Const<'T2,'U2>) <!> f x
 
-/// Basic operations on Const
-[<RequireQualifiedAccess>]
-module Const =
-    let run (Const t) = t
 
 #endif
 
@@ -113,6 +138,8 @@ type Mult<'a> = Mult of 'a with
     static member inline (+) (Mult (x: 'n), Mult (y: 'n)) = Mult (x * y)
 
 
+open FSharpPlus.Control
+
 /// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
 [<Struct>]
 type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t>>`` with
@@ -120,10 +147,35 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
     // Functor
     static member inline Map (Compose (x: '``FunctorF<'FunctorG<'T>>``), f: 'T->'U) = Compose (map (map f: '``FunctorG<'T>`` -> '``FunctorG<'U>``) x : '``FunctorF<'FunctorG<'U>>``)
 
+    /// <summary>Lifts a function into a Composed Applicative Functor. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member inline (<!>) (f: 'T->'U, x: '``FunctorF<'FunctorG<'T>>``) = Compose (map (map f: '``FunctorG<'T>`` -> '``FunctorG<'U>``) x : '``FunctorF<'FunctorG<'U>>``)
+
     // Applicative
     static member inline Return (x: 'T) = Compose (result (result x: '``ApplicativeG<'T>``)) : Compose<'``ApplicativeF<'ApplicativeG<'T>``>
+
     static member inline (<*>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T->'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
         Compose ((((<*>) : '``ApplicativeG<'T->'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>`` ) <*> x: '``ApplicativeF<'ApplicativeG<'U>``)
+
+    /// <summary>
+    /// Sequences two composed applicatives left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: '``FunctorF<'FunctorG<'T>>``, y: '``FunctorF<'FunctorG<'U>>``) : '``FunctorF<'FunctorG<'U>>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``FunctorF<'FunctorG<'U->'U>>``) <*> y
+    
+    /// <summary>
+    /// Sequences two composed applicatives left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<*  ) (x: '``FunctorF<'FunctorG<'U>>``, y: '``FunctorF<'FunctorG<'T>>``): '``FunctorF<'FunctorG<'U>>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``FunctorF<'FunctorG<'T->'U>>``) <*> y
+    
+    static member inline Lift2 (f: 'T -> 'U -> 'V, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``)) =
+        Compose (Lift2.Invoke (Lift2.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>``) x y: '``ApplicativeF<'ApplicativeG<'V>``)
+
+    static member inline Lift3 (f: 'T -> 'U -> 'V -> 'W, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``), Compose (z: '``ApplicativeF<'ApplicativeG<'V>``)) =
+        Compose (Lift3.Invoke (Lift3.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>`` -> '``ApplicativeG<'W>``) x y z: '``ApplicativeF<'ApplicativeG<'W>``)
 
     // Alternative
     static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``AlternativeF<'ApplicativeG<'T>``>

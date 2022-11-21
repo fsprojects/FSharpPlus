@@ -15,8 +15,22 @@
 
   <Target Name="Test">
     <Exec Command='dotnet build src/FSharpPlus.TypeLevel' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
-    <Exec Command='dotnet test tests/FSharpPlus.Tests -c Release --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet test --blame-hang-timeout 30s tests/FSharpPlus.Tests -c Release --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
+
+  <!-- dotnet msbuild -target:AllDocs build.proj -->
+  <Target Name="AllDocs">
+    <Exec Command='dotnet tool restore' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet build FSharpPlus.sln -c Release' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet run -c Release --project ./docsrc/tools' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
+  <Target Name="ReleaseDocs">
+    <Exec Command='dotnet tool restore' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet build FSharpPlus.sln -c Release' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet run -c Release --project ./docsrc/tools ReleaseDocs' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+  </Target>
+
 
   <Target Name="VSTest" DependsOnTargets="Test" />
 

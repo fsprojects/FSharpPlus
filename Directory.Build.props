@@ -1,7 +1,7 @@
 <Project ToolsVersion="15.0">
 
   <PropertyGroup>
-    <RepositoryUrl>https://github.com/fsprojects/FSharpPlus.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/fsprojects/FSharpPlus</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <Description>
       A complete and extensible base library for F#.
@@ -18,6 +18,8 @@
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
 
     <FsDocsNavBarPosition>fixed-left</FsDocsNavBarPosition>
+    <FsDocsReleaseNotesLink>https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
+    <FsDocsLicenseLink>https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md</FsDocsLicenseLink>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -36,15 +38,21 @@
     <MonoRoot Condition="'$(MonoRoot)' == '' and $([MSBuild]::IsOsPlatform('OSX'))">/Library/Frameworks/Mono.framework/Versions/Current</MonoRoot>
     <MonoLibFolder>$(MonoRoot)/lib/mono</MonoLibFolder>
     <MonoPackaging Condition="$(TargetFramework.StartsWith('net4'))">true</MonoPackaging>
+    <!-- End Date: Jan 12, 2016 : net45 -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net45'">$(MonoLibFolder)/4.5-api</FrameworkPathOverride>
+    <!-- End Date: Jan 12, 2016 : net451 -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net451'">$(MonoLibFolder)/4.5.1-api</FrameworkPathOverride>
+    <!-- End Date: Apr 26, 2022 : net452 -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net452'">$(MonoLibFolder)/4.5.2-api</FrameworkPathOverride>
+    <!-- End Date: Apr 26, 2022 : net46 -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net46'">$(MonoLibFolder)/4.6-api</FrameworkPathOverride>
+    <!-- End Date: Apr 26, 2022 : net461 -->
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net461'">$(MonoLibFolder)/4.6.1-api</FrameworkPathOverride>
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net462'">$(MonoLibFolder)/4.6.2-api</FrameworkPathOverride>
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net47'">$(MonoLibFolder)/4.7-api</FrameworkPathOverride>
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net471'">$(MonoLibFolder)/4.7.1-api</FrameworkPathOverride>
     <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net472'">$(MonoLibFolder)/4.7.2-api</FrameworkPathOverride>
+    <FrameworkPathOverride Condition="'$(TargetFramework)' == 'net48'">$(MonoLibFolder)/4.8-api</FrameworkPathOverride>
   </PropertyGroup>
 
 </Project>

@@ -179,7 +179,7 @@ type Zero with
     #if !FABLE_COMPILER
     static member inline Zero (_: Task<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
-        let s = TaskCompletionSource ()
+        let s = TaskCompletionSource<_> ()
         s.SetResult v
         s.Task
     #endif

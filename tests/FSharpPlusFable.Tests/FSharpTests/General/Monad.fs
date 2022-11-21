@@ -5,6 +5,11 @@ open FSharpPlus
 open FSharpPlus.Data
 #nowarn "686"
 
+#if !FABLE_COMPILER || FABLE_COMPILER_3
+let option<'t> = monad<Option<'t>>
+let list<'t>   = monad'<list<'t>>
+#endif
+
 let monad = testList "Monad" [
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "joinDefaultCustom" (fun () -> 
@@ -18,31 +23,56 @@ let monad = testList "Monad" [
         equal ["Join"] (SideEffects.get ()))
     #endif
 
-    #if !FABLE_COMPILER
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     testCase "workFlow" (fun () ->       
         let testVal = 
             monad {
                 let! x1 = WrappedListD [1;2]
                 let! x2 = WrappedListD [10;20]
                 return ((+) x1 x2) }
-        Assert.IsInstanceOf<WrappedListD<int>> (testVal))
-
+        
+        Assert.IsInstanceOf<WrappedListD<int>> (testVal)
+        equal (WrappedListD [11; 21; 12; 22]) testVal
+        () )
+    #endif
+    
+    // Exception: TypeError: Cannot read property '0' of undefined 
+    #if !FABLE_COMPILER
     testCase "return Const First using invoke on instance" (fun () ->
         let cf : Const<First<int>,int> = Control.Return.InvokeOnInstance 1
         equal None (cf |> Const.run |> First.run)
     )
     #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     testCase "return Const First using explicit method" (fun () ->
         let cf : Const<First<int>,int> = Const.Return<_,_> 1
         equal None (cf |> Const.run |> First.run)
     )
+    #if !FABLE_COMPILER
     testCase "return Const" (fun () ->
         let c : Const<int,int> = Control.Return.InvokeOnInstance 1 in equal 0 (Const.run c)
     )
     #endif
+    
+    testCase "specialized maybe monad" (fun () ->
+        let v = option {
+            let! x = Some 10
+            let! y = Some 15
+            return x + y
+        }        
+        equal (Some 25) v
+    )
+    
+    testCase "specialized (strict) list monad" (fun () ->
+        let v = list {
+            let! x = [10]
+            let! y = [15]
+            return x + y
+        }        
+        equal [25] v
+    )  
 
+    //  Exception: RangeError: Maximum call stack size exceeded
     #if !FABLE_COMPILER
     testCase "DelayForCont" (fun () -> 
         // If Delay is not properly implemented this will stack-overflow

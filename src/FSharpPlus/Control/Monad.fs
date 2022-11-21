@@ -151,7 +151,9 @@ type Return =
 type Delay =
     inherit Default1
     
+    #if !FABLE_COMPILER
     static member inline Delay (_mthd: Default3, x: unit-> ^``Monad<'T>``                                 , _: Default1) = Bind.Invoke (Return.Invoke ()) x : ^``Monad<'T>``
+    
     static member inline Delay (_mthd: Default1, x: unit-> ^I                                             , _: Delay   ) = (^I : (static member Delay : _->_) x) : ^I
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()
 
@@ -159,14 +161,18 @@ type Delay =
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = NonEmptySeq.delay x : NonEmptySeq<'T>
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
-    #if !FABLE_COMPILER
     static member        Delay (_mthd: Delay   , x: unit-> Task<_>                                        , _          ) = x () : Task<'T>
-    #endif
-    static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>    
-
-    static member inline Invoke source : 'R =
+    static member        Delay (_mthd: Delay   , x: unit-> Lazy<_>                                        , _          ) = lazy (x().Value) : Lazy<'T>
+        
+    static member inline Invoke (source : unit -> '``Monad<'T>``) : '``Monad<'T>`` =
         let inline call (mthd: ^M, input: unit -> ^I) = ((^M or ^I) : (static member Delay : _*_*_ -> _) mthd, input, Unchecked.defaultof<Delay>)
         call (Unchecked.defaultof<Delay>, source)
+    
+    #else
+    
+    static member inline Invoke (source : unit -> '``Monad<'T>``) : '``Monad<'T>`` = Bind.Invoke (Return.Invoke ()) source
+    
+    #endif
 
 
 [<System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
@@ -190,11 +196,19 @@ type TryWith =
     inherit Default1
 
     [<CompilerMessage(MessageWhile  , CodeWhile  , IsError = false)>]
-    static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: While) = raise Internals.Errors.exnUnreachable
+    static member        TryWith (_: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: exn -> '``Monad<'T>``, _: Default4, _defaults: While) = raise Internals.Errors.exnUnreachable
+    
+    [<CompilerMessage(MessageWhile  , CodeWhile  , IsError = false)>]
+    static member        TryWith (_: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, _: exn -> '``Monad<'T>``, _: Default3, _defaults: While) = raise Internals.Errors.exnUnreachable
     
     [<CompilerMessage(MessageTryWith, CodeTryWith, IsError = true)>]
-    static member        TryWith (_:           unit -> '``Monad<'T>``, _:            exn -> '``Monad<'T>``, _: Default3, _defaults: False) = raise Internals.Errors.exnUnreachable
-    static member        TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default3, _defaults: True ) = try computation () with e -> catchHandler e
+    static member        TryWith (_: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, _: exn -> '``Monad<'T>``, _: Default4, _defaults: False) = raise Internals.Errors.exnUnreachable
+    
+    [<CompilerMessage(MessageTryWith, CodeTryWith, IsError = true)>]
+    static member        TryWith (_: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, _: exn -> '``Monad<'T>``, _: Default3, _defaults: False) = raise Internals.Errors.exnUnreachable
+
+    static member        TryWith (computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` : not struct, catchHandler: exn -> '``Monad<'T>``, _: Default4, _defaults: True) = try computation () with e -> catchHandler e
+    static member        TryWith (computation: unit -> '``Monad<'T>`` when '``Monad<'T>`` :     struct, catchHandler: exn -> '``Monad<'T>``, _: Default3, _defaults: True) = try computation () with e -> catchHandler e
 
     static member inline TryWith (computation: unit -> '``Monad<'T>``, catchHandler: exn -> '``Monad<'T>``, _: Default1, _) = (^``Monad<'T>`` : (static member TryWith : _*_->_) computation (), catchHandler) : '``Monad<'T>``
     static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
@@ -209,15 +223,15 @@ type TryWith =
     static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith , _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
 
     static member inline Invoke (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, False)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> _) input, h, mthd, False)
         call (Unchecked.defaultof<TryWith>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
 
     static member inline InvokeForStrict (source: unit ->'``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, True)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> _) input, h, mthd, True)
         call (Unchecked.defaultof<TryWith>, source, Unchecked.defaultof<'``Monad<'T>``>, f)
 
     static member inline InvokeForWhile (source: '``Monad<'T>``) (f: exn -> '``Monad<'T>``) : '``Monad<'T>`` =
-        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*_*_*_ -> _) input, h, mthd, While)
+        let inline call (mthd: 'M, input: unit -> 'I, _output: 'R, h: exn -> 'I) = ((^M or ^I) : (static member TryWith : _*(exn -> _)*_*_ -> _) input, h, mthd, While)
         call (Unchecked.defaultof<TryWith>, (fun () -> source), Unchecked.defaultof<'``Monad<'T>``>, f)
 
 

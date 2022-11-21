@@ -1,4 +1,5 @@
 namespace FSharpPlus
+open System
 
 /// Additional operations on Map<'Key, 'Value>
 [<RequireQualifiedAccess>]
@@ -16,12 +17,20 @@ module Map =
     /// <param name="source">The input map.</param>
     ///
     /// <returns>A seq of the keys in the map.</returns>
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let keys   (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(k, _)) -> k) source
 
     /// <summary>Returns the values of the given map.</summary>
     /// <param name="source">The input map.</param>
     ///
     /// <returns>A seq of the values in the map.</returns>
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     /// <summary>Maps the values of the original Map.</summary>

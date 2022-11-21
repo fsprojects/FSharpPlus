@@ -23,7 +23,7 @@ type LiftAsync =
     static member        LiftAsync (_: Async<'T>) = fun (x: Async<'T>) -> x
 
 
-// MonadError
+// MonadError<'E, 'T> is a Monad<'T> with following operations
 
 type Throw =
     static member inline Invoke (x: 'E) : '``'MonadError<'E,'T>`` =
@@ -45,24 +45,24 @@ type Catch =
         call_3 (Unchecked.defaultof<Catch>, x, Unchecked.defaultof<'``MonadError<'E2,'T>``>, f)
 
 
-// MonadCont
+// MonadCont<'C, 'T> is a Monad<'T> with following operations
 
 type CallCC = static member inline Invoke (f: (('T -> '``MonadCont<'U>``) ->'``MonadCont<'T>``)) = (^``MonadCont<'T>`` : (static member CallCC : _ -> '``MonadCont<'T>``) f)
 
 
-// MonadState
+// MonadState<'S, 'T> is a Monad<'T> with following operations
 
-type Get = static member inline Invoke ()      : '``MonadState<'S * 'S>``   = (^``MonadState<'S * 'S>``   : (static member Get :      _) ())
-type Put = static member inline Invoke (x: 'S) : '``MonadState<unit * 'S>`` = (^``MonadState<unit * 'S>`` : (static member Put : _ -> _) x)
-
-
-// MonadReader
-
-type Ask   = static member inline Invoke ()                                          : '``MonadReader<'R,'T>``  = (^``MonadReader<'R,'T>``  : (static member Ask   : _) ())
-type Local = static member inline Invoke (f: 'R1->'R2) (m: ^``MonadReader<'R2,'T>``) : '``MonadReader<'R1,'T>`` = (^``MonadReader<'R1,'T>`` : (static member Local : _*_ -> _) m, f)
+type Get = static member inline Invoke ()      : '``MonadState<'S, 'S>``   = (^``MonadState<'S, 'S>``   : (static member Get :      _) ())
+type Put = static member inline Invoke (x: 'S) : '``MonadState<'S, unit>`` = (^``MonadState<'S, unit>`` : (static member Put : _ -> _) x)
 
 
-// MonadWriter
+// MonadReader<'R, 'T> is a Monad<'T> with following operations
+
+type Ask   = static member inline Invoke ()                                             : '``MonadReader<'R, 'T>``  = (^``MonadReader<'R, 'T>``  : (static member Ask   : _) ())
+type Local = static member inline Invoke (f: 'R1 -> 'R2) (m: ^``MonadReader<'R2, 'T>``) : '``MonadReader<'R1, 'T>`` = (^``MonadReader<'R1, 'T>`` : (static member Local : _*_ -> _) m, f)
+
+
+// MonadWriter<'Monoid, 'T> is a Monad<'T> with following operations
     
 type Tell   = static member inline Invoke (w: 'Monoid)                                               : '``MonadWriter<'Monoid,unit>``           = (^``MonadWriter<'Monoid,unit>``           : (static member Tell   : _ -> _) w)
 type Listen = static member inline Invoke (m: '``MonadWriter<'Monoid,'T>``)                          : '``MonadWriter<'Monoid,('T * 'Monoid)>`` = (^``MonadWriter<'Monoid,('T * 'Monoid)>`` : (static member Listen : _ -> _) m)

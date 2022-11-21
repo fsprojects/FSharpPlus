@@ -828,7 +828,8 @@ module Task =
 
         // no need to call this, we just want to check that it compiles w/o warnings
         let testDefaultInferenceForReturnFrom() =
-            let t: Task<_> = monad' { return Some "x" }
+            // NOTE the type hint is due to https://github.com/dotnet/fsharp/issues/12929
+            let t: Task<string option> = monad' { return Some "x" }
             monad' {
                 let! r = t
                 if r = None then

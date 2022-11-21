@@ -14,6 +14,36 @@ module ComputationExpressions =
     let task<'t> = monad'<Task<'t>>
 
     [<Test>]
+    let twoLayersApplicatives () =
+        let id   : Task<Validation<_, string>>   = Failure (Map.ofList ["Id",   ["Negative number"]]) |> Task.FromResult
+        let firstName : Validation<_, string>    = Failure (Map.ofList ["Name", ["Invalid chars"]])
+        let lastName :  Validation<_, string>    = Failure (Map.ofList ["Name", ["Too long"]])
+        let date : Task<Validation<_, DateTime>> = Failure (Map.ofList ["DoB" , ["Invalid date"]]) |> result
+        
+        let _person = applicative2 {
+            let! i = id
+            and! f = result firstName
+            and! l = result lastName
+            and! d = date
+            return {| Id = i; Name = f + l; DateOfBirth = d |} }
+        ()
+
+    [<Test>]
+    let threeLayersApplicatives () =
+        let id        : Lazy<Task<Validation<Map<string, string list>, int>>>      = lazy (Failure (Map.ofList ["Id",   ["Negative number"]]) |> result)
+        let firstName :      Task<Validation<Map<string, string list>, string>>    =       Failure (Map.ofList ["Name", ["Invalid chars"]]) |> Task.FromResult
+        let lastName                                                               = "Smith"
+        let date      : Lazy<Task<Validation<Map<string, string list>, DateTime>>> = lazy (Failure (Map.ofList ["DoB" , ["Invalid date"]]) |> result)
+
+        let _person = applicative3 {
+            let! i = id
+            and! d = date
+            and! f = result firstName
+            let  l = lastName
+            return {| Id = i; Name = f + l ; DateOfBirth = d |} }
+        ()
+
+    [<Test>]
     let specializedCEs () =
     
         // From Taskbuilder.fs
@@ -45,6 +75,22 @@ module ComputationExpressions =
         
         testTryFinallyCaught ()
         ()
+
+        // specialized to Validation
+
+        let mk1 (s: string) = if true then  Success '1' else Failure [s]
+        let mk2 (s: string) = if false then Success 1 else Failure [s]
+        let mk3 (s: string) = if false then Success true else Failure [s]
+
+        let f x = applicative<Validation<_,_>> {
+            let! x = mk1 x
+            and! y = mk2 "2"
+            and! z = mk3 "3"
+            return (x, y, z) }
+        let _ = f "1"
+
+        ()
+
 
     [<Test>]
     let monadFx () =

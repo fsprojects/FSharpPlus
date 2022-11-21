@@ -35,6 +35,7 @@ module Extensions =
 
     open System.Threading
     open System.Threading.Tasks
+    open FSharp.Core.CompilerServices
 
     let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
         if t.IsCanceled then Canceled
@@ -66,19 +67,28 @@ module Extensions =
         #if !FABLE_COMPILER
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+            let startImmediateAsTask ct a =
+                Async.StartImmediateAsTask(a, ct).Result
+
             let! ct = Async.CancellationToken
-            return seq {
-                use enum = t.GetEnumerator ()
-                while enum.MoveNext() do
-                    yield Async.RunSynchronously (enum.Current, cancellationToken = ct) }}
+            return t |> Seq.map (startImmediateAsTask ct) }
         #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: list<Async<_>>) : Async<list<_>> =
+        static member Sequence (t: list<Async<'T>>) : Async<list<'T>> =
+        #if FABLE_COMPILER
             let rec loop acc = function
                 | []    -> async.Return (List.rev acc)
                 | x::xs -> async.Bind (x, fun x -> loop (x::acc) xs)
             loop [] t
+        #else
+            async {
+                let mutable coll = ListCollector<'T> ()
+                for e in t do
+                    let! v = e
+                    coll.Add v
+                return coll.Close () }
+        #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: array<Async<_>>) : Async<array<_>> = async {

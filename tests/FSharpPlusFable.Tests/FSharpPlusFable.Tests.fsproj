@@ -1,18 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <Configurations>Debug;Release;Fable;Fable3</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">5.0</LangVersion>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_FAKE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3;FABLE_COMPILER_FAKE</DefineConstants>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Include="Util.fs" />
     <Compile Include="FSharpTests/General/Util.fs" />
+    <Compile Include="FSharpTests/General/Splits.fs" />
+    <Compile Include="FSharpTests/General/MonoidCompile.fs" />
     <Compile Include="FSharpTests/General/Monoid.fs" />
     <Compile Include="FSharpTests/General/Functor.fs" />
     <Compile Include="FSharpTests/General/Collections.fs" />
@@ -42,6 +44,6 @@
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
       <Private>True</Private>
     </ProjectReference>
-    <PackageReference Update="FSharp.Core" Version="5.0.1" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" />
   </ItemGroup>
 </Project>
