@@ -342,6 +342,19 @@ module ComputationExpressions =
             } |> OptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         SideEffects.are ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
+
+    [<Test>]
+    let usingInValueOptionT () =
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Async<int voption> =
+            monad {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (res: int) = ValueOptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" res)
+                return res
+            } |> ValueOptionT.run
+        let _ = reproducePrematureDisposal |> Async.RunSynchronously
+        SideEffects.are ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
    
     [<Test>]
     let testCompileUsingInOptionTStrict () = // wrong results, Async is not strict
@@ -353,6 +366,19 @@ module ComputationExpressions =
                 SideEffects.add (sprintf "Unpacked async option: %A" res)
                 return res
             } |> OptionT.run
+        let _ = reproducePrematureDisposal |> Async.RunSynchronously
+        SideEffects.are ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"]
+   
+    [<Test>]
+    let testCompileUsingInValueOptionTStrict () = // wrong results, Async is not strict
+        SideEffects.reset ()
+        let reproducePrematureDisposal : Async<int voption> =
+            monad.strict {
+                use somethingDisposable = new AsyncOfOptionDisposable ()
+                let! (res: int) = ValueOptionT <| somethingDisposable.AsyncSomeOption ()
+                SideEffects.add (sprintf "Unpacked async option: %A" res)
+                return res
+            } |> ValueOptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         SideEffects.are ["I'm disposed"; "I'm doing something async"; "Unpacked async option: 1"]
         
