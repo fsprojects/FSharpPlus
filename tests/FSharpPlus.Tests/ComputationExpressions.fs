@@ -329,6 +329,16 @@ module ComputationExpressions =
         member __.IdSomeOption() : Identity<int option> = monad { 
             SideEffects.add "I'm doing something id"
             return Some 1 }
+        
+    type AsyncOfValueOptionDisposable () =
+        interface IDisposable with
+            member __.Dispose() = SideEffects.add "I'm disposed"
+        member __.AsyncSomeOption() : Async<int voption> = async { 
+            SideEffects.add "I'm doing something async"
+            return ValueSome 1 }
+        member __.IdSomeOption() : Identity<int voption> = monad { 
+            SideEffects.add "I'm doing something id"
+            return ValueSome 1 }
 
     [<Test>]
     let usingInOptionT () =
@@ -343,18 +353,20 @@ module ComputationExpressions =
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         SideEffects.are ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
 
+    #if !FABLE_COMPILER
     [<Test>]
     let usingInValueOptionT () =
         SideEffects.reset ()
         let reproducePrematureDisposal : Async<int voption> =
             monad {
-                use somethingDisposable = new AsyncOfOptionDisposable ()
+                use somethingDisposable = new AsyncOfValueOptionDisposable ()
                 let! (res: int) = ValueOptionT <| somethingDisposable.AsyncSomeOption ()
                 SideEffects.add (sprintf "Unpacked async option: %A" res)
                 return res
             } |> ValueOptionT.run
         let _ = reproducePrematureDisposal |> Async.RunSynchronously
         SideEffects.are ["I'm doing something async"; "Unpacked async option: 1"; "I'm disposed"]
+    #endif
    
     [<Test>]
     let testCompileUsingInOptionTStrict () = // wrong results, Async is not strict
@@ -374,7 +386,7 @@ module ComputationExpressions =
         SideEffects.reset ()
         let reproducePrematureDisposal : Async<int voption> =
             monad.strict {
-                use somethingDisposable = new AsyncOfOptionDisposable ()
+                use somethingDisposable = new AsyncOfValueOptionDisposable ()
                 let! (res: int) = ValueOptionT <| somethingDisposable.AsyncSomeOption ()
                 SideEffects.add (sprintf "Unpacked async option: %A" res)
                 return res
