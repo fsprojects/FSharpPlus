@@ -64,6 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\type-mult.fsx = docsrc\content\type-mult.fsx
 		docsrc\content\type-nonempty.fsx = docsrc\content\type-nonempty.fsx
 		docsrc\content\type-optiont.fsx = docsrc\content\type-optiont.fsx
+		docsrc\content\type-valueoptiont.fsx = docsrc\content\type-valueoptiont.fsx
 		docsrc\content\type-parallelarray.fsx = docsrc\content\type-parallelarray.fsx
 		docsrc\content\type-reader.fsx = docsrc\content\type-reader.fsx
 		docsrc\content\type-readert.fsx = docsrc\content\type-readert.fsx
@@ -77,7 +78,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\type-writert.fsx = docsrc\content\type-writert.fsx
 		docsrc\content\type-ziplist.fsx = docsrc\content\type-ziplist.fsx
 		docsrc\content\types.fsx = docsrc\content\types.fsx
-		docsrc\content\type-valueoptiont.fsx = docsrc\content\type-valueoptiont.fsx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"
