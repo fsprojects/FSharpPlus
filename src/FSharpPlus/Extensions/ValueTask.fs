@@ -4,7 +4,7 @@ namespace FSharpPlus
 
 /// Additional operations on ValueTask<'T>
 [<RequireQualifiedAccess>]
-module ValueTasks =
+module ValueTask =
     
     open System.Threading
     open System.Threading.Tasks
@@ -23,7 +23,7 @@ module ValueTasks =
 
     /// <summary>Creates a ValueTask workflow from 'source' another, mapping its result with 'f'.</summary>
     let map (f: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
-        task{
+        backgroundTask {
             let! r = source
             return f r
         } |> ValueTask<'U>
@@ -34,7 +34,7 @@ module ValueTasks =
     /// <param name="x">First ValueTask workflow.</param>
     /// <param name="y">Second ValueTask workflow.</param>
     let map2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
-        task{
+        backgroundTask {
             let! rX = x
             let! rY = y
             return f rX rY
@@ -47,19 +47,19 @@ module ValueTasks =
     /// <param name="y">Second ValueTask workflow.</param>
     /// <param name="z">Third ValueTask workflow.</param>
     let map3 (f : 'T -> 'U -> 'V -> 'W) (x : ValueTask<'T>) (y : ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
-        task{
+        backgroundTask {
             let! rX = x
             let! rY = y
             let! rZ = z
             return f rX rY rZ
         } |> ValueTask<'W>
 
-    /// <summary>Creates a ValueTask workflow that is the result of applying the resulting function of a task workflow
-    /// to the resulting value of another task workflow</summary>
+    /// <summary>Creates a ValueTask workflow that is the result of applying the resulting function of a ValueTask workflow
+    /// to the resulting value of another ValueTask workflow</summary>
     /// <param name="f">ValueTask workflow returning a function</param>
     /// <param name="x">ValueTask workflow returning a value</param>
     let apply (f: ValueTask<'T->'U>) (x: ValueTask<'T>) : ValueTask<'U> =
-        task{
+        backgroundTask {
             let! r = x
             let! fn = f
             return (fn r)
@@ -67,30 +67,30 @@ module ValueTasks =
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', tupling its results.</summary>
     let zip (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'T * 'U> =
-        task{
+        backgroundTask {
             let! rX = x
             let! rY = y
             return (rX, rY)
         } |> ValueTask<'T * 'U>
     
-    /// Flattens two nested tasks into one.
+    /// Flattens two nested ValueTask into one.
     let join (source: ValueTask<ValueTask<'T>>) : ValueTask<'T> =
-        task{
+        backgroundTask {
             let! s = source
             return! s
         } |> ValueTask<'T>
     
     
-    /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
+    /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
         source
         |> map f
         |> join
             
-    /// <summary>Creates a ValueTask that ignores the result of the source task.</summary>
+    /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
     let ignore (source: ValueTask<'T>) =
-        task {
+        backgroundTask {
             let! _ = source
             return ()
         } |> ValueTask
