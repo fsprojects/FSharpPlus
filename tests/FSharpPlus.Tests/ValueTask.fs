@@ -38,7 +38,7 @@ module ValueTask =
 
             let b = ValueTask.zip x1 x2
             require b.IsCompleted "ValueTask.zip didn't short-circuit"
-            let (b1, b2) = b.Result
+            let b1, b2 = b.Result
             areEqual b1 1
             areEqual b2 2
 
@@ -57,8 +57,6 @@ module ValueTask =
             let e3 () = createValueTask true  3
             let x1 () = createValueTask false 1
             let x2 () = createValueTask false 2
-            let x3 () = createValueTask false 3
-        
         
             let mapping  isFailure x     = if isFailure then raise (TestException "I was told to fail") else x
             let mapping2 isFailure x y   = if isFailure then raise (TestException "I was told to fail") else x + y
