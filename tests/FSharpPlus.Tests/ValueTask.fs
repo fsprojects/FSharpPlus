@@ -34,21 +34,21 @@ module ValueTask =
 
             let a = ValueTask.map string x1
             require a.IsCompleted "ValueTask.map didn't short-circuit"
-            Assert.AreEqual a "1"
+            areEqual a.Result "1"
 
             let b = ValueTask.zip x1 x2
             require b.IsCompleted "ValueTask.zip didn't short-circuit"
-            let (b1, b2) = b
-            Assert.AreEqual b1 1
-            Assert.AreEqual b2 2
+            let (b1, b2) = b.Result
+            areEqual b1 1
+            areEqual b2 2
 
             let c = ValueTask.map2 (+) x1 x2
             require c.IsCompleted "ValueTask.map2 didn't short-circuit"
-            Assert.AreEqual c 3
+            areEqual c.Result 3
             
             let d = ValueTask.map3 (fun x y z -> x + y + z) x1 x2 x3
             require d.IsCompleted "ValueTask.map3 didn't short-circiut"
-            Assert.AreEqual d 6
+            areEqual d.Result 6
         
         [<Test>]
         let erroredValueTasks () =
