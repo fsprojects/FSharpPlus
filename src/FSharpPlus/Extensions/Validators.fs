@@ -5,13 +5,13 @@ module RequiredValidation =
     open System
     open FSharpPlus.Data
     
-    let inline validate error f v =
+    let inline private validate error f v =
         if f v then
             Success v
         else
             Failure [ error ]
 
-    let inline string error value =
+    let inline notNullOrWhiteSpace error value =
         validate (error value) (String.IsNullOrWhiteSpace >> not) value
 
     let inline greaterThan error min value =
@@ -30,7 +30,7 @@ module RequiredValidation =
 
         validate (error value) check value
 
-    let inline guid error value =
+    let inline guidNotEmpty error value =
         validate (error value) (fun v -> v <> Guid.Empty) value
 
     let inline object error value =
