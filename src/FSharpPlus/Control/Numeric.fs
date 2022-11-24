@@ -185,7 +185,7 @@ type Zero with
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member inline Zero (_: ValueTask<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
-        ValueTask<'T>(result)
+        ValueTask<_>(v)
     #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
