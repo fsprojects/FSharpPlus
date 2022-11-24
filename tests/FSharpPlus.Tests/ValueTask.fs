@@ -15,9 +15,9 @@ module ValueTask =
     module ValueTaskTests =
 
         let createValueTask isFailed value =
-            if not isFailed then ValueTask.fromResult value
+            if not isFailed then ValueTask.FromResult value
             else
-                ValueTask.fromException (TestException (sprintf "Ouch, can't create: %A" value ))
+                ValueTask.FromException (TestException (sprintf "Ouch, can't create: %A" value ))
 
         let (|AggregateException|_|) (x: exn) =
             match x with
