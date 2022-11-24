@@ -57,6 +57,7 @@ From F#
  -  ``Map<'Key,'T>``
  -  ``'Monoid * 'T``
  -  ``Task<'T>``
+ -  ``ValueTask<'T>``
  -  ``'R->'T``
  -  ``Expr<'T>``
  -  ``Dictionary<'Key,'T>``

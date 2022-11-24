@@ -60,6 +60,7 @@ From .Net/F#
  -  ``Tuple<'Monoid1* ... *'MonoidN>``
  -  ``'Monoid1* ... *'MonoidN``
  -  ``Task<'T>``
+ -  ``ValueTask<'T>``
  -  ``'T->'Monoid``
  -  ``Async<'T>``
  -  ``Expr<'T>``

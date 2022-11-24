@@ -66,6 +66,7 @@ From F#
  -  ``KeyValuePair<'Key,'T>``
  -  ``'Monoid * 'T``
  -  ``Task<'T>``
+ -  ``ValueTask<'T>``
  -  ``'R->'T``
  -  ``Expr<'T>``
  -  ``ResizeArray<'T>``

@@ -74,6 +74,7 @@ From F#
  -  ``Choice<'T,'U>``
  -  ``'Monoid * 'T``
  -  ``Task<'T>``
+ -  ``ValueTask<'T>``
  -  ``'R->'T``
  -  ``ResizeArray<'T>``
 
