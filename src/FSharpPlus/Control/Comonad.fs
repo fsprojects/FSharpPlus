@@ -65,7 +65,7 @@ type Extend =
     #endif
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        (=>>) (g: ValueTask<'T>     , f: ValueTask<'T> -> 'U ) : ValueTask<'U> =
-        task {
+        backgroundTask {
             return! f g
         } |> ValueTask<'U>
     #endif
