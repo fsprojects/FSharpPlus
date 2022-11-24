@@ -2,6 +2,7 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 #r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+open System
 open FSharpPlus
 
 (**
@@ -137,6 +138,21 @@ let inline tuple6 a b c d e f     = a,b,c,d,e,f
 let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
 let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
 
+(**
+
+## valueTuple2, valueTuple2, ...valueTuple2
+
+Functions that generate a valueTuple. The number indicates the number of arguments
+that are defined, and the corresponding size of valueTuple.
+
+*)
+let inline valueTuple2 a b             = ValueTuple.Create a,b
+let inline valueTuple2 a b c           = ValueTuple.Create a,b,c
+let inline valueTuple2 a b c d         = ValueTuple.Create a,b,c,d
+let inline valueTuple2 a b c d e       = ValueTuple.Create a,b,c,d,e
+let inline valueTuple2 a b c d e f     = ValueTuple.Create a,b,c,d,e,f
+let inline valueTuple2 a b c d e f g   = ValueTuple.Create a,b,c,d,e,f,g
+let inline valueTuple2 a b c d e f g h = ValueTuple.Create a,b,c,d,e,f,g,h
 
 (**
 ## Explicit

@@ -42,6 +42,7 @@ From .Net/F#
  -  ``Map<'T,'U>``
  -  ``TimeSpan`` 
  -  ``Tuple<*>``
+ -  ``ValueTuple<*>``
  -  ``'T1* ... *'Tn``
  -  ``Task<'T>``
  -  ``'T->'Semigroup``
