@@ -48,7 +48,7 @@
     <Compile Include="Extensions/IReadOnlyDictionary.fs" />
     <Compile Include="Extensions/Enumerator.fs" />
     <Compile Include="Extensions/Task.fs" />
-    <Compile Include="Extensions\ValueTask.fs" />
+    <Compile Include="Extensions/ValueTask.fs" />
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
