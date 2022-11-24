@@ -128,7 +128,6 @@ open System.Collections.Generic
 open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals.Prelude
 
-
 type Zero =
     inherit Default1
 
@@ -186,7 +185,7 @@ type Zero with
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member inline Zero (_: ValueTask<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
-        ValueTask.FromResult v
+        ValueTask<'T>(result)
     #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
