@@ -23,7 +23,7 @@ module ValueTask =
 
     /// <summary>Creates a ValueTask workflow from 'source' another, mapping its result with 'f'.</summary>
     let map (f: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
-        backgroundTask {
+        task {
             let! r = source
             return f r
         } |> ValueTask<'U>
@@ -34,7 +34,7 @@ module ValueTask =
     /// <param name="x">First ValueTask workflow.</param>
     /// <param name="y">Second ValueTask workflow.</param>
     let map2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
-        backgroundTask {
+        task {
             let! rX = x
             let! rY = y
             return f rX rY
@@ -47,7 +47,7 @@ module ValueTask =
     /// <param name="y">Second ValueTask workflow.</param>
     /// <param name="z">Third ValueTask workflow.</param>
     let map3 (f : 'T -> 'U -> 'V -> 'W) (x : ValueTask<'T>) (y : ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
-        backgroundTask {
+        task {
             let! rX = x
             let! rY = y
             let! rZ = z
@@ -59,7 +59,7 @@ module ValueTask =
     /// <param name="f">ValueTask workflow returning a function</param>
     /// <param name="x">ValueTask workflow returning a value</param>
     let apply (f: ValueTask<'T->'U>) (x: ValueTask<'T>) : ValueTask<'U> =
-        backgroundTask {
+        task {
             let! r = x
             let! fn = f
             return (fn r)
@@ -67,7 +67,7 @@ module ValueTask =
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', tupling its results.</summary>
     let zip (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'T * 'U> =
-        backgroundTask {
+        task {
             let! rX = x
             let! rY = y
             return (rX, rY)
@@ -75,7 +75,7 @@ module ValueTask =
     
     /// Flattens two nested ValueTask into one.
     let join (source: ValueTask<ValueTask<'T>>) : ValueTask<'T> =
-        backgroundTask {
+        task {
             let! s = source
             return! s
         } |> ValueTask<'T>
@@ -90,7 +90,7 @@ module ValueTask =
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
     let ignore (source: ValueTask<'T>) =
-        backgroundTask {
+        task {
             let! _ = source
             return ()
         } |> ValueTask
