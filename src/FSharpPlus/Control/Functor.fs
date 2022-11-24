@@ -66,6 +66,9 @@ type Map =
     #if !FABLE_COMPILER
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member Map ((x: ValueTask<'T>       , f: 'T->'U), _mthd: Map) = ValueTask.map f x : ValueTask<'U>
+    #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
     static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
@@ -144,6 +147,9 @@ type Unzip =
     #if !FABLE_COMPILER
     static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        Unzip ((source: ValueTask<'T * 'U>                , _output: ValueTask<'T> * ValueTask<'U>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    #endif
     static member        Unzip ((source: option<'T * 'U>                   , _output: option<'T> * option<'U>                              ) , _mthd: Unzip   ) = Option.unzip source
 
     static member        Unzip ((source: list<'T * 'U>                     , _output: list<'T> * list<'U>                                  ) , _mthd: Unzip   ) = List.unzip   source
@@ -207,6 +213,9 @@ type Zip =
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
+    #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member Zip ((x: ValueTask<'T>              , y: ValueTask<'U>             , _output: ValueTask<'T*'U>             ), _mthd: Zip) = ValueTask.zip           x y
     #endif
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =

@@ -28,6 +28,9 @@ type Extract =
     #if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        Extract (f: ValueTask<'T>     ) = f.Result
+    #endif
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
         let inline call_2 (_mthd: ^M, x: ^I) = ((^M or ^I) : (static member Extract : _ -> _) x)
         call_2 (Unchecked.defaultof<Extract>, x)
@@ -57,6 +60,14 @@ type Extend =
                         elif k.Status = TaskStatus.Canceled then tcs.SetCanceled ()
                         elif k.Status = TaskStatus.Faulted  then tcs.SetException k.Exception.InnerExceptions) |> ignore
                 tcs.Task
+                
+
+    #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        (=>>) (g: ValueTask<'T>     , f: ValueTask<'T> -> 'U ) : ValueTask<'U> =
+        task {
+            return! f g
+        } |> ValueTask<'U>
     #endif
 
     // Restricted Comonads

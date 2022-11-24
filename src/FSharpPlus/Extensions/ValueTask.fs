@@ -9,16 +9,16 @@ module ValueTask =
     open System.Threading
     open System.Threading.Tasks
     
-    let fromResult<'T> (result : 'T) =
+    let FromResult<'T> (result : 'T) =
         ValueTask<'T>(result)
         
-    let fromException<'T> (e : exn) =
+    let FromException<'T> (e : exn) =
         ValueTask<'T>(Task.FromException<'T>(e))
     
-    let fromCanceled<'T> (ct : CancellationToken) =
+    let FromCanceled<'T> (ct : CancellationToken) =
         ValueTask<'T>(Task.FromCanceled<'T>(ct))
         
-    let fromTask<'T> (t : Task<'T>) =
+    let FromTask<'T> (t : Task<'T>) =
         ValueTask<'T>(t)
 
     /// <summary>Creates a ValueTask workflow from 'source' another, mapping its result with 'f'.</summary>
@@ -98,6 +98,6 @@ module ValueTask =
 
     /// Raises an exception in the ValueTask
     let raise (e: exn) =
-        fromException e
+        FromException e
         
 #endif
