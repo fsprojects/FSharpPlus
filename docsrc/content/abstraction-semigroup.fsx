@@ -42,7 +42,7 @@ From .Net/F#
  -  ``Map<'T,'U>``
  -  ``TimeSpan`` 
  -  ``Tuple<*>``
- -  ``ValueTuple<*>``
+ -  ``ValueTuple<*> (* up to 8 elements)``
  -  ``'T1* ... *'Tn``
  -  ``Task<'T>``
  -  ``'T->'Semigroup``
