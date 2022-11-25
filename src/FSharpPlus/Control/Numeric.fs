@@ -296,6 +296,9 @@ type DivRem =
     inherit Default1
     static member inline DivRem (x: ^t when ^t: null and ^t: struct, y: ^t, _thisClass: DivRem) = (x, y)
     static member inline DivRem (D: 'T, d: 'T, [<Optional>]_impl: Default1) = let q = D / d in q,  D - q * d
+    static member inline DivRem (D: 'T, d: 'T, [<Optional>]_impl: DivRem  ) =
+                    let mutable r = Unchecked.defaultof<'T>
+                    (^T: (static member DivRemNotWorking : _ * _ -> _ -> _) (D, d, &r)), r
 
     static member inline Invoke (D: 'T) (d: 'T) : 'T*'T =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member DivRem : _*_*_ -> _) b, c, a)
