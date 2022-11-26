@@ -25,7 +25,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.201
+        dotnet-version: 7.0.100
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
@@ -41,7 +41,7 @@ jobs:
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.201
+        dotnet-version: 7.0.100
     - name: Restore
       run: git submodule update --init --recursive
 
@@ -81,7 +81,7 @@ jobs:
     - name: Setup .NET Core 6
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.201
+        dotnet-version: 7.0.100
     - name: Setup .NET Core 5
       uses: actions/setup-dotnet@v1
       with:
