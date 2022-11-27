@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-/// Additional operations on Tuple (,)
+/// Additional operations on ValueTuple (,)
 [<RequireQualifiedAccess>]
 module ValueTuple2 =
     let mapItem1 f (x, y) = (f x, y)
