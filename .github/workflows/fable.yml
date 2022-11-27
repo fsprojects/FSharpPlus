@@ -43,6 +43,9 @@ jobs:
       run: git submodule update --init --recursive
     - name: Remove global json
       run: rm global.json
+    - name: Remove global json in subfolder
+      run: rm global.json
+      working-directory: tests/FSharpPlusFable.Tests
     - name: Setup .NET Core 7
       uses: actions/setup-dotnet@v1
       with:
