@@ -13,12 +13,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.201
-    - name: Restore
-      run: git submodule update --init --recursive
     - name: Restore tools
       run: dotnet tool restore
     - name: Use Node.js
@@ -37,12 +39,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.201
-    - name: Restore
-      run: git submodule update --init --recursive
     - name: Restore tools
       run: dotnet tool restore
     # - name: Run tests (Fable2 subset but on .net)
