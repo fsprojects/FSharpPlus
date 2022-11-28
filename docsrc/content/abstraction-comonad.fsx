@@ -67,6 +67,7 @@ From .Net/F#
  -  ``Id<'T>``       
  -  ``('W * 'T)``
  -  ``'Monoid -> 'T``
+ -  ``ValueTask<'T>``
  
  
 From F#+

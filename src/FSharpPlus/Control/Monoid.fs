@@ -107,6 +107,14 @@ type Plus with
     static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.map2 Plus.Invoke x y
 #endif
 
+#if NETSTANDARD2_1 && !FABLE_COMPILER
+type Plus with    
+    
+    static member inline ``+`` (x: 'a ValueTask, y: 'a ValueTask, [<Optional>]_mthd: Plus) = ValueTask.map2 Plus.Invoke x y
+
+#endif
+    
+    
     static member inline ``+`` (x: Map<'a,'b>             , y                         , [<Optional>]_mthd: Plus) = Map.unionWith Plus.Invoke x y
 
     static member inline ``+`` (x: Dictionary<'Key,'Value>, y: Dictionary<'Key,'Value>, [<Optional>]_mthd: Plus) =
