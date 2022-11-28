@@ -59,6 +59,7 @@ From .Net/F#
  -  ``list<'T>``
  -  ``'T []``
  -  ``option<'T>`` 
+ -  ``voption<'T>`` 
  -  ``ResizeArray<'T>`` 
  -  ``ReadOnlyCollection<'T>`` 
  -  ``IReadOnlyCollection<'T>``

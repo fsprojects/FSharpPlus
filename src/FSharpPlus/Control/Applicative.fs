@@ -32,6 +32,7 @@ type Apply =
     #endif
     static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` (f: option<_>        , x: option<'T>           , [<Optional>]_output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
+    static member        ``<*>`` (f: voption<_>       , x: voption<'T>          , [<Optional>]_output: voption<'U>          , [<Optional>]_mthd: Apply) = ValueOption.apply f x : voption<'U>
     static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
     static member        ``<*>`` (f: Choice<_,'E>     , x: Choice<'T,'E>        , [<Optional>]_output: Choice<'b,'E>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
     static member inline ``<*>`` (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T), [<Optional>]_output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
@@ -83,6 +84,10 @@ type Lift2 =
     #endif
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.map2  f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Option.map2 f x y
+    
+    #if !FABLE_COMPILER
+    static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = ValueOption.map2 f x y
+    #endif
     static member        Lift2 (f, (x: Result<'T,'Error>  , y: Result<'U,'Error>  ), _mthd: Lift2) = Result.map2 f x y
     static member        Lift2 (f, (x: Choice<'T,'Error>  , y: Choice<'U,'Error>  ), _mthd: Lift2) = Choice.map2 f x y
     static member        Lift2 (f, (x: Map<'Key,'T>       , y : Map<'Key,'U>      ), _mthd: Lift2) = Map.mapValues2 f x y
@@ -121,6 +126,10 @@ type Lift3 =
     #endif
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.map3  f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Option.map3 f x y z
+    
+    #if !FABLE_COMPILER
+    static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = ValueOption.map3 f x y z
+    #endif
     static member        Lift3 (f, (x: Result<'T,'Error>  , y: Result<'U,'Error>  , z: Result<'V, 'Error>  ), _mthd: Lift3) = Result.map3 f x y z
     static member        Lift3 (f, (x: Choice<'T,'Error>  , y: Choice<'U,'Error>  , z: Choice<'V, 'Error>  ), _mthd: Lift3) = Choice.map3 f x y z
     static member        Lift3 (f, (x: Map<'Key,'T>       , y: Map<'Key,'U>       , z: Map<'Key, 'V>       ), _mthd: Lift3) = Map.mapValues3 f x y z
@@ -151,6 +160,9 @@ type IsLeftZero =
     static member IsLeftZero (t: ref<list<_>>     , _mthd: IsLeftZero) = List.isEmpty t.Value
     static member IsLeftZero (t: ref<array<_>>    , _mthd: IsLeftZero) = Array.isEmpty t.Value
     static member IsLeftZero (t: ref<option<_>>   , _mthd: IsLeftZero) = Option.isNone t.Value
+    #if !FABLE_COMPILER
+    static member IsLeftZero (t: ref<voption<_>>  , _mthd: IsLeftZero) = ValueOption.isNone t.Value
+    #endif
     static member IsLeftZero (t: ref<Result<_,_>> , _mthd: IsLeftZero) = match t.Value with Error _      -> true | _ -> false
     static member IsLeftZero (t: ref<Choice<_,_>> , _mthd: IsLeftZero) = match t.Value with Choice2Of2 _ -> true | _ -> false
 

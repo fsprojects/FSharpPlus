@@ -48,6 +48,7 @@ From F#
  -  ``'T [,,]``
  -  ``'T [,,,]``
  -  ``option<'T>`` 
+ -  ``voption<'T>`` 
  -  ``IObservable<'T>``
  -  ``Lazy<'T>``
  -  ``Async<'T>``
@@ -75,6 +76,7 @@ From F#+
  -  [``State<'S,'T * 'S>``](type-state.html)
  -  [``StateT<'S,'Monad<'T * 'S>>``](type-statet.html)
  -  [``OptionT<'Monad<option<'T>>``](type-optiont.html)
+ -  [``ValueOptionT<'Monad<voption<'T>>``](type-valueoptiont.html)
  -  [``SeqT<'Monad<seq<'T>>``](type-seqt.html)
  -  [``ListT<'Monad<list<'T>>``](type-listt.html)
  -  [``ResultT<'Monad<Result<'T,'TError>>``](type-resultt.html)

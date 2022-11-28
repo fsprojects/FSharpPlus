@@ -23,6 +23,9 @@ type Bind =
     static member        (>>=) (source             , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
     #endif
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                  : option<'U>
+    #if !FABLE_COMPILER
+    static member        (>>=) (source             , f: 'T -> _           ) = ValueOption.bind   f source             : voption<'U>
+    #endif
     static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                  : list<'U>
     static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                  : 'U []
     static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
@@ -75,6 +78,9 @@ type Join =
     static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
     #endif
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
+    #if !FABLE_COMPILER
+    static member        Join (x                        , [<Optional>]_output: voption<'T>     , [<Optional>]_mthd: Join    ) = ValueOption.flatten x     : voption<'T>
+    #endif
     static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
     static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
     static member        Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)         : 'R->'T
@@ -129,6 +135,7 @@ type Return =
     static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
+    static member        Return (_  : voption<'a>  , _: Return  ) = fun x -> ValueSome x                          : voption<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []
     static member        Return (_: 'r -> 'a       , _: Return  ) = const': 'a -> 'r -> _

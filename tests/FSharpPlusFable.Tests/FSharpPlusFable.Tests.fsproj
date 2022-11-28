@@ -9,41 +9,50 @@
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3;FABLE_COMPILER_FAKE</DefineConstants>
     <TargetFramework>net6</TargetFramework>
   </PropertyGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<Configurations>Debug;Release;Fable;Fable3</Configurations>
+		<Platforms>AnyCPU</Platforms>
+		<LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
+		<DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_FAKE</DefineConstants>
+		<DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3;FABLE_COMPILER_FAKE</DefineConstants>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Include="Util.fs" />
-    <Compile Include="FSharpTests/General/Util.fs" />
-    <Compile Include="FSharpTests/General/Splits.fs" />
-    <Compile Include="FSharpTests/General/MonoidCompile.fs" />
-    <Compile Include="FSharpTests/General/Monoid.fs" />
-    <Compile Include="FSharpTests/General/Functor.fs" />
-    <Compile Include="FSharpTests/General/Collections.fs" />
-    <Compile Include="FSharpTests/General/Monad.fs" />
-    <Compile Include="FSharpTests/General/Applicative.fs" />
-    <Compile Include="FSharpTests/General/Alternative.fs" />
-    <Compile Include="FSharpTests/General/Foldable.fs" />
-    <Compile Include="FSharpTests/General/Indexable.fs" />
-    <Compile Include="FSharpTests/General/Parsing.fs" />
-    <Compile Include="FSharpTests/General/Traversable.fs" />
-    <Compile Include="FSharpTests/General/Lensing.fs" />
-    <Compile Include="FSharpTests/General/Numeric.fs" />
-    <Compile Include="FSharpTests/General.fs" />
-    <Compile Include="FSharpTests/Extensions.fs" />
-    <Compile Include="Tests.fs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Include="Util.fs" />
+		<Compile Include="FSharpTests/General/Util.fs" />
+		<Compile Include="FSharpTests/General/Splits.fs" />
+		<Compile Include="FSharpTests/General/MonoidCompile.fs" />
+		<Compile Include="FSharpTests/General/Monoid.fs" />
+		<Compile Include="FSharpTests/General/Functor.fs" />
+		<Compile Include="FSharpTests/General/Collections.fs" />
+		<Compile Include="FSharpTests/General/Monad.fs" />
+		<Compile Include="FSharpTests/General/Applicative.fs" />
+		<Compile Include="FSharpTests/General/Alternative.fs" />
+		<Compile Include="FSharpTests/General/Foldable.fs" />
+		<Compile Include="FSharpTests/General/Indexable.fs" />
+		<Compile Include="FSharpTests/General/Parsing.fs" />
+		<Compile Include="FSharpTests/General/Traversable.fs" />
+		<Compile Include="FSharpTests/General/Lensing.fs" />
+		<Compile Include="FSharpTests/General/Numeric.fs" />
+		<Compile Include="FSharpTests/General.fs" />
+		<Compile Include="FSharpTests/Extensions.fs" />
+		<Compile Include="Tests.fs" />
+	</ItemGroup>
 
 
-  <ItemGroup>
-    <PackageReference Include="Fable.Core" Version="3.2.5" />
-    <PackageReference Include="Fable.Promise" Version="2.2.0" />
-    <PackageReference Include="Fable.Fetch" Version="2.2.0" />
-    <PackageReference Include="Fuchu" Version="1.2.0-beta-1" />
- </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Fable.Core" Version="3.2.5" />
+		<PackageReference Include="Fable.Promise" Version="2.2.0" />
+		<PackageReference Include="Fable.Fetch" Version="2.2.0" />
+		<PackageReference Include="Fuchu" Version="1.2.0-beta-1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
-      <Private>True</Private>
-    </ProjectReference>
-    <PackageReference Update="FSharp.Core" Version="6.0.6" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
+			<Private>True</Private>
+		</ProjectReference>
+		<PackageReference Update="FSharp.Core" Version="6.0.6" />
+	</ItemGroup>
 </Project>

@@ -54,6 +54,12 @@ type Plus with
                     | (Some a , None  ) -> Some a
                     | (None   , Some b) -> Some b
                     | _                 -> None
+    static member inline ``+`` (x: voption<_>, y, [<Optional>]_mthd: Plus) =
+                    match x, y with
+                    | (ValueSome a , ValueSome b) -> ValueSome (Plus.Invoke a b)
+                    | (ValueSome a , ValueNone  ) -> ValueSome a
+                    | (ValueNone   , ValueSome b) -> ValueSome b
+                    | _                 -> ValueNone
 
 type Plus with
     static member inline ``+`` (x: Result<_,_>, y, [<Optional>]_mthd: Plus) =

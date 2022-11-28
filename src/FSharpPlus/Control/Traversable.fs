@@ -79,6 +79,7 @@ type Traverse =
     
     static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
     static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
+    static member inline Traverse (t: voption<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with ValueSome x -> Map.Invoke ValueSome (f x) | _ -> result ValueNone
 
     static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
         let insert_f m k v = Map.Invoke (Map.add k) v <*> m        
@@ -133,6 +134,9 @@ type Sequence with
 
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq)   : '``Applicative<seq<'T>>``
     static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, List.toSeq)                                : option<seq<'t>>
+    #if !FABLE_COMPILER
+    static member        Sequence (t: seq<voption<'t>>  , [<Optional>]_output: voption<seq<'t>>   , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, ValueOption.isNone, List.toSeq)                           : voption<seq<'t>>
+    #endif
     static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Error _      -> true | _ -> false), List.toSeq) : Result<seq<'t>, 'e>
     static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, (function Choice2Of2 _ -> true | _ -> false), List.toSeq) : Choice<seq<'t>, 'e>
     static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, List.isEmpty, List.toSeq)                                 : list<seq<'t>>
@@ -155,6 +159,9 @@ type Sequence with
     static member inline Sequence (t: ^a                , [<Optional>]_output: 'R                 , [<Optional>]_impl: Default1) = Sequence.InvokeOnInstance t                                               : 'R
 
     static member inline Sequence (t: option<_>         , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with Some x -> Map.Invoke Some x | _ -> result None               : 'R
+    #if !FABLE_COMPILER
+    static member inline Sequence (t: voption<_>        , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = match t with ValueSome x -> Map.Invoke ValueSome x | _ -> result ValueNone: 'R
+    #endif
     static member inline Sequence (t: list<_>           , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, id) : 'R
 
     static member inline Sequence (t: Map<_,_>          , [<Optional>]_output: 'R                 , [<Optional>]_impl: Sequence) : 'R =

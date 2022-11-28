@@ -32,6 +32,7 @@
   <ItemGroup>
     <Compile Include="Internals.fs" />
     <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions/ValueOption.fs" />
     <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
@@ -84,6 +85,7 @@
     <Compile Include="Data/List.fs" />
     <Compile Include="Data/Seq.fs" />
     <Compile Include="Data/Option.fs" />
+    <Compile Include="Data/ValueOption.fs" />
     <Compile Include="Data/Error.fs" />
     <Compile Include="Data/Cont.fs" />
     <Compile Include="Data/Reader.fs" />
@@ -102,8 +104,6 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
-	<Compile Include="Extensions/Observable.fs" />
-	<Compile Include="Extensions/AsyncEnumerable.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
