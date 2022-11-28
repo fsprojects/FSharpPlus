@@ -128,6 +128,7 @@ open System.Collections.Generic
 open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals.Prelude
 
+
 type Zero =
     inherit Default1
 
@@ -298,7 +299,7 @@ type DivRem =
     static member inline DivRem (D: 'T, d: 'T, _impl: Default2) = let q = D / d in q,  D - q * d
     static member inline DivRem (D: 'T, d: 'T, _impl: Default1) =
                     let mutable r = Unchecked.defaultof<'T>
-                    (^T: (static member DivRemNotWorking : _ * _ -> _ -> _) (D, d, &r)), r
+                    (^T: (static member DivRem : _ * _ -> _ -> _) (D, d, &r)), r
 
     static member inline DivRem (D: 'T, d: 'T, _impl: DivRem  ) =
                     let (struct (x, y)) = (^T: (static member DivRem : _ * _ -> _) (D, d))

@@ -99,7 +99,6 @@ type Plus with
 type Plus with    
     
     static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.map2 Plus.Invoke x y
-
 #endif
 
 #if NETSTANDARD2_1 && !FABLE_COMPILER
