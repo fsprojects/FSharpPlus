@@ -135,3 +135,15 @@ module Extensions =
                     | Some v -> yield v
                     | None   -> ok <- false })
             if ok then Some (Array.toSeq res) else None
+    type ValueOption<'t> with
+
+        /// Returns None if it contains a None element, otherwise a list of all elements
+        static member Sequence (t: seq<voption<'T>>) =
+            let mutable ok = true
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () && ok do
+                    match e.Current with
+                    | ValueSome v -> yield v
+                    | ValueNone   -> ok <- false })
+            if ok then ValueSome (Array.toSeq res) else ValueNone

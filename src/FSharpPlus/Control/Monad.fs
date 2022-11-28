@@ -25,10 +25,14 @@ type Bind =
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        (>>=) (source: ValueTask<'T>   , f: 'T -> ValueTask<'U>    ) = ValueTask.bind f source            : ValueTask<'U>
     #endif
-    static member        (>>=) (source                  , f: 'T -> _           ) = Option.bind   f source                  : option<'U>
-    static member        (>>=) (source                  , f: 'T -> _           ) = List.collect  f source                  : list<'U>
-    static member        (>>=) (source                  , f: 'T -> _           ) = Array.collect f source                  : 'U []
-    static member        (>>=) (source                  , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
+
+    static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                  : option<'U>
+    #if !FABLE_COMPILER
+    static member        (>>=) (source             , f: 'T -> _           ) = ValueOption.bind   f source             : voption<'U>
+    #endif
+    static member        (>>=) (source             , f: 'T -> _           ) = List.collect  f source                  : list<'U>
+    static member        (>>=) (source             , f: 'T -> _           ) = Array.collect f source                  : 'U []
+    static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
     #if !FABLE_COMPILER
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b) : 'Monoid*'U
     #else
@@ -80,16 +84,19 @@ type Join =
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        Join (x: ValueTask<ValueTask<_>> , [<Optional>]_output: ValueTask<'T>   , [<Optional>]_mthd: Join    ) = ValueTask.join x           : ValueTask<'T>
     #endif
-    static member        Join (x                          , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
-    static member        Join (x: list<list<_>>           , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
-    static member        Join (x: _ [][]                  , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
-    static member        Join (g                          , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)         : 'R->'T
-    static member inline Join (m1, (m2, x)                , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x       : 'Monoid*'T
-    static member        Join (x                          , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
-    static member        Join (x                          , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
-    static member        Join (x                          , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x           : Choice<'T,'E>
+    static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
+    #if !FABLE_COMPILER
+    static member        Join (x                        , [<Optional>]_output: voption<'T>     , [<Optional>]_mthd: Join    ) = ValueOption.flatten x     : voption<'T>
+    #endif
+    static member        Join (x: list<list<_>>         , [<Optional>]_output: list<'T>        , [<Optional>]_mthd: Join    ) = List.concat x              : list<'T>
+    static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
+    static member        Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)         : 'R->'T
+    static member inline Join (m1, (m2, x)              , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x       : 'Monoid*'T
+    static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
+    static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
+    static member        Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x           : Choice<'T,'E>
 
-    static member        Join (x: Map<_,_>                , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    )                              : Map<'Key,'Value> =
+    static member        Join (x: Map<_,_>              , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    )                              : Map<'Key,'Value> =
                     Map (seq {
                         for KeyValue(k, v) in x do
                             match Map.tryFind k v with
@@ -138,6 +145,7 @@ type Return =
     static member        Return (_: 'T ValueTask   , _: Return  ) = fun x -> ValueTask.FromResult x               : 'T ValueTask
     #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
+    static member        Return (_  : voption<'a>  , _: Return  ) = fun x -> ValueSome x                          : voption<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []
     static member        Return (_: 'r -> 'a       , _: Return  ) = const': 'a -> 'r -> _
