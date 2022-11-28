@@ -35,8 +35,10 @@ type Bind =
     static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
     #if !FABLE_COMPILER
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b) : 'Monoid*'U
+    static member inline (>>=) (struct (w: 'Monoid, a: 'T), k: 'T -> struct ('Monoid * 'U)) = let struct (m, b) = k a in struct (Plus.Invoke w m, b) : struct ('Monoid * 'U)
     #else
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)           : 'Monoid*'U
+    static member inline (>>=) (struct (w: 'Monoid, a: 'T), k: 'T -> struct ('Monoid * 'U)) = let struct (m, b) = k a in struct (w + m, b) : struct ('Monoid * 'U)
     #endif
     static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
     static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
@@ -92,6 +94,7 @@ type Join =
     static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
     static member        Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)         : 'R->'T
     static member inline Join (m1, (m2, x)              , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x       : 'Monoid*'T
+    static member inline Join (struct (m1, struct (m2, x)), [<Optional>]_output: struct ('Monoid * 'T), [<Optional>]_mthd: Join) = Plus.Invoke m1 m2, x    : struct ('Monoid * 'T)
     static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
     static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
     static member        Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x           : Choice<'T,'E>
@@ -150,6 +153,7 @@ type Return =
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []
     static member        Return (_: 'r -> 'a       , _: Return  ) = const': 'a -> 'r -> _
     static member inline Return (_:  'm * 'a       , _: Return  ) = fun (x: 'a) -> (Zero.Invoke (): 'm), x
+    static member inline Return (_: struct ('m * 'a), _: Return ) = fun (x: 'a) -> struct ((Zero.Invoke (): 'm), x)
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
     static member        Return (_: Choice<'a,'e>  , _: Return  ) = fun x -> Choice1Of2 x                         : Choice<'a,'e>

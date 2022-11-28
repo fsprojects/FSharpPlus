@@ -74,6 +74,7 @@ From F#
  -  ``Result<'T,'U>`` 
  -  ``Choice<'T,'U>``
  -  ``'Monoid * 'T``
+ -  ``struct ('Monoid * 'T)``
  -  ``Task<'T>``
  -  ``ValueTask<'T>``
  -  ``'R->'T``

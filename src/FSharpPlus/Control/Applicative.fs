@@ -27,6 +27,7 @@ type Apply =
     static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
     static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> let f' = f x in f' (g x)            : 'U
     static member inline ``<*>`` ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)     , [<Optional>]_output: 'Monoid * 'U         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
+    static member inline ``<*>`` (struct (a: 'Monoid, f), struct (b: 'Monoid, x: 'T), [<Optional>]_output: struct ('Monoid * 'U), [<Optional>]_mthd: Apply) = struct (Plus.Invoke a b, f x)            : struct ('Monoid * 'U)
     #if !FABLE_COMPILER
     static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
@@ -82,6 +83,7 @@ type Lift2 =
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Array.lift2 f x y
     static member        Lift2 (f, (x: 'R -> 'T           , y: 'R -> 'U           ), _mthd: Lift2) = fun a -> f (x a) (y a)
     static member inline Lift2 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   ), _mthd: Lift2) = Plus.Invoke a b, f x y
+    static member inline Lift2 (f, (struct (a: 'Monoid, x: 'T), struct (b: 'Monoid, y: 'U)), _mthd: Lift2) = struct (Plus.Invoke a b, f x y)
     #if !FABLE_COMPILER
     static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.map2  f x y
     #endif

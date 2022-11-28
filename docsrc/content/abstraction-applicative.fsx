@@ -66,6 +66,7 @@ From F#
  -  ``Choice<'T,'U>``
  -  ``KeyValuePair<'Key,'T>``
  -  ``'Monoid * 'T``
+ -  ``'ValueTuple<Monoid, 'T>``
  -  ``Task<'T>``
  -  ``ValueTask<'T>``
  -  ``'R->'T``
