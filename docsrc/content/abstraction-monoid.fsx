@@ -58,7 +58,6 @@ From .Net/F#
  -  ``Map<'T,'Monoid>``
  -  ``TimeSpan`` 
  -  ``Tuple<'Monoid1* ... *'MonoidN>``
- -  ``ValueTuple<'Monoid1* ... *'Monoid8>``
  -  ``'Monoid1* ... *'MonoidN``
  -  ``Task<'T>``
  -  ``'T->'Monoid``
