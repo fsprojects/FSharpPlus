@@ -71,6 +71,7 @@ type Map =
     static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
     static member Map (((m: 'Monoid, a)        , f: 'T->'U), _mthd: Map) = (m, f a)
+    static member Map ((struct (m: 'Monoid, a) , f: 'T->'U), _mthd: Map) = struct (m, f a)
     static member Map ((x: _ []                , f: 'T->'U), _mthd: Map) = Array.map   f x
     #if !FABLE_COMPILER
     static member Map ((x: _ [,]               , f: 'T->'U), _mthd: Map) = Array2D.map f x
@@ -150,6 +151,7 @@ type Unzip =
     static member        Unzip ((source: 'R -> ('T * 'U)                   , _output: ('R -> 'T) * ('R -> 'U)                              ) , _mthd: Unzip   ) = (fun x -> fst (source x)), (fun x -> snd (source x))
     static member        Unzip ((source: Func<'R, ('T * 'U)>               , _output: Func<'R,'T> * Func<'R,'U>                            ) , _mthd: Unzip   ) = Func<_,_> (fun x -> fst (source.Invoke x)), Func<_,_> (fun x -> snd (source.Invoke x))
     static member        Unzip (((m: 'Monoid, t: ('T * 'U))                , _output: ('Monoid * 'T) * ('Monoid * 'U)                      ) , _mthd: Unzip   ) = (m, fst t), (m, snd t)
+    static member        Unzip ((struct (m: 'Monoid, t: ('T * 'U))         , _output: struct ('Monoid * 'T) * struct ('Monoid * 'U)        ) , _mthd: Unzip   ) = struct (m, fst t), struct (m, snd t)
     static member        Unzip ((source: ('T * 'U) []                      , _output: 'T []    * 'U []                                     ) , _mthd: Unzip   ) = Array.unzip  source
     #if !FABLE_COMPILER
     static member        Unzip ((source: ('T * 'U) [,]                     , _output: 'T [,]   * 'U [,]                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
@@ -230,6 +232,7 @@ type Bimap =
     inherit Default1
        
     static member Bimap ((x: 'T1, y: 'T2)      , f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = (f x, g y)
+    static member Bimap (struct (x: 'T1, y: 'T2), f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = struct (f x, g y)
     static member Bimap (x: Result<'T2, 'T1>   , f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = Result.either (Ok << g) (Error << f) x
     static member Bimap (KeyValue(k:'T1, x:'T2), f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = KeyValuePair (f k, g x)
     static member Bimap (x: Choice<'T2, 'T1>   , f: 'T1->'U1, g: 'T2->'U2, [<Optional>]_mthd: Bimap) = Choice.either (Choice1Of2 << g) (Choice2Of2 << f) x
@@ -248,6 +251,7 @@ type MapFirst =
     inherit Default1
 
     static member First ((x: 'T1, y: 'T2)        , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = (f x, y)
+    static member First (struct (x: 'T1, y: 'T2) , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = struct (f x, y)
     static member First (x: Result<'T2, 'T1>     , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = Result.either Ok         (Error      << f) x
     static member First (x: Choice<'T2, 'T1>     , f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = Choice.either Choice1Of2 (Choice2Of2 << f) x
     static member First (KeyValue(k: 'T1, x: 'T2), f: 'T1->'U1, [<Optional>]_mthd: MapFirst) = KeyValuePair (f k, x)
