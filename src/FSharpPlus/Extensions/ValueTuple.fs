@@ -1,14 +1,14 @@
 ﻿namespace FSharpPlus
 
-/// Additional operations on Tuple (,)
+/// Additional operations on ValueTuple (,)
 [<RequireQualifiedAccess>]
 module ValueTuple2 =
-    let mapItem1 f (x, y) = (f x, y)
-    let mapItem2 f (x, y) = (x, f y)
+    let mapItem1 f (struct (x, y)) = struct (f x, y)
+    let mapItem2 f (struct (x, y)) = struct (x, f y)
 
-/// Additional operations on Tuple (,,)
+/// Additional operations on ValueTuple (,,)
 [<RequireQualifiedAccess>]
 module ValueTuple3 =
-    let mapItem1 f (x, y, z) = (f x, y, z)
-    let mapItem2 f (x, y, z) = (x, f y, z)
-    let mapItem3 f (x, y, z) = (x, y, f z)
+    let mapItem1 f (struct (x, y, z)) = struct (f x, y, z)
+    let mapItem2 f (struct (x, y, z)) = struct (x, f y, z)
+    let mapItem3 f (struct (x, y, z)) = struct (x, y, f z)
