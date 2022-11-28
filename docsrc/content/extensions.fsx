@@ -259,8 +259,8 @@ Collections / Traversable types:
    * zip, unzip, 
    * unionWith, union, intersectWith, intersect
 
-Async, Tasks and ValueTasks:
-================
+Async, Task and ValueTask:
+==========================
  * [ Task ](reference/fsharpplus-task.html)
    * map, map2, map3
    * apply
