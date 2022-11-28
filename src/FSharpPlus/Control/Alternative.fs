@@ -22,6 +22,7 @@ type Empty =
     static member inline Empty (_output: ^t when ^t: null and ^t: struct ,             _mthd: Default1) = id    
 
     static member        Empty ([<Optional>]_output: option<'T>          , [<Optional>]_mthd: Empty   ) = None         : option<'T>
+    static member        Empty ([<Optional>]_output: voption<'T>         , [<Optional>]_mthd: Empty   ) = ValueNone    : voption<'T>
     static member        Empty ([<Optional>]_output: list<'T>            , [<Optional>]_mthd: Empty   ) = [  ]         : list<'T>
     static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]         : 'T []    
 
@@ -44,6 +45,7 @@ type Append =
     static member inline ``<|>`` (x: Choice<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x, y with Choice1Of2 _, _ -> x | Choice2Of2 x, Choice2Of2 y -> Choice2Of2 (Plus.Invoke x y) | _, _ -> y
     static member inline ``<|>`` (x: Either<_,_>         , y              , [<Optional>]_mthd: Append  ) = match x with Left _ -> y | xs -> xs
     static member        ``<|>`` (x: 'T option           , y              , [<Optional>]_mthd: Append  ) = match x with None   -> y | xs -> xs
+    static member        ``<|>`` (x: 'T voption          , y              , [<Optional>]_mthd: Append  ) = match x with ValueNone   -> y | xs -> xs
     static member        ``<|>`` (x: 'T list             , y              , [<Optional>]_mthd: Append  ) = x @ y
     static member        ``<|>`` (x: 'T []               , y              , [<Optional>]_mthd: Append  ) = Array.append x y
 
@@ -63,6 +65,9 @@ type IsAltLeftZero =
     static member inline IsAltLeftZero (_: ref< ^t> when ^t: null and ^t: struct , _mthd: Default1) = ()
 
     static member        IsAltLeftZero (t: ref<option<_>  > , _mthd: IsAltLeftZero) = Option.isSome t.Value
+    #if !FABLE_COMPILER
+    static member        IsAltLeftZero (t: ref<voption<_>  >, _mthd: IsAltLeftZero) = ValueOption.isSome t.Value
+    #endif
     static member        IsAltLeftZero (t: ref<Result<_,_>> , _mthd: IsAltLeftZero) = match t.Value with (Ok _        ) -> true | _ -> false
     static member        IsAltLeftZero (t: ref<Choice<_,_>> , _mthd: IsAltLeftZero) = match t.Value with (Choice1Of2 _) -> true | _ -> false
 

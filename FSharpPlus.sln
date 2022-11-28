@@ -64,6 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\type-mult.fsx = docsrc\content\type-mult.fsx
 		docsrc\content\type-nonempty.fsx = docsrc\content\type-nonempty.fsx
 		docsrc\content\type-optiont.fsx = docsrc\content\type-optiont.fsx
+		docsrc\content\type-valueoptiont.fsx = docsrc\content\type-valueoptiont.fsx
 		docsrc\content\type-parallelarray.fsx = docsrc\content\type-parallelarray.fsx
 		docsrc\content\type-reader.fsx = docsrc\content\type-reader.fsx
 		docsrc\content\type-readert.fsx = docsrc\content\type-readert.fsx

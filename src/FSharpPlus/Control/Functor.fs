@@ -21,6 +21,7 @@ type Iterate =
     static member Iterate (x: Lazy<'T>   , action) = action x.Value : unit
     static member Iterate (x: seq<'T>    , action) = Seq.iter action x
     static member Iterate (x: option<'T> , action) = match x with Some x -> action x | _ -> ()
+    static member Iterate (x: voption<'T> , action) = match x with ValueSome x -> action x | _ -> ()
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
@@ -67,6 +68,9 @@ type Map =
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
+    #if !FABLE_COMPILER
+    static member Map ((x: voption<_>          , f: 'T->'U), _mthd: Map) = ValueOption.map  f x
+    #endif
     static member Map ((x: list<_>             , f: 'T->'U), _mthd: Map) = List.map    f x : list<'U>
     static member Map ((g: 'R->'T              , f: 'T->'U), _mthd: Map) = (>>) g f
     static member Map ((g: Func<'R, 'T>        , f: 'T->'U), _mthd: Map) = Func<'R, 'U> (g.Invoke >> f)
@@ -145,6 +149,7 @@ type Unzip =
     static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     #endif
     static member        Unzip ((source: option<'T * 'U>                   , _output: option<'T> * option<'U>                              ) , _mthd: Unzip   ) = Option.unzip source
+    static member        Unzip ((source: voption<'T * 'U>                  , _output: voption<'T> * voption<'U>                            ) , _mthd: Unzip   ) = ValueOption.unzip source
 
     static member        Unzip ((source: list<'T * 'U>                     , _output: list<'T> * list<'U>                                  ) , _mthd: Unzip   ) = List.unzip   source
     static member        Unzip ((source: 'R -> ('T * 'U)                   , _output: ('R -> 'T) * ('R -> 'U)                              ) , _mthd: Unzip   ) = (fun x -> fst (source x)), (fun x -> snd (source x))
@@ -203,6 +208,7 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zipShortest       x y
     static member Zip ((x: ResizeArray<'T>            , y: ResizeArray<'U>           , _output: ResizeArray<'T*'U>           ), _mthd: Zip) = ResizeArray.zipShortest x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip              x y
+    static member Zip ((x: voption<'T>                , y: voption<'U>              , _output: voption<'T*'U>                ), _mthd: Zip) = ValueOption.zip         x y
     static member Zip ((x: Result<'T, 'Error>         , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.zip              x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
