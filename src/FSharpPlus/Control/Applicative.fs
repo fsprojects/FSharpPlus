@@ -129,6 +129,8 @@ type Lift3 =
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = List.lift3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Array.lift3 f x y z
     static member        Lift3 (f, (x: 'R -> 'T           , y: 'R -> 'U           , z: 'R -> 'V            ), _mthd: Lift3) = fun a -> f (x a) (y a) (z a)
+    static member inline Lift3 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   , (c: 'Monoid, z: 'U)    ), _mthd: Lift3) = Plus.Invoke (Plus.Invoke a b) c, f x y z
+    static member inline Lift3 (f, (struct (a: 'Monoid, x: 'T), struct (b: 'Monoid, y: 'U), struct (c: 'Monoid, z: 'U)), _mthd: Lift3) = struct (Plus.Invoke (Plus.Invoke a b) c, f x y z)
     #if !FABLE_COMPILER
     static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.map3  f x y z
     #endif
