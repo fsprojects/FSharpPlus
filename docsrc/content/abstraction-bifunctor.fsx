@@ -67,6 +67,7 @@ Concrete implementations of Bifunctor<'T1,'T2>
 From .Net/F#
  
  -  ``'T1 * 'T2``
+ -  ``struct ('T1 * 'T2)``
  -  ``Result<'T2,'T1>``
  -  ``Choice<'T2,'T1>``
  -  ``KeyValuePair<'T1,'T2>``

@@ -73,7 +73,7 @@ From F#
  -  ``Result<'T,'U>`` 
  -  ``Choice<'T,'U>``
  -  ``'Monoid * 'T``
- -  ``'ValueTuple<Monoid, 'T>``
+ -  ``struct ('Monoid * 'T)``
  -  ``Task<'T>``
  -  ``'R->'T``
  -  ``ResizeArray<'T>``

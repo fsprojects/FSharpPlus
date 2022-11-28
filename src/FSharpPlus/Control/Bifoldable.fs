@@ -12,6 +12,7 @@ type BifoldMap =
     static member        BifoldMap (x: Result<'T2,'T1>, f, g, _impl: BifoldMap) = match x with Error x      -> f x | Ok x         -> g x : 'U
     static member        BifoldMap (x: Choice<'T2,'T1>, f, g, _impl: BifoldMap) = match x with Choice2Of2 x -> f x | Choice1Of2 x -> g x : 'U
     static member inline BifoldMap ((x: 'T1, y: 'T2)  , f, g, _impl: BifoldMap) = Plus.Invoke (f x) (g y)                                : 'U
+    static member inline BifoldMap (struct (x: 'T1, y: 'T2), f, g, _impl: BifoldMap) = Plus.Invoke (f x) (g y)                           : 'U
     
     static member inline Invoke (f: 'T1->'U) (g: 'T2->'U) (source: '``Bifoldable<T1,T2>``) : 'U =
         let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member BifoldMap : _*_*_*_ -> _) b,f,g,a)
@@ -30,6 +31,7 @@ type Bifold =
     static member inline Bifold (x: Result<'T2,'T1>, f: 'S->'T1->'S, g : 'S->'T2->'S, z: 'S, _impl: Bifold) = match x with Error      x -> f z x | Ok         x -> g z x
     static member inline Bifold (x: Choice<'T2,'T1>, f: 'S->'T1->'S, g : 'S->'T2->'S, z: 'S, _impl: Bifold) = match x with Choice2Of2 x -> f z x | Choice1Of2 x -> g z x
     static member inline Bifold ((x: 'T1, y: 'T2)  , f: 'S->'T1->'S, g : 'S->'T2->'S, z: 'S, _impl: Bifold) = g (f z x) y
+    static member inline Bifold (struct (x: 'T1, y: 'T2), f: 'S -> 'T1 -> 'S, g : 'S -> 'T2 -> 'S, z: 'S, _impl: Bifold) = g (f z x) y
 
     static member inline Invoke (f: 'S->'T1->'S) (g: 'S->'T2->'S) (z: 'S) (source: '``Bifoldable<'T1,'T2>``) : 'S =
         let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bifold : _*_*_*_*_ -> _) b,f,g,z,a)
@@ -48,6 +50,7 @@ type BifoldBack =
     static member inline BifoldBack (x: Result<'T2,'T1>, f: 'T1->'S->'S, g : 'T2->'S->'S, z: 'S, _impl: BifoldBack) = match x with Error      x -> f x z | Ok         x -> g x z
     static member inline BifoldBack (x: Choice<'T2,'T1>, f: 'T1->'S->'S, g : 'T2->'S->'S, z: 'S, _impl: BifoldBack) = match x with Choice2Of2 x -> f x z | Choice1Of2 x -> g x z
     static member inline BifoldBack ((x: 'T1, y: 'T2)  , f: 'T1->'S->'S, g : 'T2->'S->'S, z: 'S, _impl: BifoldBack) = (f x (g y z))
+    static member inline BifoldBack (struct (x: 'T1, y: 'T2), f: 'T1 -> 'S -> 'S, g : 'T2 -> 'S -> 'S, z: 'S, _impl: BifoldBack) = (f x (g y z))
 
     static member inline Invoke (f: 'T1->'S->'S) (g: 'T2->'S->'S) (z: 'S) (source: '``Bifoldable<'T1,'T2>``) : 'S =
         let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member BifoldBack : _*_*_*_*_ -> _) b,f,g,z,a)
@@ -66,6 +69,7 @@ type Bisum =
     static member        Bisum (x: Result<_,_>, _impl: Bisum) = match x with Ok x -> x | Error x -> x 
     static member        Bisum (x: Choice<_,_>, _impl: Bisum) = match x with Choice1Of2 x -> x | Choice2Of2 x -> x
     static member inline Bisum ((x,y)         , _impl: Bisum) = Plus.Invoke x y
+    static member inline Bisum (struct (x, y) , _impl: Bisum) = Plus.Invoke x y
 
     static member inline Invoke (source: '``Bifoldable<'T1,'T2>``) : 'U =
         let inline call (a: ^a, b: ^b) = ((^a or ^b) : (static member Bisum : _*_ -> _) b,a)

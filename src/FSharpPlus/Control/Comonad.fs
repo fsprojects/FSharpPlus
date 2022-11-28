@@ -18,7 +18,8 @@ type Extract =
         Async.StartImmediateAsTask(x).Result
     #endif
     static member        Extract (x: Lazy<'T>     ) = x.Value
-    static member        Extract ((_: 'W, a: 'T)  ) = a    
+    static member        Extract ((_: 'W, a: 'T)  ) = a
+    static member        Extract (struct (_: 'W, a: 'T)) = a
     static member        Extract (f: 'T Id        ) = f
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
@@ -36,6 +37,7 @@ type Extend =
     static member        (=>>) (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
     static member        (=>>) (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
     static member        (=>>) ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))
+    static member        (=>>) (struct (w: 'W, a: 'T), f: _ -> 'U   ) = struct (w, f (struct (w, a)))
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
@@ -79,6 +81,7 @@ type Duplicate =
     static member        Duplicate (s: Lazy<'T>        , [<Optional>]_mthd: Duplicate) = Lazy<_>.CreateFromValue s   : Lazy<Lazy<'T>>
     static member        Duplicate (s: Id<'T>          , [<Optional>]_mthd: Duplicate) = Id s                        : Id<Id<'T>>
     static member        Duplicate ((w: 'W, a: 'T)     , [<Optional>]_mthd: Duplicate) = w, (w, a)
+    static member        Duplicate (struct (w: 'W, a: 'T), [<Optional>]_mthd: Duplicate) = struct (w, struct (w, a))
     static member inline Duplicate (f: 'Monoid -> 'T   , [<Optional>]_mthd: Duplicate) = fun a b -> f (Plus.Invoke a b)
 
     // Restricted Comonads
