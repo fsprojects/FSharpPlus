@@ -78,6 +78,7 @@ Concrete implementations
 From .Net/F#
  
  -  ``'T * 'U``
+ -  ``struct ('T * 'U)``
  -  ``Result<'T,'U>``
  -  ``Choice<'T,'U>``
 

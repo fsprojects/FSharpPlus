@@ -167,6 +167,7 @@ type Zero with
 type Zero with
     static member inline Zero (_: Tuple<'a>, _: Zero) = tuple1 (Zero.Invoke ()) : Tuple<'a>
     static member inline Zero (_: Id<'a>   , _: Zero) = Id<_>  (Zero.Invoke ())
+    static member inline Zero (_: ValueTuple<'a>, _: Zero) = valueTuple1 (Zero.Invoke ()) : ValueTuple<'a>
     
 type Zero with static member inline Zero (_: 'a*'b               , _: Zero) = (Zero.Invoke (), Zero.Invoke ()                                                                                ) : 'a*'b
 type Zero with static member inline Zero (_: 'a*'b*'c            , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : 'a*'b*'c
@@ -174,6 +175,14 @@ type Zero with static member inline Zero (_: 'a*'b*'c*'d         , _: Zero) = (Z
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e      , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                ) : 'a*'b*'c*'d*'e
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : 'a*'b*'c*'d*'e*'f
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : 'a*'b*'c*'d*'e*'f*'g
+    
+type Zero with static member inline Zero (_: ValueTuple<'a,'b>               , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke ()                                                                                ) : ValueTuple<'a,'b>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c>            , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : ValueTuple<'a,'b,'c>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d>         , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                ) : ValueTuple<'a,'b,'c,'d>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d,'e>      , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                ) : ValueTuple<'a,'b,'c,'d,'e>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d,'e,'f>   , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : ValueTuple<'a,'b,'c,'d,'e,'f>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d,'e,'f,'g>, _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : ValueTuple<'a,'b,'c,'d,'e,'f,'g>
+
 
 type Zero with
     #if !FABLE_COMPILER
@@ -182,6 +191,11 @@ type Zero with
         let s = TaskCompletionSource<_> ()
         s.SetResult v
         s.Task
+    #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member inline Zero (_: ValueTask<'a>, _: Zero) : ValueTask<'a> =
+        let (v: 'a) = Zero.Invoke ()
+        ValueTask<'a>(v)
     #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v

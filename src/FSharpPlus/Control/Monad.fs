@@ -16,12 +16,16 @@ open FSharpPlus.Internals.Prelude
 // Monad class ------------------------------------------------------------
 
 type Bind =
-    static member        (>>=) (source: Lazy<'T>   , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value             : Lazy<'U>
-    static member        (>>=) (source: seq<'T>    , f: 'T -> seq<'U>     ) = Seq.bind f source                       : seq<'U>
+    static member        (>>=) (source: Lazy<'T>        , f: 'T -> Lazy<'U>    ) = lazy (f source.Value).Value             : Lazy<'U>
+    static member        (>>=) (source: seq<'T>         , f: 'T -> seq<'U>     ) = Seq.bind f source                       : seq<'U>
     #if !FABLE_COMPILER
-    static member        (>>=) (source: Task<'T>   , f: 'T -> Task<'U>    ) = Task.bind f source                      : Task<'U>
-    static member        (>>=) (source             , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
+    static member        (>>=) (source: Task<'T>        , f: 'T -> Task<'U>    ) = Task.bind f source                      : Task<'U>
+    static member        (>>=) (source                  , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        (>>=) (source: ValueTask<'T>   , f: 'T -> ValueTask<'U>    ) = ValueTask.bind f source            : ValueTask<'U>
+    #endif
+
     static member        (>>=) (source             , f: 'T -> _           ) = Option.bind   f source                  : option<'U>
     #if !FABLE_COMPILER
     static member        (>>=) (source             , f: 'T -> _           ) = ValueOption.bind   f source             : voption<'U>
@@ -31,8 +35,10 @@ type Bind =
     static member        (>>=) (source             , k: 'T -> _           ) = (fun r -> k (source r) r)               : 'R->'U
     #if !FABLE_COMPILER
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (Plus.Invoke w m, b) : 'Monoid*'U
+    static member inline (>>=) (struct (w: 'Monoid, a: 'T), k: 'T -> struct ('Monoid * 'U)) = let struct (m, b) = k a in struct (Plus.Invoke w m, b) : struct ('Monoid * 'U)
     #else
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)           : 'Monoid*'U
+    static member inline (>>=) (struct (w: 'Monoid, a: 'T), k: 'T -> struct ('Monoid * 'U)) = let struct (m, b) = k a in struct (w + m, b) : struct ('Monoid * 'U)
     #endif
     static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
     static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
@@ -69,13 +75,16 @@ type Bind =
 
 type Join =
     inherit Default1
-    static member inline Join (x: '``Monad<'Monad<'T>>``, [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default2) = Bind.InvokeOnInstance x id : '``Monad<'T>``
-    static member inline Join (x: '``Monad<'Monad<'T>>``, [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join : _ -> _) x) : '``Monad<'T>``
-    static member        Join (x: Lazy<Lazy<_>>         , [<Optional>]_output: Lazy<'T>        , [<Optional>]_mthd: Join    ) = lazy x.Value.Value         : Lazy<'T>
-    static member        Join (x: seq<seq<_>>           , [<Optional>]_output: seq<'T>         , [<Optional>]_mthd: Join    ) = Seq.concat x               : seq<'T>
-    static member        Join (x: Id<_>                 , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                 : Id<'T>
-    #if !FABLE_COMPILER
-    static member        Join (x: Task<Task<_>>         , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
+    static member inline Join (x: '``Monad<'Monad<'T>>``  , [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default2) = Bind.InvokeOnInstance x id : '``Monad<'T>``
+    static member inline Join (x: '``Monad<'Monad<'T>>``  , [<Optional>]_output: '``Monad<'T>``  , [<Optional>]_mthd: Default1) = ((^``Monad<'Monad<'T>>`` or  ^``Monad<'T>``) : (static member Join : _ -> _) x) : '``Monad<'T>``
+    static member        Join (x: Lazy<Lazy<_>>           , [<Optional>]_output: Lazy<'T>        , [<Optional>]_mthd: Join    ) = lazy x.Value.Value         : Lazy<'T>
+    static member        Join (x: seq<seq<_>>             , [<Optional>]_output: seq<'T>         , [<Optional>]_mthd: Join    ) = Seq.concat x               : seq<'T>
+    static member        Join (x: Id<_>                   , [<Optional>]_output: Id<'T>          , [<Optional>]_mthd: Join    ) = x.getValue                 : Id<'T>
+    #if !FABLE_COMPILER  
+    static member        Join (x: Task<Task<_>>           , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
+    #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        Join (x: ValueTask<ValueTask<_>> , [<Optional>]_output: ValueTask<'T>   , [<Optional>]_mthd: Join    ) = ValueTask.join x           : ValueTask<'T>
     #endif
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
     #if !FABLE_COMPILER
@@ -85,6 +94,7 @@ type Join =
     static member        Join (x: _ [][]                , [<Optional>]_output: 'T []           , [<Optional>]_mthd: Join    ) = Array.concat x             : 'T []
     static member        Join (g                        , [<Optional>]_output: 'R->'T          , [<Optional>]_mthd: Join    ) = (fun r -> (g r) r)         : 'R->'T
     static member inline Join (m1, (m2, x)              , [<Optional>]_output: 'Monoid * 'T    , [<Optional>]_mthd: Join    ) = Plus.Invoke m1 m2, x       : 'Monoid*'T
+    static member inline Join (struct (m1, struct (m2, x)), [<Optional>]_output: struct ('Monoid * 'T), [<Optional>]_mthd: Join) = Plus.Invoke m1 m2, x    : struct ('Monoid * 'T)
     static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
     static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
     static member        Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x           : Choice<'T,'E>
@@ -134,12 +144,16 @@ type Return =
     #if !FABLE_COMPILER
     static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        Return (_: 'T ValueTask   , _: Return  ) = fun x -> ValueTask.FromResult x               : 'T ValueTask
+    #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_  : voption<'a>  , _: Return  ) = fun x -> ValueSome x                          : voption<'a>
     static member        Return (_: list<'a>       , _: Return  ) = fun x -> [ x ]                                : list<'a>
     static member        Return (_: 'a []          , _: Return  ) = fun x -> [|x|]                                : 'a []
     static member        Return (_: 'r -> 'a       , _: Return  ) = const': 'a -> 'r -> _
     static member inline Return (_:  'm * 'a       , _: Return  ) = fun (x: 'a) -> (Zero.Invoke (): 'm), x
+    static member inline Return (_: struct ('m * 'a), _: Return ) = fun (x: 'a) -> struct ((Zero.Invoke (): 'm), x)
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
     static member        Return (_: Choice<'a,'e>  , _: Return  ) = fun x -> Choice1Of2 x                         : Choice<'a,'e>
@@ -179,6 +193,10 @@ type Delay =
     
     static member inline Invoke (source : unit -> '``Monad<'T>``) : '``Monad<'T>`` = Bind.Invoke (Return.Invoke ()) source
     
+    #endif
+    
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        Delay (_mthd: Delay   , x: unit-> ValueTask<_>                                   , _          ) = x () : ValueTask<'T>
     #endif
 
 

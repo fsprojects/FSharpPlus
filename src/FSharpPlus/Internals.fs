@@ -16,6 +16,8 @@ type Default1 = class inherit Default2 end
 #nowarn "0042" // retype
 
 module internal Prelude =
+    open System
+    
     let inline flip f x y = f y x
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
@@ -35,6 +37,8 @@ module internal Prelude =
         #else
         System.Tuple<_> x
         #endif
+
+    let inline valueTuple1<'T1> (t1: 'T1) = ValueTuple.Create t1
 
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R

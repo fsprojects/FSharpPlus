@@ -23,6 +23,7 @@
     <Compile Include="Traversals.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Task.fs" />
+    <Compile Include="ValueTask.fs" />
     <Compile Include="Free.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />

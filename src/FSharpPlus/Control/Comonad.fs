@@ -18,7 +18,8 @@ type Extract =
         Async.StartImmediateAsTask(x).Result
     #endif
     static member        Extract (x: Lazy<'T>     ) = x.Value
-    static member        Extract ((_: 'W, a: 'T)  ) = a    
+    static member        Extract ((_: 'W, a: 'T)  ) = a
+    static member        Extract (struct (_: 'W, a: 'T)) = a
     static member        Extract (f: 'T Id        ) = f
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
@@ -28,6 +29,9 @@ type Extract =
     #if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        Extract (f: ValueTask<'T>     ) = f.Result
+    #endif
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
         let inline call_2 (_mthd: ^M, x: ^I) = ((^M or ^I) : (static member Extract : _ -> _) x)
         call_2 (Unchecked.defaultof<Extract>, x)
@@ -36,6 +40,7 @@ type Extend =
     static member        (=>>) (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
     static member        (=>>) (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
     static member        (=>>) ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))
+    static member        (=>>) (struct (w: 'W, a: 'T), f: _ -> 'U   ) = struct (w, f (struct (w, a)))
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
@@ -57,6 +62,14 @@ type Extend =
                         elif k.Status = TaskStatus.Canceled then tcs.SetCanceled ()
                         elif k.Status = TaskStatus.Faulted  then tcs.SetException k.Exception.InnerExceptions) |> ignore
                 tcs.Task
+                
+
+    #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member        (=>>) (g: ValueTask<'T>     , f: ValueTask<'T> -> 'U ) : ValueTask<'U> =
+        backgroundTask {
+            return! f g
+        } |> ValueTask<'U>
     #endif
 
     // Restricted Comonads
@@ -79,6 +92,7 @@ type Duplicate =
     static member        Duplicate (s: Lazy<'T>        , [<Optional>]_mthd: Duplicate) = Lazy<_>.CreateFromValue s   : Lazy<Lazy<'T>>
     static member        Duplicate (s: Id<'T>          , [<Optional>]_mthd: Duplicate) = Id s                        : Id<Id<'T>>
     static member        Duplicate ((w: 'W, a: 'T)     , [<Optional>]_mthd: Duplicate) = w, (w, a)
+    static member        Duplicate (struct (w: 'W, a: 'T), [<Optional>]_mthd: Duplicate) = struct (w, struct (w, a))
     static member inline Duplicate (f: 'Monoid -> 'T   , [<Optional>]_mthd: Duplicate) = fun a b -> f (Plus.Invoke a b)
 
     // Restricted Comonads

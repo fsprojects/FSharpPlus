@@ -66,3 +66,12 @@ module Monoid =
         let _arrayGroupAdj   = chunkBy ((%)/> 2) [11;2;3;9;5;6;7;8;9;10]
         
         ()
+
+    [<Test>]
+    let writerMonad () =
+        let struct (str, num) = monad {
+            let! x = struct ("Four", 4)
+            let! y = struct ("Ten", 10)
+            return y - x }
+        Assert.AreEqual (str, "FourTen")
+        Assert.AreEqual (num, 6)

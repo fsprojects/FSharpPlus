@@ -66,7 +66,9 @@ From .Net/F#
  -  ``Lazy<'T>``     
  -  ``Id<'T>``       
  -  ``('W * 'T)``
+ -  ``struct ('W * 'T)``
  -  ``'Monoid -> 'T``
+ -  ``ValueTask<'T>``
  
  
 From F#+
