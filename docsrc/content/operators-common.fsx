@@ -2,7 +2,6 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 #r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
-open System
 open FSharpPlus
 
 (**
@@ -137,6 +136,7 @@ let inline tuple5 a b c d e       = a,b,c,d,e
 let inline tuple6 a b c d e f     = a,b,c,d,e,f
 let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
 let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
+
 
 (**
 ## Explicit
