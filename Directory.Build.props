@@ -6,8 +6,8 @@
     <Description>
       A complete and extensible base library for F#.
     </Description>
-    <Authors>Gusty</Authors>
-    <Copyright>2012-2020 Gustavo P. Leon (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
+    <Authors>gusty; wallymathieu</Authors>
+    <Copyright>2012-2022 Gustavo M. Wild - Oskar Gewalli (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
     <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus</PackageProjectUrl>
     <PackageIconUrl>https://raw.github.com/fsprojects/FSharpPlus/master/docsrc/files/img/logo.png</PackageIconUrl>
@@ -30,6 +30,8 @@
     <!-- disable sourcelink on mono, to workaround https://github.com/dotnet/sourcelink/issues/155 -->
     <EnableSourceLink Condition=" '$(OS)' != 'Windows_NT' AND '$(MSBuildRuntimeType)' != 'Core' ">false</EnableSourceLink>
     <EnableSourceControlManagerQueries>$(EnableSourceLink)</EnableSourceControlManagerQueries>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildThisFileDirectory)/RELEASE_NOTES.txt"))</PackageReleaseNotes>
+
   </PropertyGroup>
 
   <!-- mono -->

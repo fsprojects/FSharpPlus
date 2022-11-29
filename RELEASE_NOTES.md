@@ -1,6 +1,10 @@
-#### 1.3.0  - November 13 2022
- - Proper SeqT implementation
+#### 1.3.1  - November 29 2022
  - Applicative Computation Expressions
+ - Support for ValueOption, ValueTask and ValueTuple
+ - Possibility to use explicit type parameters (plus, Seq.sum, guard, ofBytes, ofBytesWithOptions, ofBytesBE, parse, tryParse)
+ - Use InlineIfLambda attribute in CEs
+ - Small fixes (add lift3 for tuples, fix join for ref tuple and Free.map3)
+ - Small improvements in type inference
  - Use F# Core 6.0.6
  - Speed up List and Array extensions using Collectors
  - Use FSharp.Core implementations for old functions that were adopted there
@@ -9,8 +13,7 @@
  - Use InlineIfLambda attribute in CEs
  - Some missing Option, Result zip functions
  - Add NonEmptyList.sequence
- - Improve null handling
- - Fix: Free.map3
+ - Improve null handling for Array extensions
 
 #### 1.2.4  - May 5 2022
 - Fix: Fable regressions
