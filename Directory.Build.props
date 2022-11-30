@@ -8,9 +8,10 @@
     </Description>
     <Authors>gusty; wallymathieu</Authors>
     <Copyright>2012-2022 Gustavo M. Wild - Oskar Gewalli (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
-    <PackageLicenseUrl>http://opensource.org/licenses/Apache-2.0</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus</PackageProjectUrl>
-    <PackageIconUrl>https://raw.github.com/fsprojects/FSharpPlus/master/docsrc/files/img/logo.png</PackageIconUrl>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
     <VersionPrefix>1.2.0</VersionPrefix>
     <VersionSuffix></VersionSuffix>
@@ -21,6 +22,10 @@
     <FsDocsReleaseNotesLink>https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md</FsDocsReleaseNotesLink>
     <FsDocsLicenseLink>https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md</FsDocsLicenseLink>
   </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)/docsrc/content/img/logo.png" Pack="true" PackagePath="\"/>
+    <None Include="$(MSBuildThisFileDirectory)/README.md" Pack="true" PackagePath="\"/>
+  </ItemGroup>
 
   <PropertyGroup>
     <RepoRootDir>$([System.IO.Path]::GetFullPath("$(MSBuildThisFileDirectory)"))</RepoRootDir>
