@@ -9,17 +9,27 @@ module ValueTask =
     open System.Threading
     open System.Threading.Tasks
     
-    let FromResult<'T> (result : 'T) =
-        ValueTask<'T>(result)
-        
-    let FromException<'T> (e : exn) =
-        ValueTask<'T>(Task.FromException<'T>(e))
+    /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed successfully with the specified result.</summary>
+    /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
+    /// <param name="result">The result to store into the completed task.</param>
+    /// <returns>The successfully completed task.</returns>
+    let FromResult<'TResult> (result: 'TResult) = ValueTask<'TResult> result
+       
+    /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed exceptionally with the specified exception.</summary>
+    /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
+    /// <param name="exception">The exception with which to complete the task.</param>
+    /// <returns>The faulted task.</returns>
+    let FromException<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
     
-    let FromCanceled<'T> (ct : CancellationToken) =
-        ValueTask<'T>(Task.FromCanceled<'T>(ct))
-        
-    let FromTask<'T> (t : Task<'T>) =
-        ValueTask<'T>(t)
+    /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed due to cancellation with the specified token.</summary>
+    /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
+    /// <param name="cancellationToken">The token with which to complete the task.</param>
+    /// <returns>The canceled task.</returns>
+    let FromCanceled<'TResult> (cancellationToken: CancellationToken) = ValueTask<'TResult> (Task.FromCanceled<'TResult> cancellationToken)
+    
+    /// <summary>Creates a <see cref="ValueTask{TResult}"/> from a <see cref="Task{TResult}"/>.</summary>
+    /// <param name="source">Task workflow.</param>
+    let FromTask<'TResult> (source: Task<'TResult>) = ValueTask<'TResult> source
 
     /// <summary>Creates a ValueTask workflow from 'source' another, mapping its result with 'f'.</summary>
     let map (f: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
