@@ -6,6 +6,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFrameworks>net7.0;net462</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
     <IsPackable>false</IsPackable>

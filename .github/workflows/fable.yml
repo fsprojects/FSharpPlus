@@ -13,14 +13,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Restore
-      run: git submodule update --init --recursive
-    - name: Remove global json
-      run: rm global.json
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.201
+    - name: Restore
+      run: git submodule update --init --recursive
     - name: Restore tools
       run: dotnet tool restore
     - name: Use Node.js
@@ -43,14 +41,7 @@ jobs:
       run: git submodule update --init --recursive
     - name: Remove global json
       run: rm global.json
-    - name: Remove global json in subfolder
-      run: rm global.json
-      working-directory: tests/FSharpPlusFable.Tests
-    - name: Setup .NET Core 7
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 7.0.100
-    - name: Setup .NET Core 6
+    - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.201
