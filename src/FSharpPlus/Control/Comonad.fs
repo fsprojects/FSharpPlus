@@ -62,14 +62,27 @@ type Extend =
                         elif k.Status = TaskStatus.Canceled then tcs.SetCanceled ()
                         elif k.Status = TaskStatus.Faulted  then tcs.SetException k.Exception.InnerExceptions) |> ignore
                 tcs.Task
-                
-
     #endif
+
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        (=>>) (g: ValueTask<'T>     , f: ValueTask<'T> -> 'U ) : ValueTask<'U> =
-        backgroundTask {
-            return! f g
-        } |> ValueTask<'U>
+        if g.IsCompletedSuccessfully then
+            try
+                let r = f g
+                ValueTask<'U> r
+            with e -> ValueTask<'U> (Task.FromException<'U> e)
+        else
+            let tcs = TaskCompletionSource<'U> ()
+            if g.IsCompleted then
+                match g with
+                | ValueTask.Faulted e -> tcs.SetException e
+                | ValueTask.Canceled  -> tcs.SetCanceled ()
+            else
+                ValueTask.continueTask tcs g (fun _ ->
+                    try tcs.SetResult (f g)
+                    with e -> tcs.SetException e)
+            tcs.Task |> ValueTask<'U>
+            
     #endif
 
     // Restricted Comonads
