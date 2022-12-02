@@ -1,9 +1,11 @@
 ﻿namespace FSharpPlus.Tests
 
-#if NET7
+#if NETSTANDARD2_1
+
 module ValueTask =
 
     open System
+    open System.Threading
     open System.Threading.Tasks
     open NUnit.Framework
     open FSharpPlus
@@ -11,29 +13,6 @@ module ValueTask =
     open FSharpPlus.Tests.Helpers
     
     exception TestException of string
-    
-
-    module ValueTask =
-        
-        // Following is not available in F#6
-
-        /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed successfully with the specified result.</summary>
-        /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
-        /// <param name="result">The result to store into the completed task.</param>
-        /// <returns>The successfully completed task.</returns>
-        let FromResult<'TResult> (result: 'TResult) = ValueTask<'TResult> result
-
-        /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed exceptionally with the specified exception.</summary>
-        /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
-        /// <param name="exception">The exception with which to complete the task.</param>
-        /// <returns>The faulted task.</returns>
-        let FromException<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
-
-        /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed due to cancellation with the specified token.</summary>
-        /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
-        /// <param name="cancellationToken">The token with which to complete the task.</param>
-        /// <returns>The canceled task.</returns>
-        let FromCanceled<'TResult> (cancellationToken: CancellationToken) = ValueTask<'TResult> (Task.FromCanceled<'TResult> cancellationToken)
 
     module ValueTaskTests =
 
