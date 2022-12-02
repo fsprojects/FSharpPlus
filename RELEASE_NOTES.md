@@ -1,4 +1,4 @@
-#### 1.3.1  - November 29 2022
+#### 1.3.2  - December 2 2022
  - Applicative Computation Expressions
  - Support for ValueOption, ValueTask and ValueTuple
  - Possibility to use explicit type parameters (plus, Seq.sum, guard, ofBytes, ofBytesWithOptions, ofBytesBE, parse, tryParse)
