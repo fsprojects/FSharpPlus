@@ -145,7 +145,7 @@ type Return =
     static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     #endif
     #if NETSTANDARD2_1 && !FABLE_COMPILER
-    static member        Return (_: 'T ValueTask   , _: Return  ) = fun x -> ValueTask.FromResult x               : 'T ValueTask
+    static member        Return (_: 'T ValueTask   , _: Return  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
     #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_  : voption<'a>  , _: Return  ) = fun x -> ValueSome x                          : voption<'a>

@@ -5,37 +5,14 @@ namespace FSharpPlus
 /// Additional operations on ValueTask<'T>
 [<RequireQualifiedAccess>]
 module ValueTask =
-    
-    open System.Threading
+
     open System.Threading.Tasks
 
     let inline internal (|Succeeded|Canceled|Faulted|) (t: ValueTask<'T>) =
         if t.IsCompletedSuccessfully then Succeeded t.Result
         elif t.IsCanceled then Canceled
-        else Faulted (t.AsTask().Exception.InnerExceptions)
+        else Faulted (t.AsTask().Exception.InnerExceptions)    
     
-    /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed successfully with the specified result.</summary>
-    /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
-    /// <param name="result">The result to store into the completed task.</param>
-    /// <returns>The successfully completed task.</returns>
-    let FromResult<'TResult> (result: 'TResult) = ValueTask<'TResult> result
-       
-    /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed exceptionally with the specified exception.</summary>
-    /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
-    /// <param name="exception">The exception with which to complete the task.</param>
-    /// <returns>The faulted task.</returns>
-    let FromException<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
-    
-    /// <summary>Creates a <see cref="ValueTask{TResult}"/> that's completed due to cancellation with the specified token.</summary>
-    /// <typeparam name="TResult">The type of the result returned by the task.</typeparam>
-    /// <param name="cancellationToken">The token with which to complete the task.</param>
-    /// <returns>The canceled task.</returns>
-    let FromCanceled<'TResult> (cancellationToken: CancellationToken) = ValueTask<'TResult> (Task.FromCanceled<'TResult> cancellationToken)
-    
-    /// <summary>Creates a <see cref="ValueTask{TResult}"/> from a <see cref="Task{TResult}"/>.</summary>
-    /// <param name="source">Task workflow.</param>
-    let FromTask<'TResult> (source: Task<'TResult>) = ValueTask<'TResult> source
-
     let inline internal continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
         let f = function
         | Succeeded r -> k r
@@ -47,6 +24,8 @@ module ValueTask =
             aw.OnCompleted (fun () -> f x)
 
     /// <summary>Creates a ValueTask workflow from 'source' another, mapping its result with 'f'.</summary>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="source">ValueTask workflow.</param>
     let map (f: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
         let tcs = TaskCompletionSource<'U> ()
         continueTask tcs source (fun x ->
@@ -133,6 +112,6 @@ module ValueTask =
         
 
     /// Raises an exception in the ValueTask
-    let raise (e: exn) = FromException e
+    let raise (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
         
 #endif
