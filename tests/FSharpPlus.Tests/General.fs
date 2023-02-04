@@ -1711,13 +1711,13 @@ module Numerics =
     [<Test>]
     let zeroOfDifferentTypes () = 
         let _01 = zero<int option>
-        Assert.AreEqual (None, _01)
+        areEqual None _01
         let _02 = zero<GuidId<int> option>
-        Assert.AreEqual (None, _02)
+        areEqual None _02
         let _03 = zero<int voption>
-        Assert.AreEqual (ValueNone, _03)
+        areEqual ValueNone _03
         let _04 = zero<GuidId<int> voption>
-        Assert.AreEqual (ValueNone, _04)
+        areEqual ValueNone _04
 
 
 
