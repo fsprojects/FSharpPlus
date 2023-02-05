@@ -155,8 +155,18 @@ type ReaderT<'r,'``monad<'t>``> with
     /// <category index="2">Applicative</category>
     static member inline (<* ) (x: ReaderT<'R, '``Monad<'U>``>, y: ReaderT<'R, '``Monad<'T>``>) : ReaderT<'R, '``Monad<'U>``> = ((fun (k: 'U) (_: 'T) -> k ) </ReaderT.map/> x : ReaderT<'R, '``Monad<'T->'U>``>) </ReaderT.apply/> y
 
+    /// <summary>
+    /// Takes a Reader value and a function from a plain type to a Reader value, and returns a new Reader value.
+    /// </summary>
+    /// <category index="2">Monad</category>
     static member inline (>>=) (x: ReaderT<_,'``Monad<'T>``>, f: 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>
-    
+
+    /// <summary>
+    /// Composes left-to-right two Reader functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> ReaderT<_,'``Monad<'U>``>, g: 'U -> ReaderT<'R,'``Monad<'V>``>) : 'T -> ReaderT<'R,'``Monad<'V>``> = fun x -> ReaderT.bind g (f x)
+
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty ()) : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline (<|>) (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
 
