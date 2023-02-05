@@ -1,5 +1,8 @@
-#### 1.3.3  - February 4 2023
+#### 1.3.3  - February 5 2023
  - Fix missing zero overload for voption
+ - Add (>>=) and (>=>) to ReaderT
+ - Add ValueOption.toOption
+ - Deprecate (<**>)
 
 #### 1.3.2  - December 2 2022
  - Applicative Computation Expressions

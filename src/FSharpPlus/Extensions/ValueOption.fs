@@ -70,3 +70,8 @@ module ValueOption =
         match pair with
         | true,  x -> ValueSome x
         | false, _ -> ValueNone
+
+    let toOption x =
+        match x with
+        | ValueSome x -> Some x
+        | ValueNone   -> None
