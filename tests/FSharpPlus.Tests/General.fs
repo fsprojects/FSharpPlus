@@ -1704,6 +1704,20 @@ module Numerics =
 
         Assert.AreEqual (argBigRational, r09 * r19)
 
+    [<Struct>]
+    type GuidId<'t> =
+        | Id of Guid
+
+    [<Test>]
+    let zeroOfDifferentTypes () = 
+        let _01 = zero<int option>
+        areEqual None _01
+        let _02 = zero<GuidId<int> option>
+        areEqual None _02
+        let _03 = zero<int voption>
+        areEqual ValueNone _03
+        let _04 = zero<GuidId<int> voption>
+        areEqual ValueNone _04
 
 
 

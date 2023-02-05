@@ -1,3 +1,6 @@
+#### 1.3.3  - February 4 2023
+ - Fix missing zero overload for voption
+
 #### 1.3.2  - December 2 2022
  - Applicative Computation Expressions
  - Support for ValueOption, ValueTask and ValueTuple
