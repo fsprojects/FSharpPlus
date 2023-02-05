@@ -136,6 +136,7 @@ type Zero =
     static member        Zero (_: DmStruct                       , _: Zero    ) = Unchecked.defaultof<DmStruct>
     static member        Zero (_: list<'a>                       , _: Zero    ) = []   :   list<'a>
     static member        Zero (_: option<'a>                     , _: Zero    ) = None : option<'a>
+    static member        Zero (_: voption<'a>                    , _: Zero    ) = ValueNone : voption<'a>
     static member        Zero (_: array<'a>                      , _: Zero    ) = [||] :  array<'a>
     static member        Zero (_: string                         , _: Zero    ) = ""
     static member        Zero (_: StringBuilder                  , _: Zero    ) = new StringBuilder ()
