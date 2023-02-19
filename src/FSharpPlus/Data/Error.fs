@@ -137,6 +137,11 @@ type ChoiceT<'``monad<Choice<'t,'e>>``> with
     static member inline (<*>) (f: ChoiceT<'``Monad<Choice<('T -> 'U),'E>>``>, x: ChoiceT<'``Monad<Choice<'T,'E>>``>) = ChoiceT.apply f x : ChoiceT<'``Monad<Choice<'U,'E>>``>
     static member inline (>>=) (x: ChoiceT<'``Monad<Choice<'T,'E>>``>, f: 'T->ChoiceT<'``Monad<Choice<'U,'E>>``>)     = ChoiceT.bind f x
 
+    static member inline TryWith (source: ChoiceT<'``Monad<Choice<'T,'E>>``>, f: exn -> ChoiceT<'``Monad<Choice<'T,'E>>``>) = ChoiceT (TryWith.Invoke (ChoiceT.run source) (ChoiceT.run << f))
+    static member inline TryFinally (computation: ChoiceT<'``Monad<Choice<'T,'E>>``>, f) = ChoiceT (TryFinally.Invoke     (ChoiceT.run computation) f)
+    static member inline Using (resource, f: _ -> ChoiceT<'``Monad<Choice<'T,'E>>``>)    = ChoiceT (Using.Invoke resource (ChoiceT.run << f))
+    static member inline Delay (body : unit   ->  ChoiceT<'``Monad<Choice<'T,'E>>``>)    = ChoiceT (Delay.Invoke (fun _ -> ChoiceT.run (body ())))
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift (x: '``Monad<'T>``) : ChoiceT<'``Monad<Choice<'T,'E>>``> = ChoiceT.lift x
 
