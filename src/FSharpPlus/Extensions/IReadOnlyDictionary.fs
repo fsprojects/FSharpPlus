@@ -77,15 +77,59 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'U>
 
-    /// <summary>Applies given function to each value of the given read-only dictionary.</summary>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">The input IReadOnlyDictionary.</param>
+    /// <summary>Maps the given function over each key and value in the read-only dictionary.</summary>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source">The input IReadOnlyDictionary.</param>
     ///
-    /// <returns>Returns IReadOnlyDictionary with values x for each dictionary value where the function returns Some(x).</returns>
-    let chooseValues f (x: IReadOnlyDictionary<'Key, 'T>) =
+    /// <returns>The mapped IReadOnlyDictionary.</returns>
+    let mapi mapper (source: IReadOnlyDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
-        for KeyValue(k, v) in x do
-            match f v with
+        for KeyValue(k, v) in source do
+            dct.Add (k, mapper k v)
+        dct :> IReadOnlyDictionary<'Key, 'U>
+
+    /// <summary>Applies the given action over each key and value in the read-only dictionary.</summary>
+    /// <param name="action">The action to apply.</param>
+    /// <param name="source">The input IReadOnlyDictionary.</param>
+    ///
+    /// <returns>The mapped IReadOnlyDictionary.</returns>
+    let iter action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
+
+
+    /// <summary>Applies a function to each value in a read-only dictionary and then returns
+    /// a read-only dictionary of entries <c>v</c> where the applied function returned <c>Some(v)</c>.
+    /// 
+    /// Returns an empty read-only dictionary when the input read-only dictionary is empty or when the applied chooser function
+    /// returns <c>None</c> for all elements.
+    /// </summary>
+    ///
+    /// <param name="chooser">The function to be applied to the read-only dictionary values.</param>
+    /// <param name="source">The input read-only dictionary.</param>
+    ///
+    /// <returns>The resulting read-only dictionary comprising the entries <c>v</c> where the chooser function returned <c>Some(x)</c>.</returns>
+    let chooseValues chooser (source: IReadOnlyDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in source do
+            match chooser v with
+            | Some v -> dct.Add (k, v)
+            | None    -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
+
+    /// <summary>Applies a function to each key and value in a read-only dictionary and then returns
+    /// a read-only dictionary of entries <c>v</c> where the applied function returned <c>Some(v)</c>.
+    ///
+    /// Returns an empty read-only dictionary when the input read-only dictionary is empty or when the applied chooser function
+    /// returns <c>None</c> for all elements.
+    /// </summary>
+    ///
+    /// <param name="chooser">The function to be applied to the read-only dictionary values.</param>
+    /// <param name="source">The input read-only dictionary.</param>
+    ///
+    /// <returns>The resulting read-only dictionary comprising the entries <c>v</c> where the chooser function returned <c>Some(x)</c>.</returns>
+    let choose chooser (source: IReadOnlyDictionary<'Key, 'T>) =
+        let dct = Dictionary<'Key, 'U> ()
+        for KeyValue(k, v) in source do
+            match chooser k v with
             | Some v -> dct.Add (k, v)
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'U>
@@ -152,4 +196,33 @@ module IReadOnlyDictionary =
     /// Returns the intersection of two read-only dictionaries, preferring values from the first in case of duplicate keys.
     let intersect (source1:IReadOnlyDictionary<'Key, 'T>) (source2:IReadOnlyDictionary<'Key, 'T>) =
         intersectWith (fun a _ -> a) source1 source2
+
     #endif
+
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> () :> IReadOnlyDictionary<_,_>
+
+    /// <summary>Converts a read-only dictionary to a ResizeArray.</summary>
+    /// <param name="source">The source IReadOnlyDictionary.</param>
+    ///
+    /// <returns>A ResizeArray containing the Key and Value of the original IReadOnlyDictionary.</returns>
+    let toResizeArray (source: IReadOnlyDictionary<'Key, 'T>) =
+        let arr = ResizeArray<KeyValuePair<'Key, 'T>> ()
+        for KeyValue(k, x) in source do
+            arr.Add (KeyValuePair (k, x))
+        arr
+
+    /// <summary>Converts a read-only dictionary to a sequence.</summary>
+    /// <param name="source">The source IReadOnlyDictionary.</param>
+    ///
+    /// <returns>A sequence containing the Key and Value of the original IReadOnlyDictionary.</returns>
+    let toSeq (source: IReadOnlyDictionary<'Key, 'T>) = toResizeArray source :> seq<_>
+
+    /// Folds over the bindings in the Dictionary
+    let fold     (folder: 'State -> 'Key -> 'T -> 'State) (state: 'State) (source: IReadOnlyDictionary<'Key, 'T>) =
+        let unzip source = Seq.map fst source, Seq.map snd source
+        source |> toSeq |> Seq.map (|KeyValue|) |> unzip ||> Seq.fold2 folder state
+
+    /// Folds over the bindings in the Dictionary
+    let foldBack (folder: 'Key -> 'T -> 'State -> 'State) (source: IReadOnlyDictionary<'Key, 'T>) state =
+        let unzip source = Seq.map fst source, Seq.map snd source
+        source |> toSeq |> Seq.map (|KeyValue|) |> unzip ||> Seq.foldBack2 folder <| state
