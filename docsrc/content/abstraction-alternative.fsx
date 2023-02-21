@@ -59,6 +59,7 @@ From .Net/F#
  -  ``option<'T>``
  -  ``array<'T>``
  -  ``seq<'T>``
+ -  ``'T -> 'Alternative``
  
 From F#+
  
