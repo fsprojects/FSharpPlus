@@ -6,7 +6,7 @@
     <title>Matrix<'NumType,'Rows,'Cols>
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,20 +68,13 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                <li class="nav-header">
-  API Reference
-</li>             
-<li class="nav-item">
-  <a class="nav-link" href="/FSharpPlus/reference/index.html">
-    All Namespaces
-  </a>
-</li>
+                {{fsdocs-list-of-namespaces}}
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -127,34 +120,24 @@
 
 <span class="c">// Add a scalar</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="id">matrix3x4_3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 12)" onmouseover="showTip(event, 'fs3', 12)" class="id">matrix3x4_1</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs8', 13)" onmouseover="showTip(event, 'fs8', 13)" class="fn">result</span> <span class="n">5</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="id">matrix3x4_3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 12)" onmouseover="showTip(event, 'fs3', 12)" class="id">matrix3x4_1</span> <span class="o">+</span> <span class="id">result</span> <span class="n">5</span>
 
 
 <span class="c">// Another way</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 14)" onmouseover="showTip(event, 'fs1', 14)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">Math</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="m">Generic</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Math</span><span class="pn">.</span><span class="id">Generic</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="id">vector3d_4</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 18)" onmouseover="showTip(event, 'fs3', 18)" class="id">matrix3x4_1</span> <span class="o">+</span> <span class="m">5G</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="id">vector3d_4</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 15)" onmouseover="showTip(event, 'fs3', 15)" class="id">matrix3x4_1</span> <span class="o">+</span> <span class="n">5G</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
 <div class="fsdocs-tip" id="fs3">val matrix3x4_1: Matrix&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs4">val matrix: definition: &#39;(&#39;a * .. * &#39;a) * .. * (&#39;a * .. * &#39;a) -&gt; Matrix&lt;&#39;a0,&#39;m,&#39;n&gt; (requires member CountTuple and member TupleToList and member RuntimeValue and member CountTuple and member TupleToList and member RuntimeValue)</div>
+<div class="fsdocs-tip" id="fs4">val matrix: definition: &#39;(&#39;a * .. * &#39;a) * .. * (&#39;a * .. * &#39;a) -&gt; Matrix&lt;&#39;a,&#39;m,&#39;n&gt; (requires member CountTuple and member TupleToList and member RuntimeValue and member CountTuple and member TupleToList and member RuntimeValue)</div>
 <div class="fsdocs-tip" id="fs5">val matrix3x4_2: Matrix&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;&gt;</div>
 <div class="fsdocs-tip" id="fs6">val matrix3x4_sum: Matrix&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;&gt;</div>
 <div class="fsdocs-tip" id="fs7">val matrix3x4_3: Matrix&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs8">val result: x: &#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)<br /><em>&lt;summary&gt;
- Lifts a value into a Functor. Same as return in Computation Expressions.
- &lt;/summary&gt;<br />&lt;category index=&quot;2&quot;&gt;Applicative&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs9">namespace FSharpPlus.Math</div>
-<div class="fsdocs-tip" id="fs10">module Generic
-
-from FSharpPlus.Math<br /><em>&lt;summary&gt;
- Generic numbers, functions and operators.
- By opening this module some common operators become restricted, like (+) to &#39;T-&amp;gt;&#39;T-&amp;gt;&#39;T
- &lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs11">val vector3d_4: Matrix&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs8">val vector3d_4: Matrix&lt;int,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;,TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.S&lt;TypeLevel.Z&gt;&gt;&gt;&gt;&gt;</div>
 
         </div>
 

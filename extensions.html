@@ -6,7 +6,7 @@
     <title>Extensions
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,20 +68,13 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                <li class="nav-header">
-  API Reference
-</li>             
-<li class="nav-item">
-  <a class="nav-link" href="/FSharpPlus/reference/index.html">
-    All Namespaces
-  </a>
-</li>
+                {{fsdocs-list-of-namespaces}}
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -89,7 +82,7 @@
 <p>Extensions are what you probably expect: helper functions for existing types.</p>
 <p>They are defined as modules with the same name as the types they operate on
 under the FSharpPlus namespace, so can be accessed via:</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
 </code></pre>
 <p>Some functions are common across foldable types such as <code>intercalate</code> on
 List, Array and Seq, and others are common across wrapping containers,
@@ -111,16 +104,16 @@ such as <code>map</code>, <code>bind</code> and <code>apply</code> on List, Arra
 <li>Choice.protect - returns Choice2Of2 with exception value on exception</li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// throws &quot;ArgumentException: The input sequence was empty.&quot;</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">expectedSingleItem1</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="vt">int</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">expectedSingleItem1</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="vt">int</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
 
 <span class="c">// returns a Result.Error holding the exception as its value:</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="id">expectedSingleItem2</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="vt">Result</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs3', 8)" onmouseover="showTip(event, 'fs3', 8)" class="vt">int</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="rt">exn</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="m">Result</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="id">protect</span> <span onmouseout="hideTip(event, 'fs4', 12)" onmouseover="showTip(event, 'fs4', 12)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 13)" onmouseover="showTip(event, 'fs5', 13)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="id">expectedSingleItem2</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="vt">Result</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs2', 7)" onmouseover="showTip(event, 'fs2', 7)" class="vt">int</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="rt">exn</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="m">Result</span><span class="pn">.</span><span class="id">protect</span> <span onmouseout="hideTip(event, 'fs3', 10)" onmouseover="showTip(event, 'fs3', 10)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
 
 <span class="c">// ...or like typical try prefixed functions, treat exception as None</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="id">expectedSingleItem3</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="rt">Option</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs3', 16)" onmouseover="showTip(event, 'fs3', 16)" class="vt">int</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="id">protect</span> <span onmouseout="hideTip(event, 'fs4', 19)" onmouseover="showTip(event, 'fs4', 19)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 20)" onmouseover="showTip(event, 'fs5', 20)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="id">expectedSingleItem3</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="rt">Option</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="vt">int</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="m">Option</span><span class="pn">.</span><span class="id">protect</span> <span onmouseout="hideTip(event, 'fs3', 16)" onmouseover="showTip(event, 'fs3', 16)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 17)" onmouseover="showTip(event, 'fs4', 17)" class="id">exactlyOne</span> <span class="pn">[</span><span class="pn">]</span>
 
 <span class="c">// which might look like this:</span>
-<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs13', 21)" onmouseover="showTip(event, 'fs13', 21)" class="fn">tryExactlyOne</span> <span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="fn">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 23)" onmouseover="showTip(event, 'fs11', 23)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 24)" onmouseover="showTip(event, 'fs12', 24)" class="id">protect</span> <span onmouseout="hideTip(event, 'fs4', 25)" onmouseover="showTip(event, 'fs4', 25)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 26)" onmouseover="showTip(event, 'fs5', 26)" class="id">exactlyOne</span> <span onmouseout="hideTip(event, 'fs14', 27)" onmouseover="showTip(event, 'fs14', 27)" class="fn">xs</span>
+<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="fn">tryExactlyOne</span> <span onmouseout="hideTip(event, 'fs11', 19)" onmouseover="showTip(event, 'fs11', 19)" class="fn">xs</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs9', 20)" onmouseover="showTip(event, 'fs9', 20)" class="m">Option</span><span class="pn">.</span><span class="id">protect</span> <span onmouseout="hideTip(event, 'fs3', 21)" onmouseover="showTip(event, 'fs3', 21)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 22)" onmouseover="showTip(event, 'fs4', 22)" class="id">exactlyOne</span> <span onmouseout="hideTip(event, 'fs11', 23)" onmouseover="showTip(event, 'fs11', 23)" class="id">xs</span>
 </code></pre>
 <h1><a name="Deconstruction-unwrapping" class="anchor" href="#Deconstruction-unwrapping">Deconstruction (unwrapping):</a></h1>
 <p>Some extensions on Result are designed to behave like Option:</p>
@@ -147,19 +140,19 @@ Most collections, or specifically 'foldable' instances implement these:</p>
 <ul>
 <li>intersperse - takes an element and `intersperses' that element between the elements</li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="id">a</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Bob&quot;</span><span class="pn">;</span> <span class="s">&quot;Jane&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="id">intersperse</span> <span class="s">&quot;and&quot;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 24)" onmouseover="showTip(event, 'fs12', 24)" class="id">a</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Bob&quot;</span><span class="pn">;</span> <span class="s">&quot;Jane&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 25)" onmouseover="showTip(event, 'fs3', 25)" class="m">List</span><span class="pn">.</span><span class="id">intersperse</span> <span class="s">&quot;and&quot;</span>
 <span class="c">// vat a : string list = [&quot;Bob&quot;; &quot;and&quot;; &quot;Jane&quot;]</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 31)" onmouseover="showTip(event, 'fs17', 31)" class="id">b</span> <span class="o">=</span> <span class="s">&quot;WooHoo&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs18', 32)" onmouseover="showTip(event, 'fs18', 32)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs19', 33)" onmouseover="showTip(event, 'fs19', 33)" class="id">intersperse</span> <span class="s">&#39;-&#39;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 26)" onmouseover="showTip(event, 'fs13', 26)" class="id">b</span> <span class="o">=</span> <span class="s">&quot;WooHoo&quot;</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs14', 27)" onmouseover="showTip(event, 'fs14', 27)" class="m">String</span><span class="pn">.</span><span class="id">intersperse</span> <span class="s">&#39;-&#39;</span>
 <span class="c">// val b : string = &quot;W-o-o-H-o-o&quot;</span>
 </code></pre>
 <ul>
 <li>intercalate - insert a list of elements between each element and flattens</li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 34)" onmouseover="showTip(event, 'fs20', 34)" class="id">c</span> <span class="o">=</span> <span class="pn">[</span><span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">]</span><span class="pn">;</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs4', 35)" onmouseover="showTip(event, 'fs4', 35)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 36)" onmouseover="showTip(event, 'fs21', 36)" class="id">intercalate</span> <span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">;</span><span class="o">-</span><span class="n">2</span><span class="pn">]</span><span class="pn">;;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 28)" onmouseover="showTip(event, 'fs15', 28)" class="id">c</span> <span class="o">=</span> <span class="pn">[</span><span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">]</span><span class="pn">;</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 29)" onmouseover="showTip(event, 'fs3', 29)" class="m">List</span><span class="pn">.</span><span class="id">intercalate</span> <span class="pn">[</span><span class="o">-</span><span class="n">1</span><span class="pn">;</span><span class="o">-</span><span class="n">2</span><span class="pn">]</span><span class="pn">;;</span>
 <span class="c">// val c : int list = [1; 2; -1; -2; 3; 4]</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 37)" onmouseover="showTip(event, 'fs22', 37)" class="id">d</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Woo&quot;</span><span class="pn">;</span> <span class="s">&quot;Hoo&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs18', 38)" onmouseover="showTip(event, 'fs18', 38)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 39)" onmouseover="showTip(event, 'fs23', 39)" class="id">intercalate</span> <span class="s">&quot;--o.o--&quot;</span><span class="pn">;;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="id">d</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;Woo&quot;</span><span class="pn">;</span> <span class="s">&quot;Hoo&quot;</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs14', 31)" onmouseover="showTip(event, 'fs14', 31)" class="m">String</span><span class="pn">.</span><span class="id">intercalate</span> <span class="s">&quot;--o.o--&quot;</span><span class="pn">;;</span>
 <span class="c">// val d : string = &quot;Woo--o.o--Hoo&quot;</span>
 </code></pre>
 <ul>
@@ -192,10 +185,10 @@ more common <code>concat</code> for flatten and so this naming is continued for 
 <li>Array.partitionMap</li>
 <li>List.partitionMap</li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 40)" onmouseover="showTip(event, 'fs24', 40)" class="fn">isEven</span> <span onmouseout="hideTip(event, 'fs25', 41)" onmouseover="showTip(event, 'fs25', 41)" class="fn">x</span> <span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs25', 42)" onmouseover="showTip(event, 'fs25', 42)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span><span class="pn">)</span> <span class="o">=</span> <span class="n">0</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs26', 43)" onmouseover="showTip(event, 'fs26', 43)" class="fn">chooseEven</span> <span onmouseout="hideTip(event, 'fs25', 44)" onmouseover="showTip(event, 'fs25', 44)" class="fn">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs24', 45)" onmouseover="showTip(event, 'fs24', 45)" class="fn">isEven</span> <span onmouseout="hideTip(event, 'fs25', 46)" onmouseover="showTip(event, 'fs25', 46)" class="fn">x</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs27', 47)" onmouseover="showTip(event, 'fs27', 47)" class="uc">Choice1Of2</span> <span onmouseout="hideTip(event, 'fs25', 48)" onmouseover="showTip(event, 'fs25', 48)" class="fn">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, 'fs28', 49)" onmouseover="showTip(event, 'fs28', 49)" class="uc">Choice2Of2</span> <span onmouseout="hideTip(event, 'fs25', 50)" onmouseover="showTip(event, 'fs25', 50)" class="fn">x</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 32)" onmouseover="showTip(event, 'fs17', 32)" class="fn">isEven</span> <span onmouseout="hideTip(event, 'fs18', 33)" onmouseover="showTip(event, 'fs18', 33)" class="fn">x</span> <span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span><span class="pn">)</span> <span class="o">=</span> <span class="n">0</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="fn">chooseEven</span> <span onmouseout="hideTip(event, 'fs18', 36)" onmouseover="showTip(event, 'fs18', 36)" class="fn">x</span> <span class="o">=</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs17', 37)" onmouseover="showTip(event, 'fs17', 37)" class="fn">isEven</span> <span onmouseout="hideTip(event, 'fs18', 38)" onmouseover="showTip(event, 'fs18', 38)" class="fn">x</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs20', 39)" onmouseover="showTip(event, 'fs20', 39)" class="uc">Choice1Of2</span> <span onmouseout="hideTip(event, 'fs18', 40)" onmouseover="showTip(event, 'fs18', 40)" class="fn">x</span> <span class="k">else</span> <span onmouseout="hideTip(event, 'fs21', 41)" onmouseover="showTip(event, 'fs21', 41)" class="uc">Choice2Of2</span> <span onmouseout="hideTip(event, 'fs18', 42)" onmouseover="showTip(event, 'fs18', 42)" class="fn">x</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 51)" onmouseover="showTip(event, 'fs29', 51)" class="id">e</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">4</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs4', 52)" onmouseover="showTip(event, 'fs4', 52)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs30', 53)" onmouseover="showTip(event, 'fs30', 53)" class="id">partitionMap</span> <span onmouseout="hideTip(event, 'fs26', 54)" onmouseover="showTip(event, 'fs26', 54)" class="fn">chooseEven</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 43)" onmouseover="showTip(event, 'fs22', 43)" class="id">e</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">4</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 44)" onmouseover="showTip(event, 'fs3', 44)" class="m">List</span><span class="pn">.</span><span class="id">partitionMap</span> <span onmouseout="hideTip(event, 'fs19', 45)" onmouseover="showTip(event, 'fs19', 45)" class="id">chooseEven</span>
 <span class="c">// val e : int list * int list = ([2; 4], [1; 3])</span>
 </code></pre>
 <h1><a name="Conversion-functions" class="anchor" href="#Conversion-functions">Conversion functions:</a></h1>
@@ -207,14 +200,14 @@ usually when converting to Option:</p>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">request |&gt; validateRequest |&gt; Option.ofResult
 </code></pre></td></tr></table>
 <p>Going the other way is similar, but a value needs to be filled in for None:</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs31', 55)" onmouseover="showTip(event, 'fs31', 55)" class="id">xs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;some value&quot;</span><span class="pn">]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs32', 56)" onmouseover="showTip(event, 'fs32', 56)" class="id">firstElementOption</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs31', 57)" onmouseover="showTip(event, 'fs31', 57)" class="id">xs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs4', 58)" onmouseover="showTip(event, 'fs4', 58)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs33', 59)" onmouseover="showTip(event, 'fs33', 59)" class="id">tryHead</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 46)" onmouseover="showTip(event, 'fs23', 46)" class="id">xs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;some value&quot;</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 47)" onmouseover="showTip(event, 'fs24', 47)" class="id">firstElementOption</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 48)" onmouseover="showTip(event, 'fs23', 48)" class="id">xs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs3', 49)" onmouseover="showTip(event, 'fs3', 49)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 50)" onmouseover="showTip(event, 'fs25', 50)" class="id">tryHead</span>
 
 <span class="c">// Convert an `Option` to a `Result` will use unit as the Error:</span>
-<span onmouseout="hideTip(event, 'fs32', 60)" onmouseover="showTip(event, 'fs32', 60)" class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 61)" onmouseover="showTip(event, 'fs11', 61)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs34', 62)" onmouseover="showTip(event, 'fs34', 62)" class="id">toResult</span>
+<span onmouseout="hideTip(event, 'fs24', 51)" onmouseover="showTip(event, 'fs24', 51)" class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 52)" onmouseover="showTip(event, 'fs9', 52)" class="m">Option</span><span class="pn">.</span><span class="id">toResult</span>
 
 <span class="c">// ...but you can specify an error value with Option.toResultWith:</span>
-<span onmouseout="hideTip(event, 'fs32', 63)" onmouseover="showTip(event, 'fs32', 63)" class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs11', 64)" onmouseover="showTip(event, 'fs11', 64)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs35', 65)" onmouseover="showTip(event, 'fs35', 65)" class="id">toResultWith</span> <span class="s">&quot;No Element&quot;</span>
+<span onmouseout="hideTip(event, 'fs24', 53)" onmouseover="showTip(event, 'fs24', 53)" class="id">firstElementOption</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 54)" onmouseover="showTip(event, 'fs9', 54)" class="m">Option</span><span class="pn">.</span><span class="id">toResultWith</span> <span class="s">&quot;No Element&quot;</span>
 </code></pre>
 <p>Converting between <code>Choice</code> and <code>Result</code> is often useful:</p>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">let asyncChoice = anAsyncValue |&gt; Async.Catch |&gt; Async.map Result.ofChoice
@@ -366,10 +359,20 @@ MapEnumerators
 </ul>
 </li>
 </ul>
-<h1><a name="Async-and-Tasks" class="anchor" href="#Async-and-Tasks">Async and Tasks:</a></h1>
+<h1><a name="Async-Task-and-ValueTask" class="anchor" href="#Async-Task-and-ValueTask">Async, Task and ValueTask:</a></h1>
 <ul>
 <li>
 <a href="reference/fsharpplus-task.html"> Task </a>
+<ul>
+<li>map, map2, map3</li>
+<li>apply</li>
+<li>zip</li>
+<li>join</li>
+<li>ignore</li>
+</ul>
+</li>
+<li>
+<a href="reference/fsharpplus-valueTask.html"> ValueTask </a>
 <ul>
 <li>map, map2, map3</li>
 <li>apply</li>
@@ -443,9 +446,8 @@ MapEnumerators
 </li>
 </ul>
 
-            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
-<div class="fsdocs-tip" id="fs2">val expectedSingleItem1: int</div>
-<div class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
+            <div class="fsdocs-tip" id="fs1">val expectedSingleItem1: int</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
  primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
  with InvariantCulture settings. Otherwise the operation requires an appropriate
  static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
@@ -454,11 +456,7 @@ type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;se
  of measure is erased in compiled code and when values of this type
  are analyzed using reflection. The type is representationally equivalent to
  &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />module List
-
-from FSharpPlus<br /><em>&lt;summary&gt;
- Additional operations on List
-&lt;/summary&gt;</em><br /><br />--------------------<br />module List
+<div class="fsdocs-tip" id="fs3">Multiple items<br />module List
 
 from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.list`1&quot; /&gt;.&lt;/summary&gt;<br />&lt;namespacedoc&gt;&lt;summary&gt;Operations for collections such as lists, arrays, sets, maps and sequences. See also 
     &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/fsharp-collection-types&quot;&gt;F# Collection Types&lt;/a&gt; in the F# Language Guide.
@@ -479,7 +477,7 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
  the notation &lt;c&gt;[1;2;3]&lt;/c&gt;. Use the values in the &lt;c&gt;List&lt;/c&gt; module to manipulate 
  values of this type, or pattern match against the values directly.
  &lt;/remarks&gt;<br />&lt;exclude /&gt;</em></div>
-<div class="fsdocs-tip" id="fs5">val exactlyOne: list: &#39;T list -&gt; &#39;T<br /><em>&lt;summary&gt;Returns the only element of the list.&lt;/summary&gt;<br />&lt;param name=&quot;list&quot;&gt;The input list.&lt;/param&gt;<br />&lt;returns&gt;The only element of the list.&lt;/returns&gt;<br />&lt;exception cref=&quot;T:System.ArgumentException&quot;&gt;Thrown when the input does not have precisely one element.&lt;/exception&gt;<br />&lt;example id=&quot;exactlyOne-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
+<div class="fsdocs-tip" id="fs4">val exactlyOne: list: &#39;T list -&gt; &#39;T<br /><em>&lt;summary&gt;Returns the only element of the list.&lt;/summary&gt;<br />&lt;param name=&quot;list&quot;&gt;The input list.&lt;/param&gt;<br />&lt;returns&gt;The only element of the list.&lt;/returns&gt;<br />&lt;exception cref=&quot;T:System.ArgumentException&quot;&gt;Thrown when the input does not have precisely one element.&lt;/exception&gt;<br />&lt;example id=&quot;exactlyOne-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
  [&quot;the chosen one&quot;] |&amp;gt; List.exactlyOne // evaluates &quot;the chosen one&quot;
  &lt;/code&gt;&lt;/example&gt;<br />&lt;example id=&quot;exactlyOne-2&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
  let input : string list = []
@@ -490,76 +488,40 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
  [1..5] |&amp;gt; List.exactlyOne
  &lt;/code&gt;
  Will throw the exception: &lt;c&gt;System.ArgumentException: The input sequence contains more than one element&lt;/c&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs6">val expectedSingleItem2: Result&lt;int,exn&gt;</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />module Result
-
-from FSharpPlus<br /><em>&lt;summary&gt;
- Additional operations on Result&amp;lt;&#39;T,&#39;Error&amp;gt;
-&lt;/summary&gt;</em><br /><br />--------------------<br />module Result
+<div class="fsdocs-tip" id="fs5">val expectedSingleItem2: Result&lt;int,exn&gt;</div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />module Result
 
 from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Core.FSharpResult`2&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
 type Result&lt;&#39;T,&#39;TError&gt; =
   | Ok of ResultValue: &#39;T
   | Error of ErrorValue: &#39;TError<br /><em>&lt;summary&gt;Helper type for error handling without exceptions.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs8">type exn = System.Exception<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Exception&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs9">val protect: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;T -&gt; Result&lt;&#39;U,exn&gt;<br /><em>&lt;summary&gt;
- Creates a safe version of the supplied function, which returns a Result&amp;lt;&#39;U,exn&amp;gt; instead of throwing exceptions.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs10">val expectedSingleItem3: Option&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs11">Multiple items<br />module Option
-
-from FSharpPlus<br /><em>&lt;summary&gt;
- Additional operations on Option
-&lt;/summary&gt;</em><br /><br />--------------------<br />module Option
+<div class="fsdocs-tip" id="fs7">type exn = System.Exception<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Exception&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val expectedSingleItem3: Option&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs9">module Option
 
 from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Contains operations for working with options.&lt;/summary&gt;<br />&lt;category&gt;Options&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs12">val protect: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;T -&gt; &#39;U option<br /><em>&lt;summary&gt;
- Creates a safe version of the supplied function, which returns an option&amp;lt;&#39;U&amp;gt; instead of throwing exceptions.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs13">val tryExactlyOne: xs: &#39;a list -&gt; &#39;a option</div>
-<div class="fsdocs-tip" id="fs14">val xs: &#39;a list</div>
-<div class="fsdocs-tip" id="fs15">val a: string list</div>
-<div class="fsdocs-tip" id="fs16">val intersperse: separator: &#39;T -&gt; source: &#39;T list -&gt; &#39;T list<br /><em>&lt;summary&gt;
- Inserts a separator element between each element in the source list.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs17">val b: string</div>
-<div class="fsdocs-tip" id="fs18">Multiple items<br />module String
-
-from FSharpPlus<br /><em>&lt;summary&gt;
- Additional operations on String
-&lt;/summary&gt;</em><br /><br />--------------------<br />module String
+<div class="fsdocs-tip" id="fs10">val tryExactlyOne: xs: &#39;a -&gt; &#39;b</div>
+<div class="fsdocs-tip" id="fs11">val xs: &#39;a</div>
+<div class="fsdocs-tip" id="fs12">val a: obj</div>
+<div class="fsdocs-tip" id="fs13">val b: obj</div>
+<div class="fsdocs-tip" id="fs14">module String
 
 from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Functional programming operators for string processing.  Further string operations
  are available via the member functions on strings and other functionality in
   &lt;a href=&quot;http://msdn2.microsoft.com/en-us/library/system.string.aspx&quot;&gt;System.String&lt;/a&gt; 
  and &lt;a href=&quot;http://msdn2.microsoft.com/library/system.text.regularexpressions.aspx&quot;&gt;System.Text.RegularExpressions&lt;/a&gt; types.
  &lt;/summary&gt;<br />&lt;category&gt;Strings and Text&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs19">val intersperse: element: char -&gt; source: string -&gt; string<br /><em>&lt;summary&gt;
- Inserts a separator char between each char in the source string.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs20">val c: int list</div>
-<div class="fsdocs-tip" id="fs21">val intercalate: separator: &#39;T list -&gt; source: seq&lt;&#39;T list&gt; -&gt; &#39;T list<br /><em>&lt;summary&gt;
- Concatenates all elements, using the specified separator between each element.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs22">val d: string</div>
-<div class="fsdocs-tip" id="fs23">val intercalate: separator: string -&gt; source: seq&lt;string&gt; -&gt; string<br /><em>&lt;summary&gt;
- Concatenates all elements, using the specified separator between each element.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs24">val isEven: x: int -&gt; bool</div>
-<div class="fsdocs-tip" id="fs25">val x: int</div>
-<div class="fsdocs-tip" id="fs26">val chooseEven: x: int -&gt; Choice&lt;int,int&gt;</div>
-<div class="fsdocs-tip" id="fs27">union case Choice.Choice1Of2: &#39;T1 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br /><em>&lt;summary&gt;Choice 1 of 2 choices&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs28">union case Choice.Choice2Of2: &#39;T2 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br /><em>&lt;summary&gt;Choice 2 of 2 choices&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs29">val e: int list * int list</div>
-<div class="fsdocs-tip" id="fs30">val partitionMap: mapping: (&#39;T -&gt; Choice&lt;&#39;T1,&#39;T2&gt;) -&gt; source: &#39;T list -&gt; &#39;T1 list * &#39;T2 list<br /><em>&lt;summary&gt;
- Creates two lists by applying the mapping function to each element in the list
- and classifying the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
- &lt;/summary&gt;<br />&lt;returns&gt;
- A tuple with both resulting lists.
- &lt;/returns&gt;</em></div>
-<div class="fsdocs-tip" id="fs31">val xs: string list</div>
-<div class="fsdocs-tip" id="fs32">val firstElementOption: string option</div>
-<div class="fsdocs-tip" id="fs33">val tryHead: list: &#39;T list -&gt; &#39;T option<br /><em>&lt;summary&gt;Returns the first element of the list, or
+<div class="fsdocs-tip" id="fs15">val c: obj</div>
+<div class="fsdocs-tip" id="fs16">val d: obj</div>
+<div class="fsdocs-tip" id="fs17">val isEven: x: int -&gt; bool</div>
+<div class="fsdocs-tip" id="fs18">val x: int</div>
+<div class="fsdocs-tip" id="fs19">val chooseEven: x: int -&gt; Choice&lt;int,int&gt;</div>
+<div class="fsdocs-tip" id="fs20">union case Choice.Choice1Of2: &#39;T1 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br /><em>&lt;summary&gt;Choice 1 of 2 choices&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs21">union case Choice.Choice2Of2: &#39;T2 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br /><em>&lt;summary&gt;Choice 2 of 2 choices&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs22">val e: obj</div>
+<div class="fsdocs-tip" id="fs23">val xs: string list</div>
+<div class="fsdocs-tip" id="fs24">val firstElementOption: string option</div>
+<div class="fsdocs-tip" id="fs25">val tryHead: list: &#39;T list -&gt; &#39;T option<br /><em>&lt;summary&gt;Returns the first element of the list, or
  &lt;c&gt;None&lt;/c&gt; if the list is empty.&lt;/summary&gt;<br />&lt;param name=&quot;list&quot;&gt;The input list.&lt;/param&gt;<br />&lt;returns&gt;The first element of the list or None.&lt;/returns&gt;<br />&lt;example id=&quot;try-head-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
  let inputs = [ &quot;banana&quot;; &quot;pear&quot; ]
 
@@ -571,8 +533,6 @@ from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Functional programming operat
  inputs |&amp;gt; List.tryHead
  &lt;/code&gt;
  Evaluates to &lt;c&gt;None&lt;/c&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs34">val toResult: source: &#39;T option -&gt; Result&lt;&#39;T,unit&gt;<br /><em>&lt;summary&gt;Converts an option to a Result.&lt;/summary&gt;<br />&lt;param name=&quot;source&quot;&gt;The option value.&lt;/param&gt;<br />&lt;returns&gt;The resulting Result value.&lt;/returns&gt;</em></div>
-<div class="fsdocs-tip" id="fs35">val toResultWith: errorValue: &#39;Error -&gt; source: &#39;T option -&gt; Result&lt;&#39;T,&#39;Error&gt;<br /><em>&lt;summary&gt;Converts an option to a Result.&lt;/summary&gt;<br />&lt;param name=&quot;errorValue&quot;&gt;The error value to be used in case of None.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The option value.&lt;/param&gt;<br />&lt;returns&gt;The resulting Result value.&lt;/returns&gt;</em></div>
 
         </div>
 

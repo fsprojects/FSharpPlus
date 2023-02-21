@@ -6,7 +6,7 @@
     <title>FSharpPlus
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,20 +68,13 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                <li class="nav-header">
-  API Reference
-</li>             
-<li class="nav-item">
-  <a class="nav-link" href="/FSharpPlus/reference/index.html">
-    All Namespaces
-  </a>
-</li>
+                {{fsdocs-list-of-namespaces}}
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -127,22 +120,22 @@ and become useful the deeper in you get.</p>
 <p>This example demonstrates using an extension function defined in this library.</p>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="m">String</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">replace</span> <span class="s">&quot;old&quot;</span> <span class="s">&quot;new&quot;</span> <span class="s">&quot;Good old days&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="m">String</span><span class="pn">.</span><span class="id">replace</span> <span class="s">&quot;old&quot;</span> <span class="s">&quot;new&quot;</span> <span class="s">&quot;Good old days&quot;</span>
 <span class="c">// val x : string = &quot;Good new days&quot;</span>
 </code></pre>
 <h2><a name="Example-2" class="anchor" href="#Example-2">Example 2</a></h2>
 <p>This example demonstrates using a generic function defined in this library.</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="fn">string</span> <span class="pn">[|</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">|]</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="id">map</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">string</span> <span class="pn">[|</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">|]</span>
 <span class="c">// val it : string [] = [|&quot;2&quot;; &quot;3&quot;; &quot;4&quot;; &quot;5&quot;|]</span>
 
-<span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="fn">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="uc">Some</span> <span class="n">3</span><span class="pn">)</span>
+<span class="id">map</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">9</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">Some</span> <span class="n">3</span><span class="pn">)</span>
 <span class="c">// val it : int option = Some 12</span>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 9)" onmouseover="showTip(event, 'fs1', 9)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="id">Data</span>
+<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
 
-<span onmouseout="hideTip(event, 'fs5', 11)" onmouseover="showTip(event, 'fs5', 11)" class="fn">map</span> <span onmouseout="hideTip(event, 'fs6', 12)" onmouseover="showTip(event, 'fs6', 12)" class="fn">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="id">create</span> <span class="n">2</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">)</span>
+<span class="id">map</span> <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="id">string</span> <span class="pn">(</span><span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">create</span> <span class="n">2</span> <span class="pn">[</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">)</span>
 <span class="c">// val it : NonEmptyList&lt;string&gt; = {Head = &quot;2&quot;; Tail = [&quot;3&quot;; &quot;4&quot;; &quot;5&quot;];}</span>
 </code></pre>
 <p>For a more hands on run through F#+ we recommend following the tutorial:</p>
@@ -174,49 +167,16 @@ You might also want to read the <a href="https://github.com/fsprojects/FSharpPlu
 redistribution for both commercial and non-commercial purposes. For more information see the
 <a href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.txt">License file</a> in the GitHub repository.</p>
 
-            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
-<div class="fsdocs-tip" id="fs2">val x: string</div>
-<div class="fsdocs-tip" id="fs3">Multiple items<br />module String
-
-from FSharpPlus<br /><em>&lt;summary&gt;
- Additional operations on String
-&lt;/summary&gt;</em><br /><br />--------------------<br />module String
+            <div class="fsdocs-tip" id="fs1">val x: obj</div>
+<div class="fsdocs-tip" id="fs2">module String
 
 from Microsoft.FSharp.Core<br /><em>&lt;summary&gt;Functional programming operators for string processing.  Further string operations
  are available via the member functions on strings and other functionality in
   &lt;a href=&quot;http://msdn2.microsoft.com/en-us/library/system.string.aspx&quot;&gt;System.String&lt;/a&gt; 
  and &lt;a href=&quot;http://msdn2.microsoft.com/library/system.text.regularexpressions.aspx&quot;&gt;System.Text.RegularExpressions&lt;/a&gt; types.
  &lt;/summary&gt;<br />&lt;category&gt;Strings and Text&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs4">val replace: oldValue: string -&gt; newValue: string -&gt; source: string -&gt; string<br /><em>&lt;summary&gt;
- Replaces a substring with the given replacement string.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs5">val map: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><em>&lt;summary&gt;Lifts a function into a Functor.&lt;/summary&gt;<br />&lt;category index=&quot;1&quot;&gt;Functor&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs6">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs7">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;Value of type &#39;T&quot;&lt;/summary&gt;<br />&lt;param name=&quot;Value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;An option representing the value.&lt;/returns&gt;</em></div>
-<div class="fsdocs-tip" id="fs8">namespace FSharpPlus.Data</div>
-<div class="fsdocs-tip" id="fs9">Multiple items<br />module NonEmptyList
-
-from FSharpPlus.Data<br /><em>&lt;summary&gt;
- Basic operations on NonEmptyList
-&lt;/summary&gt;</em><br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =
-  {
-    Head: &#39;t
-    Tail: &#39;t list
-  }
-  interface NonEmptySeq&lt;&#39;t&gt;
-  interface IReadOnlyList&lt;&#39;t&gt;
-  interface IReadOnlyCollection&lt;&#39;t&gt;
-  interface IEnumerable
-  interface IEnumerable&lt;&#39;t&gt;
-  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
-  static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
-  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member Choice: source: NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ``&lt;|&gt;``)
-  ...<br /><em>&lt;summary&gt;
- A type-safe list that contains at least one element.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs10">val create: x: &#39;a -&gt; xs: &#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;Builds a non empty list.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs3">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs4">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;Value of type &#39;T&quot;&lt;/summary&gt;<br />&lt;param name=&quot;Value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;An option representing the value.&lt;/returns&gt;</em></div>
 
         </div>
 
