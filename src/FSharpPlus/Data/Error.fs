@@ -71,6 +71,12 @@ type ResultT<'``monad<Result<'t,'e>>``> with
 
     static member inline (<*>) (f: ResultT<'``Monad<Result<('T -> 'U),'E>>``>, x: ResultT<'``Monad<Result<'T,'E>>``>) = ResultT.apply f x : ResultT<'``Monad<Result<'U,'E>>``>    
     static member inline (>>=) (x: ResultT<'``Monad<Result<'T,'E>>``>, f: 'T->ResultT<'``Monad<Result<'U,'E>>``>)     = ResultT.bind  f x
+    
+    /// <summary>
+    /// Composes left-to-right two Result functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> ResultT<'``Monad<Result<'U, 'E>``>, g: 'U -> ResultT<'``Monad<Result<'V, 'E>``>) : 'T -> ResultT<'``Monad<Result<'V, 'E>``> = fun x -> ResultT.bind g (f x)
 
     static member inline get_Zero () : ResultT<'``MonadPlus<Result<'U,'E>>``> = ResultT <| result (Error zero)
     static member inline (+) (ResultT x, ResultT y) : ResultT<'``MonadPlus<Result<'U,'E>>``> =
@@ -154,6 +160,12 @@ type ChoiceT<'``monad<Choice<'t,'e>>``> with
 
     static member inline (<*>) (f: ChoiceT<'``Monad<Choice<('T -> 'U),'E>>``>, x: ChoiceT<'``Monad<Choice<'T,'E>>``>) = ChoiceT.apply f x : ChoiceT<'``Monad<Choice<'U,'E>>``>
     static member inline (>>=) (x: ChoiceT<'``Monad<Choice<'T,'E>>``>, f: 'T->ChoiceT<'``Monad<Choice<'U,'E>>``>)     = ChoiceT.bind f x
+    
+    /// <summary>
+    /// Composes left-to-right two Choice functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> ChoiceT<'``Monad<Choice<'U, 'E>``>, g: 'U -> ChoiceT<'``Monad<Choice<'V, 'E>``>) : 'T -> ChoiceT<'``Monad<Choice<'V, 'E>``> = fun x -> ChoiceT.bind g (f x)
 
     static member inline get_Zero () : ChoiceT<'``MonadPlus<Choice<'U,'E>>``> = ChoiceT <| result (Choice2Of2 zero)
     static member inline (+) (ChoiceT x, ChoiceT y) : ChoiceT<'``MonadPlus<Choice<'U,'E>>``> =

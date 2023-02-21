@@ -75,6 +75,12 @@ type Cont<'r,'t> with
     static member (<*  ) (x: Cont<'R, 'U>, y: Cont<'R, 'T>) : Cont<'R, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Cont.map/> x : Cont<'R, 'T->'U>) </Cont.apply/> y
 
     static member (>>=) (x, f: 'T->_)       = Cont.bind f x   : Cont<'R,'U>
+    
+    /// <summary>
+    /// Composes left-to-right two Cont functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member (>=>) (f, (g: 'U -> _)) : 'T -> Cont<'R, 'V> = fun x -> Cont.bind g (f x)
 
     static member Delay f = Cont (fun k -> Cont.run (f ()) k) : Cont<'R,'T>
     static member TryWith    (Cont c, h) = Cont (fun k -> try (c k) with e -> Cont.run (h e) k) : Cont<'R,'T>

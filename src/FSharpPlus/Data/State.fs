@@ -68,7 +68,14 @@ type State<'s,'t> with
 
     static member Return a = State (fun s -> (a, s))           : State<'S,'T>
     static member (>>=) (x, f: 'T->_) = State.bind f x         : State<'S,'U>
-    static member (<*>) (f, x: State<'S,'T>) = State.apply f x : State<'S,'U>
+
+    /// <summary>
+    /// Composes left-to-right two State functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member (>=>) (f, (g: 'U -> _)) : 'T -> State<'S, 'V> = fun x -> State.bind g (f x)
+
+    static member (<*>) (f, x: State<'S,'T>) = State.apply f x : State<'S,'U>    
 
     /// <summary>
     /// Sequences two States left-to-right, discarding the value of the first argument.
@@ -171,6 +178,12 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline (<* ) (x: StateT<'S, '``Monad<'U * 'S>``>, y: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (k: 'U) (_: 'T) -> k ) </StateT.map/> x : StateT<'S, '``Monad<('T->'U) * 'S>``>) </StateT.apply/> y
     
     static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>) = StateT.bind  f x
+
+    /// <summary>
+    /// Composes left-to-right two State functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> StateT<'S, '``Monad<'U * 'S>``>, g: 'U -> StateT<'S, '``Monad<'V * 'S>``>) : 'T -> StateT<'S, '``Monad<'V * 'S>``> = fun x -> StateT.bind g (f x)
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>

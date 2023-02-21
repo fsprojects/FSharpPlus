@@ -165,6 +165,12 @@ type ReaderT<'r,'``monad<'t>``> with
     /// Composes left-to-right two Reader functions (Kleisli composition).
     /// </summary>
     /// <category index="2">Monad</category>
+    static member (>=>) (f, (g: 'U -> _)) : 'T -> Reader<'R, 'V> = fun x -> Reader.bind g (f x)
+
+    /// <summary>
+    /// Composes left-to-right two Reader functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
     static member inline (>=>) (f: 'T -> ReaderT<_,'``Monad<'U>``>, g: 'U -> ReaderT<'R,'``Monad<'V>``>) : 'T -> ReaderT<'R,'``Monad<'V>``> = fun x -> ReaderT.bind g (f x)
 
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty ()) : ReaderT<'R, '``MonadPlus<'T>``>

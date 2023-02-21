@@ -52,6 +52,12 @@ type OptionT<'``monad<option<'t>>``> with
     static member inline (<*>) (f: OptionT<'``Monad<option<('T -> 'U)>``>, x: OptionT<'``Monad<option<'T>``>) = OptionT.apply f x : OptionT<'``Monad<option<'U>``>
     static member inline (>>=) (x: OptionT<'``Monad<option<'T>``>, f: 'T -> OptionT<'``Monad<option<'U>``>)   = OptionT.bind  f x
 
+    /// <summary>
+    /// Composes left-to-right two Option functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> OptionT<'``Monad<option<'U>``>, g: 'U -> OptionT<'``Monad<option<'V>``>) : 'T -> OptionT<'``Monad<option<'V>``> = fun x -> OptionT.bind g (f x)
+
     static member inline get_Zero () : OptionT<'``MonadPlus<option<'T>``> = OptionT <| result None
     static member inline (+) (OptionT x, OptionT y) : OptionT<'``MonadPlus<option<'T>``> =
         OptionT <| (x >>= function
