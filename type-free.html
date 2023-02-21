@@ -79,22 +79,20 @@
         <hr />
         <div class="container" id="fsdocs-content">
             <h1><a name="Free-Functor-T-T-gt" class="anchor" href="#Free-Functor-T-T-gt">Free<'Functor<'T>, 'T&gt;</a></h1>
-<p>This type is an implementation of the <a href="https://www.google.com/search?q=free+monad">Free Monad</a> which is generic to any Functor.</p>
+<p>This type is an implementation of the <a href="https://www.google.com/search?q=free+monad">Free Monad</a> which is generic to any <a href="abstraction-functor.html">Functor</a>.</p>
 <p>The Free Monad is used typically to describe a pure program at high level and separately write different interpreters for it.</p>
 <h2><a name="Related-Types" class="anchor" href="#Related-Types">Related Types</a></h2>
 <ul>
-<li><p><a href="type-functor.html">Functor</a>: The type used (typically a DU) for our instruction set has to be a Functor.</p></li>
-<li><p><a href="type-coproduct.html">Coproduct</a>: Used in conjunction with the Free Monad to combine different instruction sets.</p></li>
+<li><a href="type-coproduct.html">Coproduct</a>: A <a href="abstraction-functor.html">Functor</a> used in conjunction with the Free Monad to combine different instruction sets.</li>
 </ul>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<p>Free monad-interpreter in F# from <a href="https://blog.ploeh.dk/2017/07/17/a-pure-command-line-wizard">Mark Seemann's blog</a> but encoded with Free.</p>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">System</span>
 <span class="k">open</span> <span class="id">FSharpPlus</span>
 <span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
 
-
-<span class="c">// Free monad-interpreter in F# from https://blog.ploeh.dk/2017/07/17/a-pure-command-line-wizard/</span>
 
 <span class="k">type</span> <span class="rt">CommandLineInstruction</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span>
     <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="uc">ReadLine</span>  <span class="k">of</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="rt">string</span> <span class="k">-&gt;</span> <span class="ta">&#39;</span><span class="id">t</span><span class="pn">)</span>
