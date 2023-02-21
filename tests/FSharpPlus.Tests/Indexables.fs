@@ -60,6 +60,7 @@ module Indexables =
         Assert.AreEqual (123, foldi (fun a b c -> a + b + c) 0 (seq [20; 40; 60]))
         Assert.AreEqual (123, foldi (fun a b c -> a + b + c) 0 [20; 40; 60])
         Assert.AreEqual (123, foldi (fun a b c -> a + b + c) 0 (Map.ofSeq [0, 20; 1, 40; 2, 60]))
+        Assert.AreEqual (123, foldi (fun a b c -> a + b + c) 0 (readOnlyDict [0, 20; 1, 40; 2, 60]))
         
         
     [<Test>]
@@ -78,3 +79,7 @@ module Indexables =
         let r4 = [ ( [0; 0; 0]); ( [1; 1; 1]); ( [2; 2; 2])] |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
         CollectionAssert.AreEqual ([[0; 0; 0; 0]; [1; 1; 1; 1]; [2; 2; 2; 2]], r4.Value)
         Assert.IsInstanceOf<Option<int list list>> (Some r4.Value)
+        
+        let r5 = readOnlyDict [ (0, [0; 0; 0]); (1, [1; 1; 1]); (2, [2; 2; 2])] |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
+        CollectionAssert.AreEqual (readOnlyDict [(0, [0; 0; 0; 0]); (1, [1; 1; 1; 1]); (2, [2; 2; 2; 2])], r5.Value)
+        Assert.IsInstanceOf<Option<IReadOnlyDictionary<int,int list>>> (Some r5.Value)
