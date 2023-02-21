@@ -50,15 +50,18 @@ module IReadOnlyDictionary =
     let values (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
     /// <summary>Maps the given function over each value in the read-only dictionary.</summary>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">The input IReadOnlyDictionary.</param>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source">The input IReadOnlyDictionary.</param>
     ///
     /// <returns>The mapped IReadOnlyDictionary.</returns>
-    let map f (x: IReadOnlyDictionary<'Key, 'T>) =
+    let mapValues mapper (source: IReadOnlyDictionary<'Key, 'T>) =
         let dct = Dictionary<'Key, 'U> ()
-        for KeyValue(k, v) in x do
-            dct.Add (k, f v)
+        for KeyValue(k, v) in source do
+            dct.Add (k, mapper v)
         dct :> IReadOnlyDictionary<'Key, 'U>
+
+    [<System.Obsolete("Name is a bit ambiguous, use mapValues if the intention is to map only over the values or mapi to map over both keys and values.")>]
+    let map f (x: IReadOnlyDictionary<'Key, 'T>) = mapValues f x // F#+ 2: if following F# core naming, it should point to mapi instead.
 
     /// <summary>Creates a read-only dictionary value from a pair of read-only dictionaries,
     /// using a function to combine them.</summary>
