@@ -78,6 +78,13 @@ type Writer<'monoid,'t> with
     #endif
 
     static member inline (>>=) (x, f: 'T->_) = Writer.bind f x          : Writer<'Monoid,'U>
+
+    /// <summary>
+    /// Composes left-to-right two Writer functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f, (g: 'U -> _)) : 'T -> Writer<'Monoid, 'V> = fun x -> Writer.bind g (f x)
+
     static member inline (<*>) (f, x: Writer<_,'T>) = Writer.apply f x  : Writer<'Monoid,'U>
 
     /// <summary>
@@ -168,6 +175,12 @@ type WriterT<'``monad<'t * 'monoid>``> with
     static member inline (<* ) (x: WriterT<'``Monad<'U * 'Monoid>``>, y: WriterT<'``Monad<'T * 'Monoid>``>) : WriterT<'``Monad<'U * 'Monoid>``> = ((fun (k: 'U) (_: 'T) -> k ) </WriterT.map/> x : WriterT<'``Monad<('T -> 'U) * 'Monoid>``>) </WriterT.apply/> y
     
     static member inline (>>=) (x: WriterT<'``Monad<'T * 'Monoid>``>, f: 'T -> _)                                    = WriterT.bind  f x : WriterT<'``Monad<'U * 'Monoid>``>
+
+    /// <summary>
+    /// Composes left-to-right two Writer functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> WriterT<'``Monad<'U * 'Monoid>``>, g: 'U -> WriterT<'``Monad<'V * 'Monoid>``>) : 'T -> WriterT<'``Monad<'V * 'Monoid>``> = fun x -> WriterT.bind g (f x)
 
     static member inline get_Empty () = WriterT (getEmpty ()) : WriterT<'``MonadPlus<'T * 'Monoid>``>
     static member inline (<|>) (WriterT m, WriterT n) = WriterT (m <|> n) : WriterT<'``MonadPlus<'T * 'Monoid>``>

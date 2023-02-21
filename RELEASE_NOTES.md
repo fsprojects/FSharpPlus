@@ -1,3 +1,10 @@
+#### 1.4.0  - February 22 2023
+ - Additional Alternatives available (functions, error monads)
+ - More IReadOnlyDictionary functions
+ - Bug fixes in Map as FoldIndexable and missing <*> for IDictionary and IReadOnlyDictionary
+ - Deprecate IReadOnlyDictionary.map
+ - Guid to/from bytes conversion
+
 #### 1.3.3  - February 5 2023
  - Fix missing zero overload for voption
  - Add (>>=) and (>=>) to ReaderT

@@ -66,7 +66,7 @@ From F#
  -  ``Choice<'T,'U>``
  -  ``KeyValuePair<'Key,'T>``
  -  ``'Monoid * 'T``
- -  ``'ValueTuple<Monoid, 'T>``
+ -  ``ValueTuple<'Monoid, 'T>``
  -  ``Task<'T>``
  -  ``ValueTask<'T>``
  -  ``'R->'T``
@@ -106,6 +106,13 @@ Restricted:
  -  ``StringBuilder``
  -  ``Set<'T>``
  -  ``IEnumerator<'T>``
+
+Only for <*> operation:
+ -  ``Map<'Key, 'T>``
+ -  ``Dictionary<'Key, 'T>``
+ -  ``IDictionary<'Key, 'T>``
+ -  ``IReadOnlyDictionary<'Key, 'T>``
+
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

@@ -59,12 +59,17 @@ From .Net/F#
  -  ``option<'T>``
  -  ``array<'T>``
  -  ``seq<'T>``
+ -  ``'T -> 'Alternative``
  
 From F#+
  
  -  [``ReaderT<'R, 'MonadPlus<'T>>``](type-readert.html)
  -  [``WriterT<'MonadPlus<'T * 'Monoid>>``](type-writert.html)
  -  [``StateT<'S,'MonadPlus<'T * 'S>>``](type-statet.html)
+ -  [``OptionT<'MonadPlus<option<'T>>>``](type-optiont.html)
+ -  [``ValueOptionT<'MonadPlus<voption<'T>>>``](type-valueoptiont.html)
+ -  [``ResultT<'MonadPlus<Result<'T,'Monoid>>>``](type-resultt.html)
+ -  [``ChoiceT<'MonadPlus<Choice<'T,'Monoid>>>``](type-choicet.html)
  -  [``Compose<'AlternativeF<'AlternativeG<'T>>>``](type-compose.html)
  -  [``DList<'T>``](type-dlist.html)
  -  [``ZipList<'S>``](type-ziplist.html)

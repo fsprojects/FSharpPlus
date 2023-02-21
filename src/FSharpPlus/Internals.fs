@@ -190,6 +190,18 @@ type BitConverter =
         let mutable value = value
         BitConverter.GetBytes ((&&value |> NativePtr.toNativeInt |> NativePtr.ofNativeInt |> NativePtr.read : int64), isLittleEndian)
 
+    /// Converts a Guid into an array of bytes with length
+    /// eight.
+    static member GetBytes (value: Guid, isLittleEndian) =
+        let bytes = value.ToByteArray ()
+        if isLittleEndian then bytes
+        else
+            let p1 = Array.rev bytes.[0 .. 3]
+            let p2 = Array.rev bytes.[4 .. 5]
+            let p3 = Array.rev bytes.[6 .. 7]
+            let p4 =           bytes.[8 .. 15]
+            Array.concat [p1; p2; p3; p4]
+
     /// Converts an array of bytes into a char.
     static member ToChar (value: byte [], startIndex: int, isLittleEndian: bool) =
         char <| BitConverter.ToInt16 (value, startIndex, isLittleEndian)
@@ -236,6 +248,19 @@ type BitConverter =
             let i2 = (int64 (NativePtr.get pbyte 4) <<< 24) |||  (int64 (NativePtr.get pbyte 5) <<< 16) ||| (int64 (NativePtr.get pbyte 6) <<< 8) ||| (int64 (NativePtr.get pbyte 7))
             i2 ||| (i1 <<< 32)
 
+    static member ToGuid (value: byte[], startIndex: int, isLittleEndian: bool) =
+        if isNull value then nullArg "value"
+        if startIndex >= value.Length      then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_Index")
+        if startIndex >  value.Length - 16 then raise <| new ArgumentException "Arg_ArrayPlusOffTooSmall"
+        if isLittleEndian then
+            if startIndex = 0 then Guid value
+            else Guid value.[startIndex .. startIndex + 15]
+        else
+            let p1 = Array.rev value.[startIndex + 0 .. startIndex + 3]
+            let p2 = Array.rev value.[startIndex + 4 .. startIndex + 5]
+            let p3 = Array.rev value.[startIndex + 6 .. startIndex + 7]
+            let p4 =           value.[startIndex + 8 .. startIndex + 15]
+            Guid (Array.concat [p1; p2; p3; p4])
 
     /// Converts an array of bytes into an ushort.
     ///

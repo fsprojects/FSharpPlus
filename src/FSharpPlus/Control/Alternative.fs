@@ -24,7 +24,7 @@ type Empty =
     static member        Empty ([<Optional>]_output: option<'T>          , [<Optional>]_mthd: Empty   ) = None         : option<'T>
     static member        Empty ([<Optional>]_output: voption<'T>         , [<Optional>]_mthd: Empty   ) = ValueNone    : voption<'T>
     static member        Empty ([<Optional>]_output: list<'T>            , [<Optional>]_mthd: Empty   ) = [  ]         : list<'T>
-    static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]         : 'T []    
+    static member        Empty ([<Optional>]_output: 'T []               , [<Optional>]_mthd: Empty   ) = [||]         : 'T []
 
     static member inline Invoke () : '``Alternative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Empty : _*_ -> _) output, mthd)
@@ -32,6 +32,8 @@ type Empty =
 
     static member inline InvokeOnInstance () : '``Alternative<'T>`` = (^``Alternative<'T>`` : (static member Empty : ^``Alternative<'T>``) ()) : '``Alternative<'T>``
 
+type Empty with
+    static member inline Empty ([<Optional>]_output: 'R -> '``Alternative<'T>``, [<Optional>]_mthd: Empty) = (fun _ -> Empty.Invoke ()) : 'R -> '``Alternative<'T>``
 
 type Append =
     inherit Default1
@@ -53,6 +55,8 @@ type Append =
         let inline call (mthd: ^M, input1: ^I, input2: ^I) = ((^M or ^I) : (static member ``<|>`` : _*_*_ -> _) input1, input2, mthd)
         call (Unchecked.defaultof<Append>, x, y)
 
+type Append with
+    static member inline ``<|>`` (x: 'R -> '``Alt<'T>``  , y              , [<Optional>]_mthd: Append  ) = fun r -> Append.Invoke (x r) (y r)
 
 
 type IsAltLeftZero =

@@ -54,6 +54,23 @@ type Apply =
            | true, vx -> dct.Add (k, vf vx)
            | _        -> ()
        dct
+
+    static member        ``<*>`` (f: IDictionary<'Key,_>, x: IDictionary<'Key,'T> , [<Optional>]_output: IDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IDictionary<'Key,'U> =
+       let dct = Dictionary ()
+       for KeyValue(k, vf) in f do
+           match x.TryGetValue k with
+           | true, vx -> dct.Add (k, vf vx)
+           | _        -> ()
+       dct :> IDictionary<'Key,'U>
+
+    static member        ``<*>`` (f: IReadOnlyDictionary<'Key,_>, x: IReadOnlyDictionary<'Key,'T> , [<Optional>]_output: IReadOnlyDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IReadOnlyDictionary<'Key,'U> =
+       let dct = Dictionary ()
+       for KeyValue(k, vf) in f do
+           match x.TryGetValue k with
+           | true, vx -> dct.Add (k, vf vx)
+           | _        -> ()
+       dct :> IReadOnlyDictionary<'Key,'U>
+
     #if !FABLE_COMPILER
     static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     #endif
