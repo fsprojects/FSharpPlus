@@ -123,7 +123,7 @@ type FoldIndexed =
     inherit Default1
     static member FoldIndexed (x: list<_>   , f, z, _impl: FoldIndexed) = x |> List.fold  (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
     static member FoldIndexed (x: _ []      , f, z, _impl: FoldIndexed) = x |> Array.fold (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
-    static member FoldIndexed (_: Map<'k,'t>, f, z, _impl: FoldIndexed) = Map.fold f z
+    static member FoldIndexed (x: Map<'k,'t>, f, z, _impl: FoldIndexed) = Map.fold f z x
 
     static member inline Invoke (folder: 'State->'Key->'T->'State) (state: 'State) (foldable: '``Foldable<'T>``) : 'State =
         let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member FoldIndexed : _*_*_*_ -> _) b, f, z, a)

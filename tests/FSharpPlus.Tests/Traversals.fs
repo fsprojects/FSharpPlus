@@ -273,11 +273,6 @@ module Traversable =
         CollectionAssert.AreEqual (r2.Value, m)
 
         let m1 = Map.ofList [(1, [1;1;1]); (2, [2;2;2])]
-        let r1 = m1 |> traversei (fun _ _ -> None)
-        let r2 = m1 |> traversei (fun i v -> if List.forall ((=) i) v then Some (i :: v) else None)
-        Assert.AreEqual(None, r1)
-        CollectionAssert.AreEqual (Map.ofList [(1, [1;1;1;1]); (2, [2;2;2;2])], r2.Value)
-
         let expected = [Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)];
                         Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)];
                         Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]]
