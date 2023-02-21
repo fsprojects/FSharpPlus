@@ -49,11 +49,19 @@ type ValueOptionT<'``monad<voption<'t>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f: 'T->'U->'V->'W, x: ValueOptionT<'``Monad<voption<'T>``>, y: ValueOptionT<'``Monad<voption<'U>``>, z: ValueOptionT<'``Monad<voption<'W>``>) = ValueOptionT.map3 f x y z : ValueOptionT<'``Monad<voption<'W>``>
 
-    static member inline (<*>)  (f: ValueOptionT<'``Monad<voption<('T -> 'U)>``>, x: ValueOptionT<'``Monad<voption<'T>``>) = ValueOptionT.apply f x : ValueOptionT<'``Monad<voption<'U>``>
-    static member inline (>>=)  (x: ValueOptionT<'``Monad<voption<'T>``>, f: 'T -> ValueOptionT<'``Monad<voption<'U>``>)   = ValueOptionT.bind  f x
+    static member inline (<*>) (f: ValueOptionT<'``Monad<voption<('T -> 'U)>``>, x: ValueOptionT<'``Monad<voption<'T>``>) = ValueOptionT.apply f x : ValueOptionT<'``Monad<voption<'U>``>
+    static member inline (>>=) (x: ValueOptionT<'``Monad<voption<'T>``>, f: 'T -> ValueOptionT<'``Monad<voption<'U>``>)   = ValueOptionT.bind  f x
 
-    static member inline get_Empty () = ValueOptionT <| result ValueNone : ValueOptionT<'``MonadPlus<voption<'T>``>
-    static member inline (<|>) (ValueOptionT x, ValueOptionT y) = ValueOptionT <| (x  >>= (fun maybe_value -> match maybe_value with ValueSome value -> result (ValueSome value) | _ -> y)) : ValueOptionT<'``MonadPlus<voption<'T>``>    
+    static member inline get_Zero () : ValueOptionT<'``MonadPlus<voption<'T>``> = ValueOptionT <| result ValueNone
+    static member inline (+) (ValueOptionT x, ValueOptionT y) : ValueOptionT<'``MonadPlus<voption<'T>``> =
+        ValueOptionT <| (x >>= function
+            | ValueNone -> y
+            | ValueSome x -> y >>= function
+                | ValueNone -> result (ValueSome x)
+                | ValueSome y -> result (ValueSome (x ++ y)))
+    
+    static member inline get_Empty () : ValueOptionT<'``MonadPlus<voption<'T>``> = ValueOptionT <| result ValueNone
+    static member inline (<|>) (ValueOptionT x, ValueOptionT y) : ValueOptionT<'``MonadPlus<voption<'T>``> = ValueOptionT <| (x >>= function ValueSome value -> result (ValueSome value) | _ -> y)
 
     static member inline TryWith (source: ValueOptionT<'``Monad<voption<'T>>``>, f: exn -> ValueOptionT<'``Monad<voption<'T>>``>) = ValueOptionT (TryWith.Invoke (ValueOptionT.run source) (ValueOptionT.run << f))
     static member inline TryFinally (computation: ValueOptionT<'``Monad<voption<'T>>``>, f) = ValueOptionT (TryFinally.Invoke     (ValueOptionT.run computation) f)
