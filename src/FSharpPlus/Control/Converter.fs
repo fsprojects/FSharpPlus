@@ -49,7 +49,8 @@ type OfBytes =
     static member OfBytes (_: int64  , _: OfBytes) = fun (x, i, e) -> BitConverter.ToInt64  (x, i, e)
     static member OfBytes (_: float32, _: OfBytes) = fun (x, i, e) -> BitConverter.ToSingle (x, i, e)
 
-    static member OfBytes (_: string , _: OfBytes) = fun (x, i, _) -> BitConverter.ToString (x, i)
+    static member OfBytes (_: string , _: OfBytes) = fun (x, i, _) -> BitConverter.ToString (x, i)    
+    static member OfBytes (_: Guid   , _: OfBytes) = fun (x, i, e) -> BitConverter.ToGuid (x, i, e)
 
     static member OfBytes (_: uint16 , _: OfBytes) = fun (x, i, e) -> BitConverter.ToUInt16 (x, i, e)
     static member OfBytes (_: uint32 , _: OfBytes) = fun (x, i, e) -> BitConverter.ToUInt32 (x, i, e)
@@ -70,6 +71,7 @@ type ToBytes =
     static member ToBytes (x: int64  , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: float32, e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: string , _, _: ToBytes) = Array.map byte (x.ToCharArray ())
+    static member ToBytes (x: Guid   , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: uint16 , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: uint32 , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
     static member ToBytes (x: uint64 , e, _: ToBytes) = BitConverter.GetBytes (x, BitConverter.IsLittleEndian = e)
