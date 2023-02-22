@@ -83,15 +83,15 @@
 ___</p>
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>map f x</code>/<code>(|&gt;&gt;) x f</code>/<code>(&lt;&lt;|) f x</code>/<code>(&lt;!&gt;) f x</code></li>
+<li><code>map f x</code> &nbsp; / &nbsp; <code>(|&gt;&gt;) x f</code> &nbsp; / &nbsp; <code>(&lt;&lt;|) f x</code> &nbsp; / &nbsp; <code>(&lt;!&gt;) f x</code></li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Map</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Map</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">U</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
 </code></pre>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
 <li><code>unzip x</code></li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Unzip</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Unzip</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">Functor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
 </code></pre>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="id">map</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">id</span>  <span class="o">=</span>  <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">id</span>
@@ -118,7 +118,7 @@ ___</p>
 <li><p><code>Async&lt;'T&gt;</code></p></li>
 <li><p><code>Result&lt;'T,'U&gt;</code></p></li>
 <li><p><code>Choice&lt;'T,'U&gt;</code></p></li>
-<li><p><code>KeyValuePair&lt;'Key,'T&gt;</code></p></li>
+<li><p><code>KeyValuePair&lt;'Key, 'T&gt;</code></p></li>
 <li><p><code>Map&lt;'Key,'T&gt;</code></p></li>
 <li><p><code>'Monoid * 'T</code></p></li>
 <li><p><code>'struct ('Monoid * 'T)</code></p></li>
@@ -126,41 +126,41 @@ ___</p>
 <li><p><code>ValueTask&lt;'T&gt;</code></p></li>
 <li><p><code>'R-&gt;'T</code></p></li>
 <li><p><code>Expr&lt;'T&gt;</code></p></li>
-<li><p><code>Dictionary&lt;'Key,'T&gt;</code></p></li>
-<li><p><code>IDictionary&lt;'Key,'T&gt;</code></p></li>
-<li><p><code>IReadOnlyDictionary&lt;'Key,'T&gt;</code></p></li>
+<li><p><code>Dictionary&lt;'Key, 'T&gt;</code></p></li>
+<li><p><code>IDictionary&lt;'Key,' T&gt;</code></p></li>
+<li><p><code>IReadOnlyDictionary&lt;'Key, 'T&gt;</code></p></li>
 <li><p><code>ResizeArray&lt;'T&gt;</code></p></li>
 </ul>
 <p>From F#+</p>
 <ul>
-<li><a href="type-cont.html"><code>Cont&lt;'R,'T&gt;</code></a></li>
-<li><a href="type-contt.html"><code>ContT&lt;'R,'T&gt;</code></a></li>
-<li><a href="type-reader.html"><code>Reader&lt;'R,'T&gt;</code></a></li>
-<li><a href="type-readert.html"><code>ReaderT&lt;'R,'Monad&lt;'T&gt;&gt;</code></a></li>
-<li><a href="type-writer.html"><code>Writer&lt;'Monoid,'T&gt;</code></a></li>
+<li><a href="type-cont.html"><code>Cont&lt;'R, 'T&gt;</code></a></li>
+<li><a href="type-contt.html"><code>ContT&lt;'R, 'T&gt;</code></a></li>
+<li><a href="type-reader.html"><code>Reader&lt;'R, 'T&gt;</code></a></li>
+<li><a href="type-readert.html"><code>ReaderT&lt;'R, 'Monad&lt;'T&gt;&gt;</code></a></li>
+<li><a href="type-writer.html"><code>Writer&lt;'Monoid, 'T&gt;</code></a></li>
 <li><a href="type-writert.html"><code>WriterT&lt;'Monad&lt;'T * 'Monoid&gt;&gt;</code></a></li>
-<li><a href="type-state.html"><code>State&lt;'S,'T * 'S&gt;</code></a></li>
-<li><a href="type-statet.html"><code>StateT&lt;'S,'Monad&lt;'T * 'S&gt;&gt;</code></a></li>
+<li><a href="type-state.html"><code>State&lt;'S, 'T * 'S&gt;</code></a></li>
+<li><a href="type-statet.html"><code>StateT&lt;'S, 'Monad&lt;'T * 'S&gt;&gt;</code></a></li>
 <li><a href="type-optiont.html"><code>OptionT&lt;'Monad&lt;option&lt;'T&gt;&gt;</code></a></li>
 <li><a href="type-valueoptiont.html"><code>ValueOptionT&lt;'Monad&lt;voption&lt;'T&gt;&gt;</code></a></li>
 <li><a href="type-seqt.html"><code>SeqT&lt;'Monad&lt;seq&lt;'T&gt;&gt;</code></a></li>
 <li><a href="type-listt.html"><code>ListT&lt;'Monad&lt;list&lt;'T&gt;&gt;</code></a></li>
-<li><a href="type-resultt.html"><code>ResultT&lt;'Monad&lt;Result&lt;'T,'TError&gt;&gt;</code></a></li>
-<li><a href="type-choicet.html"><code>ChoiceT&lt;'Monad&lt;Choice&lt;'T,'TError&gt;&gt;</code></a></li>
-<li><a href="type-free.html"><code>Free&lt;'Functor&lt;'T&gt;,'T&gt;</code></a></li>
+<li><a href="type-resultt.html"><code>ResultT&lt;'Monad&lt;Result&lt;'T, 'TError&gt;&gt;</code></a></li>
+<li><a href="type-choicet.html"><code>ChoiceT&lt;'Monad&lt;Choice&lt;'T, 'TError&gt;&gt;</code></a></li>
+<li><a href="type-free.html"><code>Free&lt;'Functor&lt;'T&gt;, 'T&gt;</code></a></li>
 <li><a href="type-nonempty.html"><code>NonEmptyList&lt;'T&gt;</code></a></li>
 <li><a href="type-nonempty-set.html"><code>NonEmptySet&lt;'T&gt;</code></a></li>
 <li><a href="type-nonempty-map.html"><code>NonEmptyMap&lt;'Key, 'T&gt;</code></a></li>
-<li><a href="type-validation.html"><code>Validation&lt;'Error,'T&gt;</code></a></li>
+<li><a href="type-validation.html"><code>Validation&lt;'Error, 'T&gt;</code></a></li>
 <li><a href="type-ziplist.html"><code>ZipList&lt;'T&gt;</code></a></li>
 <li><a href="type-parallelarray.html"><code>ParallelArray&lt;'T&gt;</code></a></li>
-<li><a href="type-const.html"><code>Const&lt;'C,'T&gt;</code></a></li>
+<li><a href="type-const.html"><code>Const&lt;'C, 'T&gt;</code></a></li>
 <li><a href="type-compose.html"><code>Compose&lt;'AlternativeF&lt;'AlternativeG&lt;'T&gt;&gt;&gt;</code></a></li>
 <li><a href="type-dlist.html"><code>DList&lt;'T&gt;</code></a></li>
 <li><a href="type-kleisli.html"><code>Kleisli&lt;'T, 'Monad&lt;'U&gt;&gt;</code></a></li>
-<li><a href="type-coproduct.html"><code>Coproduct&lt;'FunctorL&lt;'T&gt;,'FunctorR&lt;'T&gt;&gt;</code></a></li>
-<li><a href="type-vector.html"><code>Vector&lt;'T,'Dimension&gt;</code></a></li>
-<li><a href="type-matrix.html"><code>Matrix&lt;'T,'Rows,'Columns&gt;</code></a></li>
+<li><a href="type-coproduct.html"><code>Coproduct&lt;'FunctorL&lt;'T&gt;, 'FunctorR&lt;'T&gt;&gt;</code></a></li>
+<li><a href="type-vector.html"><code>Vector&lt;'T, 'Dimension&gt;</code></a></li>
+<li><a href="type-matrix.html"><code>Matrix&lt;'T, 'Rows, 'Columns&gt;</code></a></li>
 </ul>
 <p>Restricted:
 -  <code>string</code>
@@ -209,8 +209,8 @@ ___</p>
     <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs29', 50)" onmouseover="showTip(event, 'fs29', 50)" class="uc">Leaf</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">a</span>
     <span class="k">static</span> <span class="k">member</span> <span class="fn">map</span> <span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="fn">f</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs31', 52)" onmouseover="showTip(event, 'fs31', 52)" class="fn">t</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs28', 53)" onmouseover="showTip(event, 'fs28', 53)" class="rt">Tree</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">&gt;</span>  <span class="pn">)</span>  <span class="o">=</span>
         <span class="k">match</span> <span onmouseout="hideTip(event, 'fs31', 54)" onmouseover="showTip(event, 'fs31', 54)" class="fn">t</span> <span class="k">with</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs29', 55)" onmouseover="showTip(event, 'fs29', 55)" class="uc">Leaf</span> <span onmouseout="hideTip(event, 'fs12', 56)" onmouseover="showTip(event, 'fs12', 56)" class="fn">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs29', 57)" onmouseover="showTip(event, 'fs29', 57)" class="uc">Leaf</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs30', 58)" onmouseover="showTip(event, 'fs30', 58)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs12', 59)" onmouseover="showTip(event, 'fs12', 59)" class="fn">x</span><span class="pn">)</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs28', 60)" onmouseover="showTip(event, 'fs28', 60)" class="uc">Tree</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 61)" onmouseover="showTip(event, 'fs12', 61)" class="fn">x</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs32', 62)" onmouseover="showTip(event, 'fs32', 62)" class="fn">t1</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs33', 63)" onmouseover="showTip(event, 'fs33', 63)" class="fn">t2</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 64)" onmouseover="showTip(event, 'fs28', 64)" class="uc">Tree</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs30', 65)" onmouseover="showTip(event, 'fs30', 65)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs12', 66)" onmouseover="showTip(event, 'fs12', 66)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs28', 67)" onmouseover="showTip(event, 'fs28', 67)" class="rt">Tree</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs34', 68)" onmouseover="showTip(event, 'fs34', 68)" class="id">map</span> <span onmouseout="hideTip(event, 'fs30', 69)" onmouseover="showTip(event, 'fs30', 69)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs32', 70)" onmouseover="showTip(event, 'fs32', 70)" class="fn">t1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs28', 71)" onmouseover="showTip(event, 'fs28', 71)" class="rt">Tree</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs34', 72)" onmouseover="showTip(event, 'fs34', 72)" class="id">map</span> <span onmouseout="hideTip(event, 'fs30', 73)" onmouseover="showTip(event, 'fs30', 73)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs33', 74)" onmouseover="showTip(event, 'fs33', 74)" class="fn">t2</span><span class="pn">)</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs29', 55)" onmouseover="showTip(event, 'fs29', 55)" class="uc">Leaf</span>  <span onmouseout="hideTip(event, 'fs12', 56)" onmouseover="showTip(event, 'fs12', 56)" class="fn">x</span>        <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs29', 57)" onmouseover="showTip(event, 'fs29', 57)" class="uc">Leaf</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs30', 58)" onmouseover="showTip(event, 'fs30', 58)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs12', 59)" onmouseover="showTip(event, 'fs12', 59)" class="fn">x</span><span class="pn">)</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs28', 60)" onmouseover="showTip(event, 'fs28', 60)" class="uc">Tree</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 61)" onmouseover="showTip(event, 'fs12', 61)" class="fn">x</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs32', 62)" onmouseover="showTip(event, 'fs32', 62)" class="fn">t1</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs33', 63)" onmouseover="showTip(event, 'fs33', 63)" class="fn">t2</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs28', 64)" onmouseover="showTip(event, 'fs28', 64)" class="uc">Tree</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs30', 65)" onmouseover="showTip(event, 'fs30', 65)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs12', 66)" onmouseover="showTip(event, 'fs12', 66)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs28', 67)" onmouseover="showTip(event, 'fs28', 67)" class="rt">Tree</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs34', 68)" onmouseover="showTip(event, 'fs34', 68)" class="id">map</span> <span onmouseout="hideTip(event, 'fs30', 69)" onmouseover="showTip(event, 'fs30', 69)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs32', 70)" onmouseover="showTip(event, 'fs32', 70)" class="fn">t1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs28', 71)" onmouseover="showTip(event, 'fs28', 71)" class="rt">Tree</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs34', 72)" onmouseover="showTip(event, 'fs34', 72)" class="id">map</span> <span onmouseout="hideTip(event, 'fs30', 73)" onmouseover="showTip(event, 'fs30', 73)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs33', 74)" onmouseover="showTip(event, 'fs33', 74)" class="fn">t2</span><span class="pn">)</span>
 
 <span class="c">// add instance for Functor class</span>
     <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 75)" onmouseover="showTip(event, 'fs1', 75)" class="fn">Map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs35', 76)" onmouseover="showTip(event, 'fs35', 76)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs28', 77)" onmouseover="showTip(event, 'fs28', 77)" class="rt">Tree</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs36', 78)" onmouseover="showTip(event, 'fs36', 78)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs28', 79)" onmouseover="showTip(event, 'fs28', 79)" class="rt">Tree</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs34', 80)" onmouseover="showTip(event, 'fs34', 80)" class="id">map</span> <span onmouseout="hideTip(event, 'fs36', 81)" onmouseover="showTip(event, 'fs36', 81)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs35', 82)" onmouseover="showTip(event, 'fs35', 82)" class="fn">x</span>
@@ -235,7 +235,7 @@ ___</p>
     <span class="k">static</span> <span class="k">member</span> <span class="fn">Return</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs48', 121)" onmouseover="showTip(event, 'fs48', 121)" class="fn">x</span><span class="pn">:</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">)</span>     <span class="o">=</span> <span onmouseout="hideTip(event, 'fs47', 122)" onmouseover="showTip(event, 'fs47', 122)" class="uc">MyList</span> <span onmouseout="hideTip(event, 'fs48', 123)" onmouseover="showTip(event, 'fs48', 123)" class="fn">x</span>
     <span class="k">static</span> <span class="k">member</span> <span class="pn">(</span><span class="fn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span><span class="pn">)</span>  <span class="pn">(</span><span onmouseout="hideTip(event, 'fs47', 124)" onmouseover="showTip(event, 'fs47', 124)" class="id">MyList</span> <span onmouseout="hideTip(event, 'fs49', 125)" onmouseover="showTip(event, 'fs49', 125)" class="fn">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs47', 126)" onmouseover="showTip(event, 'fs47', 126)" class="rt">MyList</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs50', 127)" onmouseover="showTip(event, 'fs50', 127)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs47', 128)" onmouseover="showTip(event, 'fs47', 128)" class="uc">MyList</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs25', 129)" onmouseover="showTip(event, 'fs25', 129)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs51', 130)" onmouseover="showTip(event, 'fs51', 130)" class="id">collect</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs50', 131)" onmouseover="showTip(event, 'fs50', 131)" class="fn">f</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs47', 132)" onmouseover="showTip(event, 'fs47', 132)" class="id">MyList</span> <span onmouseout="hideTip(event, 'fs43', 133)" onmouseover="showTip(event, 'fs43', 133)" class="fn">x</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs43', 134)" onmouseover="showTip(event, 'fs43', 134)" class="fn">x</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs49', 135)" onmouseover="showTip(event, 'fs49', 135)" class="fn">x</span><span class="pn">)</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs52', 136)" onmouseover="showTip(event, 'fs52', 136)" class="id">mappedMyList</span> <span class="o">=</span> <span class="id">map</span> <span onmouseout="hideTip(event, 'fs24', 137)" onmouseover="showTip(event, 'fs24', 137)" class="id">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs47', 138)" onmouseover="showTip(event, 'fs47', 138)" class="id">MyList</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs52', 136)" onmouseover="showTip(event, 'fs52', 136)" class="id">mappedMyList</span> <span class="o">=</span> <span class="id">map</span> <span onmouseout="hideTip(event, 'fs24', 137)" onmouseover="showTip(event, 'fs24', 137)" class="id">string</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs47', 138)" onmouseover="showTip(event, 'fs47', 138)" class="id">MyList</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">]</span><span class="pn">)</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">Multiple items<br />module Map
