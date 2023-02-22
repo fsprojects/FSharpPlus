@@ -6,7 +6,7 @@
     <title>All
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -93,22 +100,38 @@ The contained bools would become true only if both (all) operands are true.</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">res1</span> <span class="o">=</span> <span class="id">All</span> <span class="k">true</span> <span class="pn">++</span> <span class="id">zero</span> <span class="pn">++</span> <span class="id">All</span> <span class="k">false</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">res1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="uc">All</span> <span class="k">true</span> <span class="o">++</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">zero</span> <span class="o">++</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="uc">All</span> <span class="k">false</span>
 <span class="c">// val res1 : All = All false</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="fn">even</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">even</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">res2</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">6</span><span class="pn">;</span><span class="n">7</span><span class="pn">;</span><span class="n">8</span><span class="pn">]</span> <span class="o">|&gt;</span> <span class="id">map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="id">even</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">All</span><span class="pn">)</span> <span class="o">|&gt;</span> <span class="id">sum</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">res2</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">6</span><span class="pn">;</span><span class="n">7</span><span class="pn">;</span><span class="n">8</span><span class="pn">]</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="fn">map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="fn">even</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs4', 14)" onmouseover="showTip(event, 'fs4', 14)" class="uc">All</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs10', 15)" onmouseover="showTip(event, 'fs10', 15)" class="fn">sum</span>
 <span class="c">// val res2 : All = All false</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val res1: obj</div>
-<div class="fsdocs-tip" id="fs2">val even: x: int -&gt; bool</div>
-<div class="fsdocs-tip" id="fs3">val x: int</div>
-<div class="fsdocs-tip" id="fs4">val res2: obj</div>
+            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs3">val res1: All</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />union case All.All: bool -&gt; All<br /><br />--------------------<br />[&lt;Struct&gt;]
+type All =
+  | All of bool
+  static member (+) : All * All -&gt; All
+  static member Zero: All<br /><em>&lt;summary&gt;
+ Boolean monoid under conjunction.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val zero&lt;&#39;Monoid (requires member Zero)&gt; : &#39;Monoid (requires member Zero)<br /><em>&lt;summary&gt;
+ A value that represents the 0 element of a Monoid.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs6">val even: x: int -&gt; bool</div>
+<div class="fsdocs-tip" id="fs7">val x: int</div>
+<div class="fsdocs-tip" id="fs8">val res2: All</div>
+<div class="fsdocs-tip" id="fs9">val map: f: (&#39;T -&gt; &#39;U) -&gt; x: &#39;Functor&lt;&#39;T&gt; -&gt; &#39;Functor&lt;&#39;U&gt; (requires member Map)<br /><em>&lt;summary&gt;Lifts a function into a Functor.&lt;/summary&gt;<br />&lt;category index=&quot;1&quot;&gt;Functor&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val sum: x: &#39;Foldable&lt;&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Fold and member ``+`` and member Zero)<br /><em>&lt;summary&gt;
+ Folds the sum of all monoid elements in the Foldable.
+ &lt;/summary&gt;<br />&lt;category index=&quot;23&quot;&gt;Additional Functions&lt;/category&gt;</em></div>
 
         </div>
 

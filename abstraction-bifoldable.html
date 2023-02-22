@@ -6,7 +6,7 @@
     <title>Bifoldable
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -135,80 +142,81 @@
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll&quot;</span>
 
-<span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Control</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="id">Control</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="fn">listMapSeqLength</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">map</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="id">length</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="fn">listMapTimes2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 9)" onmouseover="showTip(event, 'fs3', 9)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 10)" onmouseover="showTip(event, 'fs4', 10)" class="id">map</span> <span class="pn">(</span><span class="o">(*)</span> <span class="n">2</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="fn">listMapSeqLength</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="id">map</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="id">length</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="fn">listMapTimes2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 12)" onmouseover="showTip(event, 'fs5', 12)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs6', 13)" onmouseover="showTip(event, 'fs6', 13)" class="id">map</span> <span class="pn">(</span><span class="o">(*)</span> <span class="n">2</span><span class="pn">)</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">c1</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="rt">Choice</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="vt">int</span> <span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="rt">string</span> <span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="rt">list</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 17)" onmouseover="showTip(event, 'fs13', 17)" class="uc">Choice1Of2</span> <span class="pn">[</span><span class="n">1..</span><span class="n">2</span><span class="pn">]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 18)" onmouseover="showTip(event, 'fs14', 18)" class="id">c2</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs9', 19)" onmouseover="showTip(event, 'fs9', 19)" class="rt">Choice</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs10', 20)" onmouseover="showTip(event, 'fs10', 20)" class="vt">int</span> <span onmouseout="hideTip(event, 'fs11', 21)" onmouseover="showTip(event, 'fs11', 21)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs12', 22)" onmouseover="showTip(event, 'fs12', 22)" class="rt">string</span> <span onmouseout="hideTip(event, 'fs11', 23)" onmouseover="showTip(event, 'fs11', 23)" class="rt">list</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="uc">Choice2Of2</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span><span class="s">&quot;bbbb&quot;</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="id">c1</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="rt">Choice</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="vt">int</span> <span onmouseout="hideTip(event, 'fs13', 17)" onmouseover="showTip(event, 'fs13', 17)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs14', 18)" onmouseover="showTip(event, 'fs14', 18)" class="rt">string</span> <span onmouseout="hideTip(event, 'fs13', 19)" onmouseover="showTip(event, 'fs13', 19)" class="rt">list</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 20)" onmouseover="showTip(event, 'fs15', 20)" class="uc">Choice1Of2</span> <span class="pn">[</span><span class="n">1..</span><span class="n">2</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 21)" onmouseover="showTip(event, 'fs16', 21)" class="id">c2</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs11', 22)" onmouseover="showTip(event, 'fs11', 22)" class="rt">Choice</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs12', 23)" onmouseover="showTip(event, 'fs12', 23)" class="vt">int</span> <span onmouseout="hideTip(event, 'fs13', 24)" onmouseover="showTip(event, 'fs13', 24)" class="rt">list</span><span class="pn">,</span><span onmouseout="hideTip(event, 'fs14', 25)" onmouseover="showTip(event, 'fs14', 25)" class="rt">string</span> <span onmouseout="hideTip(event, 'fs13', 26)" onmouseover="showTip(event, 'fs13', 26)" class="rt">list</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="uc">Choice2Of2</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span><span class="s">&quot;bbbb&quot;</span><span class="pn">]</span>
 
-<span class="id">bifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 25)" onmouseover="showTip(event, 'fs2', 25)" class="id">listMapSeqLength</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 26)" onmouseover="showTip(event, 'fs7', 26)" class="id">listMapTimes2</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs8', 27)" onmouseover="showTip(event, 'fs8', 27)" class="id">c1</span> <span class="pn">[</span><span class="n">0</span><span class="pn">]</span> <span class="c">// = [2;4;0]</span>
-<span class="id">bifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 28)" onmouseover="showTip(event, 'fs2', 28)" class="id">listMapSeqLength</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 29)" onmouseover="showTip(event, 'fs7', 29)" class="id">listMapTimes2</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs14', 30)" onmouseover="showTip(event, 'fs14', 30)" class="id">c2</span> <span class="pn">[</span><span class="n">0</span><span class="pn">]</span> <span class="c">// = [1;4;0]</span>
-<span class="id">bifoldMap</span> <span onmouseout="hideTip(event, 'fs2', 31)" onmouseover="showTip(event, 'fs2', 31)" class="id">listMapSeqLength</span> <span onmouseout="hideTip(event, 'fs7', 32)" onmouseover="showTip(event, 'fs7', 32)" class="id">listMapTimes2</span> <span onmouseout="hideTip(event, 'fs8', 33)" onmouseover="showTip(event, 'fs8', 33)" class="id">c1</span> <span class="c">// = [2;4]</span>
-<span class="id">bifoldMap</span> <span onmouseout="hideTip(event, 'fs2', 34)" onmouseover="showTip(event, 'fs2', 34)" class="id">listMapSeqLength</span> <span onmouseout="hideTip(event, 'fs7', 35)" onmouseover="showTip(event, 'fs7', 35)" class="id">listMapTimes2</span> <span onmouseout="hideTip(event, 'fs14', 36)" onmouseover="showTip(event, 'fs14', 36)" class="id">c2</span> <span class="c">// = [1;4]</span>
+<span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="fn">bifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 29)" onmouseover="showTip(event, 'fs4', 29)" class="fn">listMapSeqLength</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 30)" onmouseover="showTip(event, 'fs9', 30)" class="fn">listMapTimes2</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs10', 31)" onmouseover="showTip(event, 'fs10', 31)" class="id">c1</span> <span class="pn">[</span><span class="n">0</span><span class="pn">]</span> <span class="c">// = [2;4;0]</span>
+<span onmouseout="hideTip(event, 'fs18', 32)" onmouseover="showTip(event, 'fs18', 32)" class="fn">bifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 33)" onmouseover="showTip(event, 'fs4', 33)" class="fn">listMapSeqLength</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 34)" onmouseover="showTip(event, 'fs9', 34)" class="fn">listMapTimes2</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs16', 35)" onmouseover="showTip(event, 'fs16', 35)" class="id">c2</span> <span class="pn">[</span><span class="n">0</span><span class="pn">]</span> <span class="c">// = [1;4;0]</span>
+<span onmouseout="hideTip(event, 'fs19', 36)" onmouseover="showTip(event, 'fs19', 36)" class="fn">bifoldMap</span> <span onmouseout="hideTip(event, 'fs4', 37)" onmouseover="showTip(event, 'fs4', 37)" class="fn">listMapSeqLength</span> <span onmouseout="hideTip(event, 'fs9', 38)" onmouseover="showTip(event, 'fs9', 38)" class="fn">listMapTimes2</span> <span onmouseout="hideTip(event, 'fs10', 39)" onmouseover="showTip(event, 'fs10', 39)" class="id">c1</span> <span class="c">// = [2;4]</span>
+<span onmouseout="hideTip(event, 'fs19', 40)" onmouseover="showTip(event, 'fs19', 40)" class="fn">bifoldMap</span> <span onmouseout="hideTip(event, 'fs4', 41)" onmouseover="showTip(event, 'fs4', 41)" class="fn">listMapSeqLength</span> <span onmouseout="hideTip(event, 'fs9', 42)" onmouseover="showTip(event, 'fs9', 42)" class="fn">listMapTimes2</span> <span onmouseout="hideTip(event, 'fs16', 43)" onmouseover="showTip(event, 'fs16', 43)" class="id">c2</span> <span class="c">// = [1;4]</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 37)" onmouseover="showTip(event, 'fs16', 37)" class="id">t</span> <span class="o">=</span> <span class="pn">(</span><span class="s">&quot;b&quot;</span><span class="pn">,</span><span class="s">&quot;c&quot;</span><span class="pn">)</span>
-<span class="id">bifoldBack</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs16', 38)" onmouseover="showTip(event, 'fs16', 38)" class="id">t</span> <span class="s">&quot;a&quot;</span> <span class="c">// = &quot;bca&quot;</span>
-<span class="id">bifold</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="s">&quot;a&quot;</span> <span onmouseout="hideTip(event, 'fs16', 39)" onmouseover="showTip(event, 'fs16', 39)" class="id">t</span> <span class="c">// = &quot;abc&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 44)" onmouseover="showTip(event, 'fs20', 44)" class="id">t</span> <span class="o">=</span> <span class="pn">(</span><span class="s">&quot;b&quot;</span><span class="pn">,</span><span class="s">&quot;c&quot;</span><span class="pn">)</span>
+<span onmouseout="hideTip(event, 'fs18', 45)" onmouseover="showTip(event, 'fs18', 45)" class="fn">bifoldBack</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs20', 46)" onmouseover="showTip(event, 'fs20', 46)" class="id">t</span> <span class="s">&quot;a&quot;</span> <span class="c">// = &quot;bca&quot;</span>
+<span onmouseout="hideTip(event, 'fs21', 47)" onmouseover="showTip(event, 'fs21', 47)" class="fn">bifold</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="s">&quot;a&quot;</span> <span onmouseout="hideTip(event, 'fs20', 48)" onmouseover="showTip(event, 'fs20', 48)" class="id">t</span> <span class="c">// = &quot;abc&quot;</span>
 
 <span class="c">// implementing on custom type:</span>
-<span class="k">type</span> <span class="rt">MyEither</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">a</span><span class="pn">,</span><span class="ta">&#39;</span><span class="id">b</span><span class="pn">&gt;</span> <span class="o">=</span> 
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs17', 40)" onmouseover="showTip(event, 'fs17', 40)" class="uc">MyLeft</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">a</span> 
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs18', 41)" onmouseover="showTip(event, 'fs18', 41)" class="uc">MyRight</span> <span class="k">of</span> <span class="ta">&#39;</span><span class="id">b</span>
-    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span class="fn">BifoldMap</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs19', 42)" onmouseover="showTip(event, 'fs19', 42)" class="fn">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs20', 43)" onmouseover="showTip(event, 'fs20', 43)" class="rt">MyEither</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs21', 44)" onmouseover="showTip(event, 'fs21', 44)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs22', 45)" onmouseover="showTip(event, 'fs22', 45)" class="fn">g</span><span class="pn">)</span> <span class="o">=</span>
-      <span class="k">match</span> <span onmouseout="hideTip(event, 'fs19', 46)" onmouseover="showTip(event, 'fs19', 46)" class="fn">x</span> <span class="k">with</span>
-      <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs17', 47)" onmouseover="showTip(event, 'fs17', 47)" class="uc">MyLeft</span> <span onmouseout="hideTip(event, 'fs23', 48)" onmouseover="showTip(event, 'fs23', 48)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs21', 49)" onmouseover="showTip(event, 'fs21', 49)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs23', 50)" onmouseover="showTip(event, 'fs23', 50)" class="fn">a</span>
-      <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs18', 51)" onmouseover="showTip(event, 'fs18', 51)" class="uc">MyRight</span> <span onmouseout="hideTip(event, 'fs23', 52)" onmouseover="showTip(event, 'fs23', 52)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs22', 53)" onmouseover="showTip(event, 'fs22', 53)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs23', 54)" onmouseover="showTip(event, 'fs23', 54)" class="fn">a</span>
+<span class="k">type</span> <span class="rt">MyEither</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs22', 49)" onmouseover="showTip(event, 'fs22', 49)" class="id">a</span><span class="pn">,</span><span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs23', 50)" onmouseover="showTip(event, 'fs23', 50)" class="id">b</span><span class="pn">&gt;</span> <span class="o">=</span> 
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs24', 51)" onmouseover="showTip(event, 'fs24', 51)" class="uc">MyLeft</span> <span class="k">of</span> <span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs22', 52)" onmouseover="showTip(event, 'fs22', 52)" class="id">a</span> 
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs25', 53)" onmouseover="showTip(event, 'fs25', 53)" class="uc">MyRight</span> <span class="k">of</span> <span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs23', 54)" onmouseover="showTip(event, 'fs23', 54)" class="id">b</span>
+    <span class="k">static</span> <span class="k">member</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs26', 55)" onmouseover="showTip(event, 'fs26', 55)" class="fn">BifoldMap</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs27', 56)" onmouseover="showTip(event, 'fs27', 56)" class="fn">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs28', 57)" onmouseover="showTip(event, 'fs28', 57)" class="rt">MyEither</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs29', 58)" onmouseover="showTip(event, 'fs29', 58)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs30', 59)" onmouseover="showTip(event, 'fs30', 59)" class="fn">g</span><span class="pn">)</span> <span class="o">=</span>
+      <span class="k">match</span> <span onmouseout="hideTip(event, 'fs27', 60)" onmouseover="showTip(event, 'fs27', 60)" class="fn">x</span> <span class="k">with</span>
+      <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs24', 61)" onmouseover="showTip(event, 'fs24', 61)" class="uc">MyLeft</span> <span onmouseout="hideTip(event, 'fs31', 62)" onmouseover="showTip(event, 'fs31', 62)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs29', 63)" onmouseover="showTip(event, 'fs29', 63)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs31', 64)" onmouseover="showTip(event, 'fs31', 64)" class="fn">a</span>
+      <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs25', 65)" onmouseover="showTip(event, 'fs25', 65)" class="uc">MyRight</span> <span onmouseout="hideTip(event, 'fs32', 66)" onmouseover="showTip(event, 'fs32', 66)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs30', 67)" onmouseover="showTip(event, 'fs30', 67)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs32', 68)" onmouseover="showTip(event, 'fs32', 68)" class="fn">a</span>
 
-    <span class="k">static</span> <span class="k">member</span> <span class="fn">BifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs19', 55)" onmouseover="showTip(event, 'fs19', 55)" class="fn">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs20', 56)" onmouseover="showTip(event, 'fs20', 56)" class="rt">MyEither</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs24', 57)" onmouseover="showTip(event, 'fs24', 57)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs25', 58)" onmouseover="showTip(event, 'fs25', 58)" class="fn">g</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs26', 59)" onmouseover="showTip(event, 'fs26', 59)" class="fn">z</span><span class="pn">)</span> <span class="o">=</span>
-        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs19', 60)" onmouseover="showTip(event, 'fs19', 60)" class="fn">x</span> <span class="k">with</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs17', 61)" onmouseover="showTip(event, 'fs17', 61)" class="uc">MyLeft</span> <span onmouseout="hideTip(event, 'fs23', 62)" onmouseover="showTip(event, 'fs23', 62)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 63)" onmouseover="showTip(event, 'fs24', 63)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs23', 64)" onmouseover="showTip(event, 'fs23', 64)" class="fn">a</span> <span onmouseout="hideTip(event, 'fs26', 65)" onmouseover="showTip(event, 'fs26', 65)" class="fn">z</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs18', 66)" onmouseover="showTip(event, 'fs18', 66)" class="uc">MyRight</span> <span onmouseout="hideTip(event, 'fs23', 67)" onmouseover="showTip(event, 'fs23', 67)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs25', 68)" onmouseover="showTip(event, 'fs25', 68)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs23', 69)" onmouseover="showTip(event, 'fs23', 69)" class="fn">a</span> <span onmouseout="hideTip(event, 'fs26', 70)" onmouseover="showTip(event, 'fs26', 70)" class="fn">z</span>
+    <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs33', 69)" onmouseover="showTip(event, 'fs33', 69)" class="fn">BifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs27', 70)" onmouseover="showTip(event, 'fs27', 70)" class="fn">x</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs28', 71)" onmouseover="showTip(event, 'fs28', 71)" class="rt">MyEither</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs34', 72)" onmouseover="showTip(event, 'fs34', 72)" class="fn">f</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs35', 73)" onmouseover="showTip(event, 'fs35', 73)" class="fn">g</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs36', 74)" onmouseover="showTip(event, 'fs36', 74)" class="fn">z</span><span class="pn">)</span> <span class="o">=</span>
+        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs27', 75)" onmouseover="showTip(event, 'fs27', 75)" class="fn">x</span> <span class="k">with</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs24', 76)" onmouseover="showTip(event, 'fs24', 76)" class="uc">MyLeft</span> <span onmouseout="hideTip(event, 'fs31', 77)" onmouseover="showTip(event, 'fs31', 77)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs34', 78)" onmouseover="showTip(event, 'fs34', 78)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs31', 79)" onmouseover="showTip(event, 'fs31', 79)" class="fn">a</span> <span onmouseout="hideTip(event, 'fs36', 80)" onmouseover="showTip(event, 'fs36', 80)" class="fn">z</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs25', 81)" onmouseover="showTip(event, 'fs25', 81)" class="uc">MyRight</span> <span onmouseout="hideTip(event, 'fs32', 82)" onmouseover="showTip(event, 'fs32', 82)" class="fn">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs35', 83)" onmouseover="showTip(event, 'fs35', 83)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs32', 84)" onmouseover="showTip(event, 'fs32', 84)" class="fn">a</span> <span onmouseout="hideTip(event, 'fs36', 85)" onmouseover="showTip(event, 'fs36', 85)" class="fn">z</span>
 
-<span class="id">bisum</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs20', 71)" onmouseover="showTip(event, 'fs20', 71)" class="id">MyEither</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 72)" onmouseover="showTip(event, 'fs17', 72)" class="id">MyLeft</span> <span class="s">&quot;a&quot;</span><span class="pn">)</span> <span class="c">// = &quot;a&quot;</span>
-<span class="id">bisum</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">2</span><span class="pn">)</span> <span class="c">// = 3</span>
-
-
-<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs27', 73)" onmouseover="showTip(event, 'fs27', 73)" class="fn">law1</span> <span onmouseout="hideTip(event, 'fs28', 74)" onmouseover="showTip(event, 'fs28', 74)" class="fn">x</span> <span class="o">=</span>
-  <span class="id">bisum</span> <span onmouseout="hideTip(event, 'fs28', 75)" onmouseover="showTip(event, 'fs28', 75)" class="id">x</span> <span class="o">=</span> <span class="id">bifoldMap</span> <span onmouseout="hideTip(event, 'fs1', 76)" onmouseover="showTip(event, 'fs1', 76)" class="id">id</span> <span onmouseout="hideTip(event, 'fs1', 77)" onmouseover="showTip(event, 'fs1', 77)" class="id">id</span> <span onmouseout="hideTip(event, 'fs28', 78)" onmouseover="showTip(event, 'fs28', 78)" class="id">x</span>
-
-<span onmouseout="hideTip(event, 'fs27', 79)" onmouseover="showTip(event, 'fs27', 79)" class="fn">law1</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs27', 80)" onmouseover="showTip(event, 'fs27', 80)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs29', 81)" onmouseover="showTip(event, 'fs29', 81)" class="uc">Ok</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs27', 82)" onmouseover="showTip(event, 'fs27', 82)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs30', 83)" onmouseover="showTip(event, 'fs30', 83)" class="uc">Error</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs27', 84)" onmouseover="showTip(event, 'fs27', 84)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs13', 85)" onmouseover="showTip(event, 'fs13', 85)" class="uc">Choice1Of2</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs27', 86)" onmouseover="showTip(event, 'fs27', 86)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs15', 87)" onmouseover="showTip(event, 'fs15', 87)" class="uc">Choice2Of2</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs27', 88)" onmouseover="showTip(event, 'fs27', 88)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs17', 89)" onmouseover="showTip(event, 'fs17', 89)" class="uc">MyLeft</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs27', 90)" onmouseover="showTip(event, 'fs27', 90)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs18', 91)" onmouseover="showTip(event, 'fs18', 91)" class="uc">MyRight</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs37', 86)" onmouseover="showTip(event, 'fs37', 86)" class="fn">bisum</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 87)" onmouseover="showTip(event, 'fs28', 87)" class="rt">MyEither</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs24', 88)" onmouseover="showTip(event, 'fs24', 88)" class="id">MyLeft</span> <span class="s">&quot;a&quot;</span><span class="pn">)</span> <span class="c">// = &quot;a&quot;</span>
+<span onmouseout="hideTip(event, 'fs37', 89)" onmouseover="showTip(event, 'fs37', 89)" class="fn">bisum</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">2</span><span class="pn">)</span> <span class="c">// = 3</span>
 
 
-<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs31', 92)" onmouseover="showTip(event, 'fs31', 92)" class="fn">law2</span> <span onmouseout="hideTip(event, 'fs28', 93)" onmouseover="showTip(event, 'fs28', 93)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs32', 94)" onmouseover="showTip(event, 'fs32', 94)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs33', 95)" onmouseover="showTip(event, 'fs33', 95)" class="fn">g</span> <span class="o">=</span>
-  <span class="id">bifoldMap</span> <span onmouseout="hideTip(event, 'fs32', 96)" onmouseover="showTip(event, 'fs32', 96)" class="id">f</span> <span onmouseout="hideTip(event, 'fs33', 97)" onmouseover="showTip(event, 'fs33', 97)" class="id">g</span> <span onmouseout="hideTip(event, 'fs28', 98)" onmouseover="showTip(event, 'fs28', 98)" class="id">x</span> <span class="o">=</span> <span class="id">bifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs32', 99)" onmouseover="showTip(event, 'fs32', 99)" class="id">f</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs33', 100)" onmouseover="showTip(event, 'fs33', 100)" class="id">g</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs28', 101)" onmouseover="showTip(event, 'fs28', 101)" class="id">x</span> <span class="id">zero</span>
+<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs38', 90)" onmouseover="showTip(event, 'fs38', 90)" class="fn">law1</span> <span onmouseout="hideTip(event, 'fs39', 91)" onmouseover="showTip(event, 'fs39', 91)" class="fn">x</span> <span class="o">=</span>
+  <span onmouseout="hideTip(event, 'fs37', 92)" onmouseover="showTip(event, 'fs37', 92)" class="fn">bisum</span> <span onmouseout="hideTip(event, 'fs39', 93)" onmouseover="showTip(event, 'fs39', 93)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs19', 94)" onmouseover="showTip(event, 'fs19', 94)" class="fn">bifoldMap</span> <span onmouseout="hideTip(event, 'fs1', 95)" onmouseover="showTip(event, 'fs1', 95)" class="fn">id</span> <span onmouseout="hideTip(event, 'fs1', 96)" onmouseover="showTip(event, 'fs1', 96)" class="fn">id</span> <span onmouseout="hideTip(event, 'fs39', 97)" onmouseover="showTip(event, 'fs39', 97)" class="fn">x</span>
 
-<span onmouseout="hideTip(event, 'fs31', 102)" onmouseover="showTip(event, 'fs31', 102)" class="fn">law2</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">2</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs31', 103)" onmouseover="showTip(event, 'fs31', 103)" class="fn">law2</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs29', 104)" onmouseover="showTip(event, 'fs29', 104)" class="uc">Ok</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="pn">[</span><span class="n">1</span><span class="pn">]</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="pn">[</span><span class="n">2</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs31', 105)" onmouseover="showTip(event, 'fs31', 105)" class="fn">law2</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span><span class="s">&quot;b&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="s">&quot;bbbb&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="s">&quot;aaaa&quot;</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 98)" onmouseover="showTip(event, 'fs38', 98)" class="fn">law1</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 99)" onmouseover="showTip(event, 'fs38', 99)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs40', 100)" onmouseover="showTip(event, 'fs40', 100)" class="uc">Ok</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 101)" onmouseover="showTip(event, 'fs38', 101)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs41', 102)" onmouseover="showTip(event, 'fs41', 102)" class="uc">Error</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 103)" onmouseover="showTip(event, 'fs38', 103)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs15', 104)" onmouseover="showTip(event, 'fs15', 104)" class="uc">Choice1Of2</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 105)" onmouseover="showTip(event, 'fs38', 105)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs17', 106)" onmouseover="showTip(event, 'fs17', 106)" class="uc">Choice2Of2</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 107)" onmouseover="showTip(event, 'fs38', 107)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs24', 108)" onmouseover="showTip(event, 'fs24', 108)" class="uc">MyLeft</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs38', 109)" onmouseover="showTip(event, 'fs38', 109)" class="fn">law1</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs25', 110)" onmouseover="showTip(event, 'fs25', 110)" class="uc">MyRight</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
 
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
-<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs34', 106)" onmouseover="showTip(event, 'fs34', 106)" class="fn">law3</span> <span onmouseout="hideTip(event, 'fs28', 107)" onmouseover="showTip(event, 'fs28', 107)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs32', 108)" onmouseover="showTip(event, 'fs32', 108)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs33', 109)" onmouseover="showTip(event, 'fs33', 109)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs26', 110)" onmouseover="showTip(event, 'fs26', 110)" class="fn">z</span> <span class="o">=</span>
-  <span class="id">bifoldBack</span> <span onmouseout="hideTip(event, 'fs32', 111)" onmouseover="showTip(event, 'fs32', 111)" class="id">f</span> <span onmouseout="hideTip(event, 'fs33', 112)" onmouseover="showTip(event, 'fs33', 112)" class="id">g</span> <span onmouseout="hideTip(event, 'fs28', 113)" onmouseover="showTip(event, 'fs28', 113)" class="id">x</span> <span onmouseout="hideTip(event, 'fs26', 114)" onmouseover="showTip(event, 'fs26', 114)" class="id">z</span> <span class="o">=</span> <span class="id">Endo</span><span class="pn">.</span><span class="id">run</span> <span class="pn">(</span><span class="id">bifoldMap</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs32', 115)" onmouseover="showTip(event, 'fs32', 115)" class="id">f</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">Endo</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs33', 116)" onmouseover="showTip(event, 'fs33', 116)" class="id">g</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">Endo</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs28', 117)" onmouseover="showTip(event, 'fs28', 117)" class="id">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs26', 118)" onmouseover="showTip(event, 'fs26', 118)" class="id">z</span>
 
-<span onmouseout="hideTip(event, 'fs34', 119)" onmouseover="showTip(event, 'fs34', 119)" class="fn">law3</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="n">5</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs34', 120)" onmouseover="showTip(event, 'fs34', 120)" class="fn">law3</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span><span class="s">&quot;b&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="s">&quot;abcd&quot;</span> <span class="c">// = true</span>
-<span onmouseout="hideTip(event, 'fs34', 121)" onmouseover="showTip(event, 'fs34', 121)" class="fn">law3</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs29', 122)" onmouseover="showTip(event, 'fs29', 122)" class="uc">Ok</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">++</span><span class="pn">)</span> <span class="pn">[</span><span class="n">0</span><span class="pn">;</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span> <span class="c">// = true</span>
+<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs42', 111)" onmouseover="showTip(event, 'fs42', 111)" class="fn">law2</span> <span onmouseout="hideTip(event, 'fs43', 112)" onmouseover="showTip(event, 'fs43', 112)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs44', 113)" onmouseover="showTip(event, 'fs44', 113)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs45', 114)" onmouseover="showTip(event, 'fs45', 114)" class="fn">g</span> <span class="o">=</span>
+  <span onmouseout="hideTip(event, 'fs19', 115)" onmouseover="showTip(event, 'fs19', 115)" class="fn">bifoldMap</span> <span onmouseout="hideTip(event, 'fs44', 116)" onmouseover="showTip(event, 'fs44', 116)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs45', 117)" onmouseover="showTip(event, 'fs45', 117)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs43', 118)" onmouseover="showTip(event, 'fs43', 118)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs18', 119)" onmouseover="showTip(event, 'fs18', 119)" class="fn">bifoldBack</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs44', 120)" onmouseover="showTip(event, 'fs44', 120)" class="fn">f</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs45', 121)" onmouseover="showTip(event, 'fs45', 121)" class="fn">g</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs43', 122)" onmouseover="showTip(event, 'fs43', 122)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs46', 123)" onmouseover="showTip(event, 'fs46', 123)" class="id">zero</span>
+
+<span onmouseout="hideTip(event, 'fs42', 124)" onmouseover="showTip(event, 'fs42', 124)" class="fn">law2</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="n">2</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs42', 125)" onmouseover="showTip(event, 'fs42', 125)" class="fn">law2</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs40', 126)" onmouseover="showTip(event, 'fs40', 126)" class="uc">Ok</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">[</span><span class="n">1</span><span class="pn">]</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">[</span><span class="n">2</span><span class="pn">]</span><span class="pn">)</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs42', 127)" onmouseover="showTip(event, 'fs42', 127)" class="fn">law2</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span><span class="s">&quot;b&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="s">&quot;bbbb&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="s">&quot;aaaa&quot;</span><span class="pn">)</span> <span class="c">// = true</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 128)" onmouseover="showTip(event, 'fs2', 128)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs47', 129)" onmouseover="showTip(event, 'fs47', 129)" class="id">Data</span>
+<span class="k">let</span> <span class="k">inline</span> <span onmouseout="hideTip(event, 'fs48', 130)" onmouseover="showTip(event, 'fs48', 130)" class="fn">law3</span> <span onmouseout="hideTip(event, 'fs49', 131)" onmouseover="showTip(event, 'fs49', 131)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs50', 132)" onmouseover="showTip(event, 'fs50', 132)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs51', 133)" onmouseover="showTip(event, 'fs51', 133)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs52', 134)" onmouseover="showTip(event, 'fs52', 134)" class="fn">z</span> <span class="o">=</span>
+  <span onmouseout="hideTip(event, 'fs18', 135)" onmouseover="showTip(event, 'fs18', 135)" class="fn">bifoldBack</span> <span onmouseout="hideTip(event, 'fs50', 136)" onmouseover="showTip(event, 'fs50', 136)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs51', 137)" onmouseover="showTip(event, 'fs51', 137)" class="fn">g</span> <span onmouseout="hideTip(event, 'fs49', 138)" onmouseover="showTip(event, 'fs49', 138)" class="fn">x</span> <span onmouseout="hideTip(event, 'fs52', 139)" onmouseover="showTip(event, 'fs52', 139)" class="fn">z</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs53', 140)" onmouseover="showTip(event, 'fs53', 140)" class="m">Endo</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs54', 141)" onmouseover="showTip(event, 'fs54', 141)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs19', 142)" onmouseover="showTip(event, 'fs19', 142)" class="fn">bifoldMap</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs50', 143)" onmouseover="showTip(event, 'fs50', 143)" class="fn">f</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs53', 144)" onmouseover="showTip(event, 'fs53', 144)" class="uc">Endo</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs51', 145)" onmouseover="showTip(event, 'fs51', 145)" class="fn">g</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs53', 146)" onmouseover="showTip(event, 'fs53', 146)" class="uc">Endo</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs49', 147)" onmouseover="showTip(event, 'fs49', 147)" class="fn">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs52', 148)" onmouseover="showTip(event, 'fs52', 148)" class="fn">z</span>
+
+<span onmouseout="hideTip(event, 'fs48', 149)" onmouseover="showTip(event, 'fs48', 149)" class="fn">law3</span> <span class="pn">(</span><span class="n">1</span><span class="pn">,</span><span class="n">1</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="n">5</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs48', 150)" onmouseover="showTip(event, 'fs48', 150)" class="fn">law3</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span><span class="s">&quot;b&quot;</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="s">&quot;abcd&quot;</span> <span class="c">// = true</span>
+<span onmouseout="hideTip(event, 'fs48', 151)" onmouseover="showTip(event, 'fs48', 151)" class="fn">law3</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs40', 152)" onmouseover="showTip(event, 'fs40', 152)" class="uc">Ok</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">]</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">(</span><span class="o">++</span><span class="pn">)</span> <span class="pn">[</span><span class="n">0</span><span class="pn">;</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span> <span class="c">// = true</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T<br /><em>&lt;summary&gt;The identity function&lt;/summary&gt;<br />&lt;param name=&quot;x&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The same value.&lt;/returns&gt;<br />&lt;example id=&quot;id-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- id 12     //  Evaulates to 12
- id &quot;abc&quot;  //  Evaulates to &quot;abc&quot;
- &lt;/code&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs2">val listMapSeqLength: (seq&lt;obj&gt; list -&gt; int list)</div>
-<div class="fsdocs-tip" id="fs3">Multiple items<br />module List
+            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs3">namespace FSharpPlus.Control</div>
+<div class="fsdocs-tip" id="fs4">val listMapSeqLength: (string list -&gt; int list)</div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />module List
 
-from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.list`1&quot; /&gt;.&lt;/summary&gt;<br />&lt;namespacedoc&gt;&lt;summary&gt;Operations for collections such as lists, arrays, sets, maps and sequences. See also 
-    &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/fsharp-collection-types&quot;&gt;F# Collection Types&lt;/a&gt; in the F# Language Guide.
- &lt;/summary&gt;&lt;/namespacedoc&gt;</em><br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on List
+&lt;/summary&gt;</em><br /><br />--------------------<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
   | op_Nil
   | op_ColonColon of Head: &#39;T * Tail: &#39;T list
   interface IReadOnlyList&lt;&#39;T&gt;
@@ -221,104 +229,131 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
   member Head: &#39;T
   member IsEmpty: bool
   member Item: index: int -&gt; &#39;T with get
-  ...<br /><em>&lt;summary&gt;The type of immutable singly-linked lists.&lt;/summary&gt;<br />&lt;remarks&gt;Use the constructors &lt;c&gt;[]&lt;/c&gt; and &lt;c&gt;::&lt;/c&gt; (infix) to create values of this type, or
- the notation &lt;c&gt;[1;2;3]&lt;/c&gt;. Use the values in the &lt;c&gt;List&lt;/c&gt; module to manipulate 
- values of this type, or pattern match against the values directly.
- &lt;/remarks&gt;<br />&lt;exclude /&gt;</em></div>
-<div class="fsdocs-tip" id="fs4">val map: mapping: (&#39;T -&gt; &#39;U) -&gt; list: &#39;T list -&gt; &#39;U list<br /><em>&lt;summary&gt;Builds a new collection whose elements are the results of applying the given function
- to each of the elements of the collection.&lt;/summary&gt;<br />&lt;param name=&quot;mapping&quot;&gt;The function to transform elements from the input list.&lt;/param&gt;<br />&lt;param name=&quot;list&quot;&gt;The input list.&lt;/param&gt;<br />&lt;returns&gt;The list of transformed elements.&lt;/returns&gt;<br />&lt;example id=&quot;map-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- let inputs = [ &quot;a&quot;; &quot;bbb&quot;; &quot;cc&quot; ]
+  ...</div>
+<div class="fsdocs-tip" id="fs6">val map: mapping: (&#39;T -&gt; &#39;U) -&gt; list: &#39;T list -&gt; &#39;U list</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />module Seq
 
- inputs |&amp;gt; List.map (fun x -&amp;gt; x.Length)
- &lt;/code&gt;
- Evaluates to &lt;c&gt;[ 1; 3; 2 ]&lt;/c&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs5">module Seq
+from FSharpPlus.Operators<br /><br />--------------------<br />module Seq
 
-from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.seq`1&quot; /&gt;.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs6">val length: source: seq&lt;&#39;T&gt; -&gt; int<br /><em>&lt;summary&gt;Returns the length of the sequence&lt;/summary&gt;<br />&lt;param name=&quot;source&quot;&gt;The input sequence.&lt;/param&gt;<br />&lt;returns&gt;The length of the sequence.&lt;/returns&gt;<br />&lt;exception cref=&quot;T:System.ArgumentNullException&quot;&gt;Thrown when the input sequence is null.&lt;/exception&gt;<br />&lt;example id=&quot;item-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;]
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Seq
+&lt;/summary&gt;</em><br /><br />--------------------<br />module Seq
 
- inputs |&amp;gt; Seq.length
- &lt;/code&gt;
- Evaluates to &lt;c&gt;3&lt;/c&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs7">val listMapTimes2: (int list -&gt; int list)</div>
-<div class="fsdocs-tip" id="fs8">val c1: Choice&lt;int list,string list&gt;</div>
-<div class="fsdocs-tip" id="fs9">Multiple items<br />type Choice&lt;&#39;T1,&#39;T2&gt; =
+from Microsoft.FSharp.Collections</div>
+<div class="fsdocs-tip" id="fs8">val length: source: seq&lt;&#39;T&gt; -&gt; int</div>
+<div class="fsdocs-tip" id="fs9">val listMapTimes2: (int list -&gt; int list)</div>
+<div class="fsdocs-tip" id="fs10">val c1: Choice&lt;int list,string list&gt;</div>
+<div class="fsdocs-tip" id="fs11">Multiple items<br />module Choice
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Choice
+&lt;/summary&gt;</em><br /><br />--------------------<br />type Choice =
+  inherit Default1
+  static member Choice: x: &#39;Foldable&lt;&#39;Alternative&lt;&#39;T&gt;&gt; ref * _mthd: Default4 -&gt; &#39;a1 (requires member ToSeq and member ``&lt;|&gt;`` and member IsAltLeftZero and member Empty) + 7 overloads
+  static member Invoke: x: &#39;Foldable&lt;&#39;Alternative&lt;&#39;T&gt;&gt; -&gt; &#39;Alternative&lt;&#39;T&gt;&gt; (requires member Choice)<br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2&gt; =
   | Choice1Of2 of &#39;T1
-  | Choice2Of2 of &#39;T2<br /><em>&lt;summary&gt;Helper types for active patterns with 2 choices.&lt;/summary&gt;<br />&lt;category index=&quot;5&quot;&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3&gt; =
+  | Choice2Of2 of &#39;T2<br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3&gt; =
   | Choice1Of3 of &#39;T1
   | Choice2Of3 of &#39;T2
-  | Choice3Of3 of &#39;T3<br /><em>&lt;summary&gt;Helper types for active patterns with 3 choices.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4&gt; =
+  | Choice3Of3 of &#39;T3<br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4&gt; =
   | Choice1Of4 of &#39;T1
   | Choice2Of4 of &#39;T2
   | Choice3Of4 of &#39;T3
-  | Choice4Of4 of &#39;T4<br /><em>&lt;summary&gt;Helper types for active patterns with 4 choices.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;T5&gt; =
+  | Choice4Of4 of &#39;T4<br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;T5&gt; =
   | Choice1Of5 of &#39;T1
   | Choice2Of5 of &#39;T2
   | Choice3Of5 of &#39;T3
   | Choice4Of5 of &#39;T4
-  | Choice5Of5 of &#39;T5<br /><em>&lt;summary&gt;Helper types for active patterns with 5 choices.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;T5,&#39;T6&gt; =
+  | Choice5Of5 of &#39;T5<br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;T5,&#39;T6&gt; =
   | Choice1Of6 of &#39;T1
   | Choice2Of6 of &#39;T2
   | Choice3Of6 of &#39;T3
   | Choice4Of6 of &#39;T4
   | Choice5Of6 of &#39;T5
-  | Choice6Of6 of &#39;T6<br /><em>&lt;summary&gt;Helper types for active patterns with 6 choices.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em><br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;T5,&#39;T6,&#39;T7&gt; =
+  | Choice6Of6 of &#39;T6<br /><br />--------------------<br />type Choice&lt;&#39;T1,&#39;T2,&#39;T3,&#39;T4,&#39;T5,&#39;T6,&#39;T7&gt; =
   | Choice1Of7 of &#39;T1
   | Choice2Of7 of &#39;T2
   | Choice3Of7 of &#39;T3
   | Choice4Of7 of &#39;T4
   | Choice5Of7 of &#39;T5
   | Choice6Of7 of &#39;T6
-  | Choice7Of7 of &#39;T7<br /><em>&lt;summary&gt;Helper types for active patterns with 7 choices.&lt;/summary&gt;<br />&lt;category&gt;Choices and Results&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs10">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
- primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
- with InvariantCulture settings. Otherwise the operation requires an appropriate
- static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
-type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
-  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
- of measure is erased in compiled code and when values of this type
- are analyzed using reflection. The type is representationally equivalent to
- &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs11">type &#39;T list = List&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The type of immutable singly-linked lists. &lt;/summary&gt;<br />&lt;remarks&gt;See the &lt;see cref=&quot;T:Microsoft.FSharp.Collections.ListModule&quot; /&gt; module for further operations related to lists.
-
- Use the constructors &lt;c&gt;[]&lt;/c&gt; and &lt;c&gt;::&lt;/c&gt; (infix) to create values of this type, or
- the notation &lt;c&gt;[1; 2; 3]&lt;/c&gt;. Use the values in the &lt;c&gt;List&lt;/c&gt; module to manipulate 
- values of this type, or pattern match against the values directly.
-
-  See also &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/lists&quot;&gt;F# Language Guide - Lists&lt;/a&gt;.
- &lt;/remarks&gt;</em></div>
-<div class="fsdocs-tip" id="fs12">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs13">union case Choice.Choice1Of2: &#39;T1 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br /><em>&lt;summary&gt;Choice 1 of 2 choices&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs14">val c2: Choice&lt;int list,string list&gt;</div>
-<div class="fsdocs-tip" id="fs15">union case Choice.Choice2Of2: &#39;T2 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;<br /><em>&lt;summary&gt;Choice 2 of 2 choices&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs16">val t: string * string</div>
-<div class="fsdocs-tip" id="fs17">union case MyEither.MyLeft: &#39;a -&gt; MyEither&lt;&#39;a,&#39;b&gt;</div>
-<div class="fsdocs-tip" id="fs18">union case MyEither.MyRight: &#39;b -&gt; MyEither&lt;&#39;a,&#39;b&gt;</div>
-<div class="fsdocs-tip" id="fs19">val x: MyEither&lt;&#39;a,&#39;b&gt;</div>
-<div class="fsdocs-tip" id="fs20">type MyEither&lt;&#39;a,&#39;b&gt; =
+  | Choice7Of7 of &#39;T7</div>
+<div class="fsdocs-tip" id="fs12">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+<div class="fsdocs-tip" id="fs13">type &#39;T list = List&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs14">Multiple items<br />val string: value: &#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
+<div class="fsdocs-tip" id="fs15">union case Choice.Choice1Of2: &#39;T1 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;</div>
+<div class="fsdocs-tip" id="fs16">val c2: Choice&lt;int list,string list&gt;</div>
+<div class="fsdocs-tip" id="fs17">union case Choice.Choice2Of2: &#39;T2 -&gt; Choice&lt;&#39;T1,&#39;T2&gt;</div>
+<div class="fsdocs-tip" id="fs18">val bifoldBack: leftFolder: (&#39;T1 -&gt; &#39;State -&gt; &#39;State) -&gt; rightFolder: (&#39;T2 -&gt; &#39;State -&gt; &#39;State) -&gt; source: &#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; state: &#39;State -&gt; &#39;State (requires member BifoldBack)<br /><em>&lt;summary&gt;
+ Combines the elements of a structure in a left associative manner.
+ &lt;/summary&gt;<br />&lt;category index=&quot;14&quot;&gt;Bifoldable&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs19">val bifoldMap: f: (&#39;T1 -&gt; &#39;Monoid) -&gt; g: (&#39;T2 -&gt; &#39;Monoid) -&gt; source: &#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;Monoid (requires member BifoldMap)<br /><em>&lt;summary&gt;
+ Combines the elements of a structure, given ways of mapping them to a Common Combinators monoid.
+ &lt;/summary&gt;<br />&lt;category index=&quot;14&quot;&gt;Bifoldable&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs20">val t: string * string</div>
+<div class="fsdocs-tip" id="fs21">val bifold: leftFolder: (&#39;State -&gt; &#39;T1 -&gt; &#39;State) -&gt; rightFolder: (&#39;State -&gt; &#39;T2 -&gt; &#39;State) -&gt; state: &#39;State -&gt; source: &#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;State (requires member Bifold)<br /><em>&lt;summary&gt;
+ Combines the elements of a structure in a right associative manner.
+ &lt;/summary&gt;<br />&lt;category index=&quot;14&quot;&gt;Bifoldable&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs22">&#39;a</div>
+<div class="fsdocs-tip" id="fs23">&#39;b</div>
+<div class="fsdocs-tip" id="fs24">union case MyEither.MyLeft: &#39;a -&gt; MyEither&lt;&#39;a,&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs25">union case MyEither.MyRight: &#39;b -&gt; MyEither&lt;&#39;a,&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs26">type BifoldMap =
+  inherit Default1
+  static member BifoldMap: x: Result&lt;&#39;T2,&#39;T1&gt; * f: (&#39;T1 -&gt; &#39;U) * g: (&#39;T2 -&gt; &#39;U) * _impl: BifoldMap -&gt; &#39;U + 5 overloads
+  static member Invoke: f: (&#39;T1 -&gt; &#39;U) -&gt; g: (&#39;T2 -&gt; &#39;U) -&gt; source: &#39;Bifoldable&lt;T1,T2&gt; -&gt; &#39;U (requires member BifoldMap)
+  static member InvokeOnInstance: f: (&#39;T1 -&gt; &#39;U) -&gt; g: (&#39;T2 -&gt; &#39;U) -&gt; source: &#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;U (requires member BifoldMap)</div>
+<div class="fsdocs-tip" id="fs27">val x: MyEither&lt;&#39;a,&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs28">type MyEither&lt;&#39;a,&#39;b&gt; =
   | MyLeft of &#39;a
   | MyRight of &#39;b
-  static member BifoldBack: x: MyEither&lt;&#39;a2,&#39;a3&gt; * f: (&#39;a2 -&gt; &#39;a4 -&gt; &#39;a5) * g: (&#39;a3 -&gt; &#39;a4 -&gt; &#39;a5) * z: &#39;a4 -&gt; &#39;a5
-  static member BifoldMap: x: MyEither&lt;&#39;a2,&#39;a3&gt; * f: (&#39;a2 -&gt; &#39;a4) * g: (&#39;a3 -&gt; &#39;a4) -&gt; &#39;a4</div>
-<div class="fsdocs-tip" id="fs21">val f: (&#39;a -&gt; &#39;b)</div>
-<div class="fsdocs-tip" id="fs22">val g: (&#39;a -&gt; &#39;b)</div>
-<div class="fsdocs-tip" id="fs23">val a: &#39;a</div>
-<div class="fsdocs-tip" id="fs24">val f: (&#39;a -&gt; &#39;b -&gt; &#39;c)</div>
-<div class="fsdocs-tip" id="fs25">val g: (&#39;a -&gt; &#39;b -&gt; &#39;c)</div>
-<div class="fsdocs-tip" id="fs26">val z: &#39;a</div>
-<div class="fsdocs-tip" id="fs27">val law1: x: &#39;a -&gt; bool</div>
-<div class="fsdocs-tip" id="fs28">val x: &#39;a</div>
-<div class="fsdocs-tip" id="fs29">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;<br /><em>&lt;summary&gt;
- Represents an OK or a Successful result. The code succeeded with a value of &#39;T.
+  static member BifoldBack: x: MyEither&lt;&#39;a0,&#39;b1&gt; * f: (&#39;a0 -&gt; &#39;c -&gt; &#39;d) * g: (&#39;b1 -&gt; &#39;c -&gt; &#39;d) * z: &#39;c -&gt; &#39;d
+  static member BifoldMap: x: MyEither&lt;&#39;a0,&#39;b1&gt; * f: (&#39;a0 -&gt; &#39;c) * g: (&#39;b1 -&gt; &#39;c) -&gt; &#39;c</div>
+<div class="fsdocs-tip" id="fs29">val f: (&#39;a -&gt; &#39;c)</div>
+<div class="fsdocs-tip" id="fs30">val g: (&#39;b -&gt; &#39;c)</div>
+<div class="fsdocs-tip" id="fs31">val a: &#39;a</div>
+<div class="fsdocs-tip" id="fs32">val a: &#39;b</div>
+<div class="fsdocs-tip" id="fs33">type BifoldBack =
+  inherit Default1
+  static member BifoldBack: x: Result&lt;&#39;T2,&#39;T1&gt; * f: (&#39;T1 -&gt; &#39;S -&gt; &#39;S) * g: (&#39;T2 -&gt; &#39;S -&gt; &#39;S) * z: &#39;S * _impl: BifoldBack -&gt; &#39;S + 5 overloads
+  static member Invoke: f: (&#39;T1 -&gt; &#39;S -&gt; &#39;S) -&gt; g: (&#39;T2 -&gt; &#39;S -&gt; &#39;S) -&gt; z: &#39;S -&gt; source: &#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;S (requires member BifoldBack)
+  static member InvokeOnInstance: f: (&#39;T1 -&gt; &#39;S -&gt; &#39;S) -&gt; g: (&#39;T2 -&gt; &#39;S -&gt; &#39;S) -&gt; z: &#39;S -&gt; source: &#39;Bifoldable&lt;&#39;T1,&#39;T2&gt; -&gt; &#39;S (requires member BifoldBack)</div>
+<div class="fsdocs-tip" id="fs34">val f: (&#39;a -&gt; &#39;c -&gt; &#39;d)</div>
+<div class="fsdocs-tip" id="fs35">val g: (&#39;b -&gt; &#39;c -&gt; &#39;d)</div>
+<div class="fsdocs-tip" id="fs36">val z: &#39;c</div>
+<div class="fsdocs-tip" id="fs37">val bisum: source: &#39;Bifoldable&lt;&#39;Monoid,&#39;Monoid&gt; -&gt; &#39;Monoid (requires member Bisum)<br /><em>&lt;summary&gt;
+ Combines the elements of a structure using a monoid.
+ &lt;/summary&gt;<br />&lt;category index=&quot;14&quot;&gt;Bifoldable&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs38">val law1: x: &#39;a -&gt; bool (requires member Bisum and member BifoldMap and equality)</div>
+<div class="fsdocs-tip" id="fs39">val x: &#39;a (requires member Bisum and member BifoldMap and equality)</div>
+<div class="fsdocs-tip" id="fs40">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs41">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs42">val law2: x: &#39;a -&gt; f: (&#39;b -&gt; &#39;c) -&gt; g: (&#39;d -&gt; &#39;c) -&gt; bool (requires member BifoldMap and member BifoldBack and member Zero and member ``+`` and equality)</div>
+<div class="fsdocs-tip" id="fs43">val x: &#39;a (requires member BifoldMap and member BifoldBack and member Zero and member ``+`` and equality)</div>
+<div class="fsdocs-tip" id="fs44">val f: (&#39;b -&gt; &#39;c) (requires member Zero and member ``+`` and equality)</div>
+<div class="fsdocs-tip" id="fs45">val g: (&#39;d -&gt; &#39;c) (requires member Zero and member ``+`` and equality)</div>
+<div class="fsdocs-tip" id="fs46">val zero&lt;&#39;Monoid (requires member Zero)&gt; : &#39;Monoid (requires member Zero)<br /><em>&lt;summary&gt;
+ A value that represents the 0 element of a Monoid.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs47">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs48">val law3: x: &#39;a -&gt; f: (&#39;b -&gt; &#39;c -&gt; &#39;c) -&gt; g: (&#39;d -&gt; &#39;c -&gt; &#39;c) -&gt; z: &#39;c -&gt; bool (requires member BifoldBack and member BifoldMap and equality)</div>
+<div class="fsdocs-tip" id="fs49">val x: &#39;a (requires member BifoldBack and member BifoldMap and equality)</div>
+<div class="fsdocs-tip" id="fs50">val f: (&#39;b -&gt; &#39;c -&gt; &#39;c) (requires equality)</div>
+<div class="fsdocs-tip" id="fs51">val g: (&#39;d -&gt; &#39;c -&gt; &#39;c) (requires equality)</div>
+<div class="fsdocs-tip" id="fs52">val z: &#39;c (requires equality)</div>
+<div class="fsdocs-tip" id="fs53">Multiple items<br />union case Endo.Endo: (&#39;t -&gt; &#39;t) -&gt; Endo&lt;&#39;t&gt;<br /><br />--------------------<br />module Endo
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on Endo
+&lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type Endo&lt;&#39;t&gt; =
+  | Endo of (&#39;t -&gt; &#39;t)
+  static member (+) : Endo&lt;&#39;T&gt; * Endo&lt;&#39;T&gt; -&gt; Endo&lt;&#39;T&gt;
+  static member Zero: unit -&gt; Endo&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
+ The monoid of endomorphisms under composition.
 &lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs30">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;<br /><em>&lt;summary&gt;
- Represents an Error or a Failure. The code failed with a value of &#39;TError representing what went wrong.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs31">val law2: x: &#39;a -&gt; f: &#39;b -&gt; g: &#39;c -&gt; bool</div>
-<div class="fsdocs-tip" id="fs32">val f: &#39;a</div>
-<div class="fsdocs-tip" id="fs33">val g: &#39;a</div>
-<div class="fsdocs-tip" id="fs34">val law3: x: &#39;a -&gt; f: &#39;b -&gt; g: &#39;c -&gt; z: &#39;d -&gt; bool</div>
+<div class="fsdocs-tip" id="fs54">val run: Endo&lt;&#39;T&gt; -&gt; (&#39;T -&gt; &#39;T)</div>
 
         </div>
 

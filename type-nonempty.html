@@ -6,7 +6,7 @@
     <title>NonEmptyList<'T>
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -83,45 +90,88 @@
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 </code></pre>
 <h3><a name="Constructing-NonEmptyList" class="anchor" href="#Constructing-NonEmptyList">Constructing NonEmptyList</a></h3>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// you can construct a NonEmptyList by using ofSeq</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">list123&#39;</span> <span class="o">=</span> <span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">create</span> <span class="n">1</span> <span class="pn">[</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span> <span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">list123&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">create</span> <span class="n">1</span> <span class="pn">[</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span> <span class="pn">]</span>
 <span class="c">// or more idiomatically</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">list123</span> <span class="o">=</span> <span class="id">nelist</span> <span class="pn">{</span> <span class="n">1</span> <span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span> <span class="pn">}</span> <span class="c">// will work in F# version 4.7</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="id">list123</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="k">nelist</span> <span class="pn">{</span> <span class="n">1</span> <span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span> <span class="pn">}</span> <span class="c">// will work in F# version 4.7</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">listOne</span> <span class="o">=</span> <span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">singleton</span> <span class="n">1</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="id">listOne</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 10)" onmouseover="showTip(event, 'fs4', 10)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="id">singleton</span> <span class="n">1</span>
 <span class="c">// cons</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">list2</span> <span class="o">=</span> <span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">cons</span> <span class="n">100</span> <span onmouseout="hideTip(event, 'fs2', 5)" onmouseover="showTip(event, 'fs2', 5)" class="id">list123</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="id">list2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 13)" onmouseover="showTip(event, 'fs4', 13)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="id">cons</span> <span class="n">100</span> <span onmouseout="hideTip(event, 'fs6', 15)" onmouseover="showTip(event, 'fs6', 15)" class="id">list123</span>
 <span class="c">// append two NonEmptyLists</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">list3</span> <span class="o">=</span> <span class="id">plus</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="id">list2</span> <span class="pn">(</span><span class="id">NonEmptyList</span><span class="pn">.</span><span class="id">singleton</span> <span class="n">200</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="id">list3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 17)" onmouseover="showTip(event, 'fs13', 17)" class="fn">plus</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="id">list2</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 19)" onmouseover="showTip(event, 'fs4', 19)" class="m">NonEmptyList</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 20)" onmouseover="showTip(event, 'fs9', 20)" class="id">singleton</span> <span class="n">200</span><span class="pn">)</span>
 <span class="c">// this can be written as (since list2 is a NonEmptyList):</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="id">list3&#39;</span> <span class="o">=</span> <span class="id">plus</span> <span onmouseout="hideTip(event, 'fs4', 9)" onmouseover="showTip(event, 'fs4', 9)" class="id">list2</span> <span class="pn">(</span><span class="id">result</span> <span class="n">200</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="id">list3&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 22)" onmouseover="showTip(event, 'fs13', 22)" class="fn">plus</span> <span onmouseout="hideTip(event, 'fs10', 23)" onmouseover="showTip(event, 'fs10', 23)" class="id">list2</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs15', 24)" onmouseover="showTip(event, 'fs15', 24)" class="fn">result</span> <span class="n">200</span><span class="pn">)</span>
 <span class="c">// in order to get back to a regular list you can then use toList:</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="id">list4</span> <span class="o">=</span> <span class="id">toList</span> <span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="id">list3&#39;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 25)" onmouseover="showTip(event, 'fs16', 25)" class="id">list4</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs17', 26)" onmouseover="showTip(event, 'fs17', 26)" class="fn">toList</span> <span onmouseout="hideTip(event, 'fs14', 27)" onmouseover="showTip(event, 'fs14', 27)" class="id">list3&#39;</span>
 </code></pre>
 <h3><a name="Operations-on-NonEmptyList" class="anchor" href="#Operations-on-NonEmptyList">Operations on NonEmptyList</a></h3>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="id">lengthOfList3</span> <span class="o">=</span> <span class="id">length</span> <span onmouseout="hideTip(event, 'fs5', 13)" onmouseover="showTip(event, 'fs5', 13)" class="id">list3</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="id">lengthOfList3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="fn">length</span> <span onmouseout="hideTip(event, 'fs12', 30)" onmouseover="showTip(event, 'fs12', 30)" class="id">list3</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 14)" onmouseover="showTip(event, 'fs9', 14)" class="id">headOf3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 15)" onmouseover="showTip(event, 'fs5', 15)" class="id">list3</span><span class="pn">.</span><span class="id">Head</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs10', 16)" onmouseover="showTip(event, 'fs10', 16)" class="id">headOf3&#39;</span> <span class="o">=</span> <span class="id">head</span> <span onmouseout="hideTip(event, 'fs5', 17)" onmouseover="showTip(event, 'fs5', 17)" class="id">list3</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 31)" onmouseover="showTip(event, 'fs20', 31)" class="id">headOf3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 32)" onmouseover="showTip(event, 'fs12', 32)" class="id">list3</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 33)" onmouseover="showTip(event, 'fs21', 33)" class="id">Head</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 34)" onmouseover="showTip(event, 'fs22', 34)" class="id">headOf3&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs23', 35)" onmouseover="showTip(event, 'fs23', 35)" class="fn">head</span> <span onmouseout="hideTip(event, 'fs12', 36)" onmouseover="showTip(event, 'fs12', 36)" class="id">list3</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="id">tailOf3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 19)" onmouseover="showTip(event, 'fs5', 19)" class="id">list3</span><span class="pn">.</span><span class="id">Tail</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 37)" onmouseover="showTip(event, 'fs24', 37)" class="id">tailOf3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 38)" onmouseover="showTip(event, 'fs12', 38)" class="id">list3</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 39)" onmouseover="showTip(event, 'fs25', 39)" class="id">Tail</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val list123&#39;: obj</div>
-<div class="fsdocs-tip" id="fs2">val list123: obj</div>
-<div class="fsdocs-tip" id="fs3">val listOne: obj</div>
-<div class="fsdocs-tip" id="fs4">val list2: obj</div>
-<div class="fsdocs-tip" id="fs5">val list3: obj</div>
-<div class="fsdocs-tip" id="fs6">val list3&#39;: obj</div>
-<div class="fsdocs-tip" id="fs7">val list4: obj</div>
-<div class="fsdocs-tip" id="fs8">val lengthOfList3: obj</div>
-<div class="fsdocs-tip" id="fs9">val headOf3: obj</div>
-<div class="fsdocs-tip" id="fs10">val headOf3&#39;: obj</div>
-<div class="fsdocs-tip" id="fs11">val tailOf3: obj</div>
+            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs3">val list123&#39;: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />module NonEmptyList
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on NonEmptyList
+&lt;/summary&gt;</em><br /><br />--------------------<br />type NonEmptyList&lt;&#39;t&gt; =
+  {
+    Head: &#39;t
+    Tail: &#39;t list
+  }
+  interface NonEmptySeq&lt;&#39;t&gt;
+  interface IReadOnlyList&lt;&#39;t&gt;
+  interface IReadOnlyCollection&lt;&#39;t&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;t&gt;
+  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
+  static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
+  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member Choice: source: NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ``&lt;|&gt;``)
+  ...<br /><em>&lt;summary&gt;
+ A type-safe list that contains at least one element.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val create: x: &#39;a -&gt; xs: &#39;a list -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;Builds a non empty list.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs6">val list123: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />val nelist: NelBuilder<br /><br />--------------------<br />type nelist&lt;&#39;t&gt; = NonEmptyList&lt;&#39;t&gt;<br /><em>&lt;summary&gt;
+ A type alias for NonEmptyList&amp;lt;&#39;t&amp;gt;
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val listOne: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs9">val singleton: x: &#39;a -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;Builds a non empty list with a single element.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs10">val list2: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs11">val cons: e: &#39;a -&gt; NonEmptyList&lt;&#39;a&gt; -&gt; NonEmptyList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;
+ Returns a new NonEmptyList with the element added to the beginning.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs12">val list3: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs13">val plus: x: &#39;Monoid -&gt; y: &#39;Monoid -&gt; &#39;Monoid (requires member ``+``)<br /><em>&lt;summary&gt;
+ Combines two monoids in one.
+ &lt;/summary&gt;<br />&lt;category index=&quot;4&quot;&gt;Monoid&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs14">val list3&#39;: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs15">val result: x: &#39;T -&gt; &#39;Functor&lt;&#39;T&gt; (requires member Return)<br /><em>&lt;summary&gt;
+ Lifts a value into a Functor. Same as return in Computation Expressions.
+ &lt;/summary&gt;<br />&lt;category index=&quot;2&quot;&gt;Applicative&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs16">val list4: int list</div>
+<div class="fsdocs-tip" id="fs17">val toList: source: &#39;a -&gt; &#39;T list (requires member ToList)<br /><em>&lt;summary&gt;Builds a list from the given foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input foldable.&lt;/param&gt;<br />&lt;returns&gt;The list of foldable elements.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs18">val lengthOfList3: int</div>
+<div class="fsdocs-tip" id="fs19">val length: source: &#39;Foldable&lt;&#39;T&gt; -&gt; int (requires member Length)<br /><em>&lt;summary&gt;Gets the number of elements in the foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input foldable.&lt;/param&gt;<br />&lt;returns&gt;The length of the foldable.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs20">val headOf3: int</div>
+<div class="fsdocs-tip" id="fs21">NonEmptyList.Head: int</div>
+<div class="fsdocs-tip" id="fs22">val headOf3&#39;: int</div>
+<div class="fsdocs-tip" id="fs23">val head: source: &#39;Foldable&lt;&#39;T&gt; -&gt; &#39;T (requires member Head)<br /><em>&lt;summary&gt;Gets the first element of the foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input flodable.&lt;/param&gt;<br />&lt;exception cref=&quot;System.ArgumentException&quot;&gt;Thrown when the foldable is empty.&lt;/exception&gt;<br />&lt;returns&gt;The first element of the foldable.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs24">val tailOf3: int list</div>
+<div class="fsdocs-tip" id="fs25">NonEmptyList.Tail: int list</div>
 
         </div>
 

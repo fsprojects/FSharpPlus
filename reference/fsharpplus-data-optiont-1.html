@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>OptionT<'monad<option<'t>>> (FSharpPlus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -100,19 +100,19 @@
     </dt>
     <dt>
       Base Type: 
-      <code><a href="https://docs.microsoft.com/dotnet/api/system.valuetype">ValueType</a></code>
+      <code><a href="https://learn.microsoft.com/dotnet/api/system.valuetype">ValueType</a></code>
     </dt>
     <dt>
       All Interfaces: 
-      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;'monad<option<'t>>&gt;</span>&gt;</span></code>
+      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.iequatable-1">IEquatable</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;'monad<option<'t>>&gt;</span>&gt;</span></code>
       , 
-      <code><a href="https://docs.microsoft.com/dotnet/api/system.collections.istructuralequatable">IStructuralEquatable</a></code>
+      <code><a href="https://learn.microsoft.com/dotnet/api/system.collections.istructuralequatable">IStructuralEquatable</a></code>
       , 
-      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.icomparable-1">IComparable</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;'monad<option<'t>>&gt;</span>&gt;</span></code>
+      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.icomparable-1">IComparable</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;'monad<option<'t>>&gt;</span>&gt;</span></code>
       , 
-      <code><a href="https://docs.microsoft.com/dotnet/api/system.icomparable">IComparable</a></code>
+      <code><a href="https://learn.microsoft.com/dotnet/api/system.icomparable">IComparable</a></code>
       , 
-      <code><a href="https://docs.microsoft.com/dotnet/api/system.collections.istructuralcomparable">IStructuralComparable</a></code>
+      <code><a href="https://learn.microsoft.com/dotnet/api/system.collections.istructuralcomparable">IStructuralComparable</a></code>
     </dt>
     <dt>
       Kind: Struct
@@ -127,6 +127,153 @@
       </p>
     </div>
   </div>
+  <h3>
+    Table of contents
+  </h3>
+  <ul>
+    <li>
+      <a href="#section0">
+        Monad
+      </a>
+    </li>
+    <li>
+      <a href="#section1">
+        Other module members
+      </a>
+    </li>
+  </ul>
+  <h2 id="section0">
+    Monad
+  </h2>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div></div>
+  <div>
+    <h3>
+      Static members
+    </h3>
+    <table class="table outer-list fsdocs-member-list">
+      <thead>
+        <tr>
+          <td class="fsdocs-member-list-header">
+            Static member
+          </td>
+          <td class="fsdocs-member-list-header">
+            Description
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '3071', 3071)" onmouseover="showTip(event, '3071', 3071)">
+                <p>
+                  <a id="(>=>)">
+                    <a href="#(>=>)">
+                      <code><span>f&#32;&gt;=&gt;&#32;g</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="3071">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>f&#32;&gt;=&gt;&#32;g</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^Monad<option<'U>&gt;</span></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        g
+                      </b>
+                      :
+                      <code><span>'U&#32;->&#32;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^Monad<option<'V>&gt;</span></span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>'T&#32;->&#32;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^Monad<option<'V>&gt;</span></span></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Data.OptionT`1.op_GreaterEqualsGreater``5```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Data.OptionT`1.op_GreaterEqualsGreater``5\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L59-59" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Composes left-to-right two Option functions (Kleisli composition).
+ 
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'T&#32;->&#32;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^Monad<option<'U>&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  g
+                </span>
+                :
+                <code><span>'U&#32;->&#32;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^Monad<option<'V>&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span>'T&#32;->&#32;<span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^Monad<option<'V>&gt;</span></span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <h2 id="section1">
+    Other module members
+  </h2>
   <div></div>
   <div></div>
   <div></div>
@@ -149,7 +296,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3071', 3071)" onmouseover="showTip(event, '3071', 3071)">
+              <code onmouseout="hideTip(event, '3072', 3072)" onmouseover="showTip(event, '3072', 3072)">
                 <p>
                   <a id="OptionT">
                     <a href="#OptionT">
@@ -158,7 +305,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3071">
+              <div class="fsdocs-tip" id="3072">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT&#32;'monad<option<'t>></span></code>
@@ -228,7 +375,104 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3072', 3072)" onmouseover="showTip(event, '3072', 3072)">
+              <code onmouseout="hideTip(event, '3073', 3073)" onmouseover="showTip(event, '3073', 3073)">
+                <p>
+                  <a id="(+)">
+                    <a href="#(+)">
+                      <code><span>arg0&#32;+&#32;arg1</span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="3073">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>arg0&#32;+&#32;arg1</span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        arg0
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^a&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        arg1
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadPlus<option<'T>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadPlus<option<'T>&gt;</span></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Data.OptionT`1.op_Addition``3```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Data.OptionT`1.op_Addition``3\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L62-62" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg0
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^a&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  arg1
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadPlus<option<'T>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadPlus<option<'T>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '3074', 3074)" onmouseover="showTip(event, '3074', 3074)">
                 <p>
                   <a id="(<*>)">
                     <a href="#(<*>)">
@@ -237,7 +481,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3072">
+              <div class="fsdocs-tip" id="3074">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>f&#32;&lt;*&gt;&#32;x</span></code>
@@ -325,7 +569,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3073', 3073)" onmouseover="showTip(event, '3073', 3073)">
+              <code onmouseout="hideTip(event, '3075', 3075)" onmouseover="showTip(event, '3075', 3075)">
                 <p>
                   <a id="(<|>)">
                     <a href="#(<|>)">
@@ -334,7 +578,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3073">
+              <div class="fsdocs-tip" id="3075">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>arg0&#32;&lt;|&gt;&#32;arg1</span></code>
@@ -382,7 +626,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L56-56" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L70-70" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -422,7 +666,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3074', 3074)" onmouseover="showTip(event, '3074', 3074)">
+              <code onmouseout="hideTip(event, '3076', 3076)" onmouseover="showTip(event, '3076', 3076)">
                 <p>
                   <a id="(>>=)">
                     <a href="#(>>=)">
@@ -431,7 +675,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3074">
+              <div class="fsdocs-tip" id="3076">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>x&#32;&gt;&gt;=&#32;f</span></code>
@@ -519,7 +763,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3075', 3075)" onmouseover="showTip(event, '3075', 3075)">
+              <code onmouseout="hideTip(event, '3077', 3077)" onmouseover="showTip(event, '3077', 3077)">
                 <p>
                   <a id="CallCC">
                     <a href="#CallCC">
@@ -528,7 +772,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3075">
+              <div class="fsdocs-tip" id="3077">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.CallCC<span><span>(<span>f</span>)</span></span></span></code>
@@ -570,7 +814,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L71-71" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L85-85" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -602,7 +846,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3076', 3076)" onmouseover="showTip(event, '3076', 3076)">
+              <code onmouseout="hideTip(event, '3078', 3078)" onmouseover="showTip(event, '3078', 3078)">
                 <p>
                   <a id="Catch">
                     <a href="#Catch">
@@ -611,7 +855,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3076">
+              <div class="fsdocs-tip" id="3078">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Catch<span><span>(<span>m,&#32;h</span>)</span></span></span></code>
@@ -661,7 +905,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L69-69" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L83-83" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -701,7 +945,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3077', 3077)" onmouseover="showTip(event, '3077', 3077)">
+              <code onmouseout="hideTip(event, '3079', 3079)" onmouseover="showTip(event, '3079', 3079)">
                 <p>
                   <a id="Delay">
                     <a href="#Delay">
@@ -710,7 +954,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3077">
+              <div class="fsdocs-tip" id="3079">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Delay<span><span>(<span>body</span>)</span></span></span></code>
@@ -750,7 +994,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L61-61" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L75-75" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -782,7 +1026,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3078', 3078)" onmouseover="showTip(event, '3078', 3078)">
+              <code onmouseout="hideTip(event, '3080', 3080)" onmouseover="showTip(event, '3080', 3080)">
                 <p>
                   <a id="Lift">
                     <a href="#Lift">
@@ -791,7 +1035,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3078">
+              <div class="fsdocs-tip" id="3080">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Lift<span><span>(<span>x</span>)</span></span></span></code>
@@ -831,7 +1075,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L64-64" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L78-78" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -863,7 +1107,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3079', 3079)" onmouseover="showTip(event, '3079', 3079)">
+              <code onmouseout="hideTip(event, '3081', 3081)" onmouseover="showTip(event, '3081', 3081)">
                 <p>
                   <a id="Lift2">
                     <a href="#Lift2">
@@ -872,7 +1116,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3079">
+              <div class="fsdocs-tip" id="3081">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Lift2<span><span>(<span>f,&#32;x,&#32;y</span>)</span></span></span></code>
@@ -978,7 +1222,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3080', 3080)" onmouseover="showTip(event, '3080', 3080)">
+              <code onmouseout="hideTip(event, '3082', 3082)" onmouseover="showTip(event, '3082', 3082)">
                 <p>
                   <a id="Lift3">
                     <a href="#Lift3">
@@ -987,7 +1231,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3080">
+              <div class="fsdocs-tip" id="3082">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Lift3<span><span>(<span>f,&#32;x,&#32;y,&#32;z</span>)</span></span></span></code>
@@ -1109,7 +1353,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3081', 3081)" onmouseover="showTip(event, '3081', 3081)">
+              <code onmouseout="hideTip(event, '3083', 3083)" onmouseover="showTip(event, '3083', 3083)">
                 <p>
                   <a id="LiftAsync">
                     <a href="#LiftAsync">
@@ -1118,7 +1362,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3081">
+              <div class="fsdocs-tip" id="3083">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.LiftAsync<span><span>(<span>x</span>)</span></span></span></code>
@@ -1158,7 +1402,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L66-66" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L80-80" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1190,7 +1434,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3082', 3082)" onmouseover="showTip(event, '3082', 3082)">
+              <code onmouseout="hideTip(event, '3084', 3084)" onmouseover="showTip(event, '3084', 3084)">
                 <p>
                   <a id="Listen">
                     <a href="#Listen">
@@ -1199,7 +1443,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3082">
+              <div class="fsdocs-tip" id="3084">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Listen<span><span>(<span>m</span>)</span></span></span></code>
@@ -1239,7 +1483,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L81-81" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L95-95" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1271,7 +1515,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3083', 3083)" onmouseover="showTip(event, '3083', 3083)">
+              <code onmouseout="hideTip(event, '3085', 3085)" onmouseover="showTip(event, '3085', 3085)">
                 <p>
                   <a id="Local">
                     <a href="#Local">
@@ -1280,7 +1524,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3083">
+              <div class="fsdocs-tip" id="3085">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Local<span><span>(<span>arg1,&#32;f</span>)</span></span></span></code>
@@ -1328,7 +1572,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L77-77" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L91-91" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1368,7 +1612,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3084', 3084)" onmouseover="showTip(event, '3084', 3084)">
+              <code onmouseout="hideTip(event, '3086', 3086)" onmouseover="showTip(event, '3086', 3086)">
                 <p>
                   <a id="Map">
                     <a href="#Map">
@@ -1377,7 +1621,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3084">
+              <div class="fsdocs-tip" id="3086">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Map<span><span>(<span>x,&#32;f</span>)</span></span></span></code>
@@ -1467,7 +1711,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3085', 3085)" onmouseover="showTip(event, '3085', 3085)">
+              <code onmouseout="hideTip(event, '3087', 3087)" onmouseover="showTip(event, '3087', 3087)">
                 <p>
                   <a id="Pass">
                     <a href="#Pass">
@@ -1476,7 +1720,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3085">
+              <div class="fsdocs-tip" id="3087">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Pass<span><span>(<span>m</span>)</span></span></span></code>
@@ -1516,7 +1760,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L85-85" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L99-99" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1548,7 +1792,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3086', 3086)" onmouseover="showTip(event, '3086', 3086)">
+              <code onmouseout="hideTip(event, '3088', 3088)" onmouseover="showTip(event, '3088', 3088)">
                 <p>
                   <a id="Put">
                     <a href="#Put">
@@ -1557,7 +1801,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3086">
+              <div class="fsdocs-tip" id="3088">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Put<span><span>(<span>x</span>)</span></span></span></code>
@@ -1597,7 +1841,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L74-74" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L88-88" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1629,7 +1873,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3087', 3087)" onmouseover="showTip(event, '3087', 3087)">
+              <code onmouseout="hideTip(event, '3089', 3089)" onmouseover="showTip(event, '3089', 3089)">
                 <p>
                   <a id="Return">
                     <a href="#Return">
@@ -1638,7 +1882,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3087">
+              <div class="fsdocs-tip" id="3089">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Return<span><span>(<span>x</span>)</span></span></span></code>
@@ -1712,7 +1956,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3088', 3088)" onmouseover="showTip(event, '3088', 3088)">
+              <code onmouseout="hideTip(event, '3090', 3090)" onmouseover="showTip(event, '3090', 3090)">
                 <p>
                   <a id="Tell">
                     <a href="#Tell">
@@ -1721,7 +1965,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3088">
+              <div class="fsdocs-tip" id="3090">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Tell<span><span>(<span>w</span>)</span></span></span></code>
@@ -1761,7 +2005,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L79-79" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L93-93" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1793,7 +2037,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3089', 3089)" onmouseover="showTip(event, '3089', 3089)">
+              <code onmouseout="hideTip(event, '3091', 3091)" onmouseover="showTip(event, '3091', 3091)">
                 <p>
                   <a id="Throw">
                     <a href="#Throw">
@@ -1802,7 +2046,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3089">
+              <div class="fsdocs-tip" id="3091">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Throw<span><span>(<span>x</span>)</span></span></span></code>
@@ -1842,7 +2086,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L68-68" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L82-82" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1874,7 +2118,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3090', 3090)" onmouseover="showTip(event, '3090', 3090)">
+              <code onmouseout="hideTip(event, '3092', 3092)" onmouseover="showTip(event, '3092', 3092)">
                 <p>
                   <a id="TryFinally">
                     <a href="#TryFinally">
@@ -1883,7 +2127,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3090">
+              <div class="fsdocs-tip" id="3092">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.TryFinally<span><span>(<span>computation,&#32;f</span>)</span></span></span></code>
@@ -1931,7 +2175,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L59-59" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L73-73" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1971,7 +2215,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3091', 3091)" onmouseover="showTip(event, '3091', 3091)">
+              <code onmouseout="hideTip(event, '3093', 3093)" onmouseover="showTip(event, '3093', 3093)">
                 <p>
                   <a id="TryWith">
                     <a href="#TryWith">
@@ -1980,7 +2224,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3091">
+              <div class="fsdocs-tip" id="3093">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.TryWith<span><span>(<span>source,&#32;f</span>)</span></span></span></code>
@@ -2028,7 +2272,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L58-58" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L72-72" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -2068,7 +2312,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3092', 3092)" onmouseover="showTip(event, '3092', 3092)">
+              <code onmouseout="hideTip(event, '3094', 3094)" onmouseover="showTip(event, '3094', 3094)">
                 <p>
                   <a id="Using">
                     <a href="#Using">
@@ -2077,7 +2321,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3092">
+              <div class="fsdocs-tip" id="3094">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.Using<span><span>(<span>resource,&#32;f</span>)</span></span></span></code>
@@ -2127,7 +2371,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L60-60" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L74-74" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -2167,7 +2411,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3093', 3093)" onmouseover="showTip(event, '3093', 3093)">
+              <code onmouseout="hideTip(event, '3095', 3095)" onmouseover="showTip(event, '3095', 3095)">
                 <p>
                   <a id="get_Ask">
                     <a href="#get_Ask">
@@ -2176,7 +2420,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3093">
+              <div class="fsdocs-tip" id="3095">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.get_Ask&#32;<span>()</span></span></code>
@@ -2204,7 +2448,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L76-76" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L90-90" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -2226,7 +2470,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3094', 3094)" onmouseover="showTip(event, '3094', 3094)">
+              <code onmouseout="hideTip(event, '3096', 3096)" onmouseover="showTip(event, '3096', 3096)">
                 <p>
                   <a id="get_Empty">
                     <a href="#get_Empty">
@@ -2235,7 +2479,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3094">
+              <div class="fsdocs-tip" id="3096">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.get_Empty&#32;<span>()</span></span></code>
@@ -2263,7 +2507,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L55-55" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L69-69" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -2285,7 +2529,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '3095', 3095)" onmouseover="showTip(event, '3095', 3095)">
+              <code onmouseout="hideTip(event, '3097', 3097)" onmouseover="showTip(event, '3097', 3097)">
                 <p>
                   <a id="get_Get">
                     <a href="#get_Get">
@@ -2294,7 +2538,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="3095">
+              <div class="fsdocs-tip" id="3097">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>OptionT.get_Get&#32;<span>()</span></span></code>
@@ -2322,7 +2566,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L73-73" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L87-87" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -2336,6 +2580,65 @@
                   Returns: 
                 </span>
                 <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadState<'S,'S>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '3098', 3098)" onmouseover="showTip(event, '3098', 3098)">
+                <p>
+                  <a id="get_Zero">
+                    <a href="#get_Zero">
+                      <code><span>OptionT.get_Zero&#32;<span>()</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="3098">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>OptionT.get_Zero&#32;<span>()</span></span></code>
+                  <br/>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadPlus<option<'T>&gt;</span></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Data.OptionT`1.get_Zero``2```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Data.OptionT`1.get_Zero``2\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Option.fs#L61-61" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+              </p>
+            </div>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-optiont-1.html">OptionT</a>&lt;^MonadPlus<option<'T>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>

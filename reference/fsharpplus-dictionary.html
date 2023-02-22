@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Dictionary (FSharpPlus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -131,7 +131,7 @@
                 <p>
                   <a id="chooseValues">
                     <a href="#chooseValues">
-                      <code><span>Dictionary.chooseValues&#32;<span>f&#32;x</span></span></code>
+                      <code><span>Dictionary.chooseValues&#32;<span>mapper&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -139,14 +139,14 @@
               <div class="fsdocs-tip" id="47">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.chooseValues&#32;<span>f&#32;x</span></span></code>
+                  <code><span>Dictionary.chooseValues&#32;<span>mapper&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        f
+                        mapper
                       </b>
                       :
                       <code><span>'T&#32;->&#32;<span>'U&#32;option</span></span></code>
@@ -156,10 +156,10 @@
                     <br/>
                     <span>
                       <b>
-                        x
+                        source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -168,7 +168,7 @@
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
                   </span>
                   Returns dictionary with values x for each dictionary value where the function returns Some(x).
                   <br/>
@@ -197,7 +197,7 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  f
+                  mapper
                 </span>
                 :
                 <code><span>'T&#32;->&#32;<span>'U&#32;option</span></span></code>
@@ -209,10 +209,10 @@
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -225,7 +225,7 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -242,7 +242,7 @@
                 <p>
                   <a id="choosei">
                     <a href="#choosei">
-                      <code><span>Dictionary.choosei&#32;<span>f&#32;x</span></span></code>
+                      <code><span>Dictionary.choosei&#32;<span>chooser&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -250,14 +250,14 @@
               <div class="fsdocs-tip" id="48">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.choosei&#32;<span>f&#32;x</span></span></code>
+                  <code><span>Dictionary.choosei&#32;<span>chooser&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        f
+                        chooser
                       </b>
                       :
                       <code><span>'Key&#32;->&#32;'T&#32;->&#32;<span>'U&#32;option</span></span></code>
@@ -267,10 +267,10 @@
                     <br/>
                     <span>
                       <b>
-                        x
+                        source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -279,7 +279,7 @@
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
                   </span>
                   Dictionary with values (k, x) for each dictionary value where the function returns Some(x).
                   <br/>
@@ -308,7 +308,7 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  f
+                  chooser
                 </span>
                 :
                 <code><span>'Key&#32;->&#32;'T&#32;->&#32;<span>'U&#32;option</span></span></code>
@@ -320,10 +320,10 @@
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.idictionary-2">IDictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -336,7 +336,7 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -353,7 +353,7 @@
                 <p>
                   <a id="containsKey">
                     <a href="#containsKey">
-                      <code><span>Dictionary.containsKey&#32;<span>k&#32;dct</span></span></code>
+                      <code><span>Dictionary.containsKey&#32;<span>key&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -361,14 +361,14 @@
               <div class="fsdocs-tip" id="49">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.containsKey&#32;<span>k&#32;dct</span></span></code>
+                  <code><span>Dictionary.containsKey&#32;<span>key&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        k
+                        key
                       </b>
                       :
                       <code>'Key</code>
@@ -378,10 +378,10 @@
                     <br/>
                     <span>
                       <b>
-                        dct
+                        source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -422,7 +422,7 @@
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  k
+                  key
                 </span>
                 :
                 <code>'Key</code>
@@ -434,10 +434,10 @@
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  dct
+                  source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -485,7 +485,7 @@
                         source1
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                     </span>
                     <br/>
                     <span>
@@ -493,14 +493,14 @@
                         source2
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -533,7 +533,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   source1
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
@@ -541,7 +541,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   source2
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -550,7 +550,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -589,7 +589,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                         source1
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                     </span>
                     <br/>
                     <span>
@@ -597,14 +597,14 @@ Returns the intersection of two maps, preferring values from the first in case o
                         source2
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -645,7 +645,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   source1
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
@@ -653,7 +653,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   source2
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -662,7 +662,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -693,7 +693,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -734,7 +734,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -764,7 +764,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <p>
                   <a id="map">
                     <a href="#map">
-                      <code><span>Dictionary.map&#32;<span>mapping&#32;x</span></span></code>
+                      <code><span>Dictionary.map&#32;<span>mapping&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -772,7 +772,7 @@ Returns the intersection of two maps, preferring values from the first in case o
               <div class="fsdocs-tip" id="53">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.map&#32;<span>mapping&#32;x</span></span></code>
+                  <code><span>Dictionary.map&#32;<span>mapping&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -789,10 +789,10 @@ Returns the intersection of two maps, preferring values from the first in case o
                     <br/>
                     <span>
                       <b>
-                        x
+                        source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -801,7 +801,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
                   </span>
                   The mapped dictionary.
                   <br/>
@@ -842,10 +842,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -858,7 +858,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -875,7 +875,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <p>
                   <a id="map2">
                     <a href="#map2">
-                      <code><span>Dictionary.map2&#32;<span>mapping&#32;x&#32;y</span></span></code>
+                      <code><span>Dictionary.map2&#32;<span>mapping&#32;source1&#32;source2</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -883,7 +883,7 @@ Returns the intersection of two maps, preferring values from the first in case o
               <div class="fsdocs-tip" id="54">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.map2&#32;<span>mapping&#32;x&#32;y</span></span></code>
+                  <code><span>Dictionary.map2&#32;<span>mapping&#32;source1&#32;source2</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -900,20 +900,20 @@ Returns the intersection of two maps, preferring values from the first in case o
                     <br/>
                     <span>
                       <b>
-                        x
+                        source1
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
                        - 
                       The first input dictionary.
                     </span>
                     <br/>
                     <span>
                       <b>
-                        y
+                        source2
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
                        - 
                       The second input dictionary.
                     </span>
@@ -922,7 +922,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
                   </span>
                   The combined dictionary.
                   <br/>
@@ -966,10 +966,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source1
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -978,10 +978,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  y
+                  source2
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -994,7 +994,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -1011,7 +1011,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <p>
                   <a id="map3">
                     <a href="#map3">
-                      <code><span>Dictionary.map3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
+                      <code><span>Dictionary.map3&#32;<span>mapping&#32;source1&#32;source2&#32;source3</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -1019,7 +1019,7 @@ Returns the intersection of two maps, preferring values from the first in case o
               <div class="fsdocs-tip" id="55">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.map3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
+                  <code><span>Dictionary.map3&#32;<span>mapping&#32;source1&#32;source2&#32;source3</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -1036,30 +1036,30 @@ Returns the intersection of two maps, preferring values from the first in case o
                     <br/>
                     <span>
                       <b>
-                        x
+                        source1
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
                        - 
                       First input Dictionary.
                     </span>
                     <br/>
                     <span>
                       <b>
-                        y
+                        source2
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
                        - 
                       Second input Dictionary.
                     </span>
                     <br/>
                     <span>
                       <b>
-                        z
+                        source3
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
                        - 
                       Third input Dictionary.
                     </span>
@@ -1068,7 +1068,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
                   </span>
                   The mapped Dictionary.
                   <br/>
@@ -1112,10 +1112,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source1
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1124,10 +1124,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  y
+                  source2
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1136,10 +1136,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  z
+                  source3
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T3</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1152,7 +1152,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'U</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -1187,14 +1187,14 @@ Returns the intersection of two maps, preferring values from the first in case o
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -1227,7 +1227,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -1236,7 +1236,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlydictionary-2">IReadOnlyDictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -1249,7 +1249,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                 <p>
                   <a id="tryGetValue">
                     <a href="#tryGetValue">
-                      <code><span>Dictionary.tryGetValue&#32;<span>k&#32;dct</span></span></code>
+                      <code><span>Dictionary.tryGetValue&#32;<span>key&#32;source</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -1257,14 +1257,14 @@ Returns the intersection of two maps, preferring values from the first in case o
               <div class="fsdocs-tip" id="57">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.tryGetValue&#32;<span>k&#32;dct</span></span></code>
+                  <code><span>Dictionary.tryGetValue&#32;<span>key&#32;source</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        k
+                        key
                       </b>
                       :
                       <code>'Key</code>
@@ -1274,10 +1274,10 @@ Returns the intersection of two maps, preferring values from the first in case o
                     <br/>
                     <span>
                       <b>
-                        dct
+                        source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -1321,7 +1321,7 @@ Returns the intersection of two maps, preferring values from the first in case o
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  k
+                  key
                 </span>
                 :
                 <code>'Key</code>
@@ -1333,10 +1333,10 @@ Returns the intersection of two maps, preferring values from the first in case o
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  dct
+                  source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1384,7 +1384,7 @@ Returns the intersection of two maps, preferring values from the first in case o
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                     </span>
                     <br/>
                     <span>
@@ -1392,14 +1392,14 @@ Returns the intersection of two maps, preferring values from the first in case o
                         altSource
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -1432,7 +1432,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
@@ -1440,7 +1440,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   altSource
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -1449,7 +1449,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -1488,7 +1488,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                         source1
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                     </span>
                     <br/>
                     <span>
@@ -1496,14 +1496,14 @@ Returns the union of two maps, preferring values from the first in case of dupli
                         source2
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -1544,7 +1544,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   source1
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
@@ -1552,7 +1552,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   source2
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -1561,7 +1561,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'Value</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -1592,7 +1592,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
                        - 
                       The source dictionary.
                     </span>
@@ -1601,7 +1601,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span>&#32;*&#32;<span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></span></code>
+                    <code><span><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span>&#32;*&#32;<span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></span></code>
                   </span>
                   A tuple of each untupled dictionary.
                   <br/>
@@ -1633,7 +1633,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1646,7 +1646,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span>&#32;*&#32;<span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></span></code>
+                <code><span><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span>&#32;*&#32;<span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -1681,7 +1681,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
                        - 
                       The input dictionary.
                     </span>
@@ -1722,7 +1722,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1752,7 +1752,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                 <p>
                   <a id="zip">
                     <a href="#zip">
-                      <code><span>Dictionary.zip&#32;<span>x&#32;y</span></span></code>
+                      <code><span>Dictionary.zip&#32;<span>source1&#32;source2</span></span></code>
                     </a>
                   </a>
                 </p>
@@ -1760,27 +1760,27 @@ Returns the union of two maps, preferring values from the first in case of dupli
               <div class="fsdocs-tip" id="62">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>Dictionary.zip&#32;<span>x&#32;y</span></span></code>
+                  <code><span>Dictionary.zip&#32;<span>source1&#32;source2</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
                   <ul>
                     <span>
                       <b>
-                        x
+                        source1
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
                        - 
                       The first input dictionary.
                     </span>
                     <br/>
                     <span>
                       <b>
-                        y
+                        source2
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
                        - 
                       The second input dictionary.
                     </span>
@@ -1789,7 +1789,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
                   </span>
                   The tupled dictionary.
                   <br/>
@@ -1821,10 +1821,10 @@ Returns the union of two maps, preferring values from the first in case of dupli
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  x
+                  source1
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T1</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1833,10 +1833,10 @@ Returns the union of two maps, preferring values from the first in case of dupli
               </dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
-                  y
+                  source2
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;'T2</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -1849,7 +1849,7 @@ Returns the union of two maps, preferring values from the first in case of dupli
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.dictionary-2">Dictionary</a>&lt;<span>'Key,&#32;<span>(<span>'T1&#32;*&#32;'T2</span>)</span></span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>

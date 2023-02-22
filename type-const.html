@@ -6,7 +6,7 @@
     <title>Const<'T,'U>
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -83,16 +90,48 @@
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Lens</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">Lens</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 4)" onmouseover="showTip(event, 'fs1', 4)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="id">Data</span>
 <span class="c">// note for instance the definition of view (from the Lens part of F#+):</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="fn">view</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="fn">optic</span><span class="pn">:</span> <span class="pn">(</span><span class="ta">&#39;</span><span class="id">a</span> <span class="k">-&gt;</span> <span class="id">Const</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">b</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="k">-&gt;</span> <span class="id">_</span> <span class="k">-&gt;</span> <span class="id">Const</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">t</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="fn">source</span><span class="pn">:</span> <span class="ta">&#39;</span><span class="id">s</span><span class="pn">)</span> <span class="pn">:</span> <span class="ta">&#39;</span><span class="id">a</span> <span class="o">=</span> <span class="id">Const</span><span class="pn">.</span><span class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="id">optic</span> <span class="id">Const</span> <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="id">source</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 6)" onmouseover="showTip(event, 'fs4', 6)" class="fn">view</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="fn">optic</span><span class="pn">:</span> <span class="pn">(</span><span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="id">a</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="vt">Const</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="id">b</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="k">-&gt;</span> <span class="id">_</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs7', 11)" onmouseover="showTip(event, 'fs7', 11)" class="vt">Const</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span><span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="id">t</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="fn">source</span><span class="pn">:</span> <span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="id">s</span><span class="pn">)</span> <span class="pn">:</span> <span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs6', 15)" onmouseover="showTip(event, 'fs6', 15)" class="id">a</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 16)" onmouseover="showTip(event, 'fs7', 16)" class="m">Const</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 18)" onmouseover="showTip(event, 'fs5', 18)" class="fn">optic</span> <span onmouseout="hideTip(event, 'fs7', 19)" onmouseover="showTip(event, 'fs7', 19)" class="uc">Const</span> <span onmouseout="hideTip(event, 'fs10', 20)" onmouseover="showTip(event, 'fs10', 20)" class="fn">source</span><span class="pn">)</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val view: optic: ((&#39;a -&gt; &#39;a0) -&gt; &#39;b -&gt; &#39;c) -&gt; source: &#39;s -&gt; &#39;a</div>
-<div class="fsdocs-tip" id="fs2">val optic: ((&#39;a -&gt; &#39;a0) -&gt; &#39;b -&gt; &#39;c)</div>
-<div class="fsdocs-tip" id="fs3">val source: &#39;s</div>
+            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs2">module Lens
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Lens functions and operators
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs3">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs4">val view: optic: ((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;&#39;a,&#39;t&gt;) -&gt; source: &#39;s -&gt; &#39;a</div>
+<div class="fsdocs-tip" id="fs5">val optic: ((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;&#39;a,&#39;t&gt;)</div>
+<div class="fsdocs-tip" id="fs6">&#39;a</div>
+<div class="fsdocs-tip" id="fs7">Multiple items<br />union case Const.Const: &#39;t -&gt; Const&lt;&#39;t,&#39;u&gt;<br /><br />--------------------<br />module Const
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on Const
+&lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type Const&lt;&#39;t,&#39;u&gt; =
+  | Const of &#39;t
+  static member ( *&gt; ) : Const&lt;&#39;C,&#39;T&gt; * Const&lt;&#39;C,&#39;U&gt; -&gt; Const&lt;&#39;C,&#39;U&gt; (requires member ``+``)
+  static member (+) : Const&lt;&#39;T,&#39;U&gt; * Const&lt;&#39;T,&#39;U&gt; -&gt; Const&lt;&#39;T,&#39;U&gt; (requires member ``+``)
+  static member (&lt;!&gt;) : (&#39;T -&gt; &#39;U) * Const&lt;&#39;C,&#39;T&gt; -&gt; Const&lt;&#39;C,&#39;U&gt;
+  static member ( &lt;* ) : Const&lt;&#39;C,&#39;U&gt; * Const&lt;&#39;C,&#39;T&gt; -&gt; Const&lt;&#39;C,&#39;U&gt; (requires member ``+``)
+  static member (&lt;*&gt;) : Const&lt;&#39;C,(&#39;T -&gt; &#39;U)&gt; * Const&lt;&#39;C,&#39;T&gt; -&gt; Const&lt;&#39;C,&#39;U&gt; (requires member ``+``)
+  static member Bifold: Const&lt;&#39;T,&#39;V&gt; * f: (&#39;U -&gt; &#39;T -&gt; &#39;U) * (&#39;W -&gt; &#39;V -&gt; &#39;W) * z: &#39;U -&gt; &#39;U
+  static member BifoldBack: Const&lt;&#39;T,&#39;V&gt; * f: (&#39;T -&gt; &#39;U -&gt; &#39;U) * (&#39;V -&gt; &#39;W -&gt; &#39;W) * z: &#39;U -&gt; &#39;U
+  static member BifoldMap: Const&lt;&#39;T,&#39;V&gt; * f: (&#39;T -&gt; &#39;U) * (&#39;V -&gt; &#39;W) -&gt; &#39;U
+  static member Bimap: Const&lt;&#39;T,&#39;V&gt; * f: (&#39;T -&gt; &#39;U) * (&#39;V -&gt; &#39;W) -&gt; Const&lt;&#39;U,&#39;W&gt;
+  static member Bitraverse: Const&lt;&#39;T1,&#39;U1&gt; * f: (&#39;T1 -&gt; &#39;Functor&lt;&#39;T2&gt;) * g: (&#39;U1 -&gt; &#39;Functor&lt;&#39;U2&gt;) -&gt; &#39;Functor&lt;Const&lt;&#39;T2,&#39;U2&gt;&gt; (requires member Map and member Map and member Map)
+  ...<br /><em>&lt;summary&gt; The Const functor, defined as Const&amp;lt;&#39;T, &#39;U&amp;gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
+ &lt;para /&gt;   Useful for: Lens getters.
+ &lt;para /&gt;   Its applicative instance plays a fundamental role in Lens. &lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">&#39;b</div>
+<div class="fsdocs-tip" id="fs9">&#39;t</div>
+<div class="fsdocs-tip" id="fs10">val source: &#39;s</div>
+<div class="fsdocs-tip" id="fs11">&#39;s</div>
+<div class="fsdocs-tip" id="fs12">val run: Const&lt;&#39;c,&#39;d&gt; -&gt; &#39;c</div>
 
         </div>
 

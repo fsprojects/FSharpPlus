@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Array (FSharpPlus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -237,9 +237,17 @@
               Example
             </h5>
             <p class="fsdocs-example" id="example">
-              <pre><code class="">
- &gt; Array.apply [|double; triple|] [|1; 2; 3|];;  
- val it : int [] = [|2; 4; 6; 3; 6; 9|]</code></pre>
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Array</span><span class="pn">.</span><span class="id">apply</span> <span class="pn">[|</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">double</span><span class="pn">;</span> <span class="id">triple</span><span class="pn">|]</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">|]</span><span class="pn">;;</span>  
+ <span class="k">val</span> <span class="id">it</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">int</span> <span class="pn">[</span><span class="pn">]</span> <span class="o">=</span> <span class="pn">[|</span><span class="n">2</span><span class="pn">;</span> <span class="n">4</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">9</span><span class="pn">|]</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">module Array
+
+from Microsoft.FSharp.Collections</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />val double: value: &#39;T -&gt; double (requires member op_Explicit)<br /><br />--------------------<br />type double = System.Double<br /><br />--------------------<br />type double&lt;&#39;Measure&gt; = float&lt;&#39;Measure&gt;</div>
+<div class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+
+
             </p>
           </td>
         </tr>
@@ -467,7 +475,7 @@
             <table class="fsdocs-exception-list">
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
                     ArgumentException
                   </a>
                 </td>

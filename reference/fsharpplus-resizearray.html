@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>ResizeArray (FSharpPlus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -127,7 +127,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '457', 457)" onmouseover="showTip(event, '457', 457)">
+              <code onmouseout="hideTip(event, '459', 459)" onmouseover="showTip(event, '459', 459)">
                 <p>
                   <a id="apply">
                     <a href="#apply">
@@ -136,7 +136,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="457">
+              <div class="fsdocs-tip" id="459">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.apply&#32;<span>f&#32;x</span></span></code>
@@ -237,16 +237,38 @@
               Example
             </h5>
             <p class="fsdocs-example" id="example">
-              <pre><code class="">
- &gt; List.apply [double; triple] [1; 2; 3];;  
- val it : int list = [2; 4; 6; 3; 6; 9]</code></pre>
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">List</span><span class="pn">.</span><span class="id">apply</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">double</span><span class="pn">;</span> <span class="id">triple</span><span class="pn">]</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">]</span><span class="pn">;;</span>  
+ <span class="k">val</span> <span class="id">it</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">int</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">list</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span> <span class="n">4</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">9</span><span class="pn">]</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />val double: value: &#39;T -&gt; double (requires member op_Explicit)<br /><br />--------------------<br />type double = System.Double<br /><br />--------------------<br />type double&lt;&#39;Measure&gt; = float&lt;&#39;Measure&gt;</div>
+<div class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+<div class="fsdocs-tip" id="fs4">type &#39;T list = List&lt;&#39;T&gt;</div>
+
+
             </p>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '458', 458)" onmouseover="showTip(event, '458', 458)">
+              <code onmouseout="hideTip(event, '460', 460)" onmouseover="showTip(event, '460', 460)">
                 <p>
                   <a id="findSliceIndex">
                     <a href="#findSliceIndex">
@@ -255,7 +277,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="458">
+              <div class="fsdocs-tip" id="460">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.findSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -349,7 +371,7 @@
             <table class="fsdocs-exception-list">
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
                     ArgumentException
                   </a>
                 </td>
@@ -365,7 +387,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '459', 459)" onmouseover="showTip(event, '459', 459)">
+              <code onmouseout="hideTip(event, '461', 461)" onmouseover="showTip(event, '461', 461)">
                 <p>
                   <a id="intercalate">
                     <a href="#intercalate">
@@ -374,7 +396,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="459">
+              <div class="fsdocs-tip" id="461">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.intercalate&#32;<span>separator&#32;source</span></span></code>
@@ -461,7 +483,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '460', 460)" onmouseover="showTip(event, '460', 460)">
+              <code onmouseout="hideTip(event, '462', 462)" onmouseover="showTip(event, '462', 462)">
                 <p>
                   <a id="intersperse">
                     <a href="#intersperse">
@@ -470,7 +492,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="460">
+              <div class="fsdocs-tip" id="462">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.intersperse&#32;<span>element&#32;source</span></span></code>
@@ -557,7 +579,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '461', 461)" onmouseover="showTip(event, '461', 461)">
+              <code onmouseout="hideTip(event, '463', 463)" onmouseover="showTip(event, '463', 463)">
                 <p>
                   <a id="lift2">
                     <a href="#lift2">
@@ -566,7 +588,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="461">
+              <div class="fsdocs-tip" id="463">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.lift2&#32;<span>mapping&#32;x1&#32;x2</span></span></code>
@@ -669,7 +691,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '462', 462)" onmouseover="showTip(event, '462', 462)">
+              <code onmouseout="hideTip(event, '464', 464)" onmouseover="showTip(event, '464', 464)">
                 <p>
                   <a id="lift3">
                     <a href="#lift3">
@@ -678,7 +700,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="462">
+              <div class="fsdocs-tip" id="464">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.lift3&#32;<span>mapping&#32;x1&#32;x2&#32;x3</span></span></code>
@@ -824,7 +846,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '463', 463)" onmouseover="showTip(event, '463', 463)">
+              <code onmouseout="hideTip(event, '465', 465)" onmouseover="showTip(event, '465', 465)">
                 <p>
                   <a id="map">
                     <a href="#map">
@@ -833,7 +855,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="463">
+              <div class="fsdocs-tip" id="465">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.map&#32;<span>mapping&#32;source</span></span></code>
@@ -934,7 +956,7 @@
             <table class="fsdocs-exception-list">
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentnullexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">
                     ArgumentNullException
                   </a>
                 </td>
@@ -948,7 +970,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '464', 464)" onmouseover="showTip(event, '464', 464)">
+              <code onmouseout="hideTip(event, '466', 466)" onmouseover="showTip(event, '466', 466)">
                 <p>
                   <a id="map2Shortest">
                     <a href="#map2Shortest">
@@ -957,7 +979,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="464">
+              <div class="fsdocs-tip" id="466">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.map2Shortest&#32;<span>f&#32;a1&#32;a2</span></span></code>
@@ -1059,7 +1081,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '465', 465)" onmouseover="showTip(event, '465', 465)">
+              <code onmouseout="hideTip(event, '467', 467)" onmouseover="showTip(event, '467', 467)">
                 <p>
                   <a id="partitionMap">
                     <a href="#partitionMap">
@@ -1068,7 +1090,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="465">
+              <div class="fsdocs-tip" id="467">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.partitionMap&#32;<span>mapper&#32;source</span></span></code>
@@ -1165,7 +1187,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '466', 466)" onmouseover="showTip(event, '466', 466)">
+              <code onmouseout="hideTip(event, '468', 468)" onmouseover="showTip(event, '468', 468)">
                 <p>
                   <a id="replace">
                     <a href="#replace">
@@ -1174,7 +1196,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="466">
+              <div class="fsdocs-tip" id="468">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.replace&#32;<span>oldValue&#32;newValue&#32;source</span></span></code>
@@ -1277,7 +1299,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '467', 467)" onmouseover="showTip(event, '467', 467)">
+              <code onmouseout="hideTip(event, '469', 469)" onmouseover="showTip(event, '469', 469)">
                 <p>
                   <a id="split">
                     <a href="#split">
@@ -1286,7 +1308,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="467">
+              <div class="fsdocs-tip" id="469">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.split&#32;<span>separators&#32;source</span></span></code>
@@ -1373,7 +1395,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '468', 468)" onmouseover="showTip(event, '468', 468)">
+              <code onmouseout="hideTip(event, '470', 470)" onmouseover="showTip(event, '470', 470)">
                 <p>
                   <a id="tryFindSliceIndex">
                     <a href="#tryFindSliceIndex">
@@ -1382,7 +1404,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="468">
+              <div class="fsdocs-tip" id="470">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.tryFindSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -1479,7 +1501,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '469', 469)" onmouseover="showTip(event, '469', 469)">
+              <code onmouseout="hideTip(event, '471', 471)" onmouseover="showTip(event, '471', 471)">
                 <p>
                   <a id="zipShortest">
                     <a href="#zipShortest">
@@ -1488,7 +1510,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="469">
+              <div class="fsdocs-tip" id="471">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.zipShortest&#32;<span>a1&#32;a2</span></span></code>

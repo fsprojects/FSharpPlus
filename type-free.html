@@ -6,7 +6,7 @@
     <title>Free<'Functor<'T>, 'T&gt;
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -90,82 +97,82 @@
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">System</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">Data</span>
 
 
-<span class="k">type</span> <span class="rt">CommandLineInstruction</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="uc">ReadLine</span>  <span class="k">of</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="rt">string</span> <span class="k">-&gt;</span> <span class="ta">&#39;</span><span class="id">t</span><span class="pn">)</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="uc">WriteLine</span> <span class="k">of</span>  <span onmouseout="hideTip(event, 'fs3', 5)" onmouseover="showTip(event, 'fs3', 5)" class="rt">string</span>  <span class="pn">*</span> <span class="ta">&#39;</span><span class="id">t</span>
-<span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="fn">Map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span>
-        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="fn">x</span> <span class="k">with</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs2', 10)" onmouseover="showTip(event, 'fs2', 10)" class="uc">ReadLine</span>   <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="fn">g</span>     <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs2', 12)" onmouseover="showTip(event, 'fs2', 12)" class="uc">ReadLine</span>  <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="fn">f</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="fn">g</span><span class="pn">)</span>
-        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs4', 15)" onmouseover="showTip(event, 'fs4', 15)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="fn">s</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="fn">g</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs4', 18)" onmouseover="showTip(event, 'fs4', 18)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 19)" onmouseover="showTip(event, 'fs9', 19)" class="fn">s</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs7', 20)" onmouseover="showTip(event, 'fs7', 20)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs10', 21)" onmouseover="showTip(event, 'fs10', 21)" class="fn">g</span><span class="pn">)</span>
+<span class="k">type</span> <span class="rt">CommandLineInstruction</span><span class="pn">&lt;</span><span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">t</span><span class="pn">&gt;</span> <span class="o">=</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="uc">ReadLine</span>  <span class="k">of</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="rt">string</span> <span class="k">-&gt;</span> <span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="id">t</span><span class="pn">)</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="uc">WriteLine</span> <span class="k">of</span>  <span onmouseout="hideTip(event, 'fs6', 10)" onmouseover="showTip(event, 'fs6', 10)" class="rt">string</span>  <span class="pn">*</span> <span class="ta">&#39;</span><span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">t</span>
+<span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="fn">Map</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="fn">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="fn">f</span><span class="pn">)</span> <span class="o">=</span>
+        <span class="k">match</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="fn">x</span> <span class="k">with</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs5', 16)" onmouseover="showTip(event, 'fs5', 16)" class="uc">ReadLine</span>   <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="fn">g</span>     <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs5', 18)" onmouseover="showTip(event, 'fs5', 18)" class="uc">ReadLine</span>  <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 19)" onmouseover="showTip(event, 'fs10', 19)" class="fn">f</span> <span class="o">&lt;&lt;</span> <span onmouseout="hideTip(event, 'fs11', 20)" onmouseover="showTip(event, 'fs11', 20)" class="fn">g</span><span class="pn">)</span>
+        <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs7', 21)" onmouseover="showTip(event, 'fs7', 21)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 22)" onmouseover="showTip(event, 'fs12', 22)" class="fn">s</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs13', 23)" onmouseover="showTip(event, 'fs13', 23)" class="fn">g</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs7', 24)" onmouseover="showTip(event, 'fs7', 24)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 25)" onmouseover="showTip(event, 'fs12', 25)" class="fn">s</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs10', 26)" onmouseover="showTip(event, 'fs10', 26)" class="fn">f</span> <span onmouseout="hideTip(event, 'fs13', 27)" onmouseover="showTip(event, 'fs13', 27)" class="fn">g</span><span class="pn">)</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 22)" onmouseover="showTip(event, 'fs11', 22)" class="id">readLine</span>    <span class="o">=</span> <span class="id">Free</span><span class="pn">.</span><span class="id">liftF</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 23)" onmouseover="showTip(event, 'fs2', 23)" class="id">ReadLine</span> <span onmouseout="hideTip(event, 'fs12', 24)" onmouseover="showTip(event, 'fs12', 24)" class="id">id</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 25)" onmouseover="showTip(event, 'fs13', 25)" class="fn">writeLine</span> <span onmouseout="hideTip(event, 'fs14', 26)" onmouseover="showTip(event, 'fs14', 26)" class="fn">s</span> <span class="o">=</span> <span class="id">Free</span><span class="pn">.</span><span class="id">liftF</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 27)" onmouseover="showTip(event, 'fs4', 27)" class="id">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="id">s</span><span class="pn">,</span> <span class="pn">(</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="id">readLine</span>    <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 29)" onmouseover="showTip(event, 'fs15', 29)" class="m">Free</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="id">liftF</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 31)" onmouseover="showTip(event, 'fs5', 31)" class="uc">ReadLine</span> <span onmouseout="hideTip(event, 'fs17', 32)" onmouseover="showTip(event, 'fs17', 32)" class="fn">id</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 33)" onmouseover="showTip(event, 'fs18', 33)" class="fn">writeLine</span> <span onmouseout="hideTip(event, 'fs12', 34)" onmouseover="showTip(event, 'fs12', 34)" class="fn">s</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 35)" onmouseover="showTip(event, 'fs15', 35)" class="m">Free</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs16', 36)" onmouseover="showTip(event, 'fs16', 36)" class="id">liftF</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 37)" onmouseover="showTip(event, 'fs7', 37)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 38)" onmouseover="showTip(event, 'fs12', 38)" class="fn">s</span><span class="pn">,</span> <span class="pn">(</span><span class="pn">)</span><span class="pn">)</span><span class="pn">)</span>
 
 
-<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs15', 29)" onmouseover="showTip(event, 'fs15', 29)" class="fn">interpretCommandLine</span> <span class="o">=</span> <span class="id">Free</span><span class="pn">.</span><span class="id">run</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="k">function</span>
-    <span class="pn">|</span> <span class="id">Pure</span> <span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="fn">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs16', 31)" onmouseover="showTip(event, 'fs16', 31)" class="fn">x</span>
-    <span class="pn">|</span> <span class="id">Roll</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs2', 32)" onmouseover="showTip(event, 'fs2', 32)" class="uc">ReadLine</span>      <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="fn">next</span><span class="pn">)</span>  <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs18', 34)" onmouseover="showTip(event, 'fs18', 34)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs19', 35)" onmouseover="showTip(event, 'fs19', 35)" class="id">ReadLine</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs17', 36)" onmouseover="showTip(event, 'fs17', 36)" class="fn">next</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 37)" onmouseover="showTip(event, 'fs15', 37)" class="fn">interpretCommandLine</span>
-    <span class="pn">|</span> <span class="id">Roll</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs4', 38)" onmouseover="showTip(event, 'fs4', 38)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 39)" onmouseover="showTip(event, 'fs9', 39)" class="fn">s</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs20', 40)" onmouseover="showTip(event, 'fs20', 40)" class="fn">next</span><span class="pn">)</span><span class="pn">)</span> <span class="k">-&gt;</span>
-        <span onmouseout="hideTip(event, 'fs18', 41)" onmouseover="showTip(event, 'fs18', 41)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 42)" onmouseover="showTip(event, 'fs21', 42)" class="id">WriteLine</span> <span onmouseout="hideTip(event, 'fs9', 43)" onmouseover="showTip(event, 'fs9', 43)" class="fn">s</span>
-        <span onmouseout="hideTip(event, 'fs20', 44)" onmouseover="showTip(event, 'fs20', 44)" class="fn">next</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 45)" onmouseover="showTip(event, 'fs15', 45)" class="fn">interpretCommandLine</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs19', 39)" onmouseover="showTip(event, 'fs19', 39)" class="fn">interpretCommandLine</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 40)" onmouseover="showTip(event, 'fs15', 40)" class="m">Free</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 41)" onmouseover="showTip(event, 'fs20', 41)" class="id">run</span> <span class="o">&gt;</span><span class="pn">&gt;</span> <span class="k">function</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs21', 42)" onmouseover="showTip(event, 'fs21', 42)" class="uc">Pure</span> <span onmouseout="hideTip(event, 'fs22', 43)" onmouseover="showTip(event, 'fs22', 43)" class="fn">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs22', 44)" onmouseover="showTip(event, 'fs22', 44)" class="fn">x</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs23', 45)" onmouseover="showTip(event, 'fs23', 45)" class="uc">Roll</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 46)" onmouseover="showTip(event, 'fs5', 46)" class="uc">ReadLine</span>      <span onmouseout="hideTip(event, 'fs24', 47)" onmouseover="showTip(event, 'fs24', 47)" class="fn">next</span><span class="pn">)</span>  <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs25', 48)" onmouseover="showTip(event, 'fs25', 48)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs26', 49)" onmouseover="showTip(event, 'fs26', 49)" class="id">ReadLine</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs24', 50)" onmouseover="showTip(event, 'fs24', 50)" class="fn">next</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs19', 51)" onmouseover="showTip(event, 'fs19', 51)" class="fn">interpretCommandLine</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs23', 52)" onmouseover="showTip(event, 'fs23', 52)" class="uc">Roll</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 53)" onmouseover="showTip(event, 'fs7', 53)" class="uc">WriteLine</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs12', 54)" onmouseover="showTip(event, 'fs12', 54)" class="fn">s</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs27', 55)" onmouseover="showTip(event, 'fs27', 55)" class="fn">next</span><span class="pn">)</span><span class="pn">)</span> <span class="k">-&gt;</span>
+        <span onmouseout="hideTip(event, 'fs25', 56)" onmouseover="showTip(event, 'fs25', 56)" class="rt">Console</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs28', 57)" onmouseover="showTip(event, 'fs28', 57)" class="id">WriteLine</span> <span onmouseout="hideTip(event, 'fs12', 58)" onmouseover="showTip(event, 'fs12', 58)" class="fn">s</span>
+        <span onmouseout="hideTip(event, 'fs27', 59)" onmouseover="showTip(event, 'fs27', 59)" class="fn">next</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs19', 60)" onmouseover="showTip(event, 'fs19', 60)" class="fn">interpretCommandLine</span>
 
-<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs22', 46)" onmouseover="showTip(event, 'fs22', 46)" class="id">readQuantity</span> <span class="o">=</span> <span class="id">monad</span> <span class="pn">{</span>
-    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs13', 47)" onmouseover="showTip(event, 'fs13', 47)" class="id">writeLine</span> <span class="s">&quot;Please enter number of diners:&quot;</span>
-    <span class="k">let!</span> <span class="id">l</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 48)" onmouseover="showTip(event, 'fs11', 48)" class="id">readLine</span>
-    <span class="k">match</span> <span class="id">tryParse</span> <span class="id">l</span> <span class="k">with</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs23', 49)" onmouseover="showTip(event, 'fs23', 49)" class="id">Some</span> <span class="id">dinerCount</span> <span class="k">-&gt;</span> <span class="k">return</span> <span class="id">dinerCount</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs24', 50)" onmouseover="showTip(event, 'fs24', 50)" class="id">None</span> <span class="k">-&gt;</span>
-        <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs13', 51)" onmouseover="showTip(event, 'fs13', 51)" class="id">writeLine</span> <span class="s">&quot;Not an integer.&quot;</span>
-        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs22', 52)" onmouseover="showTip(event, 'fs22', 52)" class="id">readQuantity</span> <span class="pn">}</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs29', 61)" onmouseover="showTip(event, 'fs29', 61)" class="id">readQuantity</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs30', 62)" onmouseover="showTip(event, 'fs30', 62)" class="id">monad</span> <span class="pn">{</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs18', 63)" onmouseover="showTip(event, 'fs18', 63)" class="fn">writeLine</span> <span class="s">&quot;Please enter number of diners:&quot;</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs31', 64)" onmouseover="showTip(event, 'fs31', 64)" class="fn">l</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 65)" onmouseover="showTip(event, 'fs14', 65)" class="id">readLine</span>
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs32', 66)" onmouseover="showTip(event, 'fs32', 66)" class="fn">tryParse</span> <span onmouseout="hideTip(event, 'fs31', 67)" onmouseover="showTip(event, 'fs31', 67)" class="fn">l</span> <span class="k">with</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs33', 68)" onmouseover="showTip(event, 'fs33', 68)" class="uc">Some</span> <span onmouseout="hideTip(event, 'fs34', 69)" onmouseover="showTip(event, 'fs34', 69)" class="fn">dinerCount</span> <span class="k">-&gt;</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs34', 70)" onmouseover="showTip(event, 'fs34', 70)" class="fn">dinerCount</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs35', 71)" onmouseover="showTip(event, 'fs35', 71)" class="uc">None</span> <span class="k">-&gt;</span>
+        <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs18', 72)" onmouseover="showTip(event, 'fs18', 72)" class="fn">writeLine</span> <span class="s">&quot;Not an integer.&quot;</span>
+        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs29', 73)" onmouseover="showTip(event, 'fs29', 73)" class="id">readQuantity</span> <span class="pn">}</span>
 
-<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs25', 53)" onmouseover="showTip(event, 'fs25', 53)" class="id">readDate</span> <span class="o">=</span> <span class="id">monad</span> <span class="pn">{</span>
-    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs13', 54)" onmouseover="showTip(event, 'fs13', 54)" class="id">writeLine</span> <span class="s">&quot;Please enter your desired date:&quot;</span>
-    <span class="k">let!</span> <span class="id">l</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 55)" onmouseover="showTip(event, 'fs11', 55)" class="id">readLine</span>
-    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs26', 56)" onmouseover="showTip(event, 'fs26', 56)" class="id">DateTimeOffset</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs27', 57)" onmouseover="showTip(event, 'fs27', 57)" class="id">TryParse</span> <span class="id">l</span> <span class="k">with</span>
-    <span class="pn">|</span> <span class="k">true</span><span class="pn">,</span> <span class="id">dt</span> <span class="k">-&gt;</span> <span class="k">return</span> <span class="id">dt</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs36', 74)" onmouseover="showTip(event, 'fs36', 74)" class="id">readDate</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs30', 75)" onmouseover="showTip(event, 'fs30', 75)" class="id">monad</span> <span class="pn">{</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs18', 76)" onmouseover="showTip(event, 'fs18', 76)" class="fn">writeLine</span> <span class="s">&quot;Please enter your desired date:&quot;</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs31', 77)" onmouseover="showTip(event, 'fs31', 77)" class="fn">l</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 78)" onmouseover="showTip(event, 'fs14', 78)" class="id">readLine</span>
+    <span class="k">match</span> <span onmouseout="hideTip(event, 'fs37', 79)" onmouseover="showTip(event, 'fs37', 79)" class="vt">DateTimeOffset</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs38', 80)" onmouseover="showTip(event, 'fs38', 80)" class="id">TryParse</span> <span onmouseout="hideTip(event, 'fs31', 81)" onmouseover="showTip(event, 'fs31', 81)" class="fn">l</span> <span class="k">with</span>
+    <span class="pn">|</span> <span class="k">true</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs39', 82)" onmouseover="showTip(event, 'fs39', 82)" class="fn">dt</span> <span class="k">-&gt;</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs39', 83)" onmouseover="showTip(event, 'fs39', 83)" class="fn">dt</span>
     <span class="pn">|</span> <span class="id">_</span> <span class="k">-&gt;</span>
-        <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs13', 58)" onmouseover="showTip(event, 'fs13', 58)" class="id">writeLine</span> <span class="s">&quot;Not a date.&quot;</span>
-        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs25', 59)" onmouseover="showTip(event, 'fs25', 59)" class="id">readDate</span> <span class="pn">}</span>
+        <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs18', 84)" onmouseover="showTip(event, 'fs18', 84)" class="fn">writeLine</span> <span class="s">&quot;Not a date.&quot;</span>
+        <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs36', 85)" onmouseover="showTip(event, 'fs36', 85)" class="id">readDate</span> <span class="pn">}</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs28', 60)" onmouseover="showTip(event, 'fs28', 60)" class="id">readName</span> <span class="o">=</span> <span class="id">monad</span> <span class="pn">{</span>
-    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs13', 61)" onmouseover="showTip(event, 'fs13', 61)" class="id">writeLine</span> <span class="s">&quot;Please enter your name:&quot;</span>
-    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs11', 62)" onmouseover="showTip(event, 'fs11', 62)" class="id">readLine</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs40', 86)" onmouseover="showTip(event, 'fs40', 86)" class="id">readName</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs30', 87)" onmouseover="showTip(event, 'fs30', 87)" class="id">monad</span> <span class="pn">{</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs18', 88)" onmouseover="showTip(event, 'fs18', 88)" class="fn">writeLine</span> <span class="s">&quot;Please enter your name:&quot;</span>
+    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs14', 89)" onmouseover="showTip(event, 'fs14', 89)" class="id">readLine</span> <span class="pn">}</span>
  
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs29', 63)" onmouseover="showTip(event, 'fs29', 63)" class="id">readEmail</span> <span class="o">=</span> <span class="id">monad</span> <span class="pn">{</span>
-    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs13', 64)" onmouseover="showTip(event, 'fs13', 64)" class="id">writeLine</span> <span class="s">&quot;Please enter your email address:&quot;</span>
-    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs11', 65)" onmouseover="showTip(event, 'fs11', 65)" class="id">readLine</span> <span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs41', 90)" onmouseover="showTip(event, 'fs41', 90)" class="id">readEmail</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs30', 91)" onmouseover="showTip(event, 'fs30', 91)" class="id">monad</span> <span class="pn">{</span>
+    <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs18', 92)" onmouseover="showTip(event, 'fs18', 92)" class="fn">writeLine</span> <span class="s">&quot;Please enter your email address:&quot;</span>
+    <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs14', 93)" onmouseover="showTip(event, 'fs14', 93)" class="id">readLine</span> <span class="pn">}</span>
 
 
 <span class="k">type</span> <span class="rt">Reservation</span> <span class="o">=</span> <span class="pn">{</span>
-    <span onmouseout="hideTip(event, 'fs30', 66)" onmouseover="showTip(event, 'fs30', 66)" class="prop">Date</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs26', 67)" onmouseover="showTip(event, 'fs26', 67)" class="vt">DateTimeOffset</span>
-    <span onmouseout="hideTip(event, 'fs31', 68)" onmouseover="showTip(event, 'fs31', 68)" class="prop">Name</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 69)" onmouseover="showTip(event, 'fs3', 69)" class="rt">string</span>
-    <span onmouseout="hideTip(event, 'fs32', 70)" onmouseover="showTip(event, 'fs32', 70)" class="prop">Email</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 71)" onmouseover="showTip(event, 'fs3', 71)" class="rt">string</span>
-    <span onmouseout="hideTip(event, 'fs33', 72)" onmouseover="showTip(event, 'fs33', 72)" class="prop">Quantity</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs34', 73)" onmouseover="showTip(event, 'fs34', 73)" class="vt">int</span> <span class="pn">}</span>
-    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">Create</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs35', 74)" onmouseover="showTip(event, 'fs35', 74)" class="fn">Quantity</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs36', 75)" onmouseover="showTip(event, 'fs36', 75)" class="fn">Date</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs37', 76)" onmouseover="showTip(event, 'fs37', 76)" class="fn">Name</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs38', 77)" onmouseover="showTip(event, 'fs38', 77)" class="fn">Email</span><span class="pn">)</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs36', 78)" onmouseover="showTip(event, 'fs36', 78)" class="prop">Date</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs36', 79)" onmouseover="showTip(event, 'fs36', 79)" class="fn">Date</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs37', 80)" onmouseover="showTip(event, 'fs37', 80)" class="prop">Name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs37', 81)" onmouseover="showTip(event, 'fs37', 81)" class="fn">Name</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs38', 82)" onmouseover="showTip(event, 'fs38', 82)" class="prop">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs38', 83)" onmouseover="showTip(event, 'fs38', 83)" class="fn">Email</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs35', 84)" onmouseover="showTip(event, 'fs35', 84)" class="prop">Quantity</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs35', 85)" onmouseover="showTip(event, 'fs35', 85)" class="fn">Quantity</span> <span class="pn">}</span>
+    <span onmouseout="hideTip(event, 'fs42', 94)" onmouseover="showTip(event, 'fs42', 94)" class="prop">Date</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs37', 95)" onmouseover="showTip(event, 'fs37', 95)" class="vt">DateTimeOffset</span>
+    <span onmouseout="hideTip(event, 'fs43', 96)" onmouseover="showTip(event, 'fs43', 96)" class="prop">Name</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs6', 97)" onmouseover="showTip(event, 'fs6', 97)" class="rt">string</span>
+    <span onmouseout="hideTip(event, 'fs44', 98)" onmouseover="showTip(event, 'fs44', 98)" class="prop">Email</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs6', 99)" onmouseover="showTip(event, 'fs6', 99)" class="rt">string</span>
+    <span onmouseout="hideTip(event, 'fs45', 100)" onmouseover="showTip(event, 'fs45', 100)" class="prop">Quantity</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs46', 101)" onmouseover="showTip(event, 'fs46', 101)" class="vt">int</span> <span class="pn">}</span>
+    <span class="k">with</span> <span class="k">static</span> <span class="k">member</span> <span class="fn">Create</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs47', 102)" onmouseover="showTip(event, 'fs47', 102)" class="fn">Quantity</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs48', 103)" onmouseover="showTip(event, 'fs48', 103)" class="fn">Date</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs49', 104)" onmouseover="showTip(event, 'fs49', 104)" class="fn">Name</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs50', 105)" onmouseover="showTip(event, 'fs50', 105)" class="fn">Email</span><span class="pn">)</span> <span class="o">=</span> <span class="pn">{</span> <span onmouseout="hideTip(event, 'fs48', 106)" onmouseover="showTip(event, 'fs48', 106)" class="prop">Date</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs48', 107)" onmouseover="showTip(event, 'fs48', 107)" class="fn">Date</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs49', 108)" onmouseover="showTip(event, 'fs49', 108)" class="prop">Name</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs49', 109)" onmouseover="showTip(event, 'fs49', 109)" class="fn">Name</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs50', 110)" onmouseover="showTip(event, 'fs50', 110)" class="prop">Email</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs50', 111)" onmouseover="showTip(event, 'fs50', 111)" class="fn">Email</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs47', 112)" onmouseover="showTip(event, 'fs47', 112)" class="prop">Quantity</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs47', 113)" onmouseover="showTip(event, 'fs47', 113)" class="fn">Quantity</span> <span class="pn">}</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs39', 86)" onmouseover="showTip(event, 'fs39', 86)" class="id">readReservationRequest</span> <span class="o">=</span>
-    <span class="id">curryN</span> <span onmouseout="hideTip(event, 'fs40', 87)" onmouseover="showTip(event, 'fs40', 87)" class="id">Reservation</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs41', 88)" onmouseover="showTip(event, 'fs41', 88)" class="id">Create</span>
-    <span class="pn">&lt;!&gt;</span> <span onmouseout="hideTip(event, 'fs22', 89)" onmouseover="showTip(event, 'fs22', 89)" class="id">readQuantity</span>
-    <span class="pn">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs25', 90)" onmouseover="showTip(event, 'fs25', 90)" class="id">readDate</span>
-    <span class="pn">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs28', 91)" onmouseover="showTip(event, 'fs28', 91)" class="id">readName</span>
-    <span class="pn">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs29', 92)" onmouseover="showTip(event, 'fs29', 92)" class="id">readEmail</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs51', 114)" onmouseover="showTip(event, 'fs51', 114)" class="id">readReservationRequest</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs52', 115)" onmouseover="showTip(event, 'fs52', 115)" class="fn">curryN</span> <span onmouseout="hideTip(event, 'fs53', 116)" onmouseover="showTip(event, 'fs53', 116)" class="rt">Reservation</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs54', 117)" onmouseover="showTip(event, 'fs54', 117)" class="id">Create</span>
+    <span class="o">&lt;!&gt;</span> <span onmouseout="hideTip(event, 'fs29', 118)" onmouseover="showTip(event, 'fs29', 118)" class="id">readQuantity</span>
+    <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs36', 119)" onmouseover="showTip(event, 'fs36', 119)" class="id">readDate</span>
+    <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs40', 120)" onmouseover="showTip(event, 'fs40', 120)" class="id">readName</span>
+    <span class="o">&lt;*&gt;</span> <span onmouseout="hideTip(event, 'fs41', 121)" onmouseover="showTip(event, 'fs41', 121)" class="id">readEmail</span>
 
 
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs42', 93)" onmouseover="showTip(event, 'fs42', 93)" class="fn">mainFunc</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
-    <span onmouseout="hideTip(event, 'fs39', 94)" onmouseover="showTip(event, 'fs39', 94)" class="id">readReservationRequest</span>
-    <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs13', 95)" onmouseover="showTip(event, 'fs13', 95)" class="fn">writeLine</span> <span class="o">&lt;&lt;</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs43', 96)" onmouseover="showTip(event, 'fs43', 96)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s">&quot;</span><span class="pn">)</span><span class="pn">)</span>
-    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs15', 97)" onmouseover="showTip(event, 'fs15', 97)" class="fn">interpretCommandLine</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs55', 122)" onmouseover="showTip(event, 'fs55', 122)" class="fn">mainFunc</span> <span class="pn">(</span><span class="pn">)</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs51', 123)" onmouseover="showTip(event, 'fs51', 123)" class="id">readReservationRequest</span>
+    <span class="o">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs18', 124)" onmouseover="showTip(event, 'fs18', 124)" class="fn">writeLine</span> <span class="o">&lt;&lt;</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs56', 125)" onmouseover="showTip(event, 'fs56', 125)" class="fn">sprintf</span> <span class="s">&quot;</span><span class="pf">%A</span><span class="s">&quot;</span><span class="pn">)</span><span class="pn">)</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs19', 126)" onmouseover="showTip(event, 'fs19', 126)" class="fn">interpretCommandLine</span>
     <span class="n">0</span>
 </code></pre>
-<h2><a name="More-reading" class="anchor" href="#More-reading">More reading</a></h2>
+<h2><a name="Recommended-reading" class="anchor" href="#Recommended-reading">Recommended reading</a></h2>
 <ul>
 <li>
-<p>Highly recommended Matt Thornton's blog <a href="https://dev.to/choc13/grokking-free-monads-9jd">Grokking Free monads</a> and <a href="https://dev.to/choc13/interpreting-free-monads-3l3e">Interpreting Free Monads</a>.
+<p>Highly recommended Matt Thornton's blog <a href="https://dev.to/choc13/grokking-free-monads-9jd">Grokking Free Monads</a> and <a href="https://dev.to/choc13/interpreting-free-monads-3l3e">Interpreting Free Monads</a>.
 It contains examples using F#+ and an explanation from scratch.</p>
 </li>
 <li>
@@ -177,12 +184,19 @@ Anyways some code from those series (like the above fragment) can be found in <a
 </ul>
 
             <div class="fsdocs-tip" id="fs1">namespace System</div>
-<div class="fsdocs-tip" id="fs2">union case CommandLineInstruction.ReadLine: (string -&gt; &#39;t) -&gt; CommandLineInstruction&lt;&#39;t&gt;</div>
-<div class="fsdocs-tip" id="fs3">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs4">union case CommandLineInstruction.WriteLine: string * &#39;t -&gt; CommandLineInstruction&lt;&#39;t&gt;</div>
-<div class="fsdocs-tip" id="fs5">Multiple items<br />module Map
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs3">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs4">&#39;t</div>
+<div class="fsdocs-tip" id="fs5">union case CommandLineInstruction.ReadLine: (string -&gt; &#39;t) -&gt; CommandLineInstruction&lt;&#39;t&gt;</div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />val string: value: &#39;T -&gt; string<br /><br />--------------------<br />type string = String</div>
+<div class="fsdocs-tip" id="fs7">union case CommandLineInstruction.WriteLine: string * &#39;t -&gt; CommandLineInstruction&lt;&#39;t&gt;</div>
+<div class="fsdocs-tip" id="fs8">Multiple items<br />module Map
 
-from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.FSharpMap`2&quot; /&gt;.&lt;/summary&gt;</em><br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Map&amp;lt;&#39;Key, &#39;Value&amp;gt;
+&lt;/summary&gt;</em><br /><br />--------------------<br />module Map
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&lt;&#39;Key,&#39;Value (requires comparison)&gt; =
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
@@ -193,26 +207,36 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
   new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><em>&lt;summary&gt;Immutable maps based on binary trees, where keys are ordered by F# generic comparison. By default
- comparison is the F# structural comparison function or uses implementations of the IComparable interface on key values.&lt;/summary&gt;<br />&lt;remarks&gt;See the &lt;see cref=&quot;T:Microsoft.FSharp.Collections.MapModule&quot; /&gt; module for further operations on maps.
+  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+<div class="fsdocs-tip" id="fs9">val x: CommandLineInstruction&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs10">val f: (&#39;a -&gt; &#39;b)</div>
+<div class="fsdocs-tip" id="fs11">val g: (string -&gt; &#39;a)</div>
+<div class="fsdocs-tip" id="fs12">val s: string</div>
+<div class="fsdocs-tip" id="fs13">val g: &#39;a</div>
+<div class="fsdocs-tip" id="fs14">val readLine: Free&lt;CommandLineInstruction&lt;string&gt;,string&gt;</div>
+<div class="fsdocs-tip" id="fs15">Multiple items<br />module Free
 
- All members of this class are thread-safe and may be used concurrently from multiple threads.&lt;/remarks&gt;</em><br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
-<div class="fsdocs-tip" id="fs6">val x: CommandLineInstruction&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs7">val f: (&#39;a -&gt; &#39;b)</div>
-<div class="fsdocs-tip" id="fs8">val g: (string -&gt; &#39;a)</div>
-<div class="fsdocs-tip" id="fs9">val s: string</div>
-<div class="fsdocs-tip" id="fs10">val g: &#39;a</div>
-<div class="fsdocs-tip" id="fs11">val readLine: obj</div>
-<div class="fsdocs-tip" id="fs12">val id: x: &#39;T -&gt; &#39;T<br /><em>&lt;summary&gt;The identity function&lt;/summary&gt;<br />&lt;param name=&quot;x&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The same value.&lt;/returns&gt;<br />&lt;example id=&quot;id-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- id 12     //  Evaulates to 12
- id &quot;abc&quot;  //  Evaulates to &quot;abc&quot;
- &lt;/code&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs13">val writeLine: s: &#39;a -&gt; &#39;b</div>
-<div class="fsdocs-tip" id="fs14">val s: &#39;a</div>
-<div class="fsdocs-tip" id="fs15">val interpretCommandLine: (obj -&gt; unit)</div>
-<div class="fsdocs-tip" id="fs16">val x: unit</div>
-<div class="fsdocs-tip" id="fs17">val next: (string -&gt; obj)</div>
-<div class="fsdocs-tip" id="fs18">type Console =
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on Free Monads
+&lt;/summary&gt;</em><br /><br />--------------------<br />type Free&lt;&#39;functor&lt;&#39;t&gt;,&#39;t&gt; =
+  | Pure of &#39;t
+  | Roll of obj
+  static member (&lt;*&gt;) : f: Free&lt;&#39;Functor&lt;&#39;T-&gt;&#39;U&gt;,(&#39;T -&gt; &#39;U)&gt; * x: Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;&#39;Functor&lt;&#39;U&gt;,&#39;U&gt; (requires member Map and member Map and member Map and member Map and member Map)
+  static member (&gt;&gt;=) : x: Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; * f: (&#39;T -&gt; Free&lt;&#39;Functor&lt;&#39;U&gt;,&#39;U&gt;) -&gt; Free&lt;&#39;Functor&lt;&#39;U&gt;,&#39;U&gt; (requires member Map and member Map and member Map)
+  static member Delay: x: (unit -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;) -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;
+  static member Return: x: &#39;a2 -&gt; Free&lt;&#39;a3,&#39;a2&gt;</div>
+<div class="fsdocs-tip" id="fs16">val liftF: x: &#39;Functor&lt;&#39;T&gt; -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; (requires member Map and member Map)<br /><em>&lt;summary&gt;
+ Lift any Functor into a Free structure
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs17">val id: x: &#39;T -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs18">val writeLine: s: string -&gt; Free&lt;CommandLineInstruction&lt;unit&gt;,unit&gt;</div>
+<div class="fsdocs-tip" id="fs19">val interpretCommandLine: (Free&lt;CommandLineInstruction&lt;unit&gt;,unit&gt; -&gt; unit)</div>
+<div class="fsdocs-tip" id="fs20">val run: f: Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Choice&lt;&#39;T,&#39;Functor&lt;Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;&gt;&gt; (requires member Map)</div>
+<div class="fsdocs-tip" id="fs21">Multiple items<br />union case Free.Pure: &#39;t -&gt; Free&lt;&#39;functor&lt;&#39;t&gt;,&#39;t&gt;<br /><br />--------------------<br />active recognizer Pure: Choice&lt;&#39;a,&#39;b&gt; -&gt; Choice&lt;&#39;a,&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs22">val x: unit</div>
+<div class="fsdocs-tip" id="fs23">Multiple items<br />val Roll: f: &#39;Functor&lt;Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;&gt; -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; (requires member Map)<br /><br />--------------------<br />active recognizer Roll: Choice&lt;&#39;a,&#39;b&gt; -&gt; Choice&lt;&#39;a,&#39;b&gt;</div>
+<div class="fsdocs-tip" id="fs24">val next: (string -&gt; Free&lt;CommandLineInstruction&lt;unit&gt;,unit&gt;)</div>
+<div class="fsdocs-tip" id="fs25">type Console =
   static member Beep: unit -&gt; unit + 1 overload
   static member Clear: unit -&gt; unit
   static member GetCursorPosition: unit -&gt; struct (int * int)
@@ -224,14 +248,22 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
   static member ReadKey: unit -&gt; ConsoleKeyInfo + 1 overload
   static member ReadLine: unit -&gt; string
   ...<br /><em>&lt;summary&gt;Represents the standard input, output, and error streams for console applications. This class cannot be inherited.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs19">Console.ReadLine() : string</div>
-<div class="fsdocs-tip" id="fs20">val next: obj</div>
-<div class="fsdocs-tip" id="fs21">Console.WriteLine() : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: uint64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: uint32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: string) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: float32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: obj) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: float) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: decimal) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
-<div class="fsdocs-tip" id="fs22">val readQuantity: obj</div>
-<div class="fsdocs-tip" id="fs23">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;Value of type &#39;T&quot;&lt;/summary&gt;<br />&lt;param name=&quot;Value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;An option representing the value.&lt;/returns&gt;</em></div>
-<div class="fsdocs-tip" id="fs24">union case Option.None: Option&lt;&#39;T&gt;<br /><em>&lt;summary&gt;The representation of &quot;No value&quot;&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs25">val readDate: obj</div>
-<div class="fsdocs-tip" id="fs26">Multiple items<br />[&lt;Struct&gt;]
+<div class="fsdocs-tip" id="fs26">Console.ReadLine() : string</div>
+<div class="fsdocs-tip" id="fs27">val next: Free&lt;CommandLineInstruction&lt;unit&gt;,unit&gt;</div>
+<div class="fsdocs-tip" id="fs28">Console.WriteLine() : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: uint64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: uint32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: string) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: float32) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: obj) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: int64) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: int) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: float) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />Console.WriteLine(value: decimal) : unit<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+<div class="fsdocs-tip" id="fs29">val readQuantity: Free&lt;CommandLineInstruction&lt;int&gt;,int&gt;</div>
+<div class="fsdocs-tip" id="fs30">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs31">val l: string</div>
+<div class="fsdocs-tip" id="fs32">val tryParse: value: string -&gt; &#39;T option (requires member TryParse)<br /><em>&lt;summary&gt;
+ Converts to a value from its string representation. Returns None if the convertion doesn&#39;t succeed.
+ &lt;/summary&gt;<br />&lt;category index=&quot;21&quot;&gt;Converter&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs33">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs34">val dinerCount: int</div>
+<div class="fsdocs-tip" id="fs35">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs36">val readDate: Free&lt;CommandLineInstruction&lt;DateTimeOffset&gt;,DateTimeOffset&gt;</div>
+<div class="fsdocs-tip" id="fs37">Multiple items<br />[&lt;Struct&gt;]
 type DateTimeOffset =
   new: dateTime: DateTime -&gt; unit + 7 overloads
   member Add: timeSpan: TimeSpan -&gt; DateTimeOffset
@@ -244,28 +276,25 @@ type DateTimeOffset =
   member AddSeconds: seconds: float -&gt; DateTimeOffset
   member AddTicks: ticks: int64 -&gt; DateTimeOffset
   ...<br /><em>&lt;summary&gt;Represents a point in time, typically expressed as a date and time of day, relative to Coordinated Universal Time (UTC).&lt;/summary&gt;</em><br /><br />--------------------<br />DateTimeOffset ()<br />DateTimeOffset(dateTime: DateTime) : DateTimeOffset<br />DateTimeOffset(dateTime: DateTime, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(ticks: int64, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, calendar: Globalization.Calendar, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, microsecond: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, microsecond: int, calendar: Globalization.Calendar, offset: TimeSpan) : DateTimeOffset</div>
-<div class="fsdocs-tip" id="fs27">DateTimeOffset.TryParse(input: string, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: ReadOnlySpan&lt;char&gt;, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(s: string, provider: IFormatProvider, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(s: ReadOnlySpan&lt;char&gt;, provider: IFormatProvider, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: string, formatProvider: IFormatProvider, styles: Globalization.DateTimeStyles, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: ReadOnlySpan&lt;char&gt;, formatProvider: IFormatProvider, styles: Globalization.DateTimeStyles, result: byref&lt;DateTimeOffset&gt;) : bool</div>
-<div class="fsdocs-tip" id="fs28">val readName: obj</div>
-<div class="fsdocs-tip" id="fs29">val readEmail: obj</div>
-<div class="fsdocs-tip" id="fs30">Reservation.Date: DateTimeOffset</div>
-<div class="fsdocs-tip" id="fs31">Reservation.Name: string</div>
-<div class="fsdocs-tip" id="fs32">Reservation.Email: string</div>
-<div class="fsdocs-tip" id="fs33">Reservation.Quantity: int</div>
-<div class="fsdocs-tip" id="fs34">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
- primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
- with InvariantCulture settings. Otherwise the operation requires an appropriate
- static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
-type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
-  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
- of measure is erased in compiled code and when values of this type
- are analyzed using reflection. The type is representationally equivalent to
- &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs35">val Quantity: int</div>
-<div class="fsdocs-tip" id="fs36">val Date: DateTimeOffset</div>
-<div class="fsdocs-tip" id="fs37">val Name: string</div>
-<div class="fsdocs-tip" id="fs38">val Email: string</div>
-<div class="fsdocs-tip" id="fs39">val readReservationRequest: obj</div>
-<div class="fsdocs-tip" id="fs40">type Reservation =
+<div class="fsdocs-tip" id="fs38">DateTimeOffset.TryParse(input: string, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: ReadOnlySpan&lt;char&gt;, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(s: string, provider: IFormatProvider, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(s: ReadOnlySpan&lt;char&gt;, provider: IFormatProvider, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: string, formatProvider: IFormatProvider, styles: Globalization.DateTimeStyles, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: ReadOnlySpan&lt;char&gt;, formatProvider: IFormatProvider, styles: Globalization.DateTimeStyles, result: byref&lt;DateTimeOffset&gt;) : bool</div>
+<div class="fsdocs-tip" id="fs39">val dt: DateTimeOffset</div>
+<div class="fsdocs-tip" id="fs40">val readName: Free&lt;CommandLineInstruction&lt;string&gt;,string&gt;</div>
+<div class="fsdocs-tip" id="fs41">val readEmail: Free&lt;CommandLineInstruction&lt;string&gt;,string&gt;</div>
+<div class="fsdocs-tip" id="fs42">Reservation.Date: DateTimeOffset</div>
+<div class="fsdocs-tip" id="fs43">Reservation.Name: string</div>
+<div class="fsdocs-tip" id="fs44">Reservation.Email: string</div>
+<div class="fsdocs-tip" id="fs45">Reservation.Quantity: int</div>
+<div class="fsdocs-tip" id="fs46">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+<div class="fsdocs-tip" id="fs47">val Quantity: int</div>
+<div class="fsdocs-tip" id="fs48">val Date: DateTimeOffset</div>
+<div class="fsdocs-tip" id="fs49">val Name: string</div>
+<div class="fsdocs-tip" id="fs50">val Email: string</div>
+<div class="fsdocs-tip" id="fs51">val readReservationRequest: Free&lt;CommandLineInstruction&lt;Reservation&gt;,Reservation&gt;</div>
+<div class="fsdocs-tip" id="fs52">val curryN: f: (&#39;T1 * ^T2 * ... * ^Tn -&gt; &#39;Result) -&gt; t: &#39;T1 -&gt; &#39;T2 -&gt; ... -&gt; &#39;Tn -&gt; &#39;Result (requires member Curry)<br /><em>&lt;summary&gt;
+ Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
+ &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs53">type Reservation =
   {
     Date: DateTimeOffset
     Name: string
@@ -273,9 +302,9 @@ type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;se
     Quantity: int
   }
   static member Create: Quantity: int * Date: DateTimeOffset * Name: string * Email: string -&gt; Reservation</div>
-<div class="fsdocs-tip" id="fs41">static member Reservation.Create: Quantity: int * Date: DateTimeOffset * Name: string * Email: string -&gt; Reservation</div>
-<div class="fsdocs-tip" id="fs42">val mainFunc: unit -&gt; int</div>
-<div class="fsdocs-tip" id="fs43">val sprintf: format: Printf.StringFormat&lt;&#39;T&gt; -&gt; &#39;T<br /><em>&lt;summary&gt;Print to a string using the given format.&lt;/summary&gt;<br />&lt;param name=&quot;format&quot;&gt;The formatter.&lt;/param&gt;<br />&lt;returns&gt;The formatted result.&lt;/returns&gt;<br />&lt;example&gt;See &lt;c&gt;Printf.sprintf&lt;/c&gt; (link: &lt;see cref=&quot;M:Microsoft.FSharp.Core.PrintfModule.PrintFormatToStringThen``1&quot; /&gt;) for examples.&lt;/example&gt;</em></div>
+<div class="fsdocs-tip" id="fs54">static member Reservation.Create: Quantity: int * Date: DateTimeOffset * Name: string * Email: string -&gt; Reservation</div>
+<div class="fsdocs-tip" id="fs55">val mainFunc: unit -&gt; int</div>
+<div class="fsdocs-tip" id="fs56">val sprintf: format: Printf.StringFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
 
         </div>
 

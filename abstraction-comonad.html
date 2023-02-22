@@ -6,7 +6,7 @@
     <title>Comonad
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -124,51 +131,58 @@
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">Data</span>
 
 <span class="c">// A non-empty list</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">lst</span>   <span class="o">=</span> <span class="pn">{</span><span class="id">Head</span> <span class="o">=</span> <span class="n">1</span><span class="pn">;</span> <span class="id">Tail</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">}</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">lst</span>   <span class="o">=</span> <span class="pn">{</span><span class="prop">Head</span> <span class="o">=</span> <span class="n">1</span><span class="pn">;</span> <span class="prop">Tail</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">;</span><span class="n">5</span><span class="pn">]</span><span class="pn">}</span>
 
 <span class="c">// Get the head</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">elem1</span> <span class="o">=</span> <span class="id">extract</span>   <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="id">lst</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">elem1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="fn">extract</span>   <span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="id">lst</span>
 
 <span class="c">// Get ALL tails</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">tails</span> <span class="o">=</span> <span class="id">duplicate</span> <span onmouseout="hideTip(event, 'fs2', 6)" onmouseover="showTip(event, 'fs2', 6)" class="id">lst</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="id">tails</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="fn">duplicate</span> <span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">lst</span>
 
 <span class="c">// This should return the original list</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="id">lst&#39;</span>  <span class="o">=</span> <span class="id">extend</span> <span class="id">extract</span> <span onmouseout="hideTip(event, 'fs2', 8)" onmouseover="showTip(event, 'fs2', 8)" class="id">lst</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="id">lst&#39;</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="fn">extend</span> <span onmouseout="hideTip(event, 'fs6', 14)" onmouseover="showTip(event, 'fs6', 14)" class="fn">extract</span> <span onmouseout="hideTip(event, 'fs4', 15)" onmouseover="showTip(event, 'fs4', 15)" class="id">lst</span>
 
 
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 9)" onmouseover="showTip(event, 'fs6', 9)" class="id">ct1</span> <span class="o">=</span> <span class="id">duplicate</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span> <span class="c">// val it : List&lt;List&lt;int&gt;&gt; = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="id">ct2</span> <span class="o">=</span> <span class="id">duplicate</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span> <span class="c">// val it : string * (string * int) = (&quot;a&quot;, (&quot;a&quot;, 10))</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="fn">ct3</span> <span class="o">=</span> <span class="id">duplicate</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="id">string</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 14)" onmouseover="showTip(event, 'fs11', 14)" class="id">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="id">Parse</span> <span class="id">x</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 16)" onmouseover="showTip(event, 'fs13', 16)" class="id">r80100</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 17)" onmouseover="showTip(event, 'fs8', 17)" class="fn">ct3</span> <span class="s">&quot;80&quot;</span> <span class="s">&quot;100&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 16)" onmouseover="showTip(event, 'fs11', 16)" class="id">ct1</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 17)" onmouseover="showTip(event, 'fs8', 17)" class="fn">duplicate</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span> <span class="c">// val it : List&lt;List&lt;int&gt;&gt; = [[1; 2; 3; 4]; [2; 3; 4]; [3; 4]; [4]]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="id">ct2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 19)" onmouseover="showTip(event, 'fs8', 19)" class="fn">duplicate</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span> <span class="c">// val it : string * (string * int) = (&quot;a&quot;, (&quot;a&quot;, 10))</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="fn">ct3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 21)" onmouseover="showTip(event, 'fs8', 21)" class="fn">duplicate</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs14', 22)" onmouseover="showTip(event, 'fs14', 22)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs15', 23)" onmouseover="showTip(event, 'fs15', 23)" class="rt">string</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="vt">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 26)" onmouseover="showTip(event, 'fs18', 26)" class="id">Parse</span> <span onmouseout="hideTip(event, 'fs14', 27)" onmouseover="showTip(event, 'fs14', 27)" class="fn">x</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs19', 28)" onmouseover="showTip(event, 'fs19', 28)" class="id">r80100</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs13', 29)" onmouseover="showTip(event, 'fs13', 29)" class="fn">ct3</span> <span class="s">&quot;80&quot;</span> <span class="s">&quot;100&quot;</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 18)" onmouseover="showTip(event, 'fs14', 18)" class="id">ct1&#39;</span> <span class="o">=</span> <span class="id">extend</span> <span onmouseout="hideTip(event, 'fs1', 19)" onmouseover="showTip(event, 'fs1', 19)" class="id">id</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 20)" onmouseover="showTip(event, 'fs15', 20)" class="id">ct2&#39;</span> <span class="o">=</span> <span class="id">extend</span> <span onmouseout="hideTip(event, 'fs1', 21)" onmouseover="showTip(event, 'fs1', 21)" class="id">id</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs16', 22)" onmouseover="showTip(event, 'fs16', 22)" class="id">ct3&#39;</span> <span class="o">=</span> <span class="id">extend</span> <span onmouseout="hideTip(event, 'fs1', 23)" onmouseover="showTip(event, 'fs1', 23)" class="id">id</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs9', 24)" onmouseover="showTip(event, 'fs9', 24)" class="id">string</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 25)" onmouseover="showTip(event, 'fs10', 25)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 26)" onmouseover="showTip(event, 'fs11', 26)" class="id">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 27)" onmouseover="showTip(event, 'fs12', 27)" class="id">Parse</span> <span class="id">x</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 30)" onmouseover="showTip(event, 'fs20', 30)" class="id">ct1&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 31)" onmouseover="showTip(event, 'fs10', 31)" class="fn">extend</span> <span onmouseout="hideTip(event, 'fs1', 32)" onmouseover="showTip(event, 'fs1', 32)" class="fn">id</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs21', 33)" onmouseover="showTip(event, 'fs21', 33)" class="id">ct2&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 34)" onmouseover="showTip(event, 'fs10', 34)" class="fn">extend</span> <span onmouseout="hideTip(event, 'fs1', 35)" onmouseover="showTip(event, 'fs1', 35)" class="fn">id</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 36)" onmouseover="showTip(event, 'fs22', 36)" class="fn">ct3&#39;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs10', 37)" onmouseover="showTip(event, 'fs10', 37)" class="fn">extend</span> <span onmouseout="hideTip(event, 'fs1', 38)" onmouseover="showTip(event, 'fs1', 38)" class="fn">id</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs14', 39)" onmouseover="showTip(event, 'fs14', 39)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs15', 40)" onmouseover="showTip(event, 'fs15', 40)" class="rt">string</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs16', 41)" onmouseover="showTip(event, 'fs16', 41)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 42)" onmouseover="showTip(event, 'fs17', 42)" class="vt">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 43)" onmouseover="showTip(event, 'fs18', 43)" class="id">Parse</span> <span onmouseout="hideTip(event, 'fs14', 44)" onmouseover="showTip(event, 'fs14', 44)" class="fn">x</span><span class="pn">)</span>
 
-<span class="k">let</span> <span class="id">ct1&#39;&#39;</span> <span class="o">=</span> <span class="pn">(</span><span class="pn">=&gt;&gt;</span><span class="pn">)</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span> <span onmouseout="hideTip(event, 'fs1', 28)" onmouseover="showTip(event, 'fs1', 28)" class="fn">id</span>
-<span class="k">let</span> <span class="id">ct2&#39;&#39;</span> <span class="o">=</span> <span class="pn">(</span><span class="pn">=&gt;&gt;</span><span class="pn">)</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs1', 29)" onmouseover="showTip(event, 'fs1', 29)" class="fn">id</span>
-<span class="k">let</span> <span class="id">ct3&#39;&#39;</span> <span class="o">=</span> <span class="pn">(</span><span class="pn">=&gt;&gt;</span><span class="pn">)</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs17', 30)" onmouseover="showTip(event, 'fs17', 30)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs9', 31)" onmouseover="showTip(event, 'fs9', 31)" class="rt">string</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 32)" onmouseover="showTip(event, 'fs10', 32)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 33)" onmouseover="showTip(event, 'fs11', 33)" class="vt">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 34)" onmouseover="showTip(event, 'fs12', 34)" class="id">Parse</span> <span onmouseout="hideTip(event, 'fs17', 35)" onmouseover="showTip(event, 'fs17', 35)" class="fn">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs1', 36)" onmouseover="showTip(event, 'fs1', 36)" class="fn">id</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 45)" onmouseover="showTip(event, 'fs23', 45)" class="id">ct1&#39;&#39;</span> <span class="o">=</span> <span class="pn">(</span><span class="o">=&gt;&gt;</span><span class="pn">)</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">;</span><span class="n">4</span><span class="pn">]</span> <span onmouseout="hideTip(event, 'fs1', 46)" onmouseover="showTip(event, 'fs1', 46)" class="fn">id</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 47)" onmouseover="showTip(event, 'fs24', 47)" class="id">ct2&#39;&#39;</span> <span class="o">=</span> <span class="pn">(</span><span class="o">=&gt;&gt;</span><span class="pn">)</span> <span class="pn">(</span><span class="s">&quot;a&quot;</span><span class="pn">,</span> <span class="n">10</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs1', 48)" onmouseover="showTip(event, 'fs1', 48)" class="fn">id</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs25', 49)" onmouseover="showTip(event, 'fs25', 49)" class="fn">ct3&#39;&#39;</span> <span class="o">=</span> <span class="pn">(</span><span class="o">=&gt;&gt;</span><span class="pn">)</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs14', 50)" onmouseover="showTip(event, 'fs14', 50)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs15', 51)" onmouseover="showTip(event, 'fs15', 51)" class="rt">string</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs16', 52)" onmouseover="showTip(event, 'fs16', 52)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 53)" onmouseover="showTip(event, 'fs17', 53)" class="vt">Int32</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 54)" onmouseover="showTip(event, 'fs18', 54)" class="id">Parse</span> <span onmouseout="hideTip(event, 'fs14', 55)" onmouseover="showTip(event, 'fs14', 55)" class="fn">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs1', 56)" onmouseover="showTip(event, 'fs1', 56)" class="fn">id</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T<br /><em>&lt;summary&gt;The identity function&lt;/summary&gt;<br />&lt;param name=&quot;x&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The same value.&lt;/returns&gt;<br />&lt;example id=&quot;id-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- id 12     //  Evaulates to 12
- id &quot;abc&quot;  //  Evaulates to &quot;abc&quot;
- &lt;/code&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs2">val lst: obj</div>
-<div class="fsdocs-tip" id="fs3">val elem1: obj</div>
-<div class="fsdocs-tip" id="fs4">val tails: obj</div>
-<div class="fsdocs-tip" id="fs5">val lst&#39;: obj</div>
-<div class="fsdocs-tip" id="fs6">val ct1: obj</div>
-<div class="fsdocs-tip" id="fs7">val ct2: obj</div>
-<div class="fsdocs-tip" id="fs8">val ct3: (string -&gt; string -&gt; obj)</div>
-<div class="fsdocs-tip" id="fs9">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = System.String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs10">namespace System</div>
-<div class="fsdocs-tip" id="fs11">[&lt;Struct&gt;]
+            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs3">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs4">val lst: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs5">val elem1: int</div>
+<div class="fsdocs-tip" id="fs6">val extract: x: &#39;Comonad&lt;&#39;T&gt; -&gt; &#39;T (requires member Extract)<br /><em>&lt;summary&gt;
+ Extracts a value from a comonadic context.
+ &lt;/summary&gt;<br />&lt;category index=&quot;17&quot;&gt;Comonads&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs7">val tails: NonEmptyList&lt;NonEmptyList&lt;int&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs8">val duplicate: x: &#39;Comonad&lt;&#39;T&gt; -&gt; &#39;Comonad&lt;&#39;Comonad&lt;&#39;T&gt;&gt; (requires member Duplicate)<br /><em>&lt;summary&gt;
+ Duplicates a comonadic context.
+ &lt;/summary&gt;<br />&lt;category index=&quot;17&quot;&gt;Comonads&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs9">val lst&#39;: NonEmptyList&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs10">val extend: g: (&#39;Comonad&lt;&#39;T&gt; -&gt; &#39;U) -&gt; s: &#39;Comonad&lt;&#39;T&gt; -&gt; &#39;Comonad&lt;&#39;U&gt; (requires member (=&gt;&gt;))<br /><em>&lt;summary&gt; Extends a local context-dependent computation to a global computation. &lt;/summary&gt;<br />&lt;category index=&quot;17&quot;&gt;Comonads&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs11">val ct1: int list list</div>
+<div class="fsdocs-tip" id="fs12">val ct2: string * (string * int)</div>
+<div class="fsdocs-tip" id="fs13">val ct3: (string -&gt; string -&gt; int)</div>
+<div class="fsdocs-tip" id="fs14">val x: string</div>
+<div class="fsdocs-tip" id="fs15">Multiple items<br />val string: value: &#39;T -&gt; string<br /><br />--------------------<br />type string = System.String</div>
+<div class="fsdocs-tip" id="fs16">namespace System</div>
+<div class="fsdocs-tip" id="fs17">[&lt;Struct&gt;]
 type Int32 =
   member CompareTo: value: int -&gt; int + 1 overload
   member Equals: obj: int -&gt; bool + 1 overload
@@ -181,12 +195,14 @@ type Int32 =
   static member CopySign: value: int * sign: int -&gt; int
   static member CreateChecked&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; int
   ...<br /><em>&lt;summary&gt;Represents a 32-bit signed integer.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs12">System.Int32.Parse(s: string) : int<br />System.Int32.Parse(s: string, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int</div>
-<div class="fsdocs-tip" id="fs13">val r80100: obj</div>
-<div class="fsdocs-tip" id="fs14">val ct1&#39;: obj</div>
-<div class="fsdocs-tip" id="fs15">val ct2&#39;: obj</div>
-<div class="fsdocs-tip" id="fs16">val ct3&#39;: obj</div>
-<div class="fsdocs-tip" id="fs17">val x: string</div>
+<div class="fsdocs-tip" id="fs18">System.Int32.Parse(s: string) : int<br />System.Int32.Parse(s: string, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int</div>
+<div class="fsdocs-tip" id="fs19">val r80100: int</div>
+<div class="fsdocs-tip" id="fs20">val ct1&#39;: int list list</div>
+<div class="fsdocs-tip" id="fs21">val ct2&#39;: string * (string * int)</div>
+<div class="fsdocs-tip" id="fs22">val ct3&#39;: (string -&gt; string -&gt; int)</div>
+<div class="fsdocs-tip" id="fs23">val ct1&#39;&#39;: int list list</div>
+<div class="fsdocs-tip" id="fs24">val ct2&#39;&#39;: string * (string * int)</div>
+<div class="fsdocs-tip" id="fs25">val ct3&#39;&#39;: (string -&gt; string -&gt; int)</div>
 
         </div>
 

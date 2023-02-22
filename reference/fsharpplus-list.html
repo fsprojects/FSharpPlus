@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>List (FSharpPlus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -127,7 +127,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '180', 180)" onmouseover="showTip(event, '180', 180)">
+              <code onmouseout="hideTip(event, '186', 186)" onmouseover="showTip(event, '186', 186)">
                 <p>
                   <a id="apply">
                     <a href="#apply">
@@ -136,7 +136,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="180">
+              <div class="fsdocs-tip" id="186">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.apply&#32;<span>f&#32;x</span></span></code>
@@ -237,16 +237,38 @@
               Example
             </h5>
             <p class="fsdocs-example" id="example">
-              <pre><code class="">
- &gt; List.apply [double; triple] [1; 2; 3];;  
- val it : int list = [2; 4; 6; 3; 6; 9]</code></pre>
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">List</span><span class="pn">.</span><span class="id">apply</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">double</span><span class="pn">;</span> <span class="id">triple</span><span class="pn">]</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">]</span><span class="pn">;;</span>  
+ <span class="k">val</span> <span class="id">it</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">int</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">list</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span> <span class="n">4</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">9</span><span class="pn">]</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />val double: value: &#39;T -&gt; double (requires member op_Explicit)<br /><br />--------------------<br />type double = System.Double<br /><br />--------------------<br />type double&lt;&#39;Measure&gt; = float&lt;&#39;Measure&gt;</div>
+<div class="fsdocs-tip" id="fs3">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+<div class="fsdocs-tip" id="fs4">type &#39;T list = List&lt;&#39;T&gt;</div>
+
+
             </p>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '181', 181)" onmouseover="showTip(event, '181', 181)">
+              <code onmouseout="hideTip(event, '187', 187)" onmouseover="showTip(event, '187', 187)">
                 <p>
                   <a id="choosei">
                     <a href="#choosei">
@@ -255,7 +277,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="181">
+              <div class="fsdocs-tip" id="187">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.choosei&#32;<span>mapping&#32;source</span></span></code>
@@ -357,7 +379,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '182', 182)" onmouseover="showTip(event, '182', 182)">
+              <code onmouseout="hideTip(event, '188', 188)" onmouseover="showTip(event, '188', 188)">
                 <p>
                   <a id="cons">
                     <a href="#cons">
@@ -366,7 +388,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="182">
+              <div class="fsdocs-tip" id="188">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.cons&#32;<span>value&#32;list</span></span></code>
@@ -474,7 +496,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '183', 183)" onmouseover="showTip(event, '183', 183)">
+              <code onmouseout="hideTip(event, '189', 189)" onmouseover="showTip(event, '189', 189)">
                 <p>
                   <a id="deleteAt">
                     <a href="#deleteAt">
@@ -483,7 +505,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="183">
+              <div class="fsdocs-tip" id="189">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.deleteAt&#32;<span>i&#32;lst</span></span></code>
@@ -506,7 +528,7 @@
                         lst
                       </b>
                       :
-                      <code><span>'a&#32;list</span></code>
+                      <code><span>'d&#32;list</span></code>
                        - 
                       The input list
                     </span>
@@ -515,9 +537,9 @@
                   <br/>
                   <span>
                     Returns: 
-                    <code><span>'a&#32;list</span></code>
+                    <code><span>'d&#32;list</span></code>
                   </span>
-                  For invalid indexes, the input list.  Otherwise, a new list with the item removed.
+                  For invalid indexes, the input list. Otherwise, a new list with the item removed.
                   <br/>
                 </div>
               </div>
@@ -533,7 +555,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/List.fs#L361-361" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/List.fs#L362-362" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -541,6 +563,9 @@
                 Attempts to remove an item from a list.
               </p>
             </div>
+            <p class="fsdocs-remarks">
+              Use List.removeAt from FSharp.Core if you want to throw exceptions when using invalid indexes.
+            </p>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
@@ -559,7 +584,7 @@
                   lst
                 </span>
                 :
-                <code><span>'a&#32;list</span></code>
+                <code><span>'d&#32;list</span></code>
               </dt>
               <dd class="fsdocs-param-docs">
                 <p>
@@ -572,11 +597,11 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span>'a&#32;list</span></code>
+                <code><span>'d&#32;list</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
-                  For invalid indexes, the input list.  Otherwise, a new list with the item removed.
+                  For invalid indexes, the input list. Otherwise, a new list with the item removed.
                 </p>
               </dd>
             </dl>
@@ -585,7 +610,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '184', 184)" onmouseover="showTip(event, '184', 184)">
+              <code onmouseout="hideTip(event, '190', 190)" onmouseover="showTip(event, '190', 190)">
                 <p>
                   <a id="drop">
                     <a href="#drop">
@@ -594,7 +619,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="184">
+              <div class="fsdocs-tip" id="190">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.drop&#32;<span>count&#32;source</span></span></code>
@@ -701,7 +726,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '185', 185)" onmouseover="showTip(event, '185', 185)">
+              <code onmouseout="hideTip(event, '191', 191)" onmouseover="showTip(event, '191', 191)">
                 <p>
                   <a id="findSliceIndex">
                     <a href="#findSliceIndex">
@@ -710,7 +735,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="185">
+              <div class="fsdocs-tip" id="191">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.findSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -804,7 +829,7 @@
             <table class="fsdocs-exception-list">
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
                     ArgumentException
                   </a>
                 </td>
@@ -820,7 +845,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '186', 186)" onmouseover="showTip(event, '186', 186)">
+              <code onmouseout="hideTip(event, '192', 192)" onmouseover="showTip(event, '192', 192)">
                 <p>
                   <a id="intercalate">
                     <a href="#intercalate">
@@ -829,7 +854,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="186">
+              <div class="fsdocs-tip" id="192">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.intercalate&#32;<span>separator&#32;source</span></span></code>
@@ -916,7 +941,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '187', 187)" onmouseover="showTip(event, '187', 187)">
+              <code onmouseout="hideTip(event, '193', 193)" onmouseover="showTip(event, '193', 193)">
                 <p>
                   <a id="intersperse">
                     <a href="#intersperse">
@@ -925,7 +950,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="187">
+              <div class="fsdocs-tip" id="193">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.intersperse&#32;<span>separator&#32;source</span></span></code>
@@ -1012,7 +1037,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '188', 188)" onmouseover="showTip(event, '188', 188)">
+              <code onmouseout="hideTip(event, '194', 194)" onmouseover="showTip(event, '194', 194)">
                 <p>
                   <a id="lift2">
                     <a href="#lift2">
@@ -1021,7 +1046,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="188">
+              <div class="fsdocs-tip" id="194">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.lift2&#32;<span>f&#32;x1&#32;x2</span></span></code>
@@ -1124,7 +1149,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '189', 189)" onmouseover="showTip(event, '189', 189)">
+              <code onmouseout="hideTip(event, '195', 195)" onmouseover="showTip(event, '195', 195)">
                 <p>
                   <a id="lift3">
                     <a href="#lift3">
@@ -1133,7 +1158,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="189">
+              <div class="fsdocs-tip" id="195">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.lift3&#32;<span>f&#32;x1&#32;x2&#32;x3</span></span></code>
@@ -1279,7 +1304,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '190', 190)" onmouseover="showTip(event, '190', 190)">
+              <code onmouseout="hideTip(event, '196', 196)" onmouseover="showTip(event, '196', 196)">
                 <p>
                   <a id="map2Shortest">
                     <a href="#map2Shortest">
@@ -1288,7 +1313,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="190">
+              <div class="fsdocs-tip" id="196">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.map2Shortest&#32;<span>mapping&#32;list1&#32;list2</span></span></code>
@@ -1413,7 +1438,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '191', 191)" onmouseover="showTip(event, '191', 191)">
+              <code onmouseout="hideTip(event, '197', 197)" onmouseover="showTip(event, '197', 197)">
                 <p>
                   <a id="partitionMap">
                     <a href="#partitionMap">
@@ -1422,7 +1447,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="191">
+              <div class="fsdocs-tip" id="197">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.partitionMap&#32;<span>mapping&#32;source</span></span></code>
@@ -1519,7 +1544,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '192', 192)" onmouseover="showTip(event, '192', 192)">
+              <code onmouseout="hideTip(event, '198', 198)" onmouseover="showTip(event, '198', 198)">
                 <p>
                   <a id="replace">
                     <a href="#replace">
@@ -1528,7 +1553,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="192">
+              <div class="fsdocs-tip" id="198">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.replace&#32;<span>oldValue&#32;newValue&#32;source</span></span></code>
@@ -1631,7 +1656,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '193', 193)" onmouseover="showTip(event, '193', 193)">
+              <code onmouseout="hideTip(event, '199', 199)" onmouseover="showTip(event, '199', 199)">
                 <p>
                   <a id="setAt">
                     <a href="#setAt">
@@ -1640,7 +1665,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="193">
+              <div class="fsdocs-tip" id="199">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.setAt&#32;<span>i&#32;x&#32;lst</span></span></code>
@@ -1700,7 +1725,7 @@
                 <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
               </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/List.fs#L382-382" class="fsdocs-source-link" title="Source on GitHub">
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/List.fs#L377-377" class="fsdocs-source-link" title="Source on GitHub">
                 <img src="/FSharpPlus/content/img/github.png" class="normal"/>
                 <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
               </a>
@@ -1709,7 +1734,7 @@
               </p>
             </div>
             <p class="fsdocs-remarks">
-              Use List.updateAt if you want to throw exceptions when using invalid indexes.
+              Use List.updateAt from FSharp.Core if you want to throw exceptions when using invalid indexes.
             </p>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
@@ -1767,7 +1792,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '194', 194)" onmouseover="showTip(event, '194', 194)">
+              <code onmouseout="hideTip(event, '200', 200)" onmouseover="showTip(event, '200', 200)">
                 <p>
                   <a id="singleton">
                     <a href="#singleton">
@@ -1776,7 +1801,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="194">
+              <div class="fsdocs-tip" id="200">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.singleton&#32;<span>value</span></span></code>
@@ -1861,8 +1886,27 @@
               Example
             </h5>
             <p class="fsdocs-example" id="singleton-1">
-              <pre><code class="fsharp language-fsharp">
- List.singleton 7</code></pre>
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">singleton</span> <span class="n">7</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs2">val singleton: value: &#39;T -&gt; &#39;T list</div>
+
+
  Evaluates to <code>[ 7 ]</code>.
  
             </p>
@@ -1871,7 +1915,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '195', 195)" onmouseover="showTip(event, '195', 195)">
+              <code onmouseout="hideTip(event, '201', 201)" onmouseover="showTip(event, '201', 201)">
                 <p>
                   <a id="skip">
                     <a href="#skip">
@@ -1880,7 +1924,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="195">
+              <div class="fsdocs-tip" id="201">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.skip&#32;<span>count&#32;list</span></span></code>
@@ -1986,7 +2030,7 @@
             <table class="fsdocs-exception-list">
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
                     ArgumentException
                   </a>
                 </td>
@@ -2000,20 +2044,60 @@
               Example
             </h5>
             <p class="fsdocs-example" id="skip-1">
-              <pre><code class="fsharp language-fsharp">
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">inputs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
 
- inputs |&gt; List.skip 2</code></pre>
+ <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">inputs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">skip</span> <span class="n">2</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">val inputs: string list</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs3">val skip: count: int -&gt; list: &#39;T list -&gt; &#39;T list</div>
+
+
  Evaluates to <code>[&quot;c&quot;; &quot;d&quot;]</code>
             </p>
             <h5 class="fsdocs-example-header">
               Example
             </h5>
             <p class="fsdocs-example" id="skip-2">
-              <pre><code class="fsharp language-fsharp">
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">inputs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
 
- inputs |&gt; List.skip 5</code></pre>
+ <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">inputs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">skip</span> <span class="n">5</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">val inputs: string list</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs3">val skip: count: int -&gt; list: &#39;T list -&gt; &#39;T list</div>
+
+
  Throws <code>ArgumentException</code>.
  
             </p>
@@ -2021,10 +2105,30 @@
               Example
             </h5>
             <p class="fsdocs-example" id="skip-3">
-              <pre><code class="fsharp language-fsharp">
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">inputs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
 
- inputs |&gt; List.skip -1</code></pre>
+ <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">inputs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">skip</span> <span class="o">-</span><span class="n">1</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">val inputs: string list</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs3">val skip: count: int -&gt; list: &#39;T list -&gt; &#39;T list</div>
+
+
  Evaluates to <code>[&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]</code>.
  
             </p>
@@ -2033,7 +2137,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '196', 196)" onmouseover="showTip(event, '196', 196)">
+              <code onmouseout="hideTip(event, '202', 202)" onmouseover="showTip(event, '202', 202)">
                 <p>
                   <a id="split">
                     <a href="#split">
@@ -2042,7 +2146,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="196">
+              <div class="fsdocs-tip" id="202">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.split&#32;<span>separators&#32;source</span></span></code>
@@ -2129,7 +2233,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '197', 197)" onmouseover="showTip(event, '197', 197)">
+              <code onmouseout="hideTip(event, '203', 203)" onmouseover="showTip(event, '203', 203)">
                 <p>
                   <a id="tails">
                     <a href="#tails">
@@ -2138,7 +2242,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="197">
+              <div class="fsdocs-tip" id="203">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.tails&#32;<span>list</span></span></code>
@@ -2209,7 +2313,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '198', 198)" onmouseover="showTip(event, '198', 198)">
+              <code onmouseout="hideTip(event, '204', 204)" onmouseover="showTip(event, '204', 204)">
                 <p>
                   <a id="take">
                     <a href="#take">
@@ -2218,7 +2322,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="198">
+              <div class="fsdocs-tip" id="204">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.take&#32;<span>count&#32;list</span></span></code>
@@ -2326,7 +2430,7 @@
             <table class="fsdocs-exception-list">
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.argumentexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
                     ArgumentException
                   </a>
                 </td>
@@ -2336,7 +2440,7 @@
               </tr>
               <tr>
                 <td>
-                  <a href="https://docs.microsoft.com/dotnet/api/system.invalidoperationexception">
+                  <a href="https://learn.microsoft.com/dotnet/api/system.invalidoperationexception">
                     InvalidOperationException
                   </a>
                 </td>
@@ -2350,20 +2454,60 @@
               Example
             </h5>
             <p class="fsdocs-example" id="take-1">
-              <pre><code class="fsharp language-fsharp">
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">inputs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
 
- inputs |&gt; List.take 2</code></pre>
+ <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">inputs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">take</span> <span class="n">2</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">val inputs: string list</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs3">val take: count: int -&gt; list: &#39;T list -&gt; &#39;T list</div>
+
+
  Evaluates to <code>[&quot;a&quot;; &quot;b&quot;]</code>
             </p>
             <h5 class="fsdocs-example-header">
               Example
             </h5>
             <p class="fsdocs-example" id="take-2">
-              <pre><code class="fsharp language-fsharp">
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">inputs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
 
- inputs |&gt; List.take 6</code></pre>
+ <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">inputs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">take</span> <span class="n">6</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">val inputs: string list</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs3">val take: count: int -&gt; list: &#39;T list -&gt; &#39;T list</div>
+
+
  Throws <code>InvalidOperationException</code>.
  
             </p>
@@ -2371,10 +2515,30 @@
               Example
             </h5>
             <p class="fsdocs-example" id="take-3">
-              <pre><code class="fsharp language-fsharp">
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;; &quot;d&quot;]
+              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">inputs</span> <span class="o">=</span> <span class="pn">[</span><span class="s">&quot;a&quot;</span><span class="pn">;</span> <span class="s">&quot;b&quot;</span><span class="pn">;</span> <span class="s">&quot;c&quot;</span><span class="pn">;</span> <span class="s">&quot;d&quot;</span><span class="pn">]</span>
 
- inputs |&gt; List.take 0</code></pre>
+ <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">inputs</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">take</span> <span class="n">0</span>
+</code></pre>
+<div class="fsdocs-tip" id="fs1">val inputs: string list</div>
+<div class="fsdocs-tip" id="fs2">Multiple items<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+  | op_Nil
+  | op_ColonColon of Head: &#39;T * Tail: &#39;T list
+  interface IReadOnlyList&lt;&#39;T&gt;
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IEnumerable&lt;&#39;T&gt;
+  member GetReverseIndex: rank: int * offset: int -&gt; int
+  member GetSlice: startIndex: int option * endIndex: int option -&gt; &#39;T list
+  static member Cons: head: &#39;T * tail: &#39;T list -&gt; &#39;T list
+  member Head: &#39;T
+  member IsEmpty: bool
+  member Item: index: int -&gt; &#39;T with get
+  ...</div>
+<div class="fsdocs-tip" id="fs3">val take: count: int -&gt; list: &#39;T list -&gt; &#39;T list</div>
+
+
  Evaluates to the empty list.
  
             </p>
@@ -2383,7 +2547,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '199', 199)" onmouseover="showTip(event, '199', 199)">
+              <code onmouseout="hideTip(event, '205', 205)" onmouseover="showTip(event, '205', 205)">
                 <p>
                   <a id="toIReadOnlyList">
                     <a href="#toIReadOnlyList">
@@ -2392,7 +2556,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="199">
+              <div class="fsdocs-tip" id="205">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.toIReadOnlyList&#32;<span>source</span></span></code>
@@ -2414,7 +2578,7 @@
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'a&gt;</span></code>
+                    <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'a&gt;</span></code>
                   </span>
                   The list converted to a System.Collections.Generic.IReadOnlyList
                   <br/>
@@ -2459,7 +2623,7 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'a&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.collections.generic.ireadonlylist-1">IReadOnlyList</a>&lt;'a&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs">
                 <p>
@@ -2472,7 +2636,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '200', 200)" onmouseover="showTip(event, '200', 200)">
+              <code onmouseout="hideTip(event, '206', 206)" onmouseover="showTip(event, '206', 206)">
                 <p>
                   <a id="tryFindSliceIndex">
                     <a href="#tryFindSliceIndex">
@@ -2481,7 +2645,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="200">
+              <div class="fsdocs-tip" id="206">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.tryFindSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -2578,7 +2742,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '201', 201)" onmouseover="showTip(event, '201', 201)">
+              <code onmouseout="hideTip(event, '207', 207)" onmouseover="showTip(event, '207', 207)">
                 <p>
                   <a id="zipShortest">
                     <a href="#zipShortest">
@@ -2587,7 +2751,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="201">
+              <div class="fsdocs-tip" id="207">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>List.zipShortest&#32;<span>list1&#32;list2</span></span></code>

@@ -6,7 +6,7 @@
     <title>Contravariant
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -117,76 +124,66 @@
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">System</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">FSharpPlus</span>
 
 
-<span class="k">module</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="m">Predicate</span> <span class="o">=</span> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="fn">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="fn">p</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 7)" onmouseover="showTip(event, 'fs3', 7)" class="rt">Predicate</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="fn">p</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="id">Invoke</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 11)" onmouseover="showTip(event, 'fs6', 11)" class="fn">x</span><span class="pn">)</span>
+<span class="k">module</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="m">Predicate</span> <span class="o">=</span> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="fn">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="fn">p</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs4', 8)" onmouseover="showTip(event, 'fs4', 8)" class="rt">Predicate</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 10)" onmouseover="showTip(event, 'fs6', 10)" class="fn">p</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="id">Invoke</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs7', 12)" onmouseover="showTip(event, 'fs7', 12)" class="fn">x</span><span class="pn">)</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="fn">intToString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="vt">int</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="fn">string</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="fn">x</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 17)" onmouseover="showTip(event, 'fs12', 17)" class="id">resStr54</span> <span class="o">=</span> <span class="id">contramap</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="id">float</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 19)" onmouseover="showTip(event, 'fs10', 19)" class="id">int</span> <span class="id">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs8', 20)" onmouseover="showTip(event, 'fs8', 20)" class="id">intToString</span> <span class="o">&lt;|</span> <span class="n">54.</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="id">isEven</span>      <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 22)" onmouseover="showTip(event, 'fs3', 22)" class="fn">Predicate</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs9', 23)" onmouseover="showTip(event, 'fs9', 23)" class="fn">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs9', 24)" onmouseover="showTip(event, 'fs9', 24)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 25)" onmouseover="showTip(event, 'fs15', 25)" class="id">fstIsEven</span>   <span class="o">=</span> <span class="id">contramap</span> <span onmouseout="hideTip(event, 'fs16', 26)" onmouseover="showTip(event, 'fs16', 26)" class="id">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 27)" onmouseover="showTip(event, 'fs17', 27)" class="id">head</span> <span onmouseout="hideTip(event, 'fs14', 28)" onmouseover="showTip(event, 'fs14', 28)" class="id">isEven</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 29)" onmouseover="showTip(event, 'fs18', 29)" class="id">resBoolTrue</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 30)" onmouseover="showTip(event, 'fs3', 30)" class="m">Predicate</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs4', 31)" onmouseover="showTip(event, 'fs4', 31)" class="id">run</span> <span onmouseout="hideTip(event, 'fs15', 32)" onmouseover="showTip(event, 'fs15', 32)" class="id">fstIsEven</span> <span class="pn">[</span><span class="n">0..</span><span class="n">10</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="fn">intToString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="vt">int</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs12', 16)" onmouseover="showTip(event, 'fs12', 16)" class="fn">string</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="fn">x</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 18)" onmouseover="showTip(event, 'fs13', 18)" class="id">resStr54</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 19)" onmouseover="showTip(event, 'fs14', 19)" class="fn">contramap</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs15', 20)" onmouseover="showTip(event, 'fs15', 20)" class="fn">x</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs16', 21)" onmouseover="showTip(event, 'fs16', 21)" class="vt">float</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs11', 22)" onmouseover="showTip(event, 'fs11', 22)" class="fn">int</span> <span onmouseout="hideTip(event, 'fs15', 23)" onmouseover="showTip(event, 'fs15', 23)" class="fn">x</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs9', 24)" onmouseover="showTip(event, 'fs9', 24)" class="fn">intToString</span> <span class="o">&lt;|</span> <span class="n">54.</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="id">isEven</span>      <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 26)" onmouseover="showTip(event, 'fs4', 26)" class="fn">Predicate</span> <span class="pn">(</span><span class="k">fun</span> <span onmouseout="hideTip(event, 'fs10', 27)" onmouseover="showTip(event, 'fs10', 27)" class="fn">x</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs10', 28)" onmouseover="showTip(event, 'fs10', 28)" class="fn">x</span> <span class="o">%</span> <span class="n">2</span> <span class="o">=</span> <span class="n">0</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs18', 29)" onmouseover="showTip(event, 'fs18', 29)" class="id">fstIsEven</span>   <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 30)" onmouseover="showTip(event, 'fs14', 30)" class="fn">contramap</span> <span onmouseout="hideTip(event, 'fs19', 31)" onmouseover="showTip(event, 'fs19', 31)" class="m">List</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 32)" onmouseover="showTip(event, 'fs20', 32)" class="id">head</span> <span onmouseout="hideTip(event, 'fs17', 33)" onmouseover="showTip(event, 'fs17', 33)" class="id">isEven</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs21', 34)" onmouseover="showTip(event, 'fs21', 34)" class="id">resBoolTrue</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 35)" onmouseover="showTip(event, 'fs4', 35)" class="m">Predicate</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 36)" onmouseover="showTip(event, 'fs5', 36)" class="id">run</span> <span onmouseout="hideTip(event, 'fs18', 37)" onmouseover="showTip(event, 'fs18', 37)" class="id">fstIsEven</span> <span class="pn">[</span><span class="n">0..</span><span class="n">10</span><span class="pn">]</span>
 
-<span class="k">type</span> <span onmouseout="hideTip(event, 'fs19', 33)" onmouseover="showTip(event, 'fs19', 33)" class="rt">Person</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs19', 34)" onmouseover="showTip(event, 'fs19', 34)" class="uc">Person</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs11', 35)" onmouseover="showTip(event, 'fs11', 35)" class="rt">string</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs20', 36)" onmouseover="showTip(event, 'fs20', 36)" class="id">personEqComp</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs21', 37)" onmouseover="showTip(event, 'fs21', 37)" class="m">HashIdentity</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs22', 38)" onmouseover="showTip(event, 'fs22', 38)" class="id">Structural</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs19', 39)" onmouseover="showTip(event, 'fs19', 39)" class="rt">Person</span><span class="pn">&gt;</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 40)" onmouseover="showTip(event, 'fs23', 40)" class="id">personList</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs19', 41)" onmouseover="showTip(event, 'fs19', 41)" class="uc">Person</span> <span class="s">&quot;me&quot;</span><span class="pn">;</span> <span class="n">2</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs19', 42)" onmouseover="showTip(event, 'fs19', 42)" class="uc">Person</span> <span class="s">&quot;you&quot;</span><span class="pn">;</span> <span class="n">3</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs19', 43)" onmouseover="showTip(event, 'fs19', 43)" class="uc">Person</span> <span class="s">&quot;you&quot;</span><span class="pn">]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs24', 44)" onmouseover="showTip(event, 'fs24', 44)" class="id">cnt3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs25', 45)" onmouseover="showTip(event, 'fs25', 45)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs26', 46)" onmouseover="showTip(event, 'fs26', 46)" class="id">length</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs27', 47)" onmouseover="showTip(event, 'fs27', 47)" class="id">Linq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs28', 48)" onmouseover="showTip(event, 'fs28', 48)" class="rt">Enumerable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs29', 49)" onmouseover="showTip(event, 'fs29', 49)" class="id">Distinct</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 50)" onmouseover="showTip(event, 'fs23', 50)" class="id">personList</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="id">cnt2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs25', 52)" onmouseover="showTip(event, 'fs25', 52)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs26', 53)" onmouseover="showTip(event, 'fs26', 53)" class="id">length</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs27', 54)" onmouseover="showTip(event, 'fs27', 54)" class="id">Linq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs28', 55)" onmouseover="showTip(event, 'fs28', 55)" class="rt">Enumerable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs29', 56)" onmouseover="showTip(event, 'fs29', 56)" class="id">Distinct</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs23', 57)" onmouseover="showTip(event, 'fs23', 57)" class="id">personList</span><span class="pn">,</span> <span class="id">contramap</span> <span onmouseout="hideTip(event, 'fs31', 58)" onmouseover="showTip(event, 'fs31', 58)" class="id">snd</span> <span onmouseout="hideTip(event, 'fs20', 59)" onmouseover="showTip(event, 'fs20', 59)" class="id">personEqComp</span><span class="pn">)</span>
+<span class="k">type</span> <span onmouseout="hideTip(event, 'fs22', 38)" onmouseover="showTip(event, 'fs22', 38)" class="rt">Person</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs22', 39)" onmouseover="showTip(event, 'fs22', 39)" class="uc">Person</span> <span class="k">of</span> <span onmouseout="hideTip(event, 'fs12', 40)" onmouseover="showTip(event, 'fs12', 40)" class="rt">string</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs23', 41)" onmouseover="showTip(event, 'fs23', 41)" class="id">personEqComp</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs24', 42)" onmouseover="showTip(event, 'fs24', 42)" class="m">HashIdentity</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 43)" onmouseover="showTip(event, 'fs25', 43)" class="id">Structural</span><span class="pn">&lt;</span><span onmouseout="hideTip(event, 'fs22', 44)" onmouseover="showTip(event, 'fs22', 44)" class="rt">Person</span><span class="pn">&gt;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs26', 45)" onmouseover="showTip(event, 'fs26', 45)" class="id">personList</span> <span class="o">=</span> <span class="pn">[</span><span class="n">1</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs22', 46)" onmouseover="showTip(event, 'fs22', 46)" class="uc">Person</span> <span class="s">&quot;me&quot;</span><span class="pn">;</span> <span class="n">2</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs22', 47)" onmouseover="showTip(event, 'fs22', 47)" class="uc">Person</span> <span class="s">&quot;you&quot;</span><span class="pn">;</span> <span class="n">3</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs22', 48)" onmouseover="showTip(event, 'fs22', 48)" class="uc">Person</span> <span class="s">&quot;you&quot;</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs27', 49)" onmouseover="showTip(event, 'fs27', 49)" class="id">cnt3</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs28', 50)" onmouseover="showTip(event, 'fs28', 50)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs29', 51)" onmouseover="showTip(event, 'fs29', 51)" class="id">length</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs30', 52)" onmouseover="showTip(event, 'fs30', 52)" class="id">Linq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs31', 53)" onmouseover="showTip(event, 'fs31', 53)" class="rt">Enumerable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 54)" onmouseover="showTip(event, 'fs32', 54)" class="id">Distinct</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs26', 55)" onmouseover="showTip(event, 'fs26', 55)" class="id">personList</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs33', 56)" onmouseover="showTip(event, 'fs33', 56)" class="id">cnt2</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs28', 57)" onmouseover="showTip(event, 'fs28', 57)" class="m">Seq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs29', 58)" onmouseover="showTip(event, 'fs29', 58)" class="id">length</span> <span class="o">&lt;|</span> <span onmouseout="hideTip(event, 'fs30', 59)" onmouseover="showTip(event, 'fs30', 59)" class="id">Linq</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs31', 60)" onmouseover="showTip(event, 'fs31', 60)" class="rt">Enumerable</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 61)" onmouseover="showTip(event, 'fs32', 61)" class="id">Distinct</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs26', 62)" onmouseover="showTip(event, 'fs26', 62)" class="id">personList</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs14', 63)" onmouseover="showTip(event, 'fs14', 63)" class="fn">contramap</span> <span onmouseout="hideTip(event, 'fs34', 64)" onmouseover="showTip(event, 'fs34', 64)" class="fn">snd</span> <span onmouseout="hideTip(event, 'fs23', 65)" onmouseover="showTip(event, 'fs23', 65)" class="id">personEqComp</span><span class="pn">)</span>
 </code></pre>
 <p>For instance a predicate function from a type to bool. An example of such a function is the predicate that classifies
 integers as negative:</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs32', 60)" onmouseover="showTip(event, 'fs32', 60)" class="id">negative</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs3', 61)" onmouseover="showTip(event, 'fs3', 61)" class="fn">Predicate</span><span class="pn">(</span> <span class="k">fun</span> <span onmouseout="hideTip(event, 'fs33', 62)" onmouseover="showTip(event, 'fs33', 62)" class="fn">integer</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs33', 63)" onmouseover="showTip(event, 'fs33', 63)" class="fn">integer</span> <span class="o">&lt;</span> <span class="n">0</span> <span class="pn">)</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs35', 66)" onmouseover="showTip(event, 'fs35', 66)" class="id">negative</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 67)" onmouseover="showTip(event, 'fs4', 67)" class="fn">Predicate</span><span class="pn">(</span> <span class="k">fun</span> <span onmouseout="hideTip(event, 'fs36', 68)" onmouseover="showTip(event, 'fs36', 68)" class="fn">integer</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs36', 69)" onmouseover="showTip(event, 'fs36', 69)" class="fn">integer</span> <span class="o">&lt;</span> <span class="n">0</span> <span class="pn">)</span>
 </code></pre>
 <p>However, given this predicate, we can re-use it in other situations, providing we have a way to map values to integers.
 For instance, we can use the <code>negative</code> predicate on a person's bank balance to work out if they are currently overdrawn.</p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs34', 64)" onmouseover="showTip(event, 'fs34', 64)" class="fn">personBankBalance</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs35', 65)" onmouseover="showTip(event, 'fs35', 65)" class="fn">person</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs19', 66)" onmouseover="showTip(event, 'fs19', 66)" class="rt">Person</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs10', 67)" onmouseover="showTip(event, 'fs10', 67)" class="vt">int</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs36', 68)" onmouseover="showTip(event, 'fs36', 68)" class="fn">failwith</span> <span class="s">&quot;query persons bank account&quot;</span> 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 69)" onmouseover="showTip(event, 'fs37', 69)" class="id">overdrawn</span> <span class="o">=</span> <span class="id">contramap</span> <span onmouseout="hideTip(event, 'fs34', 70)" onmouseover="showTip(event, 'fs34', 70)" class="id">personBankBalance</span> <span onmouseout="hideTip(event, 'fs32', 71)" onmouseover="showTip(event, 'fs32', 71)" class="id">negative</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span onmouseout="hideTip(event, 'fs37', 70)" onmouseover="showTip(event, 'fs37', 70)" class="fn">personBankBalance</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs38', 71)" onmouseover="showTip(event, 'fs38', 71)" class="fn">person</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs22', 72)" onmouseover="showTip(event, 'fs22', 72)" class="rt">Person</span><span class="pn">)</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs11', 73)" onmouseover="showTip(event, 'fs11', 73)" class="vt">int</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs39', 74)" onmouseover="showTip(event, 'fs39', 74)" class="fn">failwith</span> <span class="s">&quot;query persons bank account&quot;</span> 
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs40', 75)" onmouseover="showTip(event, 'fs40', 75)" class="id">overdrawn</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 76)" onmouseover="showTip(event, 'fs14', 76)" class="fn">contramap</span> <span onmouseout="hideTip(event, 'fs37', 77)" onmouseover="showTip(event, 'fs37', 77)" class="fn">personBankBalance</span> <span onmouseout="hideTip(event, 'fs35', 78)" onmouseover="showTip(event, 'fs35', 78)" class="id">negative</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T<br /><em>&lt;summary&gt;The identity function&lt;/summary&gt;<br />&lt;param name=&quot;x&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The same value.&lt;/returns&gt;<br />&lt;example id=&quot;id-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- id 12     //  Evaulates to 12
- id &quot;abc&quot;  //  Evaulates to &quot;abc&quot;
- &lt;/code&gt;&lt;/example&gt;</em></div>
+            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T</div>
 <div class="fsdocs-tip" id="fs2">namespace System</div>
-<div class="fsdocs-tip" id="fs3">type Predicate&lt;&#39;T&gt; =
+<div class="fsdocs-tip" id="fs3">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs4">type Predicate&lt;&#39;T&gt; =
   new: object: obj * method: nativeint -&gt; unit
   member BeginInvoke: obj: &#39;T * callback: AsyncCallback * object: obj -&gt; IAsyncResult
   member EndInvoke: result: IAsyncResult -&gt; bool
   member Invoke: obj: &#39;T -&gt; bool<br /><em>&lt;summary&gt;Represents the method that defines a set of criteria and determines whether the specified object meets those criteria.&lt;/summary&gt;<br />&lt;param name=&quot;obj&quot;&gt;The object to compare against the criteria defined within the method represented by this delegate.&lt;/param&gt;<br />&lt;typeparam name=&quot;T&quot;&gt;The type of the object to compare.&lt;/typeparam&gt;<br />&lt;returns&gt;&lt;see langword=&quot;true&quot; /&gt; if &lt;paramref name=&quot;obj&quot; /&gt; meets the criteria defined within the method represented by this delegate; otherwise, &lt;see langword=&quot;false&quot; /&gt;.&lt;/returns&gt;</em></div>
-<div class="fsdocs-tip" id="fs4">val run: p: Predicate&lt;&#39;a&gt; -&gt; x: &#39;a -&gt; bool</div>
-<div class="fsdocs-tip" id="fs5">val p: Predicate&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs6">val x: &#39;a</div>
-<div class="fsdocs-tip" id="fs7">Predicate.Invoke(obj: &#39;a) : bool</div>
-<div class="fsdocs-tip" id="fs8">val intToString: x: int -&gt; string</div>
-<div class="fsdocs-tip" id="fs9">val x: int</div>
-<div class="fsdocs-tip" id="fs10">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to signed 32-bit integer. This is a direct conversion for all 
- primitive numeric types. For strings, the input is converted using &lt;c&gt;Int32.Parse()&lt;/c&gt;  
- with InvariantCulture settings. Otherwise the operation requires an appropriate
- static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted int&lt;/returns&gt;<br />&lt;example id=&quot;int-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
-type int = int32<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
-  int<br /><em>&lt;summary&gt;The type of 32-bit signed integer numbers, annotated with a unit of measure. The unit
- of measure is erased in compiled code and when values of this type
- are analyzed using reflection. The type is representationally equivalent to
- &lt;see cref=&quot;T:System.Int32&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs11">Multiple items<br />val string: value: &#39;T -&gt; string<br /><em>&lt;summary&gt;Converts the argument to a string using &lt;c&gt;ToString&lt;/c&gt;.&lt;/summary&gt;<br />&lt;remarks&gt;For standard integer and floating point values the and any type that implements &lt;c&gt;IFormattable&lt;/c&gt;&lt;c&gt;ToString&lt;/c&gt; conversion uses &lt;c&gt;CultureInfo.InvariantCulture&lt;/c&gt;. &lt;/remarks&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted string.&lt;/returns&gt;<br />&lt;example id=&quot;string-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />type string = String<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.String&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs12">val resStr54: obj</div>
-<div class="fsdocs-tip" id="fs13">Multiple items<br />val float: value: &#39;T -&gt; float (requires member op_Explicit)<br /><em>&lt;summary&gt;Converts the argument to 64-bit float. This is a direct conversion for all 
- primitive numeric types. For strings, the input is converted using &lt;c&gt;Double.Parse()&lt;/c&gt;  
- with InvariantCulture settings. Otherwise the operation requires an appropriate
- static conversion method on the input type.&lt;/summary&gt;<br />&lt;param name=&quot;value&quot;&gt;The input value.&lt;/param&gt;<br />&lt;returns&gt;The converted float&lt;/returns&gt;<br />&lt;example id=&quot;float-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;&lt;/code&gt;&lt;/example&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
-type float = Double<br /><em>&lt;summary&gt;An abbreviation for the CLI type &lt;see cref=&quot;T:System.Double&quot; /&gt;.&lt;/summary&gt;<br />&lt;category&gt;Basic Types&lt;/category&gt;</em><br /><br />--------------------<br />type float&lt;&#39;Measure&gt; =
-  float<br /><em>&lt;summary&gt;The type of double-precision floating point numbers, annotated with a unit of measure.
- The unit of measure is erased in compiled code and when values of this type
- are analyzed using reflection. The type is representationally equivalent to
- &lt;see cref=&quot;T:System.Double&quot; /&gt;.&lt;/summary&gt;<br />&lt;category index=&quot;6&quot;&gt;Basic Types with Units of Measure&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs14">val isEven: Predicate&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs15">val fstIsEven: Predicate&lt;int list&gt;</div>
-<div class="fsdocs-tip" id="fs16">Multiple items<br />module List
+<div class="fsdocs-tip" id="fs5">val run: p: Predicate&lt;&#39;a&gt; -&gt; x: &#39;a -&gt; bool</div>
+<div class="fsdocs-tip" id="fs6">val p: Predicate&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs7">val x: &#39;a</div>
+<div class="fsdocs-tip" id="fs8">Predicate.Invoke(obj: &#39;a) : bool</div>
+<div class="fsdocs-tip" id="fs9">val intToString: x: int -&gt; string</div>
+<div class="fsdocs-tip" id="fs10">val x: int</div>
+<div class="fsdocs-tip" id="fs11">Multiple items<br />val int: value: &#39;T -&gt; int (requires member op_Explicit)<br /><br />--------------------<br />type int = int32<br /><br />--------------------<br />type int&lt;&#39;Measure&gt; =
+  int</div>
+<div class="fsdocs-tip" id="fs12">Multiple items<br />val string: value: &#39;T -&gt; string<br /><br />--------------------<br />type string = String</div>
+<div class="fsdocs-tip" id="fs13">val resStr54: string</div>
+<div class="fsdocs-tip" id="fs14">val contramap: f: (&#39;U -&gt; &#39;T) -&gt; x: &#39;Contravariant&lt;&#39;T&gt; -&gt; &#39;Contravariant&lt;&#39;U&gt; (requires member Contramap)<br /><em>&lt;summary&gt;
+ Maps over the input.
+ &lt;/summary&gt;<br />&lt;category index=&quot;6&quot;&gt;Contravariant/Bifunctor/Profunctor/Invariant&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val x: float</div>
+<div class="fsdocs-tip" id="fs16">Multiple items<br />val float: value: &#39;T -&gt; float (requires member op_Explicit)<br /><br />--------------------<br />type float = Double<br /><br />--------------------<br />type float&lt;&#39;Measure&gt; =
+  float</div>
+<div class="fsdocs-tip" id="fs17">val isEven: Predicate&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs18">val fstIsEven: Predicate&lt;int list&gt;</div>
+<div class="fsdocs-tip" id="fs19">Multiple items<br />module List
 
-from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.list`1&quot; /&gt;.&lt;/summary&gt;<br />&lt;namespacedoc&gt;&lt;summary&gt;Operations for collections such as lists, arrays, sets, maps and sequences. See also 
-    &lt;a href=&quot;https://docs.microsoft.com/dotnet/fsharp/language-reference/fsharp-collection-types&quot;&gt;F# Collection Types&lt;/a&gt; in the F# Language Guide.
- &lt;/summary&gt;&lt;/namespacedoc&gt;</em><br /><br />--------------------<br />type List&lt;&#39;T&gt; =
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on List
+&lt;/summary&gt;</em><br /><br />--------------------<br />module List
+
+from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List&lt;&#39;T&gt; =
   | op_Nil
   | op_ColonColon of Head: &#39;T * Tail: &#39;T list
   interface IReadOnlyList&lt;&#39;T&gt;
@@ -199,53 +196,29 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
   member Head: &#39;T
   member IsEmpty: bool
   member Item: index: int -&gt; &#39;T with get
-  ...<br /><em>&lt;summary&gt;The type of immutable singly-linked lists.&lt;/summary&gt;<br />&lt;remarks&gt;Use the constructors &lt;c&gt;[]&lt;/c&gt; and &lt;c&gt;::&lt;/c&gt; (infix) to create values of this type, or
- the notation &lt;c&gt;[1;2;3]&lt;/c&gt;. Use the values in the &lt;c&gt;List&lt;/c&gt; module to manipulate 
- values of this type, or pattern match against the values directly.
- &lt;/remarks&gt;<br />&lt;exclude /&gt;</em></div>
-<div class="fsdocs-tip" id="fs17">val head: list: &#39;T list -&gt; &#39;T<br /><em>&lt;summary&gt;Returns the first element of the list.&lt;/summary&gt;<br />&lt;param name=&quot;list&quot;&gt;The input list.&lt;/param&gt;<br />&lt;exception cref=&quot;T:System.ArgumentException&quot;&gt;Thrown when the list is empty.&lt;/exception&gt;<br />&lt;returns&gt;The first element of the list.&lt;/returns&gt;<br />&lt;example id=&quot;head-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- let inputs = [&quot;banana&quot;; &quot;pear&quot;]
+  ...</div>
+<div class="fsdocs-tip" id="fs20">val head: list: &#39;T list -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs21">val resBoolTrue: bool</div>
+<div class="fsdocs-tip" id="fs22">Multiple items<br />union case Person.Person: string -&gt; Person<br /><br />--------------------<br />type Person = | Person of string</div>
+<div class="fsdocs-tip" id="fs23">val personEqComp: Collections.Generic.IEqualityComparer&lt;Person&gt;</div>
+<div class="fsdocs-tip" id="fs24">module HashIdentity
 
- inputs |&amp;gt; List.head
- &lt;/code&gt;
- Evaluates to &lt;c&gt;banana&lt;/c&gt;&lt;/example&gt;<br />&lt;example id=&quot;head-2&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- [] |&amp;gt; List.head
- &lt;/code&gt;
- Throws &lt;c&gt;ArgumentException&lt;/c&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs18">val resBoolTrue: bool</div>
-<div class="fsdocs-tip" id="fs19">Multiple items<br />union case Person.Person: string -&gt; Person<br /><br />--------------------<br />type Person = | Person of string</div>
-<div class="fsdocs-tip" id="fs20">val personEqComp: Collections.Generic.IEqualityComparer&lt;Person&gt;</div>
-<div class="fsdocs-tip" id="fs21">module HashIdentity
+from Microsoft.FSharp.Collections</div>
+<div class="fsdocs-tip" id="fs25">val Structural&lt;&#39;T (requires equality)&gt; : Collections.Generic.IEqualityComparer&lt;&#39;T&gt; (requires equality)</div>
+<div class="fsdocs-tip" id="fs26">val personList: (int * Person) list</div>
+<div class="fsdocs-tip" id="fs27">val cnt3: int</div>
+<div class="fsdocs-tip" id="fs28">Multiple items<br />module Seq
 
-from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Common notions of value identity implementing the &lt;see cref=&quot;T:System.Collections.Generic.IEqualityComparer`1&quot; /&gt; 
- interface, for constructing &lt;see cref=&quot;T:System.Collections.Generic.Dictionary`2&quot; /&gt; objects and other collections&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs22">val Structural&lt;&#39;T (requires equality)&gt; : Collections.Generic.IEqualityComparer&lt;&#39;T&gt; (requires equality)<br /><em>&lt;summary&gt;Get an implementation of equality semantics using structural equality and structural hashing.&lt;/summary&gt;<br />&lt;returns&gt;An object implementing &lt;see cref=&quot;T:System.Collections.Generic.IEqualityComparer`1&quot; /&gt; using &lt;see cref=&quot;M:Microsoft.FSharp.Core.Operators.op_Equality&quot; /&gt; and &lt;see cref=&quot;M:Microsoft.FSharp.Core.Operators.hash&quot; /&gt;.&lt;/returns&gt;<br />&lt;example id=&quot;structural-1&quot;&gt;Create a dictionary which uses structural equality and structural hashing on the key, allowing an array as a key:
- &lt;code&gt;
- open System.Collections.Generic
+from FSharpPlus.Operators<br /><br />--------------------<br />module Seq
 
- let dict = new Dictionary&amp;lt;int[],int&amp;gt;(HashIdentity.Structural)
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Seq
+&lt;/summary&gt;</em><br /><br />--------------------<br />module Seq
 
- let arr1 = [| 1;2;3 |]
- let arr2 = [| 1;2;3 |]
-
- dict.[arr1] &amp;lt;- 6
- dict.[arr2] &amp;gt;- 7
- &lt;/code&gt;
- In this example, only one entry is added to the dictionary, as the arrays identical by structural equality.
- &lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs23">val personList: (int * Person) list</div>
-<div class="fsdocs-tip" id="fs24">val cnt3: int</div>
-<div class="fsdocs-tip" id="fs25">module Seq
-
-from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations for working with values of type &lt;see cref=&quot;T:Microsoft.FSharp.Collections.seq`1&quot; /&gt;.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs26">val length: source: seq&lt;&#39;T&gt; -&gt; int<br /><em>&lt;summary&gt;Returns the length of the sequence&lt;/summary&gt;<br />&lt;param name=&quot;source&quot;&gt;The input sequence.&lt;/param&gt;<br />&lt;returns&gt;The length of the sequence.&lt;/returns&gt;<br />&lt;exception cref=&quot;T:System.ArgumentNullException&quot;&gt;Thrown when the input sequence is null.&lt;/exception&gt;<br />&lt;example id=&quot;item-1&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- let inputs = [&quot;a&quot;; &quot;b&quot;; &quot;c&quot;]
-
- inputs |&amp;gt; Seq.length
- &lt;/code&gt;
- Evaluates to &lt;c&gt;3&lt;/c&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs27">Multiple items<br />namespace System.Linq<br /><br />--------------------<br />namespace Microsoft.FSharp.Linq</div>
-<div class="fsdocs-tip" id="fs28">type Enumerable =
+from Microsoft.FSharp.Collections</div>
+<div class="fsdocs-tip" id="fs29">val length: source: seq&lt;&#39;T&gt; -&gt; int</div>
+<div class="fsdocs-tip" id="fs30">Multiple items<br />namespace System.Linq<br /><br />--------------------<br />namespace Microsoft.FSharp.Linq</div>
+<div class="fsdocs-tip" id="fs31">type Enumerable =
   static member Aggregate&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; * func: Func&lt;&#39;TSource,&#39;TSource,&#39;TSource&gt; -&gt; &#39;TSource + 2 overloads
   static member All&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; * predicate: Func&lt;&#39;TSource,bool&gt; -&gt; bool
   static member Any&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; -&gt; bool + 1 overload
@@ -253,27 +226,19 @@ from Microsoft.FSharp.Collections<br /><em>&lt;summary&gt;Contains operations fo
   static member AsEnumerable&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; -&gt; IEnumerable&lt;&#39;TSource&gt;
   static member Average: source: IEnumerable&lt;decimal&gt; -&gt; decimal + 19 overloads
   static member Cast&lt;&#39;TResult&gt; : source: IEnumerable -&gt; IEnumerable&lt;&#39;TResult&gt;
-  static member Chunk&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; * size: int -&gt; IEnumerable&lt;&#39;TSource[]&gt;
+  static member Chunk&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; * size: int -&gt; IEnumerable&lt;&#39;TSource array&gt;
   static member Concat&lt;&#39;TSource&gt; : first: IEnumerable&lt;&#39;TSource&gt; * second: IEnumerable&lt;&#39;TSource&gt; -&gt; IEnumerable&lt;&#39;TSource&gt;
   static member Contains&lt;&#39;TSource&gt; : source: IEnumerable&lt;&#39;TSource&gt; * value: &#39;TSource -&gt; bool + 1 overload
   ...<br /><em>&lt;summary&gt;Provides a set of &lt;see langword=&quot;static&quot; /&gt; (&lt;see langword=&quot;Shared&quot; /&gt; in Visual Basic) methods for querying objects that implement &lt;see cref=&quot;T:System.Collections.Generic.IEnumerable`1&quot; /&gt;.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs29">Linq.Enumerable.Distinct&lt;&#39;TSource&gt;(source: Collections.Generic.IEnumerable&lt;&#39;TSource&gt;) : Collections.Generic.IEnumerable&lt;&#39;TSource&gt;<br />Linq.Enumerable.Distinct&lt;&#39;TSource&gt;(source: Collections.Generic.IEnumerable&lt;&#39;TSource&gt;, comparer: Collections.Generic.IEqualityComparer&lt;&#39;TSource&gt;) : Collections.Generic.IEnumerable&lt;&#39;TSource&gt;</div>
-<div class="fsdocs-tip" id="fs30">val cnt2: int</div>
-<div class="fsdocs-tip" id="fs31">val snd: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T2<br /><em>&lt;summary&gt;Return the second element of a tuple, &lt;c&gt;snd (a,b) = b&lt;/c&gt;.&lt;/summary&gt;<br />&lt;param name=&quot;tuple&quot;&gt;The input tuple.&lt;/param&gt;<br />&lt;returns&gt;The second value.&lt;/returns&gt;<br />&lt;example id=&quot;snd-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- snd (&quot;first&quot;, 2)  //  Evaluates to 2
- &lt;/code&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs32">val negative: Predicate&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs33">val integer: int</div>
-<div class="fsdocs-tip" id="fs34">val personBankBalance: person: Person -&gt; int</div>
-<div class="fsdocs-tip" id="fs35">val person: Person</div>
-<div class="fsdocs-tip" id="fs36">val failwith: message: string -&gt; &#39;T<br /><em>&lt;summary&gt;Throw a &lt;see cref=&quot;T:System.Exception&quot; /&gt; exception.&lt;/summary&gt;<br />&lt;param name=&quot;message&quot;&gt;The exception message.&lt;/param&gt;<br />&lt;returns&gt;Never returns.&lt;/returns&gt;<br />&lt;example id=&quot;failwith-example&quot;&gt;&lt;code lang=&quot;fsharp&quot;&gt;
- let failingFunction() = 
-     failwith &quot;Oh no&quot; // Throws an exception
-     true  // Never reaches this
-   
- failingFunction()  // Throws a System.Exception
- &lt;/code&gt;&lt;/example&gt;</em></div>
-<div class="fsdocs-tip" id="fs37">val overdrawn: obj</div>
+<div class="fsdocs-tip" id="fs32">Linq.Enumerable.Distinct&lt;&#39;TSource&gt;(source: Collections.Generic.IEnumerable&lt;&#39;TSource&gt;) : Collections.Generic.IEnumerable&lt;&#39;TSource&gt;<br />Linq.Enumerable.Distinct&lt;&#39;TSource&gt;(source: Collections.Generic.IEnumerable&lt;&#39;TSource&gt;, comparer: Collections.Generic.IEqualityComparer&lt;&#39;TSource&gt;) : Collections.Generic.IEnumerable&lt;&#39;TSource&gt;</div>
+<div class="fsdocs-tip" id="fs33">val cnt2: int</div>
+<div class="fsdocs-tip" id="fs34">val snd: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T2</div>
+<div class="fsdocs-tip" id="fs35">val negative: Predicate&lt;int&gt;</div>
+<div class="fsdocs-tip" id="fs36">val integer: int</div>
+<div class="fsdocs-tip" id="fs37">val personBankBalance: person: Person -&gt; int</div>
+<div class="fsdocs-tip" id="fs38">val person: Person</div>
+<div class="fsdocs-tip" id="fs39">val failwith: message: string -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs40">val overdrawn: Predicate&lt;Person&gt;</div>
 
         </div>
 

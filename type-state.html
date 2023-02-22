@@ -6,7 +6,7 @@
     <title>State<'S,'T>
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -35,7 +35,7 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-            <a href="/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
             <!-- BEGIN SEARCH BOX: this adds support for the search box -->
             <div id="header">
                 <div class="searchbox" id="fsdocs-searchbox">
@@ -52,9 +52,9 @@
             <!-- END SEARCH BOX: this adds support for the search box -->
             <ul class="navbar-nav">
                 <li class="nav-header">Links</li>
-                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="{{fsdocs-license-link}}">License (Apache 2.0)</a></li>
-                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="{{fsdocs-release-notes-link}}">Release Notes</a></li>
-                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="{{fsdocs-repository-link}}">Source Repository</a></li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
@@ -68,13 +68,20 @@
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
                 <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
 
-                {{fsdocs-list-of-namespaces}}
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
             </ul>
         </div>
     </nav>
     <div class="container">
         <div class="masthead">
-            <h3 class="muted"><a href="/FSharpPlus/">FSharpPlus</a></h3>
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
@@ -87,39 +94,78 @@
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span class="id">FSharpPlus</span>
-<span class="k">open</span> <span class="id">FSharpPlus</span><span class="pn">.</span><span class="id">Data</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">Data</span>
 </code></pre>
 <p>From <a href="https://wiki.haskell.org/State_Monad">Haskell Wiki on State monad</a></p>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="fn">playGame</span> <span class="o">=</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="fn">playGame</span> <span class="o">=</span>
     <span class="k">function</span>
-    <span class="pn">|</span> <span class="pn">[</span><span class="pn">]</span><span class="k">-&gt;</span> <span class="id">monad</span> <span class="pn">{</span>
-            <span class="k">let!</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span class="id">score</span><span class="pn">)</span> <span class="o">=</span> <span class="id">State</span><span class="pn">.</span><span class="id">get</span>
-            <span class="k">return</span> <span class="id">score</span>
+    <span class="pn">|</span> <span class="pn">[</span><span class="pn">]</span><span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">monad</span> <span class="pn">{</span>
+            <span class="k">let!</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="fn">score</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="id">get</span>
+            <span class="k">return</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="fn">score</span>
         <span class="pn">}</span>
-    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="fn">x</span><span class="uc">::</span><span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="fn">xs</span><span class="k">-&gt;</span> <span class="id">monad</span> <span class="pn">{</span>
-            <span class="k">let!</span> <span class="pn">(</span><span class="id">on</span><span class="pn">,</span> <span class="id">score</span><span class="pn">)</span> <span class="o">=</span> <span class="id">State</span><span class="pn">.</span><span class="id">get</span>
-            <span class="k">match</span> <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="id">x</span> <span class="k">with</span>
-            <span class="pn">|</span> <span class="s">&#39;a&#39;</span> <span class="k">when</span> <span class="id">on</span> <span class="k">-&gt;</span> <span class="k">do!</span> <span class="id">State</span><span class="pn">.</span><span class="id">put</span> <span class="pn">(</span><span class="id">on</span><span class="pn">,</span> <span class="id">score</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span>
-            <span class="pn">|</span> <span class="s">&#39;b&#39;</span> <span class="k">when</span> <span class="id">on</span> <span class="k">-&gt;</span> <span class="k">do!</span> <span class="id">State</span><span class="pn">.</span><span class="id">put</span> <span class="pn">(</span><span class="id">on</span><span class="pn">,</span> <span class="id">score</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span>
-            <span class="pn">|</span> <span class="s">&#39;c&#39;</span>         <span class="k">-&gt;</span> <span class="k">do!</span> <span class="id">State</span><span class="pn">.</span><span class="id">put</span> <span class="pn">(</span><span class="id">not</span> <span class="id">on</span><span class="pn">,</span> <span class="id">score</span><span class="pn">)</span>
-            <span class="pn">|</span> <span class="id">_</span>           <span class="k">-&gt;</span> <span class="k">do!</span> <span class="id">State</span><span class="pn">.</span><span class="id">put</span> <span class="pn">(</span><span class="id">on</span><span class="pn">,</span> <span class="id">score</span><span class="pn">)</span>
-            <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs1', 5)" onmouseover="showTip(event, 'fs1', 5)" class="id">playGame</span> <span onmouseout="hideTip(event, 'fs3', 6)" onmouseover="showTip(event, 'fs3', 6)" class="id">xs</span>
+    <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="fn">x</span><span class="uc">::</span><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="fn">xs</span><span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs4', 12)" onmouseover="showTip(event, 'fs4', 12)" class="id">monad</span> <span class="pn">{</span>
+            <span class="k">let!</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="fn">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs5', 14)" onmouseover="showTip(event, 'fs5', 14)" class="fn">score</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 15)" onmouseover="showTip(event, 'fs6', 15)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs7', 16)" onmouseover="showTip(event, 'fs7', 16)" class="id">get</span>
+            <span class="k">match</span> <span onmouseout="hideTip(event, 'fs8', 17)" onmouseover="showTip(event, 'fs8', 17)" class="fn">x</span> <span class="k">with</span>
+            <span class="pn">|</span> <span class="s">&#39;a&#39;</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs10', 18)" onmouseover="showTip(event, 'fs10', 18)" class="fn">on</span> <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 19)" onmouseover="showTip(event, 'fs6', 19)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 20)" onmouseover="showTip(event, 'fs11', 20)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 21)" onmouseover="showTip(event, 'fs10', 21)" class="fn">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs5', 22)" onmouseover="showTip(event, 'fs5', 22)" class="fn">score</span> <span class="o">+</span> <span class="n">1</span><span class="pn">)</span>
+            <span class="pn">|</span> <span class="s">&#39;b&#39;</span> <span class="k">when</span> <span onmouseout="hideTip(event, 'fs10', 23)" onmouseover="showTip(event, 'fs10', 23)" class="fn">on</span> <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 24)" onmouseover="showTip(event, 'fs6', 24)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 25)" onmouseover="showTip(event, 'fs11', 25)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 26)" onmouseover="showTip(event, 'fs10', 26)" class="fn">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs5', 27)" onmouseover="showTip(event, 'fs5', 27)" class="fn">score</span> <span class="o">-</span> <span class="n">1</span><span class="pn">)</span>
+            <span class="pn">|</span> <span class="s">&#39;c&#39;</span>         <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 28)" onmouseover="showTip(event, 'fs6', 28)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 29)" onmouseover="showTip(event, 'fs11', 29)" class="id">put</span> <span class="pn">(</span><span class="fn">not</span> <span onmouseout="hideTip(event, 'fs10', 30)" onmouseover="showTip(event, 'fs10', 30)" class="fn">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs5', 31)" onmouseover="showTip(event, 'fs5', 31)" class="fn">score</span><span class="pn">)</span>
+            <span class="pn">|</span> <span class="id">_</span>           <span class="k">-&gt;</span> <span class="k">do!</span> <span onmouseout="hideTip(event, 'fs6', 32)" onmouseover="showTip(event, 'fs6', 32)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs11', 33)" onmouseover="showTip(event, 'fs11', 33)" class="id">put</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs10', 34)" onmouseover="showTip(event, 'fs10', 34)" class="fn">on</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs5', 35)" onmouseover="showTip(event, 'fs5', 35)" class="fn">score</span><span class="pn">)</span>
+            <span class="k">return!</span> <span onmouseout="hideTip(event, 'fs3', 36)" onmouseover="showTip(event, 'fs3', 36)" class="fn">playGame</span> <span onmouseout="hideTip(event, 'fs9', 37)" onmouseover="showTip(event, 'fs9', 37)" class="fn">xs</span>
         <span class="pn">}</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 7)" onmouseover="showTip(event, 'fs4', 7)" class="id">startState</span> <span class="o">=</span> <span class="pn">(</span><span class="k">false</span><span class="pn">,</span> <span class="n">0</span><span class="pn">)</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 8)" onmouseover="showTip(event, 'fs5', 8)" class="id">moves</span> <span class="o">=</span> <span class="id">toList</span> <span class="s">&quot;abcaaacbbcabbab&quot;</span>
-<span class="id">State</span><span class="pn">.</span><span class="id">eval</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs1', 9)" onmouseover="showTip(event, 'fs1', 9)" class="id">playGame</span> <span onmouseout="hideTip(event, 'fs5', 10)" onmouseover="showTip(event, 'fs5', 10)" class="id">moves</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs4', 11)" onmouseover="showTip(event, 'fs4', 11)" class="id">startState</span>
-<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs6', 12)" onmouseover="showTip(event, 'fs6', 12)" class="id">score</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs7', 13)" onmouseover="showTip(event, 'fs7', 13)" class="id">finalState</span><span class="pn">)</span> <span class="o">=</span> <span class="id">State</span><span class="pn">.</span><span class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs1', 14)" onmouseover="showTip(event, 'fs1', 14)" class="id">playGame</span> <span onmouseout="hideTip(event, 'fs5', 15)" onmouseover="showTip(event, 'fs5', 15)" class="id">moves</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs4', 16)" onmouseover="showTip(event, 'fs4', 16)" class="id">startState</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 38)" onmouseover="showTip(event, 'fs12', 38)" class="id">startState</span> <span class="o">=</span> <span class="pn">(</span><span class="k">false</span><span class="pn">,</span> <span class="n">0</span><span class="pn">)</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 39)" onmouseover="showTip(event, 'fs13', 39)" class="id">moves</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 40)" onmouseover="showTip(event, 'fs14', 40)" class="fn">toList</span> <span class="s">&quot;abcaaacbbcabbab&quot;</span>
+<span onmouseout="hideTip(event, 'fs6', 41)" onmouseover="showTip(event, 'fs6', 41)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs15', 42)" onmouseover="showTip(event, 'fs15', 42)" class="id">eval</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 43)" onmouseover="showTip(event, 'fs3', 43)" class="fn">playGame</span> <span onmouseout="hideTip(event, 'fs13', 44)" onmouseover="showTip(event, 'fs13', 44)" class="id">moves</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs12', 45)" onmouseover="showTip(event, 'fs12', 45)" class="id">startState</span>
+<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 46)" onmouseover="showTip(event, 'fs5', 46)" class="id">score</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs16', 47)" onmouseover="showTip(event, 'fs16', 47)" class="id">finalState</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 48)" onmouseover="showTip(event, 'fs6', 48)" class="m">State</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs17', 49)" onmouseover="showTip(event, 'fs17', 49)" class="id">run</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs3', 50)" onmouseover="showTip(event, 'fs3', 50)" class="fn">playGame</span> <span onmouseout="hideTip(event, 'fs13', 51)" onmouseover="showTip(event, 'fs13', 51)" class="id">moves</span><span class="pn">)</span> <span onmouseout="hideTip(event, 'fs12', 52)" onmouseover="showTip(event, 'fs12', 52)" class="id">startState</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">val playGame: _arg1: &#39;a list -&gt; &#39;b</div>
-<div class="fsdocs-tip" id="fs2">val x: &#39;a</div>
-<div class="fsdocs-tip" id="fs3">val xs: &#39;a list</div>
-<div class="fsdocs-tip" id="fs4">val startState: bool * int</div>
-<div class="fsdocs-tip" id="fs5">val moves: obj</div>
-<div class="fsdocs-tip" id="fs6">val score: obj</div>
-<div class="fsdocs-tip" id="fs7">val finalState: obj</div>
+            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs3">val playGame: _arg1: char list -&gt; State&lt;(bool * int),int&gt;</div>
+<div class="fsdocs-tip" id="fs4">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs5">val score: int</div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />union case State.State: (&#39;s -&gt; &#39;t * &#39;s) -&gt; State&lt;&#39;s,&#39;t&gt;<br /><br />--------------------<br />module State
+
+from FSharpPlus.Data<br /><em>&lt;summary&gt;
+ Basic operations on State
+&lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
+type State&lt;&#39;s,&#39;t&gt; =
+  | State of (&#39;s -&gt; &#39;t * &#39;s)
+  static member ( *&gt; ) : x: State&lt;&#39;S,&#39;T&gt; * y: State&lt;&#39;S,&#39;U&gt; -&gt; State&lt;&#39;S,&#39;U&gt;
+  static member (&lt;!&gt;) : f: (&#39;T -&gt; &#39;U) * x: State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;
+  static member ( &lt;* ) : x: State&lt;&#39;S,&#39;U&gt; * y: State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;
+  static member (&lt;*&gt;) : f: State&lt;&#39;S,(&#39;T -&gt; &#39;U)&gt; * x: State&lt;&#39;S,&#39;T&gt; -&gt; State&lt;&#39;S,&#39;U&gt;
+  static member (&gt;=&gt;) : f: (&#39;T -&gt; State&lt;&#39;S,&#39;U&gt;) * g: (&#39;U -&gt; State&lt;&#39;S,&#39;V&gt;) -&gt; (&#39;T -&gt; State&lt;&#39;S,&#39;V&gt;)
+  static member (&gt;&gt;=) : x: State&lt;&#39;S,&#39;T&gt; * f: (&#39;T -&gt; State&lt;&#39;S,&#39;U&gt;) -&gt; State&lt;&#39;S,&#39;U&gt;
+  static member Delay: body: (unit -&gt; State&lt;&#39;S,&#39;T&gt;) -&gt; State&lt;&#39;S,&#39;T&gt;
+  static member Return: a: &#39;T -&gt; State&lt;&#39;S,&#39;T&gt;
+  static member TryFinally: State&lt;&#39;S,&#39;T&gt; * f: (unit -&gt; unit) -&gt; State&lt;&#39;S,&#39;T&gt;
+  static member TryWith: State&lt;&#39;S,&#39;T&gt; * h: (exn -&gt; State&lt;&#39;S,&#39;T&gt;) -&gt; State&lt;&#39;S,&#39;T&gt;
+  ...<br /><em>&lt;summary&gt; Computation type: Computations which maintain state.
+ &lt;para&gt;   Binding strategy: Threads a state parameter through the sequence of bound functions so that the same state value is never used twice, giving the illusion of in-place update.&lt;/para&gt;&lt;para&gt;   Useful for: Building computations from sequences of operations that require a shared state.&lt;/para&gt;
+ The &lt;typeparamref name=&quot;&#39;s&quot; /&gt; indicates the computation state, while &lt;typeparamref name=&quot;&#39;t&quot; /&gt; indicates the result.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs7">val get: State&lt;&#39;S,&#39;S&gt;<br /><em>&lt;summary&gt;
+ Return the state from the internals of the monad.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs8">val x: char</div>
+<div class="fsdocs-tip" id="fs9">val xs: char list</div>
+<div class="fsdocs-tip" id="fs10">val on: bool</div>
+<div class="fsdocs-tip" id="fs11">val put: x: &#39;S -&gt; State&lt;&#39;S,unit&gt;<br /><em>&lt;summary&gt;
+ Replace the state inside the monad.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs12">val startState: bool * int</div>
+<div class="fsdocs-tip" id="fs13">val moves: char list</div>
+<div class="fsdocs-tip" id="fs14">val toList: source: &#39;a -&gt; &#39;T list (requires member ToList)<br /><em>&lt;summary&gt;Builds a list from the given foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input foldable.&lt;/param&gt;<br />&lt;returns&gt;The list of foldable elements.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val eval: State&lt;&#39;s,&#39;T&gt; -&gt; s: &#39;s -&gt; &#39;T<br /><em>&lt;summary&gt;
+ Evaluates a &amp;lt;paramref name=&quot;sa&quot;&amp;gt;state computation&amp;lt;/paramref&amp;gt; with the &amp;lt;paramref name=&quot;s&quot;&amp;gt;initial value&amp;lt;/paramref&amp;gt; and return only the result value of the computation. Ignore the final state.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs16">val finalState: bool * int</div>
+<div class="fsdocs-tip" id="fs17">val run: State&lt;&#39;S,&#39;T&gt; -&gt; (&#39;S -&gt; &#39;T * &#39;S)<br /><em>&lt;summary&gt;
+ Runs the state with an inital state to get back the result and the new state.
+&lt;/summary&gt;</em></div>
 
         </div>
 
