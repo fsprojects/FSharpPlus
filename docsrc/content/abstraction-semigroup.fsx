@@ -9,10 +9,10 @@ In mathematics, a semigroup is an algebraic structure consisting of a set togeth
 ___
 Minimal complete definition
 ---------------------------
- * ``(+)``/``(++)``
+ * ``(+)`` &nbsp; / &nbsp; ``(++)``
 *)
 (**
-    static member (+) (x:'Semigroup, y:'Semigroup) :'Semigroup
+    static member (+) (x: 'Semigroup, y: 'Semigroup) : 'Semigroup
 *)
 (**
 Rules
@@ -34,25 +34,26 @@ From .Net/F#
  
  -  ``list<'T>``
  -  ``option<'T>``
+ -  ``voption<'T>``
  -  ``array<'T>``
  -  ``string``
  -  ``StringBuilder``
  -  ``unit``
  -  ``Set<'T>``
- -  ``Map<'T,'U>``
+ -  ``Map<'T, 'U>``
  -  ``TimeSpan`` 
  -  ``Tuple<*>``
  -  ``ValueTuple<*> ( * up to 7 elements)``
  -  ``'T1* ... *'Tn``
  -  ``Task<'T>``
  -  ``ValueTask<'T>``
- -  ``'T->'Semigroup``
+ -  ``'T -> 'Semigroup``
  -  ``Async<'T>``
  -  ``Expr<'T>``
  -  ``Lazy<'T>``
- -  ``Dictionary<'T,'U>``
- -  ``IDictionary<'T,'U>``
- -  ``IReadOnlyDictionary<'T,'U>``
+ -  ``Dictionary<'T, 'U>``
+ -  ``IDictionary<'T, 'U>``
+ -  ``IReadOnlyDictionary<'T, 'U>``
  -  ``ResizeArray<'T>``
  -  ``seq<'T>``
  -  ``IEnumerator<'T>``
@@ -67,12 +68,12 @@ From F#+
  -  [``Endo<'T>``](type-endo.html)
  -  [``All``](type-all.html)
  -  [``Any``](type-any.html)
- -  [``Const<'C,'T>``](type-const.html)
+ -  [``Const<'C, 'T>``](type-const.html)
  -  [``First<'T>``](type-first.html)
  -  [``Last<'T>``](type-last.html)
  -  [``DList<'T>``](type-dlist.html)
- -  [``Vector<'T,'Dimension>``](type-vector.html)
- -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
+ -  [``Vector<'T, 'Dimension>``](type-vector.html)
+ -  [``Matrix<'T, 'Rows, 'Columns>``](type-matrix.html)
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 *)

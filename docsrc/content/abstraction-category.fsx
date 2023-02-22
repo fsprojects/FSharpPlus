@@ -55,8 +55,8 @@ Concrete implementations
 
 From .Net/F#
  
- -  ``'T->'U``
- -  ``Func<'T,'U>``
+ -  ``'T -> 'U``
+ -  ``Func<'T, 'U>``
 
  
 From F#+

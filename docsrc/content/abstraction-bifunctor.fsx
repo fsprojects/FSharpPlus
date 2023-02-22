@@ -68,15 +68,15 @@ From .Net/F#
  
  -  ``'T1 * 'T2``
  -  ``struct ('T1 * 'T2)``
- -  ``Result<'T2,'T1>``
- -  ``Choice<'T2,'T1>``
- -  ``KeyValuePair<'T1,'T2>``
+ -  ``Result<'T2, 'T1>``
+ -  ``Choice<'T2, 'T1>``
+ -  ``KeyValuePair<'T1, 'T2>``
 
  
 From F#+
 
- -  [``Const<'C,'T>``](type-const.html)
- -  [``Validation<'Error,'T>``](type-validation.html)
+ -  [``Const<'C, 'T>``](type-const.html)
+ -  [``Validation<'Error, 'T>``](type-validation.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
