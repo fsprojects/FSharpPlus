@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <Configurations>Debug;Release;Fable</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <TargetFramework>net5</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -52,12 +52,9 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
-      <Name>FSharpPlus</Name>
-      <Project>{4364a3ea-06d8-4493-be44-e22d5370cca1}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj" />
+    <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
   </ItemGroup>
 </Project>

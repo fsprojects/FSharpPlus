@@ -47,17 +47,18 @@ module Lens =
     /// <param name="optic">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (FSharpPlus.Data.First (Some x))) |> Const.run |> First.run
+    let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (First (Some x))) |> Const.run |> First.run
 
     /// <summary>Build a 'Lens' from a getter and a setter.</summary>
     /// <remarks>The lens should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <param name="getter">The getter function.</param>
     /// <param name="setter">The setter function, having as first parameter the object and second the value to set.</param>
     /// <param name="f">The free parameter.</param>
+    /// <param name="s"></param>
     /// <returns>The lens.</returns>
     let inline lens (getter: 's -> 'a) (setter: 's -> 'b -> 't) (f: 'a -> '``F<'b>``) = fun s -> setter s </Map.InvokeOnInstance/> f (getter s) : '``F<'t>``
 
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER // there are issues on Fable with Return.InvokeOnInstance
     /// <summary>Build a 'Prism' from a constructor and a getter.</summary>
     /// <remarks>The prism should be assigned as an inline function of the free parameter, not a value, otherwise compiler will fail with a type constraint mismatch.</remarks>
     /// <remarks>Using Result instead of Option to permit the types of 's and 't to differ.</remarks>
@@ -75,7 +76,7 @@ module Lens =
     /// <param name="f">The free parameter.</param>
     /// <returns>The prism.</returns>
     let inline prism' (constructor: 'b -> 's) (getter: 's -> Option<'a>) (f: 'a -> '``F<'b>``) = prism constructor (fun s -> option Ok (Error s) (getter s)) f : 's -> '``F<'t>``
-    #endif
+#endif
 
     /// <summary>Build an 'Iso' from a pair of inverse functions.</summary>
     /// <param name="func">The transform function.</param>
@@ -116,10 +117,10 @@ module Lens =
     module List =      
         /// Given a specific key, produces a Lens from a List<value> to an Option<value>. When setting,
         /// a Some(value) will insert or replace the value into the list at the given index. Setting a value of
-        /// None will delete the value at the specified index.  Works well together with non.
-        let inline _item i f t = 
+        /// None will delete the value at the specified index. Works well together with non.
+        let inline _item i f t =
             Map.InvokeOnInstance
-                (function | None -> List.removeAt i t | Some x -> List.setAt i x t)
+                (function None -> List.deleteAt i t | Some x -> List.setAt i x t)
                 (f (List.tryItem i t))
 
     [<RequireQualifiedAccess>]
@@ -155,8 +156,8 @@ module Lens =
     /// Lens for the value inside an Option or the given default value if the Option is None.  Works well when combined with Map._item
     let inline non def f ma = Map.InvokeOnInstance (fun a' -> if a' = def then None else Some(a')) (f (Option.defaultValue def ma))
 
-    #if !FABLE_COMPILER
     // Prism
+#if !FABLE_COMPILER // there are issues on Fable with Return.InvokeOnInstance for prism 'Const First'
 
     /// Prism providing a Traversal for targeting the 'Ok' part of a Result<'T,'Error>
     let inline _Ok    x = (prism Ok    <| either Ok (Error << Error)) x
@@ -169,7 +170,7 @@ module Lens =
 
     /// Prism providing a Traversal for targeting the 'None' part of an Option<'T>
     let inline _None x = (prism' (konst None) <| option (konst None) (Some ())) x
-    #endif
+#endif
 
     // Traversal
     let inline _all ref f s =
@@ -239,13 +240,11 @@ module Lens =
     /// <returns>The new object with the value modified.</returns>
     let (%->) lens updater = over lens updater : 's -> 't
 
-    #if !FABLE_COMPILER
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). Same as ``preview`` but with the arguments flipped.</summary>
     /// <param name="prism">The prism.</param>
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
     let (^?) (source: 's) (prism: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) = preview prism source
-    #endif
 
     /// Extract a list of the targets of a Fold. Same as ``toListOf`` but with the arguments flipped.
     let (^..) s l = toListOf l s

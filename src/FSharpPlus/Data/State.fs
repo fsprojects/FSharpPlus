@@ -24,6 +24,9 @@ module State =
     /// Combines two States into one by applying a mapping function.
     let map2 (f: 'T->'U->_) (State x) (State y) = State (fun s -> let (g, s1) = Tuple2.mapItem1 f (x s) in Tuple2.mapItem1 g (y s1)) : State<'S,'V>
 
+    /// Combines three States into one by applying a mapping function.
+    let map3 (f: 'T->'U->'V->_) (State x) (State y) (State z) = State (fun s -> let (g, s1) = Tuple2.mapItem1 f (x s) in let (h, s2) = Tuple2.mapItem1 g (y s1) in Tuple2.mapItem1 h (z s2)) : State<'S,'W>
+
     let bind  f (State m) = State (fun s -> let (a: 'T, s') = m s in run (f a) s')                                : State<'S,'U>
     let apply (State f) (State x) = State (fun s -> let (f', s1) = f s in let (x': 'T, s2) = x s1 in (f' x', s2)) : State<'S,'U>
     /// Evaluates a <paramref name="sa">state computation</paramref> with the <paramref name="s">initial value</paramref> and return only the result value of the computation. Ignore the final state.
@@ -51,9 +54,41 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x, f: 'T->_) = State.map f x          : State<'S,'U>
 
+    /// <summary>Lifts a function into a State. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (f: 'T->'U, x: State<'S, 'T>) : State<'S, 'U> = State.map f x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift2 (f: 'T->'U->_, x, y) = State.map2 f x y : State<'S, 'V>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift3 (f: 'T->'U->'V->_, x, y, z) = State.map3 f x y z : State<'S, 'W>
+
     static member Return a = State (fun s -> (a, s))           : State<'S,'T>
     static member (>>=) (x, f: 'T->_) = State.bind f x         : State<'S,'U>
-    static member (<*>) (f, x: State<'S,'T>) = State.apply f x : State<'S,'U>
+
+    /// <summary>
+    /// Composes left-to-right two State functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member (>=>) (f, (g: 'U -> _)) : 'T -> State<'S, 'V> = fun x -> State.bind g (f x)
+
+    static member (<*>) (f, x: State<'S,'T>) = State.apply f x : State<'S,'U>    
+
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member ( *>) (x: State<'S, 'T>, y: State<'S, 'U>) : State<'S, 'U> = ((fun (_: 'T) (k: 'U) -> k) </State.map/> x : State<'S, 'U->'U>) </State.apply/> y
+
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member (<* ) (x: State<'S, 'U>, y: State<'S, 'T>) : State<'S, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </State.map/> x : State<'S, 'T->'U>) </State.apply/> y
+
     static member get_Get () = State.get                       : State<'S,'S>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
@@ -96,7 +131,11 @@ module StateT =
     let inline map (f: 'T->'U) (StateT (m :_->'``Monad<'T * 'S>``)) = StateT (m >> Map.Invoke (fun (a, s') -> (f a, s'))) : StateT<'S,'``Monad<'U * 'S>``>
     
     /// Combines two StateTs into one by applying a mapping function.
-    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
+    let inline map2 (f: 'T->'U->'V) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2: 'S) -> result (f g h, s2)) : StateT<'S,'``Monad<'V * 'S>``>
+
+    /// Combines three StateTs into one by applying a mapping function.
+    let inline map3 (f: 'T->'U->'V->'W) (StateT x: StateT<'S,'``Monad<'T * 'S>``>) (StateT y: StateT<'S,'``Monad<'U * 'S>``>) (StateT z: StateT<'S,'``Monad<'V * 'S>``>) : StateT<'S,'``Monad<'W * 'S>``> =
+        StateT (fun s -> x s >>= fun (g, s1) -> y s1 >>= fun (h, s2) -> z s2 >>= fun (i, s3) -> result (f g h i, s3))
 
     let inline apply (StateT f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>) (StateT a: StateT<'S,'``Monad<'T * 'S>``>) = StateT (fun s -> f s >>= fun (g, t) -> Map.Invoke (fun (z: 'T, u: 'S) -> ((g z: 'U), u)) (a t)) : StateT<'S,'``Monad<'U * 'S>``>
 
@@ -112,11 +151,39 @@ type StateT<'s,'``monad<'t * 's>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Map    (x: StateT<'S,'``Monad<'T * 'S>``>, f : 'T->'U)                                = StateT.map   f x : StateT<'S,'``Monad<'U * 'S>``>
 
+    /// <summary>Lifts a function into a StateT. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member inline (<!>) (f: 'T -> 'U, x: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = StateT.map f x
+
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>) : StateT<'S,'``Monad<'V * 'S>``> = StateT.map2 f x y
 
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: StateT<'S,'``Monad<'T * 'S>``>, y: StateT<'S,'``Monad<'U * 'S>``>, z : StateT<'S,'``Monad<'V * 'S>``>) : StateT<'S,'``Monad<'W * 'S>``> = StateT.map3 f x y z
+
     static member inline (<*>)  (f: StateT<'S,'``Monad<('T -> 'U) * 'S>``>, x: StateT<'S,'``Monad<'T * 'S>``>) = StateT.apply f x : StateT<'S,'``Monad<'U * 'S>``>
-    static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>)     = StateT.bind  f x
+    
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: StateT<'S, '``Monad<'T * 'S>``>, y: StateT<'S, '``Monad<'U * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (_: 'T) (k: 'U) -> k) </StateT.map/> x : StateT<'S, '``Monad<('U->'U) * 'S>``>) </StateT.apply/> y
+
+    /// <summary>
+    /// Sequences two States left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: StateT<'S, '``Monad<'U * 'S>``>, y: StateT<'S, '``Monad<'T * 'S>``>) : StateT<'S, '``Monad<'U * 'S>``> = ((fun (k: 'U) (_: 'T) -> k ) </StateT.map/> x : StateT<'S, '``Monad<('T->'U) * 'S>``>) </StateT.apply/> y
+    
+    static member inline (>>=)  (x: StateT<'S,'``Monad<'T * 'S>``>, f: 'T->StateT<'S,'``Monad<'U * 'S>``>) = StateT.bind  f x
+
+    /// <summary>
+    /// Composes left-to-right two State functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> StateT<'S, '``Monad<'U * 'S>``>, g: 'U -> StateT<'S, '``Monad<'V * 'S>``>) : 'T -> StateT<'S, '``Monad<'V * 'S>``> = fun x -> StateT.bind g (f x)
 
     static member inline get_Empty () = StateT (fun _ -> getEmpty ()) : StateT<'S,'``MonadPlus<'T * 'S>``>
     static member inline (<|>) (StateT m, StateT n) = StateT (fun s -> m s <|> n s) : StateT<'S,'``MonadPlus<'T * 'S>``>
@@ -140,5 +207,8 @@ type StateT<'s,'``monad<'t * 's>``> with
     static member inline Throw (x: 'E) = x |> throw |> StateT.lift
     static member inline Catch (m: StateT<'S,'``MonadError<'E1,'T * 'S>``>, h: 'E1 -> _) =
         StateT (fun s -> catch (StateT.run m s) (fun e -> StateT.run (h e) s)) : StateT<'S,'``MonadError<'E2, 'T * 'S>``>
+
+    static member inline get_Ask ()                      = StateT.lift ask       : StateT<'S, '``MonadReader<'R, 'R>``>
+    static member inline Local (StateT m, f: 'R1 -> 'R2) = StateT (local f << m) : StateT<'S, '``MonadReader<'R1, 'T>``>
 
 #endif

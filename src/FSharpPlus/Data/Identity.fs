@@ -10,15 +10,30 @@
 ///           Any monad transformer applied to the Identity monad yields a non-transformer version of that monad.
 ///           Its applicative instance plays a fundamental role in Lens. </summary> 
 [<Struct>]
-type Identity<'t> = Identity of 't with
-    static member Return x = Identity x                                             : Identity<'T>
-    static member (>>=) (Identity x, f :'T -> Identity<'U>) = f x                   : Identity<'U>
-    static member (<*>) (Identity (f : 'T->'U), Identity (x : 'T)) = Identity (f x) : Identity<'U>
-    static member Lift2 (f, Identity (x: 'T), Identity (y: 'U)) = Identity (f x y)  : Identity<'V>
-    static member Map   (Identity x, f : 'T->'U) = Identity (f x)                   : Identity<'U>
-    static member Zip   (Identity x, Identity y) = Identity (x, y)                  : Identity<'T * 'U>
+type Identity<'t> = Identity of 't
 
 /// Basic operations on Identity
 [<RequireQualifiedAccess>]
 module Identity = 
     let run (Identity x) = x  : 'T
+    let apply (Identity (f : 'T -> 'U)) (Identity (x: 'T)) : Identity<'U> = Identity (f x)
+    let bind  (f: 'T -> Identity<'U>) (Identity x) : Identity<'U> = f x
+
+type Identity<'t> with
+    
+    static member Return x = Identity x                                             : Identity<'T>
+    
+    static member Lift2 (f, Identity (x: 'T), Identity (y: 'U)) = Identity (f x y)  : Identity<'V>
+    static member Lift3 (f, Identity (x: 'T), Identity (y: 'U), Identity (z: 'V))   : Identity<'W> = Identity (f x y z)
+    static member Map   (Identity x, f : 'T->'U) = Identity (f x)                   : Identity<'U>
+    static member Zip   (Identity x, Identity y) = Identity (x, y)                  : Identity<'T * 'U>
+
+    static member (<*>) (Identity (f: 'T -> 'U), Identity (x: 'T)) : Identity<'U> = Identity (f x)
+    
+    static member (>>=) (Identity x, f: 'T -> Identity<'U>) : Identity<'U> = f x
+
+    /// <summary>
+    /// Composes left-to-right two Id functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member (>=>) (f, (g: 'U -> _)) : 'T -> Identity<'V> = fun x -> Identity.bind g (f x)

@@ -49,15 +49,18 @@ module Seq =
         |> Seq.map (fun x -> (fst (snd x), snd (snd x), fst x))
         |> Seq.map (fun (x, y, z) -> f x y z)
 
-    /// <summary>
-    /// Applies a function to each element of the collection, starting from the end,
-    /// threading an accumulator argument through the computation.
-    /// </summary>
+    /// <summary>Applies a function to each element of the collection, starting from the end, threading an accumulator argument
+    /// through the computation. If the input function is <c>f</c> and the elements are <c>i0...iN</c>
+    /// then computes <c>f i0 (... (f iN s)...)</c></summary>
+    ///
+    /// <param name="folder">The function to update the state given the input elements.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <param name="state">The initial state.</param>
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
-    let foldBack f x z = Array.foldBack f (Seq.toArray x) z
+    let foldBack folder source state = Array.foldBack folder (Seq.toArray source) state
 
     /// <summary>
     /// Chunks the seq up into groups with the same projected key by applying
@@ -168,19 +171,24 @@ module Seq =
     ///
     /// <returns>The result sequence.</returns>
     let drop count (source: seq<_>) =
-        let mutable i = count
-        use e = source.GetEnumerator ()
-        while (i > 0 && e.MoveNext ()) do i <- i-1
-        seq { while e.MoveNext () do yield e.Current }
+        seq {
+            let mutable i = count
+
+            for x in source do
+                if i > 0 then i <- i - 1 else yield x
+        }
 
     #if !FABLE_COMPILER
-    
-    /// <summary>
-    /// Creates a sequence by replicating the given initial value count times.
-    /// </summary>
+   
+    /// <summary>Creates a sequence by replicating the given initial value.</summary>
+    ///
+    /// <param name="count">The number of elements to replicate.</param>
+    /// <param name="initial">The value to replicate</param>
+    ///
+    /// <returns>The generated sequence.</returns> 
     /// <remarks>
-    /// Note: this function has since been added to FSharpCore, so effectively
-    /// overrides it. It will be removed in next major release of FSharpPlus.
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
     #endif

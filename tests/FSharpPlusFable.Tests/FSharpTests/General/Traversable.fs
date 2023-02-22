@@ -16,14 +16,13 @@ type Either<'l,'r> = Left of 'l | Right of 'r with
         SideEffects.add ("f(x) <*> " + string x)
         match f, x with Right a, Right b -> Right (a b) | Left e, _ | _, Left e -> Left e
     static member IsLeftZero x = match x with Left _ -> true | _ -> false
-#endif
 
-#if !FABLE_COMPILER
 let traverseTest =
     let _None = sequence (seq [Some 3;None ;Some 1])
     let _None2 = sequence (TestNonEmptyCollection.Create (Some 42))
     ()
 #endif
+
 let toOptions x = if x <> 4 then Some x       else None
 let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
 let toLists   x = if x <> 4 then [x; x]       else []
@@ -31,16 +30,9 @@ let toLists   x = if x <> 4 then [x; x]       else []
 let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
 #endif
 
-let expectedEffects =
-    [
-        """f(x) <*> Right 0"""
-        """f(x) <*> Right 1"""
-        """f(x) <*> Right 2"""
-        """f(x) <*> Right 3"""
-        """f(x) <*> Left ["This is a failure"]"""
-    ]
-
 let traversable = testList "Traversable" [
+    
+    // Exception: TypeError: o[Symbol.iterator] is not a function
     #if !FABLE_COMPILER
     testCase "sequence_Default_Primitive" (fun () -> 
         let testVal = sequence [|Some 1; Some 2|]
@@ -48,6 +40,7 @@ let traversable = testList "Traversable" [
         Assert.IsInstanceOf<Option<array<int>>> testVal)
     #endif
 
+    // .. Control/Functor.fs(..): (..) error FABLE: Cannot resolve trait call Map - Inline call from ./Traversable.fs [Wrong line number??]
     #if !FABLE_COMPILER
     testCase "traverseDerivedFromSequence" (fun () -> 
         let testVal = traverse (fun x -> [int16 x..int16 (x+2)]) (WrappedListH [1; 4])
@@ -82,6 +75,7 @@ let traversable = testList "Traversable" [
         ())
     #endif
 
+    // Control/Applicative.fs(..): (..) error FABLE: Cannot resolve trait call IsLeftZero - Inline call from ./Traversable.fs(..) < ..
     #if !FABLE_COMPILER
     testCase "traverse_Specialization" (fun () ->
         let _ = Seq.traverse id [WrappedSeqD [1]; WrappedSeqD [2]]
@@ -120,28 +114,33 @@ let traversable = testList "Traversable" [
             let rs4 = sequence nem
             Assert.IsInstanceOf<option<NonEmptyMap<string, int>>> rs4)
         #endif
+        #if !FABLE_COMPILER
         testCase "necol" (fun () ->
             let rs5 = traverse id (TestNonEmptyCollection.Create (Some 42))
-            #if !FABLE_COMPILER
             Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs5
-            #endif
             ())
         testCase "neseq" (fun () ->
             let nes = neseq { Some 1 }
             let rs6 = traverse id nes
-            #if !FABLE_COMPILER
             Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs6
-            #endif
             let rs7 = sequence nes
-            #if !FABLE_COMPILER
             Assert.IsInstanceOf<option<NonEmptySeq<int>>> rs7
-            #endif
             ())
+        #endif
     ]
     #endif
 
     #if !FABLE_COMPILER
     testCase "traverseInfiniteApplicatives" (fun () ->
+
+        let expectedEffects =
+            [
+                """f(x) <*> Right 0"""
+                """f(x) <*> Right 1"""
+                """f(x) <*> Right 2"""
+                """f(x) <*> Right 3"""
+                """f(x) <*> Left ["This is a failure"]"""
+            ]
 
         SideEffects.reset ()
 
@@ -194,6 +193,7 @@ let traversable = testList "Traversable" [
 
     #if !FABLE_COMPILER || FABLE_COMPILER_3
     testList "traverseFiniteApplicatives" [ // TODO -> implement short-circuit without breaking anything else
+
         #if !FABLE_COMPILER
         testCase "a" (fun () ->
             SideEffects.reset ()
@@ -241,6 +241,14 @@ let traversable = testList "Traversable" [
             ())
 
         testCase "e" (fun () ->
+            let expectedEffects =
+                [
+                    """f(x) <*> Right 0"""
+                    """f(x) <*> Right 1"""
+                    """f(x) <*> Right 2"""
+                    """f(x) <*> Right 3"""
+                    """f(x) <*> Left ["This is a failure"]"""
+                ]
             SideEffects.reset ()
             let e = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toList)
             SideEffects.are expectedEffects
@@ -252,6 +260,14 @@ let traversable = testList "Traversable" [
             ())
 
         testCase "f" (fun () ->
+            let expectedEffects =
+                [
+                    """f(x) <*> Right 0"""
+                    """f(x) <*> Right 1"""
+                    """f(x) <*> Right 2"""
+                    """f(x) <*> Right 3"""
+                    """f(x) <*> Left ["This is a failure"]"""
+                ]
             SideEffects.reset ()
             let f = sequence (Seq.initInfinite toEithers |> Seq.take 20 |> Seq.toArray)
             SideEffects.are expectedEffects
@@ -341,7 +357,8 @@ let traversable = testList "Traversable" [
         equalSeq expected a
         equalSeq expected b)
     #endif
-]
+
+    ]
 
 module Bitraversable =
     #if !FABLE_COMPILER

@@ -13,14 +13,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
     - name: Restore
       run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
+    - name: Setup .NET Core 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.201
     - name: Restore tools
-      run: dotnet tool restore
+      run: dotnet tool install --global Fable --version 3.7.20
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
@@ -30,24 +32,33 @@ jobs:
       run: npm install
     - name: Run Fable tests
       working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet fable . --outDir bin --runScript ./bin 
+      run: fable . --outDir bin --runScript ./bin 
   
   testFable3SubsetOnCore:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.100
     - name: Restore
       run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
+    - name: Remove global json in subfolder
+      run: rm global.json
+      working-directory: tests/FSharpPlusFable.Tests
+    - name: Setup .NET Core 7
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 7.0.100
+    - name: Setup .NET Core 6
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.201
     - name: Restore tools
       run: dotnet tool restore
-    - name: Run tests (Fable2 subset but on .net)
-      working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet run -c Fable
+    # - name: Run tests (Fable2 subset but on .net)
+    #   working-directory: tests/FSharpPlusFable.Tests
+    #   run: dotnet run -c Fable
     - name: Run tests (Fable3 subset but on .net)
       working-directory: tests/FSharpPlusFable.Tests
       run: dotnet run -c Fable3

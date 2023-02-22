@@ -1,7 +1,6 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
 
 (**
 Category
@@ -56,8 +55,8 @@ Concrete implementations
 
 From .Net/F#
  
- -  ``'T->'U``
- -  ``Func<'T,'U>``
+ -  ``'T -> 'U``
+ -  ``Func<'T, 'U>``
 
  
 From F#+

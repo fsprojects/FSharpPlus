@@ -1,4 +1,4 @@
-image: Visual Studio 2019
+image: Visual Studio 2022
 
 before_build:
   - ps: >-
@@ -18,9 +18,9 @@ build_script:
   - cmd: dotnet build -c Release ./FSharpPlus.sln
   - cmd: dotnet test -c Release tests/FSharpPlus.Tests
   - ps: if ($env:VersionSuffix) { dotnet pack build.proj --version-suffix $env:VersionSuffix } else { dotnet pack build.proj }
-  - ps: ./docsrc/tools/download_nugets.ps1
-  - cmd: dotnet run -c Release --project ./docsrc/tools
 test: off
 artifacts:
   - path: bin
     name: bin
+nuget:
+  project_feed: true

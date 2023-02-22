@@ -395,3 +395,8 @@ module NonEmptyList =
     let ``mapi on non empty list should equal mapi on list`` () =
         let mapOp a b = sprintf "%d-%d" a b
         fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.mapi mapOp |> NonEmptyList.toList) = (l |> List.mapi mapOp)))
+
+module MultiMap =
+    [<Test>]
+    let ``monoid works`` () =
+        MultiMap.ofList [1, 'a'; 3, 'b'] ++ MultiMap.ofList [1, 'c'; 5, 'd'; 6, 'e'] |> shoulSeqEqual (MultiMap.ofList [1, 'a'; 1, 'c'; 3, 'b'; 5, 'd'; 6, 'e'])

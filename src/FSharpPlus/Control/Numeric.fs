@@ -132,12 +132,11 @@ open FSharpPlus.Internals.Prelude
 type Zero =
     inherit Default1
 
-    #if !FABLE_COMPILER
     static member        Zero (_: System.TimeSpan                , _: Zero    ) = System.TimeSpan ()
-    #endif
     static member        Zero (_: DmStruct                       , _: Zero    ) = Unchecked.defaultof<DmStruct>
     static member        Zero (_: list<'a>                       , _: Zero    ) = []   :   list<'a>
     static member        Zero (_: option<'a>                     , _: Zero    ) = None : option<'a>
+    static member        Zero (_: voption<'a>                    , _: Zero    ) = ValueNone : voption<'a>
     static member        Zero (_: array<'a>                      , _: Zero    ) = [||] :  array<'a>
     static member        Zero (_: string                         , _: Zero    ) = ""
     static member        Zero (_: StringBuilder                  , _: Zero    ) = new StringBuilder ()
@@ -146,11 +145,12 @@ type Zero =
     static member        Zero (_: Set<'a>                        , _: Zero    ) = Set.empty : Set<'a>
     static member        Zero (_: Map<'a,'b>                     , _: Zero    ) = Map.empty : Map<'a,'b>
 
-    static member inline Invoke () = 
+    static member inline Invoke () =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Zero : _*_ -> _) b, a)
         let inline call (a: 'a) = call_2 (a, Unchecked.defaultof<'r>) : 'r
         call Unchecked.defaultof<Zero>
 
+#if !FABLE_COMPILER
 type Zero with
     static member inline Zero (t: 't, _:Zero) : 't =
         let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
@@ -163,10 +163,12 @@ type Zero with
         let (t2: 't2) = Zero.Invoke ()
         let (t1: 't1) = Zero.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
+#endif
 
 type Zero with
-    static member inline Zero (_: Tuple<'a>, _: Zero) = Tuple<_> (Zero.Invoke ()) : Tuple<'a>
-    static member inline Zero (_: Id<'a>   , _: Zero) = Id<_>    (Zero.Invoke ())
+    static member inline Zero (_: Tuple<'a>, _: Zero) = tuple1 (Zero.Invoke ()) : Tuple<'a>
+    static member inline Zero (_: Id<'a>   , _: Zero) = Id<_>  (Zero.Invoke ())
+    static member inline Zero (_: ValueTuple<'a>, _: Zero) = valueTuple1 (Zero.Invoke ()) : ValueTuple<'a>
     
 type Zero with static member inline Zero (_: 'a*'b               , _: Zero) = (Zero.Invoke (), Zero.Invoke ()                                                                                ) : 'a*'b
 type Zero with static member inline Zero (_: 'a*'b*'c            , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : 'a*'b*'c
@@ -174,18 +176,33 @@ type Zero with static member inline Zero (_: 'a*'b*'c*'d         , _: Zero) = (Z
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e      , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                ) : 'a*'b*'c*'d*'e
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : 'a*'b*'c*'d*'e*'f
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : 'a*'b*'c*'d*'e*'f*'g
+    
+type Zero with static member inline Zero (_: ValueTuple<'a,'b>               , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke ()                                                                                ) : ValueTuple<'a,'b>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c>            , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : ValueTuple<'a,'b,'c>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d>         , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                ) : ValueTuple<'a,'b,'c,'d>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d,'e>      , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                ) : ValueTuple<'a,'b,'c,'d,'e>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d,'e,'f>   , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : ValueTuple<'a,'b,'c,'d,'e,'f>
+type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d,'e,'f,'g>, _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : ValueTuple<'a,'b,'c,'d,'e,'f,'g>
+
 
 type Zero with
     #if !FABLE_COMPILER
     static member inline Zero (_: Task<'a>, _: Zero) =
         let (v: 'a) = Zero.Invoke ()
-        let s = TaskCompletionSource ()
+        let s = TaskCompletionSource<_> ()
         s.SetResult v
         s.Task
     #endif
+    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    static member inline Zero (_: ValueTask<'a>, _: Zero) : ValueTask<'a> =
+        let (v: 'a) = Zero.Invoke ()
+        ValueTask<'a>(v)
+    #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
+    #if !FABLE_COMPILER
     static member inline Zero (_: Expr<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in Expr.Cast<'a>(Expr.Value (v))
+    #endif
     static member inline Zero (_: Lazy<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in lazy v
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
@@ -196,13 +213,9 @@ type Zero with
     static member inline Zero (_: ^R                             , _: Default5) = Implicit.Invoke 0   : ^R
 
     static member        Zero (_: seq<'a>                        , _: Default4) = Seq.empty      : seq<'a>
-    #if !FABLE_COMPILER
     static member        Zero (_: IEnumerator<'a>                , _: Default4) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
-    #endif
     static member        Zero (_: IDictionary<'a,'b>             , _: Default4) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
-    #if !FABLE_COMPILER
     static member        Zero (_: IReadOnlyDictionary<'a,'b>     , _: Default4) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
-    #endif
     static member inline Zero (_: 't                             , _: Default3) = (^t : (static member Empty: ^t) ()) : 't
 
     static member inline Zero (_: 't                             , _: Default2) = FromInt32.InvokeOnInstance 0        : 't
@@ -293,10 +306,14 @@ type TryNegate' =
 type DivRem =
     inherit Default1
     static member inline DivRem (x: ^t when ^t: null and ^t: struct, y: ^t, _thisClass: DivRem) = (x, y)
-    static member inline DivRem (D: 'T, d: 'T, [<Optional>]_impl: Default1) = let q = D / d in q,  D - q * d
-    static member inline DivRem (D: 'T, d: 'T, [<Optional>]_impl: DivRem  ) =
+    static member inline DivRem (D: 'T, d: 'T, _impl: Default2) = let q = D / d in q,  D - q * d
+    static member inline DivRem (D: 'T, d: 'T, _impl: Default1) =
                     let mutable r = Unchecked.defaultof<'T>
                     (^T: (static member DivRem : _ * _ -> _ -> _) (D, d, &r)), r
+
+    static member inline DivRem (D: 'T, d: 'T, _impl: DivRem  ) =
+                    let (struct (x, y)) = (^T: (static member DivRem : _ * _ -> _) (D, d))
+                    (x, y)
 
     static member inline Invoke (D: 'T) (d: 'T) : 'T*'T =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member DivRem : _*_*_ -> _) b, c, a)
@@ -558,8 +575,8 @@ type MinValue =
         let (t1: 't1) = MinValue.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
-    static member inline MinValue (_: Tuple<'a>, _: MinValue) = Tuple<_> (MinValue.Invoke ()) : Tuple<'a>
-    static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>    (MinValue.Invoke ())
+    static member inline MinValue (_: Tuple<'a>, _: MinValue) = tuple1 (MinValue.Invoke ()) : Tuple<'a>
+    static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>  (MinValue.Invoke ())
 
     static member inline MinValue (_: 'a*'b               , _: MinValue) = (MinValue.Invoke (), MinValue.Invoke ())
     static member inline MinValue (_: 'a*'b*'c            , _: MinValue) = (MinValue.Invoke (), MinValue.Invoke (), MinValue.Invoke ())
@@ -608,8 +625,8 @@ type MaxValue =
         let (t1: 't1) = MaxValue.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
-    static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = Tuple<_> (MaxValue.Invoke ()) : Tuple<'a>
-    static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>    (MaxValue.Invoke ())
+    static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = tuple1 (MaxValue.Invoke ()) : Tuple<'a>
+    static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>  (MaxValue.Invoke ())
 
     static member inline MaxValue (_: 'a*'b               , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke ())
     static member inline MaxValue (_: 'a*'b*'c            , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke ())

@@ -1,10 +1,9 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
-    "test": "dotnet fable . --outDir bin --runScript ./bin /d"
-  },
-  "dependencies": {
-    "esm": "^3.2.25"
+    "test": "dotnet fable . --outDir bin --runScript ./bin /d",
+    "test_debug": "node --eval \"require('esm')(module)('./bin/./Tests.js')\" ./bin/./Tests.js ./bin /d"
   },
   "name": "tests"
 }

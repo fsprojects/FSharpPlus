@@ -32,6 +32,7 @@ module String =
     let endsWith subString (source: string) = source.EndsWith (subString, false, CultureInfo.InvariantCulture)
 
     /// Does the source string contain the given character?
+    /// Use `String.isSubstring` to check for strings.
     let contains char      (source: string) = Seq.contains char source
 
     /// Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
@@ -40,11 +41,23 @@ module String =
     /// Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) = if isNull source then source else source.ToLowerInvariant ()
 
-    /// Trims white space -- function wrapper for String.Trim method.
+    /// Trims leading and trailing white spaces -- function wrapper for String.Trim method.
     /// 
     /// Note this is distinct from trim which trims the given characters,
-    /// not whitespace.
+    /// not white spaces.
     let trimWhiteSpaces (source: string) = source.Trim ()
+    
+    /// Trims leading white spaces -- function wrapper for String.TrimStart method.
+    /// 
+    /// Note this is distinct from trim which trims the given characters,
+    /// not white spaces.
+    let trimStartWhiteSpaces (source: string) = source.TrimStart ()
+    
+    /// Trims trailing white spaces -- function wrapper for String.TrimEnd method.
+    /// 
+    /// Note this is distinct from trim which trims the given characters,
+    /// not white spaces.
+    let trimEndWhiteSpaces (source: string) = source.TrimEnd ()
 
     #if !FABLE_COMPILER
        
