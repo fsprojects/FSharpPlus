@@ -124,7 +124,7 @@ ___</p>
 <li><p><code>Choice&lt;'T,'U&gt;</code></p></li>
 <li><p><code>KeyValuePair&lt;'Key,'T&gt;</code></p></li>
 <li><p><code>'Monoid * 'T</code></p></li>
-<li><p><code>'ValueTuple&lt;Monoid, 'T&gt;</code></p></li>
+<li><p><code>ValueTuple&lt;'Monoid, 'T&gt;</code></p></li>
 <li><p><code>Task&lt;'T&gt;</code></p></li>
 <li><p><code>ValueTask&lt;'T&gt;</code></p></li>
 <li><p><code>'R-&gt;'T</code></p></li>
@@ -164,6 +164,11 @@ ___</p>
 -  <code>StringBuilder</code>
 -  <code>Set&lt;'T&gt;</code>
 -  <code>IEnumerator&lt;'T&gt;</code></p>
+<p>Only for <*> operation:
+-  <code>Map&lt;'Key, 'T&gt;</code>
+-  <code>Dictionary&lt;'Key, 'T&gt;</code>
+-  <code>IDictionary&lt;'Key, 'T&gt;</code>
+-  <code>IReadOnlyDictionary&lt;'Key, 'T&gt;</code></p>
 <p><a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"

@@ -121,23 +121,31 @@ ___</p>
 <p>From .Net/F#</p>
 </li>
 <li><p><code>list&lt;'T&gt;</code></p></li>
-<li><p><code>option&lt;'T&gt;</code></p></li>
 <li><p><code>array&lt;'T&gt;</code></p></li>
 <li><p><code>seq&lt;'T&gt;</code></p></li>
+<li><p><code>option&lt;'T&gt;</code></p></li>
+<li><p><code>voption&lt;'T&gt;</code></p></li>
+<li><p><code>Result&lt;'T, 'Monoid&gt;</code></p></li>
+<li><p><code>Choice&lt;'T, 'Monoid&gt;</code></p></li>
+<li><p><code>'T -&gt; 'Alternative</code></p></li>
 </ul>
 <p>From F#+</p>
 <ul>
-<li><a href="type-readert.html"><code>ReaderT&lt;'R, 'MonadPlus&lt;'T&gt;&gt;</code></a></li>
-<li><a href="type-writert.html"><code>WriterT&lt;'MonadPlus&lt;'T * 'Monoid&gt;&gt;</code></a></li>
-<li><a href="type-statet.html"><code>StateT&lt;'S,'MonadPlus&lt;'T * 'S&gt;&gt;</code></a></li>
-<li><a href="type-compose.html"><code>Compose&lt;'AlternativeF&lt;'AlternativeG&lt;'T&gt;&gt;&gt;</code></a></li>
-<li><a href="type-dlist.html"><code>DList&lt;'T&gt;</code></a></li>
-<li>
-<a href="type-ziplist.html"><code>ZipList&lt;'S&gt;</code></a>
-
-<a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation
-</li>
+<li><p><a href="type-readert.html"><code>ReaderT&lt;'R, 'MonadPlus&lt;'T&gt;&gt;</code></a></p></li>
+<li><p><a href="type-writert.html"><code>WriterT&lt;'MonadPlus&lt;'T * 'Monoid&gt;&gt;</code></a></p></li>
+<li><p><a href="type-statet.html"><code>StateT&lt;'S,'MonadPlus&lt;'T * 'S&gt;&gt;</code></a></p></li>
+<li><p><a href="type-optiont.html"><code>OptionT&lt;'MonadPlus&lt;option&lt;'T&gt;&gt;&gt;</code></a></p></li>
+<li><p><a href="type-valueoptiont.html"><code>ValueOptionT&lt;'MonadPlus&lt;voption&lt;'T&gt;&gt;&gt;</code></a></p></li>
+<li><p><a href="type-resultt.html"><code>ResultT&lt;'MonadPlus&lt;Result&lt;'T,'Monoid&gt;&gt;&gt;</code></a></p></li>
+<li><p><a href="type-choicet.html"><code>ChoiceT&lt;'MonadPlus&lt;Choice&lt;'T,'Monoid&gt;&gt;&gt;</code></a></p></li>
+<li><p><a href="type-compose.html"><code>Compose&lt;'AlternativeF&lt;'AlternativeG&lt;'T&gt;&gt;&gt;</code></a></p></li>
+<li><p><a href="type-dlist.html"><code>DList&lt;'T&gt;</code></a></p></li>
+<li><p><a href="type-ziplist.html"><code>ZipList&lt;'S&gt;</code></a></p></li>
+<li><p><a href="type-nonemptyseq.html"><code>NonEmptySeq&lt;'T&gt;</code></a></p></li>
+<li><p><a href="type-validation.html"><code>Validation&lt;'Error, 'T&gt;</code></a></p></li>
+<li><p>Only <code>&lt;|&gt;</code> operation</p></li>
 </ul>
+<p><a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
