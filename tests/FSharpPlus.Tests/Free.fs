@@ -352,3 +352,9 @@ module Lift3 =
             |> Identity.run
 
         areStEqual result ("1", "2", "3")
+
+    [<Test>]
+    let hoistFunction () =
+        let x: Free<Result<int, string>, int> = Pure 4
+        let y = Free.hoist Result.toOption x
+        Assert.IsInstanceOf<Option<Free<option<int>, int>>> (Some y)
