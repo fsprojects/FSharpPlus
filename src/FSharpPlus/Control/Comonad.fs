@@ -77,6 +77,7 @@ type Extend =
                 match g with
                 | ValueTask.Faulted e -> tcs.SetException e
                 | ValueTask.Canceled  -> tcs.SetCanceled ()
+                | ValueTask.Succeeded -> raise Internals.Errors.exnUnreachable
             else
                 ValueTask.continueTask tcs g (fun _ ->
                     try tcs.SetResult (f g)
