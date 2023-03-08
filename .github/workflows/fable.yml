@@ -16,7 +16,7 @@ jobs:
     - name: Restore
       run: git submodule update --init --recursive
     - name: Remove global json
-       run: rm global.json
+      run: rm global.json
     - name: Setup .NET Core 7
       uses: actions/setup-dotnet@v1
       with:
