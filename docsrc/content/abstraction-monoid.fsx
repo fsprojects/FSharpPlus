@@ -1,6 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Monoid
@@ -59,6 +60,7 @@ From .Net/F#
  -  ``Tuple<'Monoid1* ... *'MonoidN>``
  -  ``'Monoid1* ... *'MonoidN``
  -  ``Task<'T>``
+ -  ``ValueTask<'T>``
  -  ``'T->'Monoid``
  -  ``Async<'T>``
  -  ``Expr<'T>``
@@ -91,9 +93,11 @@ Examples
 --------
 *)
 
-
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Math.Generic

@@ -79,7 +79,10 @@ type MapIndexed =
         call (Unchecked.defaultof<MapIndexed>, source, mapping)
     static member inline InvokeOnInstance (mapping: 'K->'T->'Key) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member MapIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
 
-    static member inline MapIndexed (x: seq<'T>   , f: int->'T->'U, _impl: Default2) = x |> Seq.mapi f : seq<'U>
+type MapIndexed with
+    static member inline MapIndexed (x: seq<'T>                      , f:  int -> 'T -> 'U, _impl: Default3) = x |> Seq.mapi f : seq<'U>
+    static member inline MapIndexed (x: IReadOnlyDictionary<'Key, 'T>, f: 'Key -> 'T -> 'U, _impl: Default2) = x |> IReadOnlyDictionary.mapi f : IReadOnlyDictionary<'Key, 'U>
+    static member inline MapIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default2) = ()
     static member inline MapIndexed (x: ^``I<'T>``, f: 'K->'T->'U , _impl: Default1) : '``I<'U>`` = MapIndexed.InvokeOnInstance f x
     static member inline MapIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 
@@ -97,7 +100,10 @@ type ChooseIndexed =
         call (Unchecked.defaultof<ChooseIndexed>, source, mapping)
     static member inline InvokeOnInstance (mapping: 'K->'T->'U option) (source: '``Indexable<'T>``) : '``Indexable<'U>`` = (^``Indexable<'T>`` : (static member ChooseIndexed : _*_->_) source, mapping) : ^``Indexable<'U>``
 
-    static member inline ChooseIndexed (x: seq<'T>   , f: int->'T->'U option, _impl: Default2) = x |> Seq.choosei f : seq<'U>
+type ChooseIndexed with
+    static member inline ChooseIndexed (x: seq<'T>                      , f:  int-> 'T -> 'U option, _impl: Default3) = x |> Seq.choosei f : seq<'U>
+    static member inline ChooseIndexed (x: IReadOnlyDictionary<'Key, 'T>, f: 'Key-> 'T -> 'U option, _impl: Default2) = x |> IReadOnlyDictionary.choose f : IReadOnlyDictionary<'Key, 'U>
+    static member inline ChooseIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U option, _mthd: Default2) = ()
     static member inline ChooseIndexed (x: ^``I<'T>``, f: 'K->'T->'U option, _impl: Default1) : '``I<'U>`` = ChooseIndexed.InvokeOnInstance f x
     static member inline ChooseIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U option, _mthd: Default1) = ()
 
@@ -113,7 +119,10 @@ type IterateIndexed =
         call (Unchecked.defaultof<IterateIndexed>,  source, action) : unit
     static member inline InvokeOnInstance (action: 'K->'T->unit) (source: '``Indexable<'T>``) = (^``Indexable<'T>`` : (static member IterateIndexed : _*_->unit) source, action)
 
-    static member inline IterateIndexed (x: seq<'T>   , f: int->'T->unit , _impl: Default2) = Seq.iteri   f x
+type IterateIndexed with
+    static member inline IterateIndexed (x: seq<'T>                      , f:  int -> 'T-> unit, _impl: Default3) = Seq.iteri f x
+    static member inline IterateIndexed (x: IReadOnlyDictionary<'Key, 'T>, f: 'Key -> 'T-> unit, _impl: Default2) = IReadOnlyDictionary.iter f x
+    static member inline IterateIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default2) = ()
     static member inline IterateIndexed (x: ^``I<'T>``, f: 'K->'T->unit  , _impl: Default1) = IterateIndexed.InvokeOnInstance f x
     static member inline IterateIndexed (_: ^t when ^t: null and ^t: struct, _: 'K->'T->'U, _mthd: Default1) = ()
 
@@ -123,7 +132,7 @@ type FoldIndexed =
     inherit Default1
     static member FoldIndexed (x: list<_>   , f, z, _impl: FoldIndexed) = x |> List.fold  (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
     static member FoldIndexed (x: _ []      , f, z, _impl: FoldIndexed) = x |> Array.fold (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
-    static member FoldIndexed (_: Map<'k,'t>, f, z, _impl: FoldIndexed) = Map.fold f z
+    static member FoldIndexed (x: Map<'k,'t>, f, z, _impl: FoldIndexed) = Map.fold f z x
 
     static member inline Invoke (folder: 'State->'Key->'T->'State) (state: 'State) (foldable: '``Foldable<'T>``) : 'State =
         let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member FoldIndexed : _*_*_*_ -> _) b, f, z, a)
@@ -131,7 +140,10 @@ type FoldIndexed =
         call (Unchecked.defaultof<FoldIndexed>, foldable, folder, state)
     static member inline InvokeOnInstance (folder: 'State->'Key->'T->'State) (state: 'State) (source: '``Indexable<'T>``) : 'State = (^``Indexable<'T>`` : (static member FoldIndexed : _*_*_->_) source, folder, state) : 'State
 
-    static member inline FoldIndexed (x: seq<_>    , f: 'State->int->'T->'State  , z:'State, _impl: Default2) = x |> Seq.fold   (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
+type FoldIndexed with
+    static member inline FoldIndexed (x: seq<_>    , f: 'State->int->'T->'State  , z:'State, _impl: Default3) = x |> Seq.fold   (fun (p, i) t -> (f p i t, i + 1)) (z, 0) |> fst
+    static member        FoldIndexed (x: IReadOnlyDictionary<'Key, 'T>, f, z, _impl: Default2) = IReadOnlyDictionary.fold f z x
+    static member inline FoldIndexed (_: ^t when ^t: null and ^t: struct, _: 'State->'Key->'T->'State, _:'S, _mthd: Default2) = ()
     static member inline FoldIndexed (x: ^``I<'T>``, f: 'State->'Key->'T->'State , z:'State, _impl: Default1) : 'State = FoldIndexed.InvokeOnInstance f z x
     static member inline FoldIndexed (_: ^t when ^t: null and ^t: struct, _: 'State->'Key->'T->'State, _:'S, _mthd: Default1) = ()
 
@@ -147,16 +159,22 @@ type TraverseIndexed =
         let insert_f k x ys = Map.Invoke (Map.add k) (f k x) <*> ys
         Map.foldBack insert_f t (result Map.empty)
 
-    static member inline InvokeOnInstance (f: 'Key -> 'T -> '``Functor<'U>``) (t: '``Indexable<'T>``) : '``Functor<'Indexable<'U>>`` = (^``Indexable<'T>`` : (static member TraverseIndexed: _*_->_) t,f) : '``Functor<'Indexable<'U>>`` 
-
-    static member inline TraverseIndexed (t: seq<'T>, f: int -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) : '``Functor<seq<'U>>`` = Traverse.Invoke (fun (i, x) -> f i x) (Seq.indexed t)
-    static member inline TraverseIndexed (t: ^``I<'T>``, f: 'Index -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'I<'U>>``, [<Optional>]_impl: Default1) : '``Functor<'I<'U>>`` = TraverseIndexed.InvokeOnInstance f t : '``Functor<'I<'U>>``
-    static member inline TraverseIndexed (_: ^t when ^t: null and ^t: struct, _: 'Index -> 'T -> '``Functor<'U>``, _: 'R, _mthd: Default1) = id
 
     static member inline Invoke (f: 'Key -> 'T -> '``Functor<'U>``) (t: '``Indexable<'T>``) : '``Functor<'Indexable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member TraverseIndexed : _*_*_*_ -> _) b, f, c, a)
         let inline call (a: 'a, b: 'b, f) = call_3 (a, b, Unchecked.defaultof<'r>, f) : 'r
         call (Unchecked.defaultof<TraverseIndexed>, t, f)
+    static member inline InvokeOnInstance (f: 'Key -> 'T -> '``Functor<'U>``) (t: '``Indexable<'T>``) : '``Functor<'Indexable<'U>>`` = (^``Indexable<'T>`` : (static member TraverseIndexed: _*_->_) t,f) : '``Functor<'Indexable<'U>>`` 
+
+type TraverseIndexed with
+    static member inline TraverseIndexed (t: seq<'T>                      , f:  int -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default3) : '``Functor<seq<'U>>`` = Traverse.Invoke (fun (i, x) -> f i x) (Seq.indexed t)
+    
+    static member inline TraverseIndexed (t: IReadOnlyDictionary<'Key, 'T>, f: 'Key -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) : '``Functor<seq<'U>>`` =
+        let insert_f k x ys = Map.Invoke (IReadOnlyDictionary.add k) (f k x) <*> ys
+        IReadOnlyDictionary.foldBack insert_f t (result IReadOnlyDictionary.empty)
+    static member inline TraverseIndexed (t: ^``I<'T>``, f: 'Index -> 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'I<'U>>``, [<Optional>]_impl: Default1) : '``Functor<'I<'U>>`` = TraverseIndexed.InvokeOnInstance f t : '``Functor<'I<'U>>``
+
+    static member inline TraverseIndexed (_: ^t when ^t: null and ^t: struct, _: 'Index -> 'T -> '``Functor<'U>``, _: 'R, _mthd: Default1) = id
 
 
 

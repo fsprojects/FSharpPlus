@@ -1,3 +1,33 @@
+#### 1.4.0  - February 22 2023
+ - Additional Alternatives available (functions, error monads)
+ - More IReadOnlyDictionary functions
+ - Bug fixes in Map as FoldIndexable and missing <*> for IDictionary and IReadOnlyDictionary
+ - Deprecate IReadOnlyDictionary.map
+ - Guid to/from bytes conversion
+
+#### 1.3.3  - February 5 2023
+ - Fix missing zero overload for voption
+ - Add (>>=) and (>=>) to ReaderT
+ - Add ValueOption.toOption
+ - Deprecate (<**>)
+
+#### 1.3.2  - December 2 2022
+ - Applicative Computation Expressions
+ - Support for ValueOption, ValueTask and ValueTuple
+ - Possibility to use explicit type parameters (plus, Seq.sum, guard, ofBytes, ofBytesWithOptions, ofBytesBE, parse, tryParse)
+ - Use InlineIfLambda attribute in CEs
+ - Small fixes (add lift3 for tuples, fix join for ref tuple and Free.map3)
+ - Small improvements in type inference
+ - Use F# Core 6.0.6
+ - Speed up List and Array extensions using Collectors
+ - Use FSharp.Core implementations for old functions that were adopted there
+ - Add some missing Option, Result zip functions
+ - Add explicit type parameters
+ - Use InlineIfLambda attribute in CEs
+ - Some missing Option, Result zip functions
+ - Add NonEmptyList.sequence
+ - Improve null handling for Array extensions
+
 #### 1.2.4  - May 5 2022
 - Fix: Fable regressions
 - Add additional applicative operators directly to types

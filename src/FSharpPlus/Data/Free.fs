@@ -87,6 +87,18 @@ module Free =
     /// Lift any Functor into a Free structure
     let inline liftF (x: '``Functor<'T>``) : Free<'Functor, 'T> = Roll (Map.Invoke (Pure: 'T -> Free<'Functor, 'T>) x : '``Functor<Free<'Functor, 'T>>``)
 
+    /// Lift a natural transformation from functor F to functor G into a natural transformation from Free of F to Free of G.
+    let inline hoist (f: ^``F<Free<'F<'T>, 'T>>`` -> ^``G<Free<'F<'T>, 'T>>``) (x: Free<'``F<'T>``, 'T>) : Free<'``G<'T>``, 'T> =
+        let rec loop f x =
+            if opaqueId false then
+                let _: '``G<Free<'F<'T>, 'T>>`` = Map.Invoke Unchecked.defaultof<Free<'``G<'T>``, 'T> -> Free<'``F<'T>``, 'T>> Unchecked.defaultof<'``G<Free<'G<'T>, 'T>>``>
+                let _: '``G<Free<'G<'T>, 'T>>`` = Map.Invoke Unchecked.defaultof<'T -> Free<'``G<'T>``, 'T>> Unchecked.defaultof<'``G<'T>``>
+                ()
+            match run x with
+            | Pure x -> Pure x
+            | Roll (x: ^``F<Free<'F<'T>, 'T>>``) -> Roll (Map.Invoke (loop f: _ -> _) (f x) : ^``G<Free<'G<'T>, 'T>>``)
+        loop f x
+
 
 type Free<'functor, 't> with
 

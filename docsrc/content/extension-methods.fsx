@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 open FSharpPlus
 
 (**
@@ -17,7 +17,11 @@ Some methods are also exposed as extensions. This makes possible some uses from 
 Here are some examples:
 
 *)
-
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open FSharpPlus.Extensions
 
 let opt  = Option.Sequence [Some 1; Some 2]

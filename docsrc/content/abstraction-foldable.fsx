@@ -59,6 +59,7 @@ From .Net/F#
  -  ``list<'T>``
  -  ``'T []``
  -  ``option<'T>`` 
+ -  ``voption<'T>`` 
  -  ``ResizeArray<'T>`` 
  -  ``ReadOnlyCollection<'T>`` 
  -  ``IReadOnlyCollection<'T>``
@@ -80,7 +81,7 @@ Examples
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 open FSharpPlus
 open FSharpPlus.Data

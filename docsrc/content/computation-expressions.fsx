@@ -2,7 +2,7 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 open FSharpPlus
 open FSharpPlus.Data
 
@@ -12,7 +12,9 @@ Computations Expressions
 
 This library allows to use some common computation expressions without writing any boiler plate code.
 
-There is a single computation expression: ``monad`` but it comes in 4 flavours:
+For applicatives there is single computation expression: ``applicative { .. }``. Additionally ``applicative2 { .. }`` and ``applicative3 { .. }`` exists for composed (aka layered) applicatives.
+
+For monadic code there is a single computation expression: ``monad { .. }`` but it comes in 4 flavours:
 
  - Delayed or strict
 
@@ -55,21 +57,6 @@ let _ : OptionT<seq<unit option>> = monad { printfn "I'm strict" }
 
 (**
 
-Applicatives
-============
-
-There are some F# issues preventing applicative required `BindReturn` to be included in `monad`, so for the moment the following snipped can be used to quickly create a generic applicative CE:
-
-*)
-
-type ApplicativeBuilder<'t> () =
-    inherit MonadFxStrictBuilder<'t> ()
-    member inline _.BindReturn (x, f) = map f x
-
-let applicative<'t> = ApplicativeBuilder<'t> ()
-
-(**
-
 
 Examples
 ========
@@ -79,7 +66,11 @@ You may run this script step-by-step.
 
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open FSharpPlus
 
 let lazyValue = monad {

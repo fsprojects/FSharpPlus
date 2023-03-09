@@ -1,6 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Comonad
@@ -65,7 +66,9 @@ From .Net/F#
  -  ``Lazy<'T>``     
  -  ``Id<'T>``       
  -  ``('W * 'T)``
+ -  ``struct ('W * 'T)``
  -  ``'Monoid -> 'T``
+ -  ``ValueTask<'T>``
  
  
 From F#+
@@ -82,8 +85,11 @@ Examples
 
 *)
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Data

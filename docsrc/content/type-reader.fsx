@@ -1,6 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 (**
 Reader<'R,'T>
 =============
@@ -16,8 +17,11 @@ Examples
 --------
 *)
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 (**
 One usage of the Reader monad is an alternative to dependency injection or currying
@@ -139,3 +143,11 @@ and
                                         let! value = resolve d
                                         return (name,value) }
 
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking the Reader Monad](https://dev.to/choc13/grokking-the-reader-monad-4f45).
+   It contains examples using F#+ and an explanation from scratch.
+
+*)

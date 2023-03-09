@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Lens
@@ -22,6 +22,11 @@ As a convention, all lens identifiers will start with an underscore `_`.
 Here's an example usage of lenses with business objects:
 
 
+*)
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
 *)
 open System
 open FSharpPlus
@@ -260,3 +265,14 @@ let fv3 = maximumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4
 
 let fv4 = minimumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4)]
 // val fv4 : int option = Some 1
+
+
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking Lenses](https://dev.to/choc13/grokking-lenses-2jgp).
+   It contains examples using F#+ and an explanation from scratch.
+
+
+*)

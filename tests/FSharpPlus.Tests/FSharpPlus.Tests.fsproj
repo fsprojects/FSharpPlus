@@ -5,20 +5,26 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>net6;net462</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;Fable</Configurations>
     <Platforms>AnyCPU</Platforms>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
+    <Compile Include="Splits.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Parsing.fs" />
+    <Compile Include="Traversals.fs" />
+    <Compile Include="Indexables.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Task.fs" />
+    <Compile Include="ValueTask.fs" />
     <Compile Include="Free.fs" />
     <Compile Include="ListT.fs" />
     <Compile Include="ComputationExpressions.fs" />
@@ -26,7 +32,6 @@
     <Compile Include="Extensions.fs" />
     <Compile Include="BifoldableTests.fs" />
     <Compile Include="TypeLevel.fs" />
-    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net462'" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
@@ -41,11 +46,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="FsCheck" Version="2.14" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="FsCheck" Version="2.16.5" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
   </ItemGroup>
 </Project>

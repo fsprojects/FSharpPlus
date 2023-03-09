@@ -22,3 +22,5 @@ test: off
 artifacts:
   - path: bin
     name: bin
+nuget:
+  project_feed: true

@@ -5,17 +5,13 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net45;net6</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 --warnon:3390 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'netstandard2.0'">--warnon:1182 $(OtherFlags)</OtherFlags>
-    <OtherFlags Condition=" '$(TargetFramework)' == 'net45'">--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -25,14 +21,16 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configurations>Debug;Release;Fable;Fable3</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
+    <LangVersion>6.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Internals.fs" />
     <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions/ValueOption.fs" />
     <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
@@ -51,9 +49,11 @@
     <Compile Include="Extensions/IReadOnlyDictionary.fs" />
     <Compile Include="Extensions/Enumerator.fs" />
     <Compile Include="Extensions/Task.fs" />
+    <Compile Include="Extensions/ValueTask.fs" />
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
+    <Compile Include="Extensions/ValueTuple.fs" />
     <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
@@ -85,6 +85,7 @@
     <Compile Include="Data/List.fs" />
     <Compile Include="Data/Seq.fs" />
     <Compile Include="Data/Option.fs" />
+    <Compile Include="Data/ValueOption.fs" />
     <Compile Include="Data/Error.fs" />
     <Compile Include="Data/Cont.fs" />
     <Compile Include="Data/Reader.fs" />
@@ -105,7 +106,6 @@
     <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
   </ItemGroup>
 
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
@@ -118,9 +118,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" />
   </ItemGroup>
 </Project>

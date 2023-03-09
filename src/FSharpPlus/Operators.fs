@@ -1,5 +1,6 @@
 namespace FSharpPlus
 
+open System
 open FSharpPlus.Control
 
 /// Generic functions and operators
@@ -79,43 +80,42 @@ module Operators =
     /// Tuple two arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple2 a b             = a,b
+    let inline tuple2<'T1, 'T2> (t1: 'T1) (t2: 'T2) = t1, t2
 
     /// <summary>
     /// Tuple three arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple3 a b c           = a,b,c
+    let inline tuple3<'T1, 'T2, 'T3> (t1: 'T1) (t2: 'T2) (t3: 'T3) = t1, t2, t3
 
     /// <summary>
     /// Tuple four arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple4 a b c d         = a,b,c,d
+    let inline tuple4<'T1, 'T2, 'T3, 'T4> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) = t1, t2, t3, t4
 
     /// <summary>
     /// Tuple five arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple5 a b c d e       = a,b,c,d,e
+    let inline tuple5<'T1, 'T2, 'T3, 'T4, 'T5> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) = t1, t2, t3, t4, t5
 
     /// Tuple six arguments
     /// <category index="0">Common Combinators</category>
-    let inline tuple6 a b c d e f     = a,b,c,d,e,f
+    let inline tuple6<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) = t1, t2, t3, t4, t5, t6
 
     /// <summary>
     /// Tuple seven arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+    let inline tuple7<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) = t1, t2, t3, t4, t5, t6, t7
 
     /// <summary>
     /// Tuple eight arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
-
-
+    let inline tuple8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7, 'T8> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) (t8: 'T8) = t1, t2, t3, t4, t5, t6, t7, t8
+         
     #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Functor ----------------------------------------------------------------
@@ -206,9 +206,7 @@ module Operators =
     /// <category index="2">Applicative</category>
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
-    /// <summary>
-    /// Apply a lifted argument to a lifted function (flipped): arg &lt;**&gt; f
-    /// </summary>
+    [<System.Obsolete("Use flip (<*>) instead.")>]
     /// <category index="2">Applicative</category>
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
@@ -294,7 +292,7 @@ module Operators =
     /// Combines two monoids in one.
     /// </summary>
     /// <category index="4">Monoid</category>
-    let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
+    let inline plus< ^Monoid when (Plus or ^Monoid) : (static member ``+`` : ^Monoid * ^Monoid * Plus -> ^Monoid)> (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
 
     
     module Seq =
@@ -302,7 +300,7 @@ module Operators =
         /// Folds all values in the sequence using the monoidal addition.
         /// </summary>
         /// <category index="4">Monoid</category>
-        let inline sum (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
+        let inline sum< ^Monoid when (Sum or seq< ^Monoid> or ^Monoid) : (static member Sum: seq<'Monoid> * 'Monoid * Sum -> 'Monoid)> (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -333,7 +331,9 @@ module Operators =
     /// Common uses of guard include conditionally signaling an error in an error monad and conditionally rejecting the current choice in an Alternative-based parser.
     /// </summary>
     /// <category index="5">Alternative/Monadplus/Arrowplus</category>
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
+    let inline guard< ^``MonadPlus<unit>`` when (Return or ^``MonadPlus<unit>``) :
+        (static member Return: ^``MonadPlus<unit>`` * Return -> (unit -> ^``MonadPlus<unit>``)) and
+        (Empty or ^``MonadPlus<unit>``) : (static member Empty: ^``MonadPlus<unit>`` * Empty -> ^``MonadPlus<unit>``)> x : '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
     
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
@@ -984,13 +984,13 @@ module Operators =
     /// Converts to a Collection from a list.
     /// </summary>
     /// <category index="19">Collection</category>
-    let inline ofList (source: list<'T>) = OfList.Invoke source : 'Collection
+    let inline ofList (source: list<'T>) = OfList.Invoke source : '``Collection<'T>``
 
     /// <summary>
     /// Converts to a Collection from a seq.
     /// </summary>
     /// <category index="19">Collection</category>
-    let inline ofSeq (source: seq<'T> ) = OfSeq.Invoke source : 'Collection
+    let inline ofSeq (source: seq<'T> ) = OfSeq.Invoke source : '``Collection<'T>``
 
     /// <summary>Returns a new collection containing only the elements of the collection
     /// for which the given predicate returns "true"</summary>
@@ -999,7 +999,7 @@ module Operators =
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="source">The input collection.</param>
     /// <returns>A collection containing only the elements that satisfy the predicate.</returns>
-    let inline filter (predicate: _->bool) (source: 'Collection) : 'Collection = Filter.Invoke predicate source
+    let inline filter (predicate: 'T -> bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = Filter.Invoke predicate source
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
@@ -1333,19 +1333,19 @@ module Operators =
     /// Convert from a byte array value, given options of little-endian, and startIndex
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
+    let inline ofBytesWithOptions< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (isLtEndian: bool) (startIndex: int) (value: byte[]) : 'T = OfBytes.Invoke isLtEndian startIndex value
 
     /// <summary>
     /// Convert from a byte array value, assuming little-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytes (value: byte[]) = OfBytes.Invoke true 0 value
+    let inline ofBytes< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke true 0 value
 
     /// <summary>
     /// Convert from a byte array value, assuming big-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
+    let inline ofBytesBE< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke false 0 value
 
     /// <summary>
     /// Convert to a byte array value, assuming little endian
@@ -1367,13 +1367,13 @@ module Operators =
     /// Converts to a value from its string representation.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline parse (value: string) = Parse.Invoke value
+    let inline parse< ^T when (Parse or ^T) : (static member Parse: ^T * Parse -> (string -> ^T))> (value: string) : 'T = Parse.Invoke value
 
     /// <summary>
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline tryParse (value: string) = TryParse.Invoke value
+    let inline tryParse< ^T when (TryParse or ^T) : (static member TryParse: ^T * TryParse -> (string -> ^T option))> (value: string) : 'T option = TryParse.Invoke value
 
 
     // Numerics

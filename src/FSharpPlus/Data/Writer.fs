@@ -81,6 +81,13 @@ type Writer<'monoid,'t> with
     #endif
 
     static member inline (>>=) (x, f: 'T->_) = Writer.bind f x          : Writer<'Monoid,'U>
+
+    /// <summary>
+    /// Composes left-to-right two Writer functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f, (g: 'U -> _)) : 'T -> Writer<'Monoid, 'V> = fun x -> Writer.bind g (f x)
+
     static member inline (<*>) (f, x: Writer<_,'T>) = Writer.apply f x  : Writer<'Monoid,'U>
 
     /// <summary>

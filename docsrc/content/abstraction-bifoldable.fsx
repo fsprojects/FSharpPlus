@@ -78,14 +78,15 @@ Concrete implementations
 From .Net/F#
  
  -  ``'T * 'U``
- -  ``Result<'T,'U>``
- -  ``Choice<'T,'U>``
+ -  ``struct ('T * 'U)``
+ -  ``Result<'T, 'U>``
+ -  ``Choice<'T, 'U>``
 
  
 From F#+
 
- -  [``Const<'C,'T>``](type-const.html)
- -  [``Validation<'err,'a>``](type-validation.html)
+ -  [``Const<'C, 'T>``](type-const.html)
+ -  [``Validation<'Error, 'T>``](type-validation.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
@@ -93,7 +94,7 @@ Examples
 --------
 *)
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 open FSharpPlus
 open FSharpPlus.Control
