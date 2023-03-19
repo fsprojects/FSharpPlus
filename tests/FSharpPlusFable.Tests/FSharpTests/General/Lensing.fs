@@ -5,7 +5,7 @@ open Testing
 open FSharpPlus
 open FSharpPlus.Data
 open System
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 open FSharpPlus.Lens
 type Person = { Name: string; DateOfBirth: DateTime }
 module Person =
@@ -20,7 +20,7 @@ let rayuela =
                  DateOfBirth = DateTime (1914, 8, 26) } }
 #endif
 let lensing = testList "Lensing" [
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     testCase "Lens" (fun () ->
                equal (view Book._authorName rayuela) "Julio Cortázar")
     testCase "Lens view 1, 2" (fun () ->

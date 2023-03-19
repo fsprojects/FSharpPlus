@@ -322,7 +322,7 @@ type BitConverter =
         if isNull value then nullArg "value"
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 // findSliceIndex
 module FindSliceIndex =
     open System.Collections.Generic

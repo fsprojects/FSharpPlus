@@ -10,7 +10,7 @@ open System.Text
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 type Explicit =
     inherit Default1
@@ -26,7 +26,7 @@ type Explicit =
     static member inline Explicit (_: uint32    , _: Explicit) = fun x -> uint32          x
     static member inline Explicit (_: int64     , _: Explicit) = fun x -> int64           x
     static member inline Explicit (_: uint64    , _: Explicit) = fun x -> uint64          x
-#if !FABLE_COMPILER_3
+#if !(FABLE_COMPILER_3 || FABLE_COMPILER_4)
     static member inline Explicit (_: nativeint , _: Explicit) = fun x -> nativeint  (int x)
     static member inline Explicit (_: unativeint, _: Explicit) = fun x -> unativeint (uint32 x)
 #endif    
@@ -38,7 +38,7 @@ type Explicit =
         let inline call_2 (a: ^a, b: ^r) = ((^a or ^r or ^t) : (static member Explicit : _*_ -> ('t  -> ^r)) b, a)
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
         call Unchecked.defaultof<Explicit> value
-#if !FABLE_COMPILER_3
+#if !(FABLE_COMPILER_3 || FABLE_COMPILER_4)
 type OfBytes =
     static member OfBytes (_: bool   , _: OfBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
 
@@ -86,7 +86,7 @@ open System.Globalization
 
 type TryParse =
     inherit Default1
-#if !FABLE_COMPILER_3
+#if !(FABLE_COMPILER_3 || FABLE_COMPILER_4)
     static member TryParse (_: decimal       , _: TryParse) = fun (x:string) -> Decimal.TryParse (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<decimal>
     static member TryParse (_: float32       , _: TryParse) = fun (x:string) -> Single.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float32>
     static member TryParse (_: float         , _: TryParse) = fun (x:string) -> Double.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float>

@@ -10,7 +10,7 @@ open FSharpPlus.Data
 open System.Threading.Tasks
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                               = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f: 'a->'b)                = ZipList (Seq.map f x)
@@ -49,13 +49,13 @@ let testCompile =
     let _quot23      = plus       (zero)         <@ ResizeArray ([2;3])   @>
     let _quot13      = plus       (zero)         <@ ("1","3") @>
     #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let lzy1 = plus (lazy [1]) (lazy [2;3])
     #endif
     #if !FABLE_COMPILER
     let _lzy = plus (zero) lzy1
     #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let asy1 = plus (async.Return [1]) (async.Return [2;3])
     #endif
     #if !FABLE_COMPILER
@@ -64,7 +64,7 @@ let testCompile =
     let _bigNestedTuple2 = (1, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ (zero, System.Tuple (8, "ff",3,4,5,6,7,8,9,10,11,12,(),14,15,16,17,18,19,20)) ++ zero
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let _nes : NonEmptySeq<_> = plus (NonEmptySeq.singleton 1) (NonEmptySeq.singleton 2)
     #endif
 

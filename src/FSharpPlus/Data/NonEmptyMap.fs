@@ -246,7 +246,7 @@ module NonEmptyMap =
     /// Returns the union of two maps, preferring values from the first in case of duplicate keys.
     let union (source: NonEmptyMap<'Key, 'T>) (altSource: NonEmptyMap<'Key, 'T>) = unionWith (fun x _ -> x) source altSource
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let inline traverse (f: 'T->'``Functor<'U>``) (m: NonEmptyMap<'K, 'T>) : '``Functor<NonEmptyMap<'K, 'U>>`` =
         let m' = traverse f (toMap m) : '``Functor<Map<'K, 'U>>``
         ofMap <!> m' : '``Functor<NonEmptyMap<'K, 'U>>``
@@ -266,7 +266,7 @@ type NonEmptyMap<[<EqualityConditionalOn>]'Key,[<EqualityConditionalOn;Compariso
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Unzip (x: NonEmptyMap<'K, ('T * 'U)>) = NonEmptyMap.unzip x : NonEmptyMap<'K, 'T> * NonEmptyMap<'K, 'U>
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Traverse (x: NonEmptyMap<'K, 'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyMap<'K, 'U>>`` = NonEmptyMap.traverse f x
 

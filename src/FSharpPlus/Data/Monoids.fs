@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus.Data
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 open FSharpPlus
 open FSharpPlus.Internals.Prelude
@@ -41,7 +41,7 @@ type Any = Any of bool with
     static member (+) (Any x, Any y) = Any (x || y)
 
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 /// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 /// <para/>   Useful for: Lens getters.
@@ -129,7 +129,7 @@ type Last<'t> = Last of Option<'t> with
     static member run (Last a) = a                                            : 't option
 
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 /// Numeric wrapper for multiplication monoid (*, 1)
 [<Struct>]

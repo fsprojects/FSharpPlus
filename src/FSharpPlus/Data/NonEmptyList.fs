@@ -129,7 +129,7 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
     /// <summary>
     /// Maps each element of the list to an action, evaluates these actions from left to right and collect the results.
@@ -200,7 +200,7 @@ module NonEmptyList =
     /// Equivalent to [start..stop] on regular lists.
     let inline range (start: 'T) stop = create start (List.drop 1 [start..stop])
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     /// Reduces using alternative operator `<|>`.
     let inline choice (list: NonEmptyList<'``Alt<'T>``>) = reduce (<|>) list : '``Alt<'T>``
 #endif
@@ -244,7 +244,7 @@ type NonEmptyList<'t> with
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
     #endif
 
@@ -257,7 +257,7 @@ type NonEmptyList<'t> with
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member Sum (source: seq<NonEmptyList<'T>>) = source |> Seq.map NonEmptyList.toList |> List.concat |> NonEmptyList.ofList
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s    
 

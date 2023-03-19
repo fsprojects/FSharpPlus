@@ -13,7 +13,7 @@ open FSharpPlus.Internals.Prelude
 open FSharpPlus
 open FSharpPlus.Data
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 // Functor class ----------------------------------------------------------
 
@@ -61,7 +61,7 @@ type Iterate =
 type Map =
     inherit Default1
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy.map f x
     #if !FABLE_COMPILER
@@ -113,7 +113,7 @@ type Map =
     static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map : _ * _ -> _) source, mapping)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 
 type Map with
@@ -139,7 +139,7 @@ type Map with
     static member inline Map ((_: ^t when ^t: null and ^t: struct, _ ), _mthd: Default1) = ()
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 type Unzip =
     inherit Default1
@@ -199,7 +199,7 @@ type Unzip =
         call (Unchecked.defaultof<Unzip>, source) : '``Functor<'T1>`` * '``Functor<'T2>``
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 type Zip =
     inherit Default1
@@ -239,7 +239,7 @@ type Zip with
     static member inline Zip ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , _output: '``ZipFunctor<'T1 * 'T2>``      ), _mthd: Default1) = Zip.InvokeOnInstance x y : '``ZipFunctor<'T1 * 'T2>``
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 // Bifunctor class --------------------------------------------------------
 
@@ -260,7 +260,7 @@ type Bimap =
         (^``Bifunctor<'T,'V>``: (static member Bimap : _*_*_ -> _) source, f, g)
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 type MapFirst =
     inherit Default1
@@ -312,7 +312,7 @@ type Dimap =
         (^``Profunctor<'B,'C>`` : (static member Dimap : _*_*_ -> _) source, ab, cd)
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 // Contravariant class ----------------------------------------------------
 
@@ -338,7 +338,7 @@ type Contramap =
     #endif
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     
 type Contramap with
     static member inline Contramap (x: '``Profunctor<'B,'C>``, f: 'A->'B, [<Optional>]_mthd: Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
@@ -346,13 +346,13 @@ type Contramap with
     static member inline Contramap (_: ^t when ^t: null and ^t: struct  , _: 'A->'B,  _mthd: Default1) = ()
 
 #endif
-#if !FABLE_COMPILER|| FABLE_COMPILER_3
+#if !FABLE_COMPILER|| (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 type Map with
     static member inline Map ((x: '``Profunctor<'B,'C>``, cd: 'C->'D), [<Optional>]_mthd: Default5) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
 
 type Dimap with
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default2) = x |> Map.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``

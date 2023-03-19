@@ -14,7 +14,7 @@ module Collections =
 
     open System.Collections.Concurrent
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let testCollections =
         let bigSeq = seq {1..10000000}
         let bigLst = [ 1..10000000 ]
@@ -39,7 +39,7 @@ module Collections =
         ()
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let testSeqConversions =
         #if !FABLE_COMPILER
         let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
@@ -125,7 +125,7 @@ module Collections =
         ()
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
     let testListConversions =
 
         // From sequence
