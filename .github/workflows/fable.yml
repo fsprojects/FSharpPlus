@@ -40,7 +40,7 @@ jobs:
       working-directory: tests/FSharpPlusFable.Tests
       run: fable . --outDir bin --runScript ./bin
 
-   testfable4:
+  testfable4:
     runs-on: ubuntu-latest
 
     steps:
