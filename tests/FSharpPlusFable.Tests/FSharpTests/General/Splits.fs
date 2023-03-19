@@ -17,7 +17,7 @@ type Sum<'a> = Sum of 'a with
 
 let splits = testList "Splits" [
 
-    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
+    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
     testCase "splitArraysAndStrings" (fun () ->
         let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
         let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|]

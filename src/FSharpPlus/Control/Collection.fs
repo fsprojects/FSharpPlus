@@ -8,7 +8,7 @@ open System.Runtime.InteropServices
 open FSharpPlus
 open FSharpPlus.Internals
 
-#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
+#if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
 
 type OfSeq =
     inherit Default1

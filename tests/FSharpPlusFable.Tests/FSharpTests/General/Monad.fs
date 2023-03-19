@@ -5,13 +5,13 @@ open FSharpPlus
 open FSharpPlus.Data
 #nowarn "686"
 
-#if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
+#if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
 let option<'t> = monad<Option<'t>>
 let list<'t>   = monad'<list<'t>>
 #endif
 
 let monad = testList "Monad" [
-    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
+    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
     testCase "joinDefaultCustom" (fun () -> 
         let x = join [[1];[2]]
         equal [1;2] x
@@ -23,7 +23,7 @@ let monad = testList "Monad" [
         equal ["Join"] (SideEffects.get ()))
     #endif
 
-    #if !FABLE_COMPILER || (FABLE_COMPILER_3 || FABLE_COMPILER_4)
+    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
     testCase "workFlow" (fun () ->       
         let testVal = 
             monad {
