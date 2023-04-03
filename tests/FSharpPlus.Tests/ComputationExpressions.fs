@@ -161,6 +161,17 @@ module ComputationExpressions =
 
         // Check the result
         areEquivalent [42] seqValue
+        
+        // Test proper lazyness in for loops
+        let source = seq {
+            yield 1
+            yield 2
+            yield (failwith "error !!!"; 2)
+            yield 3
+        }
+        let x:seq<int> = monad.plus { for x in source do yield x }
+        x.GetEnumerator ()
+        ()
 
     open FsCheck
 
