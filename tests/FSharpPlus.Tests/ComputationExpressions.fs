@@ -171,7 +171,7 @@ module ComputationExpressions =
         }
         let x:seq<int> = monad.plus { for x in source do yield x }
         x.GetEnumerator ()
-        
+        ()
 
     open FsCheck
 
