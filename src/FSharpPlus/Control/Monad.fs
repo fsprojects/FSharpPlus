@@ -305,8 +305,8 @@ type TryFinally with
 type Using =
     inherit Default1
     
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>        , _: Using) = seq (try Seq.toArray (body resource) finally if not (isNull (box resource)) then resource.Dispose ()) : seq<'U>
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq (try Seq.toArray (body resource) finally if not (isNull (box resource)) then resource.Dispose ()) |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>        , _: Using) = seq { try for e in (body resource) do yield e finally if not (isNull (box resource)) then resource.Dispose () } : seq<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq { try for e in (body resource) do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     #if !FABLE_COMPILER
