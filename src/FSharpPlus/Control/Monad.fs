@@ -263,8 +263,8 @@ type TryWith =
 type TryFinally =
     inherit Default1
 
-    static member        TryFinally ((computation: unit -> seq<_>        , compensation: unit -> unit), _: Default2, _, _) = seq (try (Seq.toArray (computation ())) finally compensation ())
-    static member        TryFinally ((computation: unit -> NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _, _) = seq (try (Seq.toArray (computation ())) finally compensation ()) |> NonEmptySeq.unsafeOfSeq
+    static member        TryFinally ((computation: unit -> seq<_>        , compensation: unit -> unit), _: Default2, _, _) = seq { try for e in computation () do yield e finally compensation () }
+    static member        TryFinally ((computation: unit -> NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _, _) = seq { try for e in computation () do yield e finally compensation () } |> NonEmptySeq.unsafeOfSeq
 
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
     static member        TryFinally ((_:           unit -> 'R -> _            , _: unit -> unit), _: Default2  , _, _defaults: False) = raise Internals.Errors.exnUnreachable
@@ -305,8 +305,8 @@ type TryFinally with
 type Using =
     inherit Default1
     
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>        , _: Using) = seq { try for e in (body resource) do yield e finally if not (isNull (box resource)) then resource.Dispose () } : seq<'U>
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq { try for e in (body resource) do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>        , _: Using) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } : seq<'U>
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     #if !FABLE_COMPILER
