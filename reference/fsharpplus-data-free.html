@@ -57,15 +57,15 @@
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/numerics.html">Numerics</a></li>
 
                 <li class="nav-header">
   API Reference
@@ -428,6 +428,107 @@
             <div>
               <code onmouseout="hideTip(event, '640', 640)" onmouseover="showTip(event, '640', 640)">
                 <p>
+                  <a id="hoist">
+                    <a href="#hoist">
+                      <code><span>Free.hoist&#32;<span>f&#32;x</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="640">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Free.hoist&#32;<span>f&#32;x</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>^F<Free<'F<'T>,'T>>&#32;->&#32;^G<Free<'F<'T>,'T>></span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="/FSharpPlus/reference/fsharpplus-data-free-2.html">Free</a>&lt;<span>^F<'T>,&#32;'T</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-free-2.html">Free</a>&lt;<span>^G<'T>,&#32;'T</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                  Modifiers: 
+                  inline
+                  <br/>
+                  Type parameters: 
+                  ^F&lt;Free&lt;&#39;F&lt;&#39;T&gt;, &#39;T&gt;&gt;, ^F&lt;&#39;T&gt;, &#39;T, ^G&lt;Free&lt;&#39;F&lt;&#39;T&gt;, &#39;T&gt;&gt;, ^G&lt;Free&lt;&#39;G&lt;&#39;T&gt;, &#39;T&gt;&gt;, ^G&lt;&#39;T&gt;, ^G&lt;Free&lt;&#39;G&lt;&#39;T&gt;, &#39;T&gt;&gt;
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <div class="fsdocs-summary">
+              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Data.Free.hoist``7```')">
+                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+              </div>
+              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Data.Free.hoist``7\'/>')">
+                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+              </div>
+              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Data/Free.fs#L91-91" class="fsdocs-source-link" title="Source on GitHub">
+                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+              </a>
+              <p class="fsdocs-summary">
+                
+ Lift a natural transformation from functor F to functor G into a natural transformation from Free of F to Free of G.
+
+              </p>
+            </div>
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>^F<Free<'F<'T>,'T>>&#32;->&#32;^G<Free<'F<'T>,'T>></span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-free-2.html">Free</a>&lt;<span>^F<'T>,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-free-2.html">Free</a>&lt;<span>^G<'T>,&#32;'T</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '641', 641)" onmouseover="showTip(event, '641', 641)">
+                <p>
                   <a id="iterM">
                     <a href="#iterM">
                       <code><span>Free.iterM&#32;<span>f&#32;x</span></span></code>
@@ -435,7 +536,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="640">
+              <div class="fsdocs-tip" id="641">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Free.iterM&#32;<span>f&#32;x</span></span></code>
@@ -527,7 +628,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '641', 641)" onmouseover="showTip(event, '641', 641)">
+              <code onmouseout="hideTip(event, '642', 642)" onmouseover="showTip(event, '642', 642)">
                 <p>
                   <a id="liftF">
                     <a href="#liftF">
@@ -536,7 +637,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="641">
+              <div class="fsdocs-tip" id="642">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Free.liftF&#32;<span>x</span></span></code>
@@ -584,7 +685,7 @@
               </a>
               <p class="fsdocs-summary">
                 
- Lift any Functor into a Free structure
+ Lift any Functor into a Free structure.
 
               </p>
             </div>
@@ -612,7 +713,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '642', 642)" onmouseover="showTip(event, '642', 642)">
+              <code onmouseout="hideTip(event, '643', 643)" onmouseover="showTip(event, '643', 643)">
                 <p>
                   <a id="map">
                     <a href="#map">
@@ -621,7 +722,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="642">
+              <div class="fsdocs-tip" id="643">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Free.map&#32;<span>f&#32;x</span></span></code>
@@ -711,7 +812,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '643', 643)" onmouseover="showTip(event, '643', 643)">
+              <code onmouseout="hideTip(event, '644', 644)" onmouseover="showTip(event, '644', 644)">
                 <p>
                   <a id="map2">
                     <a href="#map2">
@@ -720,7 +821,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="643">
+              <div class="fsdocs-tip" id="644">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Free.map2&#32;<span>f&#32;x&#32;y</span></span></code>
@@ -826,7 +927,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '644', 644)" onmouseover="showTip(event, '644', 644)">
+              <code onmouseout="hideTip(event, '645', 645)" onmouseover="showTip(event, '645', 645)">
                 <p>
                   <a id="map3">
                     <a href="#map3">
@@ -835,7 +936,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="644">
+              <div class="fsdocs-tip" id="645">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Free.map3&#32;<span>f&#32;x&#32;y&#32;z</span></span></code>
@@ -957,7 +1058,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '645', 645)" onmouseover="showTip(event, '645', 645)">
+              <code onmouseout="hideTip(event, '646', 646)" onmouseover="showTip(event, '646', 646)">
                 <p>
                   <a id="run">
                     <a href="#run">
@@ -966,7 +1067,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="645">
+              <div class="fsdocs-tip" id="646">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Free.run&#32;<span>f</span></span></code>
