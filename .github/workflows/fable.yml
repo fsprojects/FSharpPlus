@@ -13,6 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -21,8 +25,6 @@ jobs:
       run: git submodule update --init --recursive
     - name: Restore tools
       run: dotnet tool restore
-    - name: Install fable
-      run: dotnet tool install --global Fable --version 3.7.20
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
@@ -32,7 +34,7 @@ jobs:
       run: npm install
     - name: Run Fable tests
       working-directory: tests/FSharpPlusFable.Tests
-      run: fable . --outDir bin --runScript ./bin
+      run: dotnet fable . --outDir bin --runScript ./bin 
   
   testFable3SubsetOnCore:
     runs-on: ubuntu-latest
