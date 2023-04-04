@@ -54,14 +54,14 @@ From .Net/F#
 
 -  ``'T * 'U``
 -  ``struct ('T * 'U)``
--  ``Result<'T,'U>``
--  ``Choice<'T,'U>``
+-  ``Result<'T, 'U>``
+-  ``Choice<'T, 'U>``
 
 
 From F#+
 
- -  [``Const<'C,'T>``](type-const.html)
- -  [``Validation<'Error,'T>``](type-validation.html)
+ -  [``Const<'C, 'T>``](type-const.html)
+ -  [``Validation<'Error, 'T>``](type-validation.html)
 
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation

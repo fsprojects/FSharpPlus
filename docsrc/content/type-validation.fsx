@@ -211,3 +211,13 @@ module Email =
 
     let failureAll = email ""
     // Failure [MustNotBeEmpty;MustContainAt;MustContainPeriod]
+
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking Applicative Validation](https://dev.to/choc13/grokking-applicative-validation-lh6).
+   It contains examples using F#+ and an explanation from scratch.
+
+
+*)

@@ -10,16 +10,16 @@ Applicative Functors which also have a monoid structure.
 ___
 Minimal complete definition
 ---------------------------
- * ``return x``/``result x`` 
+ * ``return x`` &nbsp; / &nbsp; ``result x``
  * ``(<*>) f x``
  * ``empty``
- * ``append x y``/``(<|>) x y``
+ * ``append x y`` &nbsp; / &nbsp; ``(<|>) x y``
 *)
 (**
-    static member Return (x:'T) : 'Alternative<'T>
-    static member (<*>) (f:'T->'U, x:Alternative<'T>) : Alternative<'U>
-    static member get_Empty () :'Alternative
-    static member (<|>) (x:'Alternative<'T>, y:'Alternative<'T>) :'Alternative<'T>
+    static member Return (x: 'T) : 'Alternative<'T>
+    static member (<*>) (f: 'T -> 'U, x: 'Alternative<'T>) : 'Alternative<'U>
+    static member get_Empty () : 'Alternative
+    static member (<|>) (x: 'Alternative<'T>, y: 'Alternative<'T>) : 'Alternative<'T>
 *)
 (**
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
@@ -28,10 +28,13 @@ Other operations
  * ``mfilter``
 *)
 (**
-    static member MFilter (x:seq<'Alternative>) :'Alternative
+    static member MFilter (x: seq<'Alternative>) : 'Alternative
 *)
 (**
  * ``choice``
+*)
+(**
+    static member inline Choice (source: 'Foldable<'Alt<'T>>) : 'Alt<'T>
 *)
 (**
 Rules
@@ -56,13 +59,16 @@ Concrete implementations
 From .Net/F#
  
  -  ``list<'T>``
- -  ``option<'T>``
  -  ``array<'T>``
  -  ``seq<'T>``
+ -  ``option<'T>``
+ -  ``voption<'T>``
+ -  ``Result<'T, 'Monoid>``
+ -  ``Choice<'T, 'Monoid>``
  -  ``'T -> 'Alternative``
- 
+
 From F#+
- 
+
  -  [``ReaderT<'R, 'MonadPlus<'T>>``](type-readert.html)
  -  [``WriterT<'MonadPlus<'T * 'Monoid>>``](type-writert.html)
  -  [``StateT<'S,'MonadPlus<'T * 'S>>``](type-statet.html)
@@ -73,7 +79,12 @@ From F#+
  -  [``Compose<'AlternativeF<'AlternativeG<'T>>>``](type-compose.html)
  -  [``DList<'T>``](type-dlist.html)
  -  [``ZipList<'S>``](type-ziplist.html)
- 
+ -  [``NonEmptySeq<'T>``](type-nonemptyseq.html) ``*``
+ -  [``Validation<'Error, 'T>``](type-validation.html) ``*``
+
+``*`` Only ``<|>`` operation
+
+
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
 Examples

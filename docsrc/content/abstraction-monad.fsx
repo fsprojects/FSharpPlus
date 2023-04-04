@@ -17,7 +17,7 @@ Minimal complete definition
 ---------------------------
 
 
- * ``return x``/``result x``
+ * ``return x`` &nbsp; / &nbsp; ``result x``
  * ``(>>=) x f``
 *)
 (**
@@ -281,14 +281,6 @@ module Suave =
     type WebPart<'a> = 'a -> OptionT<Async<'a option>>
     let inline succeed x = async.Return (Some x)
 
-    module WebPart =
-        /// Comment from <a href="https://github.com/SuaveIO/suave/blob/v2.4.3/src/Suave/WebPart.fsi#L39-L42">WebPart.fsi</a>
-        /// Entry-point for composing the applicative routes of the http application,
-        /// by iterating the options, applying the context, arg, to the predicate
-        /// from the list of options, until there's a match/a Some(x) which can be
-        /// run.
-        let choose (options: WebPart<'a> list) = fun x -> choice (List.map ((|>) x) options)
-
     module Http =
         type HttpResponse = { status: int; content: string }
         type HttpRequest  = { url: Uri; ``method``: string }
@@ -351,6 +343,22 @@ module Suave =
                   | Error msg -> 
                       return! BAD_REQUEST msg ctx
                 })
-        WebPart.choose [ path "/" >=> (OK "/")
-                         path "/note" >=> register
-                         path "/notes" >=> overview ]
+        choice [
+            path "/" >=> (OK "/")
+            path "/note" >=> register
+            path "/notes" >=> overview
+        ]
+
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog:
+
+   - [Grokking Monads](https://dev.to/choc13/grokking-monads-in-f-3j7f)
+   - [Grokking Monads Imperatively](https://dev.to/choc13/grokking-monads-imperatively-394a)
+   - [Grokking Monads Transformers](https://dev.to/choc13/grokking-monad-transformers-3l3)
+   
+   It contains examples using F#+ and an explanation from scratch.
+
+*)

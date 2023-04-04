@@ -108,10 +108,10 @@ let mainFunc () =
 
 
 (**
-More reading
-------------
+Recommended reading
+-------------------
 
- - Highly recommended Matt Thornton's blog [Grokking Free monads](https://dev.to/choc13/grokking-free-monads-9jd) and [Interpreting Free Monads](https://dev.to/choc13/interpreting-free-monads-3l3e).
+ - Highly recommended Matt Thornton's blog [Grokking Free Monads](https://dev.to/choc13/grokking-free-monads-9jd) and [Interpreting Free Monads](https://dev.to/choc13/interpreting-free-monads-3l3e).
    It contains examples using F#+ and an explanation from scratch.
 
  - Mark Seemann's blog has an [article series](https://blog.ploeh.dk/2017/06/27/pure-times/) which ends 

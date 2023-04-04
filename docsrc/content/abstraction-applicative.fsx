@@ -10,12 +10,12 @@ A functor with application, providing operations to embed pure expressions (``re
 ___
 Minimal complete definition
 ---------------------------
- * ``return x``/``result x`` 
+ * ``return x`` &nbsp; / &nbsp; ``result x``
  * ``(<*>) f x``
 *)
 (**
-    static member Return (x:'T) : 'Applicative<'T>
-    static member (<*>) (f: 'Applicative<'T->'U>, x: 'Applicative<'T>) : 'Applicative<'U>
+    static member Return (x: 'T) : 'Applicative<'T>
+    static member (<*>) (f: 'Applicative<'T -> 'U>, x: 'Applicative<'T>) : 'Applicative<'U>
 *)
 (**
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
@@ -27,7 +27,7 @@ Other operations
 * ``lift2``
 *)
 (**
-   static member Lift2 (f: 'T1->'T2->'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
+   static member Lift2 (f: 'T1 -> 'T2 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
 *)
 (**
 
@@ -131,13 +131,13 @@ open FSharpPlus
 open FSharpPlus.Data
 
 // Apply +4 to a list
-let lst5n6  = map ((+) 4) [ 1;2 ]
+let lst5n6  = map ((+) 4) [ 1; 2 ]
 
 // Apply +4 to an array
-let arr5n6  = map ((+) 4) [|1;2|]
+let arr5n6  = map ((+) 4) [|1; 2|]
 
 // I could have written this
-let arr5n6' = (+) <!> [|4|] <*> [|1;2|]
+let arr5n6' = (+) <!> [|4|] <*> [|1; 2|]
 
 // Add two options
 let opt120  = (+) <!> Some 20 <*> tryParse "100"
@@ -198,7 +198,7 @@ open FSharpPlus.Math.Applicative
 let opt121'  = Some 21 .+. tryParse "100"
 let optTrue  = 30 >. tryParse "29"
 let optFalse = tryParse "30" .< 29
-let m1m2m3 = -.[1;2;3]
+let m1m2m3 = -.[1; 2; 3]
 
 
 // Using applicative computation expression
@@ -245,7 +245,17 @@ let person6 = applicative2 {
 // A Monad is automatically an Applicative
 
 type MyList<'s> = MyList of 's seq with
-    static member Return (x:'a)     = MyList (Seq.singleton x)
+    static member Return (x: 'a) = MyList (Seq.singleton x)
     static member (>>=)  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
 
-let mappedMyList : MyList<_> = (MyList [(+) 1;(+) 2;(+) 3]) <*> (MyList [1;2;3])
+let mappedMyList : MyList<_> = (MyList [(+) 1; (+) 2; (+) 3]) <*> (MyList [1; 2; 3])
+
+
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking Applicatives](https://dev.to/choc13/grokking-applicatives-44o1).
+   It contains examples using F#+ and an explanation from scratch.
+
+*)

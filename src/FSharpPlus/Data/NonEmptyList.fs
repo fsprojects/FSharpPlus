@@ -156,6 +156,13 @@ module NonEmptyList =
     /// <returns>The resulting average.</returns>
     let inline averageBy (projection: 'T -> ^U) list = List.averageBy projection (list.Head :: list.Tail)
 
+    /// <summary>Returns a list that contains no duplicate entries according to the generic hash and equality comparisons
+    /// on the keys returned by the given key-generating function.
+    /// If an element occurs multiple times in the list then the later occurrences are discarded.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>The resulting list without duplicates.</returns>
+    let distinct (list: NonEmptyList<'T>) = list |> Seq.distinct |> ofSeq
+
     /// <summary>Applies a function to each element of the list, threading an accumulator argument
     /// through the computation. Apply the function to the first two elements of the list.
     /// Then feed this result into the function along with the third element and so on. 

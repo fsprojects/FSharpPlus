@@ -8,7 +8,7 @@ env:
   # GitHub Packages Feed settings
   GITHUB_FEED: https://nuget.pkg.github.com/fsprojects
   GITHUB_USER: fsprojects
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   push:
@@ -66,13 +66,13 @@ jobs:
       with:
         name: nupkg
         path: ./bin/nupkg/*.nupkg
-    - name: Push to GitHub Feed
-      shell: bash
-      run: |
-          for f in ./bin/nupkg/*.nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
+    #- name: Push to GitHub Feed
+    #  shell: bash
+    #  run: |
+    #      for f in ./bin/nupkg/*.nupkg
+    #      do
+    #        curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+    #      done
 
   docs:
     runs-on: windows-latest

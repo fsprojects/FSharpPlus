@@ -143,3 +143,11 @@ and
                                         let! value = resolve d
                                         return (name,value) }
 
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking the Reader Monad](https://dev.to/choc13/grokking-the-reader-monad-4f45).
+   It contains examples using F#+ and an explanation from scratch.
+
+*)

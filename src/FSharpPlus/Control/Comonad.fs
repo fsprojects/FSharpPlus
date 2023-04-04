@@ -36,6 +36,8 @@ type Extract =
         let inline call_2 (_mthd: ^M, x: ^I) = ((^M or ^I) : (static member Extract : _ -> _) x)
         call_2 (Unchecked.defaultof<Extract>, x)
 
+#nowarn "0025" // (see nowarn comment below)
+
 type Extend =
     static member        (=>>) (g: Async<'T>    , f: Async<'T> -> 'U) = async.Return (f g)              : Async<'U>
     static member        (=>>) (g: Lazy<'T>     , f: Lazy<'T> -> 'U ) = Lazy<_>.Create  (fun () -> f g) : Lazy<'U>
@@ -77,6 +79,7 @@ type Extend =
                 match g with
                 | ValueTask.Faulted e -> tcs.SetException e
                 | ValueTask.Canceled  -> tcs.SetCanceled ()
+                // nowarn here, this case has been handled already if g.IsCompleted
             else
                 ValueTask.continueTask tcs g (fun _ ->
                     try tcs.SetResult (f g)

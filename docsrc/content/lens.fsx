@@ -265,3 +265,14 @@ let fv3 = maximumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4
 
 let fv4 = minimumOf (traverse << both << _Some) [(Some 1, Some 2);(Some 3,Some 4)]
 // val fv4 : int option = Some 1
+
+
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking Lenses](https://dev.to/choc13/grokking-lenses-2jgp).
+   It contains examples using F#+ and an explanation from scratch.
+
+
+*)
