@@ -281,11 +281,11 @@ module SeqT_V2 =
     let inline hoist (source: seq<'T>) : SeqT<'``Monad<bool>``, 'T> = ofSeq source
 
     let inline internal runThen<'T, .. > (f: ResizeArray<'T> -> 'R) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'R>`` =
-        let ra = new ResizeArray<_> ()
         Using.Invoke
             ((source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ())
             (fun ie ->
                 ie.MoveNext () >>= fun (move: bool) ->
+                    let ra = new ResizeArray<_> ()
                     let mutable b = move
                     let rec loop guard (body: unit -> '``Monad<unit>``) : '``Monad<unit>`` =
                         if guard () then body () >>= (fun () -> loop guard body)
