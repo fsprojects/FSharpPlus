@@ -354,3 +354,11 @@ module Applicative =
                     let actual = SeqT.map2M (fun a b -> a + b |> async.Return) a b
                     let expected = Seq.zip la lb |> Seq.map ((<||) (+)) |> SeqT.ofSeq
                     Assert.True (EQ expected actual)
+
+    module SeqSeq =
+        [<Test>]
+        let ``SeqSeq.wrapAndRun``() =
+            let source = seq [|seq [1; 2]; seq [3; 0; 4]; seq [5; 6] |]
+            let wrapped = SeqT.wrap (seq [|seq [1; 2]; seq [3; 0; 4]; seq [5; 6] |])
+            let unwrapped = SeqT.run wrapped
+            CollectionAssert.AreEqual (source, unwrapped)
