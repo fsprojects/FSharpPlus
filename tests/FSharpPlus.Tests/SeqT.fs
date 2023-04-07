@@ -5,6 +5,7 @@ open FSharpPlus
 open FSharpPlus.Data
 open NUnit.Framework
 open FsCheck
+open FsCheck.NUnit
 open Helpers
 open System.Collections.Generic
 open System.Threading.Tasks
@@ -356,9 +357,10 @@ module Applicative =
                     Assert.True (EQ expected actual)
 
     module SeqSeq =
-        [<Test>]
-        let ``SeqSeq.wrapAndRun``() =
-            let source = seq [|seq [1; 2]; seq [3; 0; 4]; seq [5; 6] |]
-            let wrapped = SeqT.wrap (seq [|seq [1; 2]; seq [3; 0; 4]; seq [5; 6] |])
+        [<Property>]
+        let ``Wrapping a seq of seqs and running it gets back the original`` (source: list<list<int>>) =
+            let source = List.toSeq (List.map List.toSeq source)
+            let wrapped = SeqT.wrap source
             let unwrapped = SeqT.run wrapped
-            CollectionAssert.AreEqual (source, unwrapped)
+            Seq.toList (Seq.map Seq.toList source) = Seq.toList (Seq.map Seq.toList unwrapped)
+
