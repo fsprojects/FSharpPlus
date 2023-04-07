@@ -70,3 +70,14 @@ module Option =
         match pair with
         | (true,  x) -> Some x
         | (false, _) -> None
+        
+    
+
+    /// <summary>Runs a compensation function when the value is None</summary>
+    /// <remarks>Useful for reacting to failures and trying fallbacks.</remarks>
+    /// <param name="mapper">The componesation function.</param>
+    /// <returns><c>Some</c> if the compensation succeeded or the source value was already `Some`, <c>None</c> if the source was `None` and the compensation failed.</returns>
+    let mapError mapper (source: option<'T>) =
+        match source with
+        | Some x -> Some x
+        | None -> mapper ()
