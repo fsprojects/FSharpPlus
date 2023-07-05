@@ -76,7 +76,7 @@ type Reader<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Local (m, f: 'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = Reader.zip x y
 
@@ -91,7 +91,7 @@ type Reader<'r,'t> with
     static member Delay (body: unit->Reader<'R,'T>)  = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
 
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Monad Transformer for Reader<'R, 'T>
 [<Struct>]

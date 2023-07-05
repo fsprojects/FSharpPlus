@@ -34,7 +34,7 @@ let functor = testList "Functor" [
         let tenEncoded = StringCodec.encode intCodec 10
         equal oneParsed (Result<int, string>.Ok 1)
         equal tenEncoded "10" )
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "mapDefaultCustom" [
         testCase "nelist" (fun () -> 
 
@@ -140,7 +140,7 @@ let functor = testList "Functor" [
     ]
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "unzip" (fun () -> 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         #if !FABLE_COMPILER
@@ -154,7 +154,7 @@ let functor = testList "Functor" [
         Assert.AreEqual((NonEmptyMap.Create((1,(true)), (2, (false))),NonEmptyMap.Create((1,('a')), (2, ( 'b')))),testVal2))
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "zipTest" (fun () ->
 
         SideEffects.reset ()
@@ -239,7 +239,7 @@ let functor = testList "Functor" [
         ())
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "genericZipShortest" (fun () ->
         let a = zip [|1; 2; 3|]  [|"a"; "b"|]
         equalSeq [|1,"a"; 2,"b"|] a

@@ -235,7 +235,7 @@ type NonEmptySet<[<EqualityConditionalOn>]'a when 'a: comparison> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member FoldBack (set: NonEmptySet<'a>, f, z) = Set.foldBack f set.Value z
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptySet<'a>, [<Optional>]_impl: ToList) = NonEmptySet.toList s
 

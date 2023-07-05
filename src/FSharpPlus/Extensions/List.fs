@@ -243,7 +243,7 @@ module List =
             member _.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member _.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.

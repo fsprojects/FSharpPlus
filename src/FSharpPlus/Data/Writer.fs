@@ -22,7 +22,7 @@ module Writer =
     let map f (Writer (a: 'T, w)) = Writer (f a, w)                                            : Writer<'Monoid,'U>
 
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// Combines two Writers into one by applying a mapping function.
     let inline map2 f (Writer (a: 'T, w1)) (Writer (b: 'U, w2)) = Writer (f a b, w1 ++ w2) : Writer<'Monoid,'V>
@@ -106,7 +106,7 @@ type Writer<'monoid,'t> with
     static member        Extract (Writer (_: 'W, a: 'T)) = a
     static member        (=>>)   (Writer (w: 'W, _: 'T) as g, f : Writer<_,_> -> 'U) = Writer (w, f g)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 
 /// Monad Transformer for Writer<'Monoid, 'T>

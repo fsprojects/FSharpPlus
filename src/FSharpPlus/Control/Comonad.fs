@@ -6,7 +6,7 @@ open System.Threading.Tasks
 
 open FSharpPlus
 open FSharpPlus.Internals
-
+#if !FABLE_COMPILER4
 
 // Comonad class ----------------------------------------------------------
 
@@ -21,7 +21,7 @@ type Extract =
     static member        Extract ((_: 'W, a: 'T)  ) = a
     static member        Extract (struct (_: 'W, a: 'T)) = a
     static member        Extract (f: 'T Id        ) = f
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Extract (f: 'Monoid -> 'T) = f (Zero.Invoke ())
     #else
     static member inline Extract (f: 'Monoid -> 'T) = f (LanguagePrimitives.GenericZero)
@@ -42,7 +42,7 @@ type Extend =
     static member        (=>>) ((w: 'W, a: 'T)  , f: _ -> 'U        ) = (w, f (w, a))
     static member        (=>>) (struct (w: 'W, a: 'T), f: _ -> 'U   ) = struct (w, f (struct (w, a)))
     static member        (=>>) (g: Id<'T>       , f: Id<'T> -> 'U   ) = f g
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (Plus.Invoke a b))
     #else
     static member inline (=>>) (g: 'Monoid -> 'T, f: _ -> 'U        ) = fun a -> f (fun b -> g (a + b))
@@ -91,13 +91,13 @@ type Extend =
     static member        (=>>) (s: 'T []        , g) = Array.map g (s |> Array.toList |> List.tails |> List.toArray |> Array.map List.toArray) : 'U []
     static member        (=>>) (s: seq<'T>      , g) = Seq.map   g (s |> Seq.toList   |> List.tails |> List.toSeq   |> Seq.map   List.toSeq)   : 'U seq
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+#if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Invoke (g: '``Comonad<'T>``->'U) (s: '``Comonad<'T>``) : '``Comonad<'U>`` =
         let inline call (_mthd: 'M, source: 'I, _output: 'R) = ((^M or ^I or ^R) : (static member (=>>) : _*_ -> _) source, g)
         call (Unchecked.defaultof<Extend>, s, Unchecked.defaultof<'``Comonad<'U>``>)
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+#if !FABLE_COMPILER || FABLE_COMPILER_3
 
 type Duplicate =
     inherit Default1
@@ -117,4 +117,5 @@ type Duplicate =
         let inline call (mthd: ^M, source: ^I, _output: ^R) = ((^M or ^I or ^R) : (static member Duplicate : _*_ -> _) source, mthd)
         call (Unchecked.defaultof<Duplicate>, x, Unchecked.defaultof<'``Comonad<'Comonad<'T>>``>)
 
+#endif
 #endif

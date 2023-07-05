@@ -203,7 +203,7 @@ module Seq =
     /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: seq<_>) = source |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
     #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
