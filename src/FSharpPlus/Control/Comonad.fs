@@ -12,7 +12,7 @@ open FSharpPlus.Internals
 
 type Extract =
     static member        Extract (x: Async<'T>    ) =
-    #if FABLE_COMPILER_3 || FABLE_COMPILER_4
+    #if FABLE_COMPILER_3
         Async.RunSynchronously x
     #else
         Async.StartImmediateAsTask(x).Result
