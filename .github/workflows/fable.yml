@@ -63,8 +63,8 @@ jobs:
       uses: dcarbone/install-jq-action@v1.0.1
     - name: Install fable
       run: |
-      version=`cat ./.config/dotnet-tools.json | jq '.tools.fable.version'`
-      dotnet tool install --global Fable --version $version
+        version=`cat ./.config/dotnet-tools.json | jq --raw-output '.tools.fable.version'`
+        dotnet tool install --global Fable --version $version
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
