@@ -77,7 +77,7 @@ module List =
     ///
     /// <returns>List with values returned from mapping function.</returns>
     let lift3 f x1 x2 x3 =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
@@ -243,7 +243,7 @@ module List =
             member _.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member _.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
