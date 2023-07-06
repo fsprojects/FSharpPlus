@@ -12,7 +12,7 @@ open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-
+#if !FABLE_COMPILER_4
 // Monad class ------------------------------------------------------------
 
 type Bind =
@@ -128,7 +128,7 @@ type Return =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     static member inline Invoke (x: 'T) : '``Applicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Return : _*_ -> _) output, mthd)
@@ -344,4 +344,5 @@ type Using with
     static member inline Using (resource: 'T when 'T :> IDisposable, body: 'T -> '``Monad<'U>``                                 , _: Using   ) = Using.InvokeOnInstance resource body : '``Monad<'U>``
     static member inline Using (_                                  , _   : 'a -> ^t when ^t : null and ^t: struct               , _: Using   ) = ()
 
+#endif
 #endif

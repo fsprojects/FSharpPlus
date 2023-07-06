@@ -12,7 +12,7 @@ namespace FSharpPlus
 #nowarn "40"
 #nowarn "44"
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 open System
 open System.ComponentModel
 
@@ -92,7 +92,7 @@ module Builders =
     let monad' = new MonadFxStrictBuilder ()
 
 #endif
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]

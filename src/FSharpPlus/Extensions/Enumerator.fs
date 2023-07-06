@@ -1,6 +1,6 @@
 namespace FSharpPlus
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Additional operations on IEnumerator
 [<RequireQualifiedAccess>]

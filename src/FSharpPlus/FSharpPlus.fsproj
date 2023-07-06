@@ -27,6 +27,7 @@
     <LangVersion>6.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4</DefineConstants>
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
