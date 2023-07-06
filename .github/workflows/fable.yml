@@ -25,6 +25,8 @@ jobs:
       run: git submodule update --init --recursive
     - name: Restore tools
       run: dotnet tool restore
+    - name: Install fable
+      run: dotnet tool install --global Fable --version 3.7.20
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
