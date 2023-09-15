@@ -168,8 +168,17 @@ type Curry =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Curry: _*_ -> _) b, a)
         call_2 (Unchecked.defaultof<Curry>, Unchecked.defaultof<'t>) (f: 't -> 'r) : 'args
 
+    static member inline Invoke1 f =
+        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Curry1: _*_ -> _) b, a)
+        call_2 (Unchecked.defaultof<Curry>, Unchecked.defaultof<'t>) (f: 't -> 'r) : 'args
+
     static member inline Curry (t: 't, _: Curry) = fun f t1 t2 t3 t4 t5 t6 t7 ->
         Curry.Invoke (fun tr ->
+            let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
+            f (Tuple<'t1,'t2,'t3,'t4,'t5,'t6,'t7,'tr> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype))
+
+    static member inline Curry1 (t: 't, _: Curry) = fun f t2 t3 t4 t5 t6 t7 ->
+        Curry.Invoke (fun tr t1 ->
             let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
             f (Tuple<'t1,'t2,'t3,'t4,'t5,'t6,'t7,'tr> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype))
     
@@ -181,9 +190,21 @@ type Curry =
     static member Curry ((_, _, _, _, _, _)   , _: Curry) = fun f t1 t2 t3 t4 t5 t6    -> f (t1, t2, t3, t4, t5, t6)
     static member Curry ((_, _, _, _, _, _, _), _: Curry) = fun f t1 t2 t3 t4 t5 t6 t7 -> f (t1, t2, t3, t4, t5, t6, t7)
 
+    static member Curry1 (_: Tuple<'t1>        , _: Curry) = fun f t1                   -> f (tuple1 t1)
+    static member Curry1 ((_, _)               , _: Curry) = fun f t2 t1                -> f (t1, t2)
+    static member Curry1 ((_, _, _)            , _: Curry) = fun f t2 t3 t1             -> f (t1, t2, t3)
+    static member Curry1 ((_, _, _, _)         , _: Curry) = fun f t2 t3 t4 t1          -> f (t1, t2, t3, t4)
+    static member Curry1 ((_, _, _, _, _)      , _: Curry) = fun f t2 t3 t4 t5 t1       -> f (t1, t2, t3, t4, t5)
+    static member Curry1 ((_, _, _, _, _, _)   , _: Curry) = fun f t2 t3 t4 t5 t6 t1    -> f (t1, t2, t3, t4, t5, t6)
+    static member Curry1 ((_, _, _, _, _, _, _), _: Curry) = fun f t2 t3 t4 t5 t6 t7 t1 -> f (t1, t2, t3, t4, t5, t6, t7)
+
 type Uncurry =
     static member inline Invoke f t =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Uncurry: _*_ -> _) b, a) f
+        call_2 (Unchecked.defaultof<Uncurry>, t) : 'r
+
+    static member inline Invoke1 f t =
+        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Uncurry1: _*_ -> _) b, a) f
         call_2 (Unchecked.defaultof<Uncurry>, t) : 'r
 
     static member inline Uncurry (t: 't, _: Uncurry) = fun f  ->
@@ -197,6 +218,17 @@ type Uncurry =
         let (t1: 't1) = (^t : (member Item1 : 't1) t)
         Uncurry.Invoke (f t1 t2 t3 t4 t5 t6 t7) tr
 
+    static member inline Uncurry1 (t: 't, _: Uncurry) = fun f  ->
+        let (tr: 'tr) = (^t : (member Rest  : 'tr) t)
+        let (t7: 't7) = (^t : (member Item7 : 't7) t)
+        let (t6: 't6) = (^t : (member Item6 : 't6) t)
+        let (t5: 't5) = (^t : (member Item5 : 't5) t)
+        let (t4: 't4) = (^t : (member Item4 : 't4) t)
+        let (t3: 't3) = (^t : (member Item3 : 't3) t)
+        let (t2: 't2) = (^t : (member Item2 : 't2) t)
+        let (t1: 't1) = (^t : (member Item1 : 't1) t)
+        Uncurry.Invoke (f t2 t3 t4 t5 t6 t7) tr t1
+
     static member Uncurry (x: Tuple<'t1>               , _: Uncurry) = fun f -> f x.Item1
     static member Uncurry ((t1, t2)                    , _: Uncurry) = fun f -> f t1 t2
     static member Uncurry ((t1, t2, t3)                , _: Uncurry) = fun f -> f t1 t2 t3
@@ -204,5 +236,13 @@ type Uncurry =
     static member Uncurry ((t1, t2, t3, t4, t5)        , _: Uncurry) = fun f -> f t1 t2 t3 t4 t5
     static member Uncurry ((t1, t2, t3, t4, t5, t6)    , _: Uncurry) = fun f -> f t1 t2 t3 t4 t5 t6
     static member Uncurry ((t1, t2, t3, t4, t5, t6, t7), _: Uncurry) = fun f -> f t1 t2 t3 t4 t5 t6 t7
+
+    static member Uncurry1 (x: Tuple<'t1>               , _: Uncurry) = fun f -> f x.Item1
+    static member Uncurry1 ((t1, t2)                    , _: Uncurry) = fun f -> f t2 t1
+    static member Uncurry1 ((t1, t2, t3)                , _: Uncurry) = fun f -> f t2 t3 t1
+    static member Uncurry1 ((t1, t2, t3, t4)            , _: Uncurry) = fun f -> f t2 t3 t4 t1
+    static member Uncurry1 ((t1, t2, t3, t4, t5)        , _: Uncurry) = fun f -> f t2 t3 t4 t5 t1
+    static member Uncurry1 ((t1, t2, t3, t4, t5, t6)    , _: Uncurry) = fun f -> f t2 t3 t4 t5 t6 t1
+    static member Uncurry1 ((t1, t2, t3, t4, t5, t6, t7), _: Uncurry) = fun f -> f t2 t3 t4 t5 t6 t7 t1
 
 #endif
