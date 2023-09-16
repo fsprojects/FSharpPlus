@@ -70,8 +70,8 @@ type ValueOptionT<'``monad<voption<'t>>``> with
     static member inline get_Empty () : ValueOptionT<'``MonadPlus<voption<'T>``> = ValueOptionT <| result ValueNone
     static member inline (<|>) (ValueOptionT x, ValueOptionT y) : ValueOptionT<'``MonadPlus<voption<'T>``> = ValueOptionT <| (x >>= function ValueSome value -> result (ValueSome value) | _ -> y)
 
-    static member inline TryWith (source: ValueOptionT<'``Monad<voption<'T>>``>, f: exn -> ValueOptionT<'``Monad<voption<'T>>``>) = ValueOptionT (TryWith.Invoke (ValueOptionT.run source) (ValueOptionT.run << f))
-    static member inline TryFinally (computation: ValueOptionT<'``Monad<voption<'T>>``>, f) = ValueOptionT (TryFinally.Invoke     (ValueOptionT.run computation) f)
+    static member inline TryWith (source: unit -> ValueOptionT<'``Monad<voption<'T>>``>, f: exn -> ValueOptionT<'``Monad<voption<'T>>``>) = ValueOptionT (TryWith.Invoke  (fun () -> ValueOptionT.run (source ())) (ValueOptionT.run << f))
+    static member inline TryFinally (computation: unit -> ValueOptionT<'``Monad<voption<'T>>``>, f) = ValueOptionT (TryFinally.Invoke (fun () -> ValueOptionT.run (computation ())) f)
     static member inline Using (resource, f: _ -> ValueOptionT<'``Monad<voption<'T>>``>)    = ValueOptionT (Using.Invoke resource (ValueOptionT.run << f))
     static member inline Delay (body : unit   ->  ValueOptionT<'``Monad<voption<'T>>``>)    = ValueOptionT (Delay.Invoke (fun _ -> ValueOptionT.run (body ()))) : ValueOptionT<'``Monad<voption<'T>>``>
 
