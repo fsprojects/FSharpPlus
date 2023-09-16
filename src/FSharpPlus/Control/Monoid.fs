@@ -26,6 +26,11 @@ type Plus =
     static member        ``+`` (x: array<_>          , y                    , [<Optional>]_mthd: Plus    ) = Array.append x y
     static member        ``+`` (()                   , ()                   , [<Optional>]_mthd: Plus    ) = ()
     static member        ``+`` (x: bool              , y: bool              , [<Optional>]_mthd: Plus    ) = x <> y
+    
+    #if NET6_0_OR_GREATER
+    static member        ``+`` (x: DateOnly          , y: DateOnly          , [<Optional>]_mthd: Plus    ) = DateOnly.FromDayNumber (x.DayNumber + y.DayNumber)
+    #endif
+
     static member        ``+`` (x: Set<_>            , y                    , [<Optional>]_mthd: Plus    ) = Set.union x y
     
     #if !FABLE_COMPILER
