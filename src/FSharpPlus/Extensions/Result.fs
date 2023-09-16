@@ -21,7 +21,7 @@ module Result =
     let apply f (x: Result<'T,'Error>) : Result<'U,'Error> = match f, x with Ok a, Ok b -> Ok (a b) | Error e, _ | _, Error e -> Error e
 
     /// <summary>If value is Ok, returns both of them tupled. Otherwise it returns the Error value twice in a tuple.</summary>
-    /// <param name="v">The value.</param>
+    /// <param name="source">The value.</param>
     /// <returns>The resulting tuple.</returns>
     let unzip (source: Result<'T * 'U, 'Error>) : Result<'T, 'Error> * Result<'U, 'Error> = match source with Ok (x, y) -> Ok x, Ok y | Error e -> Error e, Error e
     

@@ -53,7 +53,7 @@ type ValueOptionT<'``monad<voption<'t>>``> with
     static member inline (>>=) (x: ValueOptionT<'``Monad<voption<'T>``>, f: 'T -> ValueOptionT<'``Monad<voption<'U>``>)   = ValueOptionT.bind  f x
 
     /// <summary>
-    /// Composes left-to-right two option functions (Kleisli composition).
+    /// Composes left-to-right two ValueOption functions (Kleisli composition).
     /// </summary>
     /// <category index="2">Monad</category>
     static member inline (>=>) (f: 'T -> ValueOptionT<'``Monad<voption<'U>``>, g: 'U -> ValueOptionT<'``Monad<voption<'V>``>) : 'T -> ValueOptionT<'``Monad<voption<'V>``> = fun x -> ValueOptionT.bind g (f x)
