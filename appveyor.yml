@@ -11,7 +11,7 @@ before_build:
 init:
   - git config --global core.autocrlf input
 install:
-  - cmd: choco install dotnet --version 8.0.0-rc1234194 --pre -y
+  - cmd: choco install dotnet-sdk --version 8.0.100-rc1234635 --pre -y
   - cmd: git submodule update --init --recursive
 build_script:
   - cmd: dotnet restore ./FSharpPlus.sln
