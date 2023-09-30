@@ -305,7 +305,7 @@ module Traversable =
         CollectionAssert.AreEqual (expected, a)
         CollectionAssert.AreEqual (expected, b)
         #if TEST_TRACE
-        CollectionAssert.AreEqual (["Traverse Result";"Traverse Result"], Traces.get())
+        CollectionAssert.AreEqual (["Traverse Result, 'T->Functor<'U>";"Traverse Result, 'T->Functor<'U>"], Traces.get())
         #endif
 
 

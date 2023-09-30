@@ -151,7 +151,6 @@ type Traverse =
        #if TEST_TRACE
        Traces.add "Traverse list"
        #endif
-
        let rec loop acc = function
            | [] -> acc
            | x::xs -> 
@@ -164,7 +163,6 @@ type Traverse =
        #if TEST_TRACE
        Traces.add "Traverse []"
        #endif
-
        let cons x y = Array.append [|x|] y
        let rec loop acc = function
            | [||] -> acc
