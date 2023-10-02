@@ -34,8 +34,8 @@ module Parsing =
         let t3  = parse<DateTime>    "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(     t, t3, nameof t3)
         let t4  = tryParse<DateTime> "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(Some t, t4, nameof t4)
 
-        let u3  = parse<DateTimeOffset>    "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(     u0, u3, nameof u3)
-        let u4  = tryParse<DateTimeOffset> "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(Some u0, u4, nameof u4)
+        let u3  = parse<DateTimeOffset>    "Mon, 14 Mar 2011 15:42:19 GMT" in Assert.AreEqual(     u0, u3, nameof u3)
+        let u4  = tryParse<DateTimeOffset> "Mon, 14 Mar 2011 15:42:19 GMT" in Assert.AreEqual(Some u0, u4, nameof u4)
 
         let u5 = parse<DateTimeOffset>    "2011-03-14T15:42:19" in Assert.AreEqual(     u0, u5, nameof u5)
         let u6 = tryParse<DateTimeOffset> "2011-03-14T15:42:19" in Assert.AreEqual(Some u0, u6, nameof u6)
