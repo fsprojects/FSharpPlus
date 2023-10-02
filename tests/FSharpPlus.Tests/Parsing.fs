@@ -20,18 +20,33 @@ module Parsing =
 
     [<Test>]
     let parseDateTime () =
-#if MONO
-        let v1 : DateTime = parse "2011-03-04T15:42:19+03:00"
-        Assert.IsTrue((v1 = DateTime(2011,3,4,12,42,19)))
-#else
-        Assert.Ignore ("Depends on how it's executed...")
-#endif
+
+        let t  = DateTime(2011,3,14,12,42,19)
+        let u  = DateTimeOffset(2011,3,14,15,42,19, TimeSpan.FromHours 3.)
+        let u0 = DateTimeOffset(2011,3,14,15,42,19, TimeSpan.FromHours 0.)
+
+        let t1 = parse<DateTime>    "2011-03-14T15:42:19+03:00" in Assert.AreEqual(     t, t1, nameof t1)
+        let t2 = tryParse<DateTime> "2011-03-14T15:42:19+03:00" in Assert.AreEqual(Some t, t2, nameof t2)
+
+        let u1 = parse<DateTimeOffset>    "2011-03-14T15:42:19+03:00" in Assert.AreEqual(     u, u1, nameof u1)
+        let u2 = tryParse<DateTimeOffset> "2011-03-14T15:42:19+03:00" in Assert.AreEqual(Some u, u2, nameof u2)
+
+        let t3  = parse<DateTime>    "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(     t, t3, nameof t3)
+        let t4  = tryParse<DateTime> "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(Some t, t4, nameof t4)
+
+        let u3  = parse<DateTimeOffset>    "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(     u0, u3, nameof u3)
+        let u4  = tryParse<DateTimeOffset> "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(Some u0, u4, nameof u4)
+
+        let u5 = parse<DateTimeOffset>    "2011-03-14T15:42:19" in Assert.AreEqual(     u0, u5, nameof u5)
+        let u6 = tryParse<DateTimeOffset> "2011-03-14T15:42:19" in Assert.AreEqual(Some u0, u6, nameof u6)
+
+        let u7 = parse<DateTimeOffset>    "2011-03-14T15:42:19Z" in Assert.AreEqual(     u0, u7, nameof u7)
+        let u8 = tryParse<DateTimeOffset> "2011-03-14T15:42:19Z" in Assert.AreEqual(Some u0, u8, nameof u8)
+
+
 
     [<Test>]
     let parse () = 
-        let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
-
-        Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
 
         let _101 = tryParse "10.1.0.1" : Net.IPAddress option
         let _102 = tryParse "102" : string option
@@ -50,7 +65,7 @@ module Parsing =
         areStEqual r66 (Some 66.0)
 
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
-        areStEqual r123 (Some (WrappedListA [1; 2; 3]))
+        areStEqual r123 (Some (WrappedListA [1; 2; 3]))    
 
     [<Test>]
     let parseCustomType () = 
