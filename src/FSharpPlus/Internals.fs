@@ -1,5 +1,13 @@
 namespace FSharpPlus.Internals
 
+#if TEST_TRACE
+module Traces =
+    let private effects = ResizeArray<string> []
+    let reset () = effects.Clear ()
+    let add x = effects.Add (x)
+    let get () = effects |> Seq.toList
+#endif
+
 /// <namespacedoc>
 /// <summary>
 /// Internal to the library - please ignore
