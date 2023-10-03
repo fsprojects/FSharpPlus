@@ -124,9 +124,6 @@ type TryParse =
         match DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.AssumeUniversal) with
         | true, x -> Some x
         | _ ->
-            match DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) with
-            | true, x -> Some x
-            | _ ->
                 match DateTimeOffset.TryParse (x, CultureInfo.InvariantCulture, DateTimeStyles.None) with
                 | true, x -> Some x
                 | _ -> None
