@@ -124,9 +124,9 @@ type TryParse =
         match DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.AssumeUniversal) with
         | true, x -> Some x
         | _ ->
-                match DateTimeOffset.TryParse (x, CultureInfo.InvariantCulture, DateTimeStyles.None) with
-                | true, x -> Some x
-                | _ -> None
+            match DateTimeOffset.TryParse (x, CultureInfo.InvariantCulture, DateTimeStyles.None) with
+            | true, x -> Some x
+            | _ -> None
     #endif
 
     static member inline Invoke (value: string) =
@@ -208,9 +208,10 @@ type Parse with
 
 type TryParse with
 
-    static member inline TryParse (_: 'R, _: Default4) : string -> 'R option = fun (value: string) ->        
-        try Parse.InvokeOnInstance value |> Some
-        with _ -> None   // todo, maybe match on invalidArg only
+    static member inline TryParse (_: 'R, _: Default4) : string -> 'R option = fun (value: string) ->
+        try Some (Parse.InvokeOnInstance value) with
+        | :? ArgumentNullException | :? FormatException -> None 
+        | _ -> reraise ()
 
     static member inline TryParse (_: 'R, _: Default3) : string -> 'R option = TryParse.InvokeOnConvention
 
