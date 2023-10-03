@@ -165,8 +165,9 @@ type Parse =
 
     #if !FABLE_COMPILER
     static member Parse (_: DateTime      , _: Parse) = fun (x:string) ->
-        try DateTime.ParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind)
-        with _ -> DateTime.Parse (x, CultureInfo.InvariantCulture)
+        match DateTime.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) with
+        | true, x -> x
+        | _ -> DateTime.Parse (x, CultureInfo.InvariantCulture)
 
     static member Parse (_: DateTimeOffset, _: Parse) = fun (x:string) ->
         try DateTimeOffset.ParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.AssumeUniversal)
@@ -210,7 +211,7 @@ type Parse with
 
 type TryParse with
 
-    static member inline TryParse (_: 'R, _: Default4) : string -> 'R option = fun (value: string) ->
+    static member inline TryParse (_: 'R, _: Default4) : string -> 'R option = fun (value: string) ->        
         try Parse.InvokeOnInstance value |> Some
         with _ -> None   // todo, maybe match on invalidArg only
 
