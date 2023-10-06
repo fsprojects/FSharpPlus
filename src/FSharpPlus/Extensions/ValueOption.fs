@@ -71,7 +71,14 @@ module ValueOption =
         | true,  x -> ValueSome x
         | false, _ -> ValueNone
 
-    let toOption x =
-        match x with
+    /// <summary>Converts a ValueOption to an Option.</summary>
+    let toOption (source: ValueOption<'T>) =
+        match source with
         | ValueSome x -> Some x
         | ValueNone   -> None
+    
+    /// <summary>Converts an Option to a ValueOption.</summary>
+    let ofOption (source: option<'T>) =
+        match source with
+        | Some x -> ValueSome x
+        | None   -> ValueNone
