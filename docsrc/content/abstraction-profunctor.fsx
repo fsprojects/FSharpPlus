@@ -20,7 +20,7 @@ Minimal complete definition
  * ``dimap f g x``
 *)
 (**
-    static member Dimap (x:'Profunctor<'T,'V>, f:'U->'T, g:'V->'W) :'Profunctor<'U,'W>
+    static member Dimap (x: 'Profunctor<'T, 'V>, f: 'U -> 'T, g: 'V -> 'W) : 'Profunctor<'U, 'W>
 *)
 (**
 
@@ -31,14 +31,14 @@ Other operations
  * ``lmap f x``
 *)
 (**
-    static member Contramap (x:Profunctor<'T,'V>, f:'U->'T) :'Profunctor<'U,'V>
+    static member Contramap (x: 'Profunctor<'T, 'V>, f: 'U -> 'T) : 'Profunctor<'U, 'V>
 *)
 (**
 
  * ``rmap g x``
 *)
 (**
-    static member Map (x:Profunctor<'T,'V>, f:'V->'W) :'Profunctor<'T,'W>
+    static member Map (x: 'Profunctor<'T,'V>, f: 'V -> 'W) : 'Profunctor<'T, 'W>
 *)
 (**
 
