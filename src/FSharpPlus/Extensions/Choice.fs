@@ -82,3 +82,16 @@ module Choice =
         try
             Choice1Of2 (f x)
         with e -> Choice2Of2 e
+
+    let apply2With combiner f (x: Choice<'T, 'Error>) (y: Choice<'U, 'Error>) : Choice<'V, 'Error> =
+        match x, y with
+        | Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (f a b)
+        | Choice2Of2 e, Choice1Of2 _ | Choice1Of2 _, Choice2Of2 e -> Choice2Of2 e
+        | Choice2Of2 e1, Choice2Of2 e2 -> Choice2Of2 (combiner e1 e2)
+
+    let apply3With combiner f (x: Choice<'T, 'Error>) (y: Choice<'U, 'Error>) (z: Choice<'V, 'Error>) : Choice<'W, 'Error> =
+        match x, y, z with
+        | Choice1Of2 a, Choice1Of2 b, Choice1Of2 c -> Choice1Of2 (f a b c)
+        | Choice2Of2 e, Choice1Of2 _, Choice1Of2 _ | Choice1Of2 _, Choice2Of2 e, Choice1Of2 _ | Choice1Of2 _, Choice1Of2 _, Choice2Of2 e -> Choice2Of2 e
+        | Choice1Of2 _, Choice2Of2 e1, Choice2Of2 e2 | Choice2Of2 e1, Choice1Of2 _, Choice2Of2 e2 | Choice2Of2 e1, Choice2Of2 e2, Choice1Of2 _ -> Choice2Of2 (combiner e1 e2)
+        | Choice2Of2 e1, Choice2Of2 e2, Choice2Of2 e3 -> Choice2Of2 (combiner (combiner e1 e2) e3)

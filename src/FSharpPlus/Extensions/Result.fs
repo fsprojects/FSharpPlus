@@ -159,3 +159,16 @@ module Result =
         List.iter (function Ok e -> coll1.Add e | Error e -> coll2.Add e) source
         coll1.Close (), coll2.Close ()
     #endif
+
+    let apply2With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> =
+        match x, y with
+        | Ok a, Ok b -> Ok (f a b)
+        | Error e, Ok _ | Ok _, Error e -> Error e
+        | Error e1, Error e2 -> Error (combiner e1 e2)
+
+    let apply3With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) (z: Result<'V,'Error>) : Result<'W,'Error> =
+        match x, y, z with
+        | Ok a, Ok b, Ok c -> Ok (f a b c)
+        | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
+        | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
+        | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)
