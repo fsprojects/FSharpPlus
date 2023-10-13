@@ -74,7 +74,7 @@ type ParApply =
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        ``</>`` (f: ValueTask<_>     , x: ValueTask<'T>        , [<Optional>]_output: ValueTask<'U>        , [<Optional>]_mthd: ParApply) = ValueTask.apply   f x : ValueTask<'U>
     #endif
-    static member        ``</>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: ParApply) = Async.apply  f x : Async<'U>
+    static member        ``</>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: ParApply) = Async.parMap2 (<|) f x : Async<'U>
     static member        ``</>`` (f: option<_>        , x: option<'T>           , [<Optional>]_output: option<'U>           , [<Optional>]_mthd: ParApply) = Option.apply f x : option<'U>
     static member        ``</>`` (f: voption<_>       , x: voption<'T>          , [<Optional>]_output: voption<'U>          , [<Optional>]_mthd: ParApply) = ValueOption.apply f x : voption<'U>
     static member inline ``</>`` (f: Result<_,'E>     , x: Result<'T,'E>        , [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: ParApply) = Result.apply2With Plus.Invoke (<|) f x : Result<'U, 'E>
@@ -147,7 +147,7 @@ type ParLift2 =
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        ParLift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: ParLift2) = ValueTask.map2  f x y
     #endif
-    static member        ParLift2 (f, (x                     , y                     ), _mthd: ParLift2) = Async.map2  f x y
+    static member        ParLift2 (f, (x                     , y                     ), _mthd: ParLift2) = Async.parMap2 f x y
     static member        ParLift2 (f, (x                     , y                     ), _mthd: ParLift2) = Option.map2 f x y
     
     #if !FABLE_COMPILER
@@ -194,7 +194,7 @@ type ParLift3 =
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        ParLift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: ParLift3) = ValueTask.map3  f x y z
     #endif
-    static member        ParLift3 (f, (x                     , y                     , z                      ), _mthd: ParLift3) = Async.map3  f x y z
+    static member        ParLift3 (f, (x                     , y                     , z                      ), _mthd: ParLift3) = Async.parMap3  f x y z
     static member        ParLift3 (f, (x                     , y                     , z                      ), _mthd: ParLift3) = Option.map3 f x y z
     
     #if !FABLE_COMPILER

@@ -17,7 +17,15 @@ module Async =
     let map2 f x y = async {
         let! a = x
         let! b = y
-        return f a b}
+        return f a b }
+
+    let parMap2 f c1 c2 = async {
+        let! ct = Async.CancellationToken
+        let x = Async.StartImmediateAsTask (c1, ct)
+        let y = Async.StartImmediateAsTask (c2, ct)
+        let! x' = Async.AwaitTask x
+        let! y' = Async.AwaitTask y
+        return f x' y' }
     
     /// <summary>Creates an async workflow from three workflows 'x', 'y' and 'z', mapping its results with 'f'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
@@ -29,13 +37,32 @@ module Async =
         let! a = x
         let! b = y
         let! c = z
-        return f a b c}
+        return f a b c }
+
+    let parMap3 f c1 c2 c3 = async {
+        let! ct = Async.CancellationToken
+        let x = Async.StartImmediateAsTask (c1, ct)
+        let y = Async.StartImmediateAsTask (c2, ct)
+        let z = Async.StartImmediateAsTask (c3, ct)
+        let! x' = Async.AwaitTask x
+        let! y' = Async.AwaitTask y
+        let! z' = Async.AwaitTask z
+        return f x' y' z' }
 
     /// <summary>Creates an async workflow from two workflows 'x' and 'y', tupling its results.</summary>
     let zip x y = async {
         let! a = x
         let! b = y
-        return a, b}
+        return a, b }
+
+    /// <summary>Creates an async-parallel workflow from two workflows 'x' and 'y', tupling its results.</summary>
+    let parZip c1 c2 = async {
+        let! ct = Async.CancellationToken
+        let x = Async.StartImmediateAsTask (c1, ct)
+        let y = Async.StartImmediateAsTask (c2, ct)
+        let! x' = Async.AwaitTask x
+        let! y' = Async.AwaitTask y
+        return x', y' }
 
     /// Flatten two nested asyncs into one.
     let join x = async.Bind (x, id)
