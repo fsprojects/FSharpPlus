@@ -75,3 +75,15 @@ module Monoid =
             return y - x }
         Assert.AreEqual (str, "FourTen")
         Assert.AreEqual (num, 6)
+
+    #if NET6_0_OR_GREATER
+    [<Test>]
+    let testDateAndTimes =
+        let d1 = DateOnly(2020, 1, 1)
+        let d2 = d1 ++ zero ++ one
+        Assert.AreEqual (DateOnly(2020, 1, 2), d2)
+
+        let t1 = TimeOnly (2, 10, 30)
+        let t2 = t1 ++ zero
+        Assert.AreEqual (t1, t2)
+    #endif
