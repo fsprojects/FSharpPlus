@@ -137,8 +137,10 @@ type Zero =
     inherit Default1
 
     static member        Zero (_: System.TimeSpan                , _: Zero    ) = System.TimeSpan ()
+    #if NET6_0_OR_GREATER
     static member        Zero (_: System.DateOnly                , _: Zero    ) = System.DateOnly.MinValue
     static member        Zero (_: System.TimeOnly                , _: Zero    ) = System.TimeOnly.MinValue
+    #endif
     static member        Zero (_: DmStruct                       , _: Zero    ) = Unchecked.defaultof<DmStruct>
     static member        Zero (_: list<'a>                       , _: Zero    ) = []   :   list<'a>
     static member        Zero (_: option<'a>                     , _: Zero    ) = None : option<'a>
