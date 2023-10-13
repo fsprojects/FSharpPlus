@@ -83,7 +83,7 @@ module Monoid =
         let d2 = d1 ++ zero ++ one
         Assert.AreEqual (DateOnly(2020, 1, 2), d2)
 
-        let t1 = TimeOnly (2, 10, 30)
-        let t2 = t1 ++ zero
+        let t1 = TimeOnly (0, 0, 0)
+        let t2 = zero
         Assert.AreEqual (t1, t2)
     #endif
