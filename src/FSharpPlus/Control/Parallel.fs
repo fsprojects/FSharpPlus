@@ -34,9 +34,9 @@ type ParReturn =
     #if NETSTANDARD2_1 && !FABLE_COMPILER
     static member        ParReturn (_: 'T ValueTask   , _: ParReturn  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
     #endif
-    static member inline ParReturn (_: option<'a>     , _: ParReturn  ) = fun x -> Some ()                : option<'a>
-    static member inline ParReturn (_  : voption<'a>  , _: ParReturn  ) = fun x -> ValueSome (Zero.Invoke ())           : voption<'a>
-    static member        ParReturn (_: list<'a>       , _: ParReturn  ) = fun x -> List.cycle [x]                                : list<'a>
+    static member inline ParReturn (_: option<'a>     , _: ParReturn  ) = fun x -> Some x                               : option<'a>
+    static member inline ParReturn (_: voption<'a>    , _: ParReturn  ) = fun x -> ValueSome x                          : voption<'a>
+    static member        ParReturn (_: list<'a>       , _: ParReturn  ) = fun x -> List.cycle [x]                       : list<'a>
     static member        ParReturn (_: 'a []          , _: ParReturn  ) = fun x -> [|x|]                                : 'a []
     static member        ParReturn (_: 'r -> 'a       , _: ParReturn  ) = Prelude.const': 'a -> 'r -> _
     static member inline ParReturn (_:  'm * 'a       , _: ParReturn  ) = fun (x: 'a) -> (Zero.Invoke (): 'm), x

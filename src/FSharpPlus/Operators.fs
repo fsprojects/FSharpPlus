@@ -179,6 +179,13 @@ module Operators =
     let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
     /// <summary>
+    /// Apply a lifted argument to a lifted function: f &lt;/&gt; arg.
+    /// Same as &lt;*&gt; but for parallel applicatives.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (</>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = ParApply.Invoke f x : '``Applicative<'U>``
+
+    /// <summary>
     /// Applies 2 lifted arguments to a non-lifted function. Equivalent to map2 in non list-like types.
     /// </summary>
     /// <category index="2">Applicative</category>
