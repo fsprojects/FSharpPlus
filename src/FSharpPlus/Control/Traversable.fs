@@ -34,87 +34,145 @@ type Traverse =
     static member inline InvokeOnInstance f (t: ^a) = (^a : (static member Traverse : _*_ -> 'R) t, f)
 
     static member inline Traverse (t: '``Traversable<'T>``  , f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<'Traversable<'U>>``, [<Optional>]_impl: Default4) =
-        let mapped = Map.Invoke f t : '``Traversable<'Functor<'U>>``
-        (^``Traversable<'T>`` : (static member Sequence : _ -> _) mapped) : '``Functor<'Traversable<'U>>``
+       #if TEST_TRACE
+       Traces.add "Traverse 'Traversable, 'T->Functor<'U>"
+       #endif
+       let mapped = Map.Invoke f t : '``Traversable<'Functor<'U>>``
+       (^``Traversable<'T>`` : (static member Sequence : _ -> _) mapped) : '``Functor<'Traversable<'U>>``
 
-    static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) = Map.Invoke Id.create (f (Id.run t))
+    static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       #if TEST_TRACE
+       Traces.add "Traverse Id"
+       #endif
+       Map.Invoke Id.create (f (Id.run t))
 
     static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       #if TEST_TRACE
+       Traces.add "Traverse seq"
+       #endif
        let cons x y = seq {yield x; yield! y}
        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
        Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+       #if TEST_TRACE
+       Traces.add "Traverse NonEmptySeq"
+       #endif
        let cons x y = seq {yield x; yield! y}
        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
        Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (result Seq.empty))
 
     static member inline Traverse (t: seq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
-        let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq) : '``Functor<seq<'U>>``
+       #if TEST_TRACE
+       Traces.add "Traverse seq, 'T->Functor<'U>"
+       #endif
+       let mapped = Seq.map f t
+       Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq) : '``Functor<seq<'U>>``
 
     static member inline Traverse (t: NonEmptySeq<'T>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) =
-        let mapped = NonEmptySeq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofList) : '``Functor<NonEmptySeq<'U>>``
+       #if TEST_TRACE
+       Traces.add "Traverse NonEmptySeq, 'T->Functor<'U>"
+       #endif
+       let mapped = NonEmptySeq.map f t
+       Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofList) : '``Functor<NonEmptySeq<'U>>``
 
-    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) = Traverse.InvokeOnInstance f t : 'R
+    static member inline Traverse (t: ^a   , f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) =
+       #if TEST_TRACE
+       Traces.add "Traverse ^a"
+       #endif
+       Traverse.InvokeOnInstance f t : 'R
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R   , _impl: Default1) = id
 
     #if !FABLE_COMPILER
     static member Traverse (t: 't seq, f: 't->Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Traverse) : Async<seq<_>> = async {
-        let! ct = Async.CancellationToken
-        return seq {
-            use enum = t.GetEnumerator ()
-            while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+       #if TEST_TRACE
+       Traces.add "Traverse 't seq, 't->Async<'u>"
+       #endif
+
+       let! ct = Async.CancellationToken
+       return seq {
+           use enum = t.GetEnumerator ()
+           while enum.MoveNext() do
+               yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
     #endif
 
     #if !FABLE_COMPILER
     static member Traverse (t: 't NonEmptySeq, f: 't->Async<'u>, [<Optional>]_output: Async<NonEmptySeq<'u>>, [<Optional>]_impl: Traverse) : Async<NonEmptySeq<_>> = async {
-        let! ct = Async.CancellationToken
-        return seq {
-            use enum = t.GetEnumerator ()
-            while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
+       #if TEST_TRACE
+       Traces.add "Traverse 't NonEmptySeq, 't->Async<'u>"
+       #endif
+
+       let! ct = Async.CancellationToken
+       return seq {
+           use enum = t.GetEnumerator ()
+           while enum.MoveNext() do
+               yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
     #endif
     
-    static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) = Option.map Id.create (f (Id.run t))
-    static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with Some x -> Map.Invoke Some (f x) | _ -> result None
-    static member inline Traverse (t: voption<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R = match t with ValueSome x -> Map.Invoke ValueSome (f x) | _ -> result ValueNone
+    static member        Traverse (t: Id<'t>   , f: 't->option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) =
+       #if TEST_TRACE
+       Traces.add "Traverse Id, 't->option<'u>"
+       #endif
+       Option.map Id.create (f (Id.run t))
+    static member inline Traverse (t: option<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
+       #if TEST_TRACE
+       Traces.add "Traverse option"
+       #endif
+       match t with Some x -> Map.Invoke Some (f x) | _ -> result None
+    static member inline Traverse (t: voption<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
+       #if TEST_TRACE
+       Traces.add "Traverse voption"
+       #endif
+       match t with ValueSome x -> Map.Invoke ValueSome (f x) | _ -> result ValueNone
 
     static member inline Traverse (t:Map<_,_>  , f, [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-        let insert_f m k v = Map.Invoke (Map.add k) v <*> m        
-        Map.fold insert_f (result Map.empty) (Map.mapValues f t)
+       #if TEST_TRACE
+       Traces.add "Traverse Map"
+       #endif
+       let insert_f m k v = Map.Invoke (Map.add k) v <*> m        
+       Map.fold insert_f (result Map.empty) (Map.mapValues f t)
 
     static member inline Traverse (t: Result<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Result<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Result<'U,'Error>>`` =
-        match t with
-        | Ok a    -> Map.Invoke Result<'U,'Error>.Ok (f a)
-        | Error e -> Return.Invoke (Result<'U,'Error>.Error e)
+       #if TEST_TRACE
+       Traces.add "Traverse Result, 'T->Functor<'U>"
+       #endif
+       match t with
+       | Ok a    -> Map.Invoke Result<'U,'Error>.Ok (f a)
+       | Error e -> Return.Invoke (Result<'U,'Error>.Error e)
 
     static member inline Traverse (t: Choice<'T,'Error>, f: 'T->'``Functor<'U>``, [<Optional>]_output: '``Functor<Choice<'U,'Error>>``, [<Optional>]_impl: Traverse) : '``Functor<Choice<'U,'Error>>`` =
-        match t with
-        | Choice1Of2 a -> Map.Invoke Choice<'U,'Error>.Choice1Of2 (f a)
-        | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
+       #if TEST_TRACE
+       Traces.add "Traverse Choice, 'T->Functor<'U>"
+       #endif
+       match t with
+       | Choice1Of2 a -> Map.Invoke Choice<'U,'Error>.Choice1Of2 (f a)
+       | Choice2Of2 e -> Return.Invoke (Choice<'U,'Error>.Choice2Of2 e)
 
     static member inline Traverse (t:list<_>   ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-        let rec loop acc = function
-            | [] -> acc
-            | x::xs -> 
-                let v = f x
-                loop (v::acc) xs
-        let cons_f x xs = Map.Invoke List.cons xs <*> x
-        List.fold cons_f (result []) (loop [] t)
+       #if TEST_TRACE
+       Traces.add "Traverse list"
+       #endif
+       let rec loop acc = function
+           | [] -> acc
+           | x::xs -> 
+               let v = f x
+               loop (v::acc) xs
+       let cons_f x xs = Map.Invoke List.cons xs <*> x
+       List.fold cons_f (result []) (loop [] t)
 
     static member inline Traverse (t:_ []      ,f , [<Optional>]_output: 'R, [<Optional>]_impl: Traverse) : 'R =
-        let cons x y = Array.append [|x|] y
-        let rec loop acc = function
-            | [||] -> acc
-            | xxs ->
-                let x, xs = Array.head xxs, Array.tail xxs
-                let v = f x
-                loop (cons v acc) xs
-        let cons_f x xs = Map.Invoke cons xs <*> x
-        Array.fold cons_f (result [||]) (loop [||] t)
+       #if TEST_TRACE
+       Traces.add "Traverse []"
+       #endif
+       let cons x y = Array.append [|x|] y
+       let rec loop acc = function
+           | [||] -> acc
+           | xxs ->
+               let x, xs = Array.head xxs, Array.tail xxs
+               let v = f x
+               loop (cons v acc) xs
+       let cons_f x xs = Map.Invoke cons xs <*> x
+       Array.fold cons_f (result [||]) (loop [||] t)
 
     static member inline Invoke (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c, f) = ((^a or ^b or ^c) : (static member Traverse : _*_*_*_ -> _) b, f, c, a)
