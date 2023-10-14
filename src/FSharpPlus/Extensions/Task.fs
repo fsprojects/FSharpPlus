@@ -286,7 +286,7 @@ module Task =
             (fun () -> if not (isNull (box disp)) then disp.Dispose ())
 
     /// Creates a Task from a value
-    let ofValue value = Task.FromResult value
+    let result value = Task.FromResult value
     
     /// Raises an exception in the Task
     let raise (e: exn) =
