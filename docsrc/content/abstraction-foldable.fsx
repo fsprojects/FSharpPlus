@@ -81,7 +81,7 @@ Examples
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 open FSharpPlus
 open FSharpPlus.Data
