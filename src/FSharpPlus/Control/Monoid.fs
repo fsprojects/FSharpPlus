@@ -29,6 +29,7 @@ type Plus =
     
     #if NET6_0_OR_GREATER
     static member        ``+`` (x: DateOnly          , y: DateOnly          , [<Optional>]_mthd: Plus    ) = DateOnly.FromDayNumber (x.DayNumber + y.DayNumber)
+    static member        ``+`` (x: TimeOnly          , y: TimeOnly          , [<Optional>]_mthd: Plus    ) = (x.Ticks + y.Ticks)  % 864000000000L |> TimeOnly
     #endif
 
     static member        ``+`` (x: Set<_>            , y                    , [<Optional>]_mthd: Plus    ) = Set.union x y
