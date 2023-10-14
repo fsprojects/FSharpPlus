@@ -26,7 +26,7 @@
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4</DefineConstants>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
