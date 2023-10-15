@@ -33,7 +33,7 @@ jobs:
     - name: Set Timezone
       uses: szenius/set-timezone@v1.2
       with:
-        timezoneWindows: "Singapore Standard Time"
+        timezoneWindows: "Nepal Standard Time"
     - name: Test with dotnet
       run: dotnet test build.proj -v n
 
