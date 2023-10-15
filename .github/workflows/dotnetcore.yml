@@ -30,6 +30,10 @@ jobs:
       run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.2
+      with:
+        timezoneWindows: "Nepal Standard Time"
     - name: Test with dotnet
       run: dotnet test build.proj -v n
 
@@ -48,7 +52,6 @@ jobs:
         dotnet-version: 6.0.201
     - name: Restore
       run: git submodule update --init --recursive
-
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
