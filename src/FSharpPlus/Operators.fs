@@ -185,7 +185,6 @@ module Operators =
     let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
     [<System.Obsolete("Use lift2 instead.")>]
-    /// <category index="2">Applicative</category>
     let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
 
     /// <summary>
@@ -207,11 +206,9 @@ module Operators =
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
     [<System.Obsolete("Use flip (<*>) instead.")>]
-    /// <category index="2">Applicative</category>
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     [<System.Obsolete("Use opt instead.")>]
-    /// <category index="2">Applicative</category>
     let inline optional v = Some <!> v </Append.Invoke/> result None
 
     /// <summary>
