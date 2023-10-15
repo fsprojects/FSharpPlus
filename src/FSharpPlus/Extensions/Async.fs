@@ -10,7 +10,7 @@ module Async =
     let map f x = async.Bind (x, async.Return << f)
 
     /// <summary>Creates an async workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
-    /// <remarks>Workflows are run in sequence.</remarks>
+    /// <remarks>Workflows are run in sequence. For parallel use pmap2</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First async workflow.</param>
     /// <param name="y">Second async workflow.</param>
@@ -19,16 +19,25 @@ module Async =
         let! b = y
         return f a b }
 
-    let parMap2 f c1 c2 = async {
+    /// <summary>Creates an async workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
+    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First async workflow.</param>
+    /// <param name="y">Second async workflow.</param>
+    #if FABLE_COMPILER
+    let pmap2 f x y = map2 f x y
+    #else
+    let pmap2 f x y = async {
         let! ct = Async.CancellationToken
-        let x = Async.StartImmediateAsTask (c1, ct)
-        let y = Async.StartImmediateAsTask (c2, ct)
+        let x = Async.StartImmediateAsTask (x, ct)
+        let y = Async.StartImmediateAsTask (y, ct)
         let! x' = Async.AwaitTask x
         let! y' = Async.AwaitTask y
         return f x' y' }
-    
+    #endif
+
     /// <summary>Creates an async workflow from three workflows 'x', 'y' and 'z', mapping its results with 'f'.</summary>
-    /// <remarks>Workflows are run in sequence.</remarks>
+    /// <remarks>Workflows are run in sequence. For parallel use pmap3</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First async workflow.</param>
     /// <param name="y">Second async workflow.</param>
@@ -39,15 +48,25 @@ module Async =
         let! c = z
         return f a b c }
 
-    let parMap3 f c1 c2 c3 = async {
+    /// <summary>Creates an async workflow from three workflows 'x', 'y' and 'z', mapping its results with 'f'.</summary>
+    /// <remarks>Similar to map3 but workflows are run in parallel.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First async workflow.</param>
+    /// <param name="y">Second async workflow.</param>
+    /// <param name="z">third async workflow.</param>
+    #if FABLE_COMPILER
+    let pmap3 f x y z = map3 f x y z
+    #else
+    let pmap3 f x y z = async {
         let! ct = Async.CancellationToken
-        let x = Async.StartImmediateAsTask (c1, ct)
-        let y = Async.StartImmediateAsTask (c2, ct)
-        let z = Async.StartImmediateAsTask (c3, ct)
+        let x = Async.StartImmediateAsTask (x, ct)
+        let y = Async.StartImmediateAsTask (y, ct)
+        let z = Async.StartImmediateAsTask (z, ct)
         let! x' = Async.AwaitTask x
         let! y' = Async.AwaitTask y
         let! z' = Async.AwaitTask z
         return f x' y' z' }
+    #endif
 
     /// <summary>Creates an async workflow from two workflows 'x' and 'y', tupling its results.</summary>
     let zip x y = async {
@@ -56,13 +75,17 @@ module Async =
         return a, b }
 
     /// <summary>Creates an async-parallel workflow from two workflows 'x' and 'y', tupling its results.</summary>
-    let parZip c1 c2 = async {
+    #if FABLE_COMPILER
+    let pzip x y = zip x y
+    #else
+    let pzip x y = async {
         let! ct = Async.CancellationToken
-        let x = Async.StartImmediateAsTask (c1, ct)
-        let y = Async.StartImmediateAsTask (c2, ct)
+        let x = Async.StartImmediateAsTask (x, ct)
+        let y = Async.StartImmediateAsTask (y, ct)
         let! x' = Async.AwaitTask x
         let! y' = Async.AwaitTask y
         return x', y' }
+    #endif
 
     /// Flatten two nested asyncs into one.
     let join x = async.Bind (x, id)
