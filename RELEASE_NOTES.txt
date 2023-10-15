@@ -1,8 +1,9 @@
-Release Notes for FSharpPlus 1.4.0  - February 22 2023
+Release Notes for FSharpPlus 1.5.0  - October 15 2023
 ------------------------------------------------------
 
-Additional Alternatives available (functions, error monads)
-More IReadOnlyDictionary functions
-Bug fixes in Map as FoldIndexable and missing <*> for IDictionary and IReadOnlyDictionary
-Deprecate IReadOnlyDictionary.map
-Guid to/from bytes conversion
+Support for Fable 4 (some functions had to be removed from Fable in order to it)
+More IList and IReadOnlyList functions
+Bug fixes in parse, tryParse, seq's TryFinally and (=>>) for ValueTask
+Add Free.hoist
+Add distinct for NonEmptySeq and NonEmptyList
+Add ValueOption.ofOption and Task.result for Task and ValueTask
