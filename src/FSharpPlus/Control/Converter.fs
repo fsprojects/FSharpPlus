@@ -164,7 +164,7 @@ type Parse =
     static member Parse (_: DateTime      , _: Parse) = fun (x:string) ->
         match DateTime.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) with
         | true, x -> x
-        | _ -> DateTime.Parse (x, CultureInfo.InvariantCulture)
+        | _ -> DateTime.Parse (x, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal)
 
     static member Parse (_: DateTimeOffset, _: Parse) = fun (x:string) ->
         try DateTimeOffset.ParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.AssumeUniversal)
