@@ -289,7 +289,7 @@ type GroupBy =
 type ChunkBy =
     static member ChunkBy (x: Id<'T>  , f: 'T->'Key, _: Id<'Key*Id<'T>>    , [<Optional>]_impl: ChunkBy) = let a = Id.run x in Id.create (f a, x)
     static member ChunkBy (x: seq<'T> , f: 'T->'Key, _: seq<'Key*seq<'T>>  , [<Optional>]_impl: ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
-    static member ChunkBy (x: list<'T>, f: 'T->'Key, _: list<'Key*list<'T>>, [<Optional>]_impl: ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    static member ChunkBy (x: list<'T>, f: 'T->'Key, _: list<'Key*list<'T>>, [<Optional>]_impl: ChunkBy) = List.chunkBy f x
     static member ChunkBy (x: 'T []   , f: 'T->'Key, _: ('Key*('T [])) []  , [<Optional>]_impl: ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = 
