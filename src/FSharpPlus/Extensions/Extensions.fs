@@ -135,6 +135,7 @@ module Extensions =
                     | Some v -> yield v
                     | None   -> ok <- false })
             if ok then Some (Array.toSeq res) else None
+    
     type ValueOption<'t> with
 
         /// Returns None if it contains a None element, otherwise a list of all elements
@@ -147,3 +148,18 @@ module Extensions =
                     | ValueSome v -> yield v
                     | ValueNone   -> ok <- false })
             if ok then ValueSome (Array.toSeq res) else ValueNone
+
+    type Result<'t, 'error> with
+
+        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
+        static member Sequence (t: seq<Result<'T, ' Error>>) =
+            let mutable bad = None
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () && bad.IsNone do
+                    match e.Current with
+                    | Ok v -> yield v
+                    | Error x -> bad <- Some x })
+            match bad with
+            | None-> Ok (Array.toSeq res)
+            | Some x -> Error x
