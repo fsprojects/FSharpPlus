@@ -67,7 +67,7 @@ We should add as much concrete implementations for primitive types (types coming
 
 #### Defaults
 
-The goal of default implementations is to allow users of the library to write less code, as an example we expect the user will add `Bind` , `Return`  to their specific monad types, but we don't want to force him to add `Join` although if he adds it, code might be more efficient.
+The goal of default implementations is to allow users of the library to write less code, as an example we expect the user will add `Bind` , `Return`  to their specific monad types, but we don't want to force them to add `Join` although if they do, code might be more efficient.
 But those defaults are not intended to be used by developers of F#+ as we should afford writing more code in order to maximize usability of the library. You can read this as "the principle is to allow user to write less boilerplate, and because of that we have to put some boilerplate inside F#+".
 
 #### Invoker
