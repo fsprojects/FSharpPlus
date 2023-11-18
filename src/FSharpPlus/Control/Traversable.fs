@@ -187,7 +187,7 @@ type Sequence with
                         Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq)   : '``Applicative<seq<'T>>``
-    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, Option.isNone, List.toSeq)                                : option<seq<'t>>
+    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) = Option.Sequence t                                                                  : option<seq<'t>>
     #if !FABLE_COMPILER
     static member        Sequence (t: seq<voption<'t>>  , [<Optional>]_output: voption<seq<'t>>   , [<Optional>]_impl: Default3) = Sequence.ForInfiniteSequences(t, ValueOption.isNone, List.toSeq)                           : voption<seq<'t>>
     #endif
