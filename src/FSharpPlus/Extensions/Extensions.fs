@@ -148,8 +148,7 @@ module Extensions =
             if noneFound
             then None
             else
-                let res = accumulator.Close ()
-                if res.Length = 0 then None else Array.toSeq res |> Some
+                Some (accumulator.Close () |> Array.toSeq)
         #endif
             
     type ValueOption<'t> with
@@ -177,8 +176,7 @@ module Extensions =
             if noneFound
             then ValueNone
             else
-                let res = accumulator.Close ()
-                if res.Length = 0 then ValueNone else Array.toSeq res |> ValueSome
+                ValueSome (accumulator.Close () |> Array.toSeq)
         #endif
 
     type Choice<'t, 'error> with
