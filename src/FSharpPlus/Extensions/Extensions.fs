@@ -140,7 +140,7 @@ module Extensions =
             let mutable accumulator = ArrayCollector<'t> ()
             let mutable noneFound = false
             use e = t.GetEnumerator ()
-            while e.MoveNext () && noneFound do
+            while e.MoveNext () && not noneFound do
                 match e.Current with
                 | Some v -> accumulator.Add v
                 | None -> noneFound <-  true
@@ -168,7 +168,7 @@ module Extensions =
             let mutable accumulator = ArrayCollector<'t> ()
             let mutable noneFound = false
             use e = t.GetEnumerator ()
-            while e.MoveNext () && noneFound do
+            while e.MoveNext () && not noneFound do
                 match e.Current with
                 | ValueSome v -> accumulator.Add v
                 | ValueNone -> noneFound <-  true
