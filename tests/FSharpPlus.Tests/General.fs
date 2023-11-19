@@ -472,7 +472,7 @@ module Functor =
         let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
         CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
 
-module Collections =
+module Collections2 =
 
     open System.Collections.Concurrent
 
