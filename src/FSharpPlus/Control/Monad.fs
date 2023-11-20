@@ -8,7 +8,6 @@ open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 
 open FSharpPlus
-open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -59,8 +58,6 @@ type Bind =
                    dct
 
     static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray (Seq.bind (f >> seq<_>) source) : ResizeArray<'U>
-
-    static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq.collect f source : NonEmptySeq<'U>
 
 #if !FABLE_COMPILER || FABLE_COMPILER_3
     static member inline Invoke (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
@@ -115,8 +112,6 @@ type Join =
                     dct
 
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
-    
-    static member        Join (x: NonEmptySeq<NonEmptySeq<'T>> , [<Optional>]_output: NonEmptySeq<'T>        , [<Optional>]_mthd: Join) = NonEmptySeq.concat x : NonEmptySeq<'T> 
 
     static member inline Invoke (source: '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, output: 'R) = ((^M or ^I or ^R) : (static member Join : _*_*_ -> _) input, output, mthd)
@@ -137,7 +132,6 @@ type Return =
     
 
     static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
-    static member        Return (_: NonEmptySeq<'a>, _: Default2) = fun  x      -> NonEmptySeq.singleton x : NonEmptySeq<'a>
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
@@ -179,7 +173,6 @@ type Delay =
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()
 
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = Seq.delay x      : seq<'T>
-    static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = NonEmptySeq.delay x : NonEmptySeq<'T>
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Task<_>                                        , _          ) = x () : Task<'T>
@@ -239,7 +232,6 @@ type TryWith =
     static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
     
     static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>        , _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
-    static member        TryWith (computation: unit -> NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq.unsafeOfSeq
     static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
     #if !FABLE_COMPILER
@@ -264,7 +256,6 @@ type TryFinally =
     inherit Default1
 
     static member        TryFinally ((computation: unit -> seq<_>        , compensation: unit -> unit), _: Default2, _, _) = seq { try for e in computation () do yield e finally compensation () }
-    static member        TryFinally ((computation: unit -> NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _, _) = seq { try for e in computation () do yield e finally compensation () } |> NonEmptySeq.unsafeOfSeq
 
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
     static member        TryFinally ((_:           unit -> 'R -> _            , _: unit -> unit), _: Default2  , _, _defaults: False) = raise Internals.Errors.exnUnreachable
@@ -306,7 +297,6 @@ type Using =
     inherit Default1
     
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>        , _: Using) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } : seq<'U>
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     #if !FABLE_COMPILER

@@ -10,7 +10,6 @@ namespace FSharpPlus.Control
 
 open System.Runtime.InteropServices
 open FSharpPlus
-open FSharpPlus.Data
 open FSharpPlus.Internals
 
 
@@ -38,8 +37,6 @@ type Empty with
 type Append =
     inherit Default1
     static member        ``<|>`` (x: 'T seq              , y              , [<Optional>]_mthd: Default2) = Seq.append   x y
-    static member        ``<|>`` (x: 'T NonEmptySeq      , y              , [<Optional>]_mthd: Default2) = NonEmptySeq.append x y
-
     static member inline ``<|>`` (x: '``Alt<'T>``        , y: '``Alt<'T>``, [<Optional>]_mthd: Default1) = (^``Alt<'T>`` :  (static member (<|>) : _*_ -> _) x, y) : '``Alt<'T>``
     static member inline ``<|>`` (_: ^t when ^t: null and ^t: struct   , _,             _mthd: Default1) = ()
 
@@ -110,14 +107,6 @@ type Choice =
     static member inline Choice (x: ref<seq<'``Alternative<'T>``>>, _mthd: Choice) =
         use e = x.Value.GetEnumerator ()
         let mutable res = Empty.Invoke ()
-        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
-            res <- Append.Invoke res e.Current
-        res
-
-    static member inline Choice (x: ref<NonEmptySeq<'``Alternative<'T>``>>, _mthd: Choice) =
-        use e = x.Value.GetEnumerator ()
-        e.MoveNext() |> ignore
-        let mutable res = e.Current
         while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
         res

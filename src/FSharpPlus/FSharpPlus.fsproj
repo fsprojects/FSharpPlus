@@ -21,7 +21,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configurations>Debug;Release;Fable;Fable3;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion>6.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
@@ -56,7 +56,6 @@
     <Compile Include="Extensions/Extensions.fs" />
     <Compile Include="Extensions/Tuple.fs" />
     <Compile Include="Extensions/ValueTuple.fs" />
-    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -83,6 +82,7 @@
     <Compile Include="Math/Applicative.fs" />
     <Compile Include="Math/Generic.fs" />
     <Compile Include="Builders.fs" />
+    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Data/Identity.fs" />
     <Compile Include="Data/List.fs" />
     <Compile Include="Data/Seq.fs" />

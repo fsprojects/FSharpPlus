@@ -34,7 +34,6 @@ open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
 open FSharpPlus
-open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -231,8 +230,7 @@ type Head =
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = Seq.head (ToSeq.Invoke x) : 'T
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Head : 'T) x)
     static member        Head (x: 'T option        , [<Optional>]_impl: Head    ) = x.Value
-    static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]
-    static member        Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First
+    static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]    
     static member        Head (x: Id<'T>           , [<Optional>]_impl: Head    ) = x.getValue
     static member        Head (x: ResizeArray<'T>  , [<Optional>]_impl: Head    ) = x.[0]
     static member        Head (x: string           , [<Optional>]_impl: Head    ) = x.[0]
@@ -247,8 +245,7 @@ type TryHead =
     inherit Default1
     static member inline TryHead (x               , [<Optional>]_impl: Default1) = Seq.tryHead <| ToSeq.Invoke x
     static member        TryHead (x: 't list      , [<Optional>]_impl: TryHead ) = List.tryHead x
-    static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = Array.tryHead x
-    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
+    static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = Array.tryHead x    
     static member        TryHead (x: Id<'T>       , [<Optional>]_impl: TryHead ) = Some x.getValue
     static member        TryHead (x: string       , [<Optional>]_impl: TryHead ) = String.tryHead x 
     static member        TryHead (x: StringBuilder, [<Optional>]_impl: TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
@@ -263,8 +260,7 @@ type TryLast =
     inherit Default1
     static member inline TryLast (x                 , [<Optional>]_impl: Default1) = Seq.tryLast <| ToSeq.Invoke x
     static member        TryLast (x: 't list        , [<Optional>]_impl: TryLast)  = List.tryLast x
-    static member        TryLast (x: 't []          , [<Optional>]_impl: TryLast)  = Array.tryLast x
-    static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
+    static member        TryLast (x: 't []          , [<Optional>]_impl: TryLast)  = Array.tryLast x    
     static member        TryLast (x: Id<'T>         , [<Optional>]_impl: TryLast ) = Some x.getValue
     static member        TryLast (x: string         , [<Optional>]_impl: TryLast ) = String.tryLast x 
     static member        TryLast (x: StringBuilder  , [<Optional>]_impl: TryLast ) = if x.Length = 0 then None else Some (x.ToString().[x.Length - 1])

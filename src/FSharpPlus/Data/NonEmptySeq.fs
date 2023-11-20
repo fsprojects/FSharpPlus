@@ -5,11 +5,97 @@ open System.Runtime.InteropServices
 open System.ComponentModel
 open System.Collections.Generic
 open FSharpPlus
+open FSharpPlus.Control
 
 /// A type-safe sequence that contains at least one element.
-type NonEmptySeq<'T> =
-    inherit IEnumerable<'T>
-    abstract member First: 'T
+[<Interface>]
+type NonEmptySeq<'t> =
+    inherit IEnumerable<'t>
+    abstract member First: 't
+
+    // boilerplate
+    static member unsafeOfSeq (seq: _ seq) =
+        { new NonEmptySeq<_> with
+            member _.First = Seq.head seq
+            member _.GetEnumerator() = seq.GetEnumerator()
+            member _.GetEnumerator() = seq.GetEnumerator() :> Collections.IEnumerator }
+
+    static member ofList (list: _ list) = match list with [] -> invalidArg "list" "The input list was empty." | _ -> NonEmptySeq<_>.unsafeOfSeq list
+    static member collect (mapping: 'a -> '``#NonEmptySeq<'b>``) (source: NonEmptySeq<'a>) : NonEmptySeq<'b> when '``#NonEmptySeq<'b>`` :> NonEmptySeq<'b> = Seq.collect mapping source |> NonEmptySeq<_>.unsafeOfSeq    
+    static member concat (sources: NonEmptySeq<'``#NonEmptySeq<'a>``>) : NonEmptySeq<'a> when '``#NonEmptySeq<'a>`` :> NonEmptySeq<'a> = Seq.concat sources |> NonEmptySeq<'a>.unsafeOfSeq
+    static member allPairs (source1: _ NonEmptySeq) (source2: _ NonEmptySeq) = Seq.allPairs source1 source2 |> NonEmptySeq<_>.unsafeOfSeq    
+    static member append (source1: 'a NonEmptySeq) (source2: 'a NonEmptySeq) = Seq.append source1 source2 |> NonEmptySeq<'a>.unsafeOfSeq
+    static member map mapping (source: NonEmptySeq<_>) = source |> Seq.map mapping |> NonEmptySeq<_>.unsafeOfSeq
+    static member bind (mapping: 'T->NonEmptySeq<'U>) source = NonEmptySeq<'U>.collect mapping source
+    static member apply f x = NonEmptySeq<_>.bind (fun f -> NonEmptySeq<_>.map ((<|) f) x) f
+    static member lift2 f x1 x2 = NonEmptySeq<_>.allPairs x1 x2 |> NonEmptySeq<_>.map (fun (x, y) -> f x y)
+    static member lift3 f x1 x2 x3 =
+        NonEmptySeq<_>.allPairs x2 x3
+        |> NonEmptySeq<_>.allPairs x1
+        |> NonEmptySeq<_>.map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> NonEmptySeq<_>.map (fun (x, y, z) -> f x y z)
+
+    static member zip (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.zip source1 source2 |> NonEmptySeq<_>.unsafeOfSeq
+    static member singleton value = Seq.singleton value |> NonEmptySeq<_>.unsafeOfSeq
+    static member delay (generator: unit -> NonEmptySeq<'a>) : NonEmptySeq<'a> = Seq.delay (fun () -> generator () :> _) |> NonEmptySeq<_>.unsafeOfSeq
+    
+    // Statics
+
+    static member        (<|>) (x: 'T NonEmptySeq      , y) = NonEmptySeq<'T>.append x y
+
+    static member inline Choice (x: ref<NonEmptySeq<'``Alternative<'T>``>>, _mthd: Choice) =
+        use e = x.Value.GetEnumerator ()
+        e.MoveNext() |> ignore
+        let mutable res = e.Current
+        while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
+            res <- Append.Invoke res e.Current
+
+    static member (<*>) (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>) : NonEmptySeq<'U> = NonEmptySeq<_>.apply f x
+    static member        Lift2 (f, x: NonEmptySeq<_>     , y: NonEmptySeq<_>) = NonEmptySeq<_>.lift2 f x y
+    static member        Lift3 (f, x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>) = NonEmptySeq<_>.lift3 f x y z
+    static member IsLeftZero (_: NonEmptySeq<_>) = false
+
+    // no need, it should take the one from Seq --> member this.Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First    
+    
+    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
+    static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
+
+    static member        Map (x: NonEmptySeq<_>, f: 'T -> 'U) = NonEmptySeq<_>.map f x      : NonEmptySeq<'U>
+    
+    static member        Unzip (source: NonEmptySeq<'T * 'U>) = Map.Invoke fst source, Map.Invoke snd source
+    static member Zip (x: NonEmptySeq<'T>, y: NonEmptySeq<'U>) = NonEmptySeq<_>.zip         x y
+    static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq<_>.collect f source : NonEmptySeq<'U>
+
+    static member        Join (x: NonEmptySeq<NonEmptySeq<'T>>) = NonEmptySeq<_>.concat x : NonEmptySeq<'T> 
+
+    static member        Return (x: 'a) = NonEmptySeq<_>.singleton x : NonEmptySeq<'a>
+
+    static member        Delay (x: unit-> _ ) = NonEmptySeq<_>.delay x : NonEmptySeq<'T>
+    static member        TryWith (computation: unit -> NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq<_>.unsafeOfSeq
+    static member        TryFinally (computation: unit -> NonEmptySeq<_>, compensation: unit -> unit) = seq { try for e in computation () do yield e finally compensation () } |> NonEmptySeq<_>.unsafeOfSeq
+    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq<_>.unsafeOfSeq : NonEmptySeq<'U>
+    static member inline (+) (x: _ NonEmptySeq             , y: _ NonEmptySeq) = NonEmptySeq<_>.append x y
+
+
+    static member inline Traverse (t: _ seq, f) =
+       let cons x y = seq {yield x; yield! y}
+       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+       Map.Invoke NonEmptySeq<_>.unsafeOfSeq (Seq.foldBack cons_f t (result Seq.empty))
+
+    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T->'``Functor<'U>``) =
+        let mapped = NonEmptySeq<_>.map f t
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq<_>.ofList) : '``Functor<NonEmptySeq<'U>>``
+
+    #if !FABLE_COMPILER
+    static member Traverse (t: 't NonEmptySeq, f: 't->Async<'u>) : Async<NonEmptySeq<_>> = async {
+        let! ct = Async.CancellationToken
+        return seq {
+            use enum = t.GetEnumerator ()
+            while enum.MoveNext() do
+                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq<_>.unsafeOfSeq }
+    #endif
+
+    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList)   : '``Applicative<NonEmptySeq<'T>>``
 
 /// A type alias for NonEmptySeq<'t>
 type neseq<'t> = NonEmptySeq<'t>
@@ -534,6 +620,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The final reduced value.</returns>
     let reduce (reduction: 'T -> 'T -> 'T) source = Seq.reduce reduction source
+
+
 
 
 [<AutoOpen>]
