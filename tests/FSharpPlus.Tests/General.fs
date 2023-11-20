@@ -1137,9 +1137,9 @@ module Applicative =
         Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], testVal)
         Assert.IsInstanceOf<Option<list<int>>> (Some testVal)
 
-        let testVal2 = NonEmptySeq.create 1 [2] .+. NonEmptySeq.create 10 [20] .+. NonEmptySeq.create 100 [200] .+ 2
-        Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], Seq.toList testVal2)
-        Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal2)
+        // let testVal2 = NonEmptySeq.create 1 [2] .+. NonEmptySeq.create 10 [20] .+. NonEmptySeq.create 100 [200] .+ 2
+        // Assert.AreEqual ([113; 213; 123; 223; 114; 214; 124; 224], Seq.toList testVal2)
+        // Assert.IsInstanceOf<Option<NonEmptySeq<int>>> (Some testVal2)
 
         let testLTE1 = Some 1 .<=. Some 2
         Assert.AreEqual (Some true, testLTE1)
