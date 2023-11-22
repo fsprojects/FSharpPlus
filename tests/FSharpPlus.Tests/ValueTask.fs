@@ -114,3 +114,12 @@ module ValueTask =
             let r09 = ValueTask.bind (binding true) (x1 ())
             r09.AsTask().Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
      
+        [<Test>]
+        let applyValueTask () =
+            let e1 () = createValueTask false 1
+            let applyingPlus1 () = ValueTask.FromResult<_> (fun x -> 1+x)
+            let v1 = ValueTask.apply (applyingPlus1 ()) (e1 ())
+            areEqual v1.Result 2
+            let v2 = (applyingPlus1 ()) <*> (e1 ())
+            areEqual v2.Result 2
+
