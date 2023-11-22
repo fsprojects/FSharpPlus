@@ -29,15 +29,15 @@ type Apply =
     static member        ``<*>`` ((f: Task<_>          , x: Task<'T>             ), _output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        ``<*>`` ((f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Apply) = ValueTask.apply   f x : ValueTask<'U>
+    static member        ``<*>`` ((f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Default1) = ValueTask.apply   f x : ValueTask<'U>
     #endif
     static member        ``<*>`` ((f: Async<_>         , x: Async<'T>            ), _output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` ((f: option<_>        , x: option<'T>           ), _output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
     static member        ``<*>`` ((f: voption<_>       , x: voption<'T>          ), _output: voption<'U>          , [<Optional>]_mthd: Apply) = ValueOption.apply f x : voption<'U>
     static member        ``<*>`` ((f: Result<_,'E>     , x: Result<'T,'E>        ), _output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
     static member        ``<*>`` ((f: Choice<_,'E>     , x: Choice<'T,'E>        ), _output: Choice<'b,'E>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
-    static member inline ``<*>`` ((KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T)), _output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Apply) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
-    static member inline ``<*>`` ((f: KeyValuePair2<'Key, _>, x: KeyValuePair2<'Key, 'T>), _output: KeyValuePair2<'Key,'U>, [<Optional>]_mthd: Apply) : KeyValuePair2<'Key,'U> =
+    static member inline ``<*>`` ((KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T)), _output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Default1) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
+    static member inline ``<*>`` ((f: KeyValuePair2<'Key, _>, x: KeyValuePair2<'Key, 'T>), _output: KeyValuePair2<'Key,'U>, [<Optional>]_mthd: Default1) : KeyValuePair2<'Key,'U> =
         let a = f.Key
         let b = x.Key
         let f = f.Value
