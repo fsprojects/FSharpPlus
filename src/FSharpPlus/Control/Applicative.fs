@@ -31,7 +31,7 @@ type Apply =
     #if !FABLE_COMPILER
     static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
-    #if (NETSTANDARD2_1_OR_GREATER||NET6_OR_GREATER) && !FABLE_COMPILER
+    #if (NETSTANDARD2_1_OR_GREATER || NET6_OR_GREATER) && !FABLE_COMPILER
     static member        ``<*>`` (f: ValueTask<_>     , x: ValueTask<'T>        , [<Optional>]_output: ValueTask<'U>        , [<Optional>]_mthd: Apply) = ValueTask.apply   f x : ValueTask<'U>
     #endif
     static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>

@@ -1,6 +1,6 @@
 namespace FSharpPlus
 
-#if (NETSTANDARD2_1_OR_GREATER||NET6_OR_GREATER) && !FABLE_COMPILER
+#if (NETSTANDARD2_1_OR_GREATER || NET6_OR_GREATER) && !FABLE_COMPILER
 
 /// Additional operations on ValueTask<'T>
 [<RequireQualifiedAccess>]
