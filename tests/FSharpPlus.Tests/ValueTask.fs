@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus.Tests
 
+#if !NET462 && !NETSTANDARD2_0
 
 module ValueTask =
 
@@ -114,3 +115,4 @@ module ValueTask =
             let r09 = ValueTask.bind (binding true) (x1 ())
             r09.AsTask().Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
      
+#endif
