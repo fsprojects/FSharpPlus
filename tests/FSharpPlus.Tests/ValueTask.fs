@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus.Tests
 
-#if NETSTANDARD2_1
+#if !NET462 && !NETSTANDARD2_0
 
 module ValueTask =
 
