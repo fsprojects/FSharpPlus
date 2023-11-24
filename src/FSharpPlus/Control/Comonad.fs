@@ -29,7 +29,7 @@ type Extract =
     #if !FABLE_COMPILER
     static member        Extract (f: Task<'T>     ) = f.Result
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Extract (f: ValueTask<'T>     ) = f.Result
     #endif
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
@@ -66,7 +66,7 @@ type Extend =
                 tcs.Task
     #endif
 
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if (!NET45 && !NETSTANDARD2_0) && !FABLE_COMPILER
     static member        (=>>) (g: ValueTask<'T>     , f: ValueTask<'T> -> 'U ) : ValueTask<'U> =
         if g.IsCompletedSuccessfully then
             try
