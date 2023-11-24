@@ -124,6 +124,7 @@ type Either<'t,'u> =
     | Right of 'u
 
 type DmStruct = struct end
+type DmStruct2<'T1, 'T2> = struct end
 
 type KeyValuePair2<'TKey, 'TValue> = struct
     val Key : 'TKey

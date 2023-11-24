@@ -89,7 +89,7 @@ type Map =
     static member Map ((x: Result<_,'E>        , f: 'T->'U), _mthd: Map) = Result.map f x
     static member Map ((x: Choice<_,'E>        , f: 'T->'U), _mthd: Map) = Choice.map f x
     static member Map ((KeyValue(k, x)         , f: 'T->'U), _mthd: Map) = KeyValuePair (k, f x)
-    static member Map ((x: KeyValuePair2<_, _> , f: 'T->'U), _mthd: Map) = let k, x = x.Key, x.Value in KeyValuePair2 (k, f x)
+    static member Map ((_: DmStruct2<'T, 'E>   , _: 'T->'U), _mthd: Map) = Unchecked.defaultof<DmStruct2<'U, 'E>>
     static member Map ((x: Map<'Key,'T>        , f: 'T->'U), _mthd: Map) = Map.map (const' f) x : Map<'Key,'U>
     static member Map ((x: Dictionary<_,_>     , f: 'T->'U), _mthd: Map) = Dictionary.map f x : Dictionary<'Key,'U>
     #if !FABLE_COMPILER
