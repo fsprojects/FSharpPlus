@@ -29,15 +29,15 @@ type Apply =
     static member        ``<*>`` (struct (f: Task<_>          , x: Task<'T>             ), _output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Default3) = ValueTask.apply   f x : ValueTask<'U>
+    static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Default2) = ValueTask.apply   f x : ValueTask<'U>
     #endif
     static member        ``<*>`` (struct (f: Async<_>         , x: Async<'T>            ), _output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` (struct (f: option<_>        , x: option<'T>           ), _output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
     static member        ``<*>`` (struct (f: voption<_>       , x: voption<'T>          ), _output: voption<'U>          , [<Optional>]_mthd: Apply) = ValueOption.apply f x : voption<'U>
     static member        ``<*>`` (struct (f: Result<_,'E>     , x: Result<'T,'E>        ), _output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
     static member        ``<*>`` (struct (f: Choice<_,'E>     , x: Choice<'T,'E>        ), _output: Choice<'b,'E>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
-    static member inline ``<*>`` (struct (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T)), _output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Default3) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
-    static member inline ``<*>`` (struct (f: KeyValuePair2<_,_>, x: KeyValuePair2<_,'T> ), _output: KeyValuePair2<_,'U>  , [<Optional>]_mthd: Default3) : KeyValuePair2<'Key,'U> =
+    static member inline ``<*>`` (struct (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T)), _output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Default2) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
+    static member inline ``<*>`` (struct (f: KeyValuePair2<_,_>, x: KeyValuePair2<_,'T> ), _output: KeyValuePair2<_,'U>  , [<Optional>]_mthd: Default2) : KeyValuePair2<'Key,'U> =
         let a, b = f.Key, x.Key
         let f, x = f.Value, x.Value
         KeyValuePair2 (Plus.Invoke a b, f x)
@@ -90,7 +90,7 @@ type Apply =
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type Apply with
-    static member inline ``<*>`` (struct (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``     ) , _output: '``Monad<'U>``      , [<Optional>]_mthd:Default3) : '``Monad<'U>``       = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
+    static member inline ``<*>`` (struct (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``     ) , _output: '``Monad<'U>``      , [<Optional>]_mthd:Default2) : '``Monad<'U>``       = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
     static member inline ``<*>`` (struct (_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct), _output: ^r when ^r : null and ^r: struct, _mthd: Default1) = id
     
     static member inline ``<*>`` (struct (f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``), _output: '``Applicative<'U>``, [<Optional>]_mthd: Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) f, x)
