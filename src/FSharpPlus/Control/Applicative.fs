@@ -37,11 +37,9 @@ type Apply =
     static member        ``<*>`` (struct (f: Result<_,'E>     , x: Result<'T,'E>        ), _output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
     static member        ``<*>`` (struct (f: Choice<_,'E>     , x: Choice<'T,'E>        ), _output: Choice<'b,'E>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
     static member inline ``<*>`` (struct (KeyValue(a: 'Key, f), KeyValue(b: 'Key, x: 'T)), _output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Default3) : KeyValuePair<'Key,'U> = KeyValuePair (Plus.Invoke a b, f x)
-    static member inline ``<*>`` (struct (f: KeyValuePair2<'Key, _>, x: KeyValuePair2<'Key, 'T>), _output: KeyValuePair2<'Key,'U>, [<Optional>]_mthd: Default3) : KeyValuePair2<'Key,'U> =
-        let a = f.Key
-        let b = x.Key
-        let f = f.Value
-        let x = x.Value
+    static member inline ``<*>`` (struct (f: KeyValuePair2<_,_>, x: KeyValuePair2<_,'T> ), _output: KeyValuePair2<_,'U>  , [<Optional>]_mthd: Default3) : KeyValuePair2<'Key,'U> =
+        let a, b = f.Key, x.Key
+        let f, x = f.Value, x.Value
         KeyValuePair2 (Plus.Invoke a b, f x)
 
     static member        ``<*>`` (struct (f: Map<'Key,_>      , x: Map<'Key,'T>        ) , _output: Map<'Key,'U>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
@@ -65,7 +63,7 @@ type Apply =
            | true, vx -> dct.Add (k, vf vx)
            | _        -> ()
        dct :> IDictionary<'Key,'U>
-    
+
     static member        ``<*>`` (struct (f: IReadOnlyDictionary<'Key,_>, x: IReadOnlyDictionary<'Key,'T>) , _output: IReadOnlyDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IReadOnlyDictionary<'Key,'U> =
        let dct = Dictionary ()
        for KeyValue(k, vf) in f do
@@ -78,7 +76,7 @@ type Apply =
     static member        ``<*>`` (struct (f: Expr<'T->'U>, x: Expr<'T>), _output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     #endif
     static member        ``<*>`` (struct (f: ('T->'U) ResizeArray, x: 'T ResizeArray), _output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
-    
+
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) =
             ((^M or ^I1 or ^I2 or ^R) : (static member ``<*>`` : struct (_*_) * _ * _ -> _) (struct (input1, input2)), output, mthd)
