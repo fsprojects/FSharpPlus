@@ -220,6 +220,13 @@ type WrappedSeqE<'s> = WrappedSeqE of 's seq with
     static member Reduce (WrappedSeqE x, reduction) = SideEffects.add "Using WrappedSeqE's Reduce"; Seq.reduce reduction x
     static member ToSeq  (WrappedSeqE x) = SideEffects.add "Using WrappedSeqE's ToSeq"; x
 
+type WrappedSeqF<'s> = WrappedSeqF of 's seq with
+    interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedSeqF x) = x in x).GetEnumerator ()
+    interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedSeqF x) = x in x).GetEnumerator () :> Collections.IEnumerator    
+    static member Return x = SideEffects.add "Using WrappedSeqF's Return"; WrappedSeqF (Seq.singleton x)
+    static member (<*>)  (WrappedSeqF f, WrappedSeqF x) = SideEffects.add "Using WrappedSeqF's Apply"; WrappedSeqF (f <*> x)
+    static member ToList (WrappedSeqF x) = Seq.toList x
+
 type TestNonEmptyCollection<'a> = private { Singleton: 'a } with
     interface NonEmptySeq<'a> with
         member this.First =
@@ -1204,6 +1211,18 @@ module Applicative =
         Assert.AreEqual ((1,2,3), res123)
         Assert.AreEqual ([4;5;6], res456)
         Assert.AreEqual (toList (run res9n5), toList (run' res9n5'))
+
+        // WrappedSeqC is Monad. Monads are Applicatives => (<*>) should work
+        let (res3: WrappedSeqC<_>) = WrappedSeqC [(+) 1] <*> WrappedSeqC [2]
+        CollectionAssert.AreEqual (WrappedSeqC [3], res3)
+
+        // Check user defined types implementing IEnumerable don't default to seq<_>
+        let res4 = WrappedSeqF [(+) 1] <*> WrappedSeqF [3]
+        Assert.IsInstanceOf<Option<WrappedSeqF<int>>> (Some res4)
+        CollectionAssert.AreEqual (WrappedSeqF [4], res4)
+        let res5 = WrappedSeqF [(+)] <*> WrappedSeqF [3] <*> WrappedSeqF [2]
+        Assert.IsInstanceOf<Option<WrappedSeqF<int>>> (Some res5)
+        CollectionAssert.AreEqual (WrappedSeqF [5], res5)
 
     let testLift2 () =
         let expectedEffects = ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Apply"; "Using WrappedSeqD's Apply"]
