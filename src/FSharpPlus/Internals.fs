@@ -125,6 +125,12 @@ type Either<'t,'u> =
 
 type DmStruct = struct end
 
+type KeyValuePair2<'TKey, 'TValue> = struct
+    val Key : 'TKey
+    val Value : 'TValue
+    new (key, value) = { Key = key; Value = value }
+end
+
 [<Sealed>]
 type Set2<'T when 'T: comparison >() = class end
 
