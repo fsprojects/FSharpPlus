@@ -55,7 +55,7 @@ type NonEmptySeq<'t> =
     static member        Lift3 (f, x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>) = NonEmptySeq<_>.lift3 f x y z
     static member IsLeftZero (_: NonEmptySeq<_>) = false
 
-    // no need, it should take the one from Seq --> member this.Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First    
+    static member        Head (x: NonEmptySeq<'T>, [<Optional>]_impl: Head) = x.First
     
     static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
     static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
