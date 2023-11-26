@@ -21,7 +21,7 @@ type Bind =
     static member        (>>=) (source: Task<'T>        , f: 'T -> Task<'U>    ) = Task.bind f source                      : Task<'U>
     static member        (>>=) (source                  , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        (>>=) (source: ValueTask<'T>   , f: 'T -> ValueTask<'U>    ) = ValueTask.bind f source            : ValueTask<'U>
     #endif
 
@@ -80,7 +80,7 @@ type Join =
     #if !FABLE_COMPILER  
     static member        Join (x: Task<Task<_>>           , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Join (x: ValueTask<ValueTask<_>> , [<Optional>]_output: ValueTask<'T>   , [<Optional>]_mthd: Join    ) = ValueTask.join x           : ValueTask<'T>
     #endif
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
@@ -138,7 +138,7 @@ type Return =
     #if !FABLE_COMPILER
     static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Return (_: 'T ValueTask   , _: Return  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
     #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
@@ -188,7 +188,7 @@ type Delay =
     
     #endif
     
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Delay (_mthd: Delay   , x: unit-> ValueTask<_>                                   , _          ) = x () : ValueTask<'T>
     #endif
 
