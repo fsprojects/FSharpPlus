@@ -206,3 +206,23 @@ module TypeProviderTests =
         Assert (Matrix.colLength row1 =^ (Z |> S |> S |> S))
         areEqual 5 (Matrix.get Z (S Z) row1)
         areEqual [3; 6; 9] (Vector.toList col2)
+
+module TestFunctors1 =
+    [<Test>]
+    let applicativeOperatorWorks() =
+        let v = vector ((fun i -> i + 1), (fun i -> i * 2))
+        let u = vector (2, 3)
+        let vu = v <*> u
+        NUnit.Framework.Assert.IsInstanceOf<Option<Vector<int,S<S<Z>>>>> (Some vu)
+        CollectionAssert.AreEqual ([|3; 6|], Vector.toArray vu)
+
+module TestFunctors2 =
+    open FSharpPlus
+
+    [<Test>]
+    let applicativeWorksWithoutSubsumption() =
+        let v = vector ((fun i -> i + 1), (fun i -> i * 2))
+        let u = vector (2, 3)
+        let vu = v <*> u
+        NUnit.Framework.Assert.IsInstanceOf<Option<Vector<int,S<S<Z>>>>> (Some vu)
+        CollectionAssert.AreEqual ([|3; 6|], Vector.toArray vu)
