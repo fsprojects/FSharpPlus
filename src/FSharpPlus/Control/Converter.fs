@@ -10,7 +10,7 @@ open System.Text
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type Explicit =
     inherit Default1
@@ -111,8 +111,22 @@ type TryParse =
     static member TryParse (_: string        , _: TryParse) = fun x -> Some x                               : option<string>
     static member TryParse (_: StringBuilder , _: TryParse) = fun x -> Some (new StringBuilder (x: string)) : option<StringBuilder>
     #if !FABLE_COMPILER
-    static member TryParse (_: DateTime      , _: TryParse) = fun (x:string) -> DateTime.TryParseExact       (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTime>
-    static member TryParse (_: DateTimeOffset, _: TryParse) = fun (x:string) -> DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.RoundtripKind) |> tupleToOption : option<DateTimeOffset>
+    
+    static member TryParse (_: DateTime      , _: TryParse) = fun (x:string) ->
+        match DateTime.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) with
+        | true, x -> Some x
+        | _ ->
+            match DateTime.TryParse (x, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal) with
+            | true, x -> Some x
+            | _ -> None
+    
+    static member TryParse (_: DateTimeOffset, _: TryParse) = fun (x:string) ->
+        match DateTimeOffset.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.AssumeUniversal) with
+        | true, x -> Some x
+        | _ ->
+            match DateTimeOffset.TryParse (x, CultureInfo.InvariantCulture, DateTimeStyles.None) with
+            | true, x -> Some x
+            | _ -> None
     #endif
 
     static member inline Invoke (value: string) =
@@ -120,17 +134,24 @@ type TryParse =
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r option
         call Unchecked.defaultof<TryParse> value
 
-type TryParse with
-    static member inline TryParse (_: 'R, _: Default2) = fun x ->
-        let mutable r = Unchecked.defaultof< ^R>
-        if (^R: (static member TryParse : _ * _ -> _) (x, &r)) then Some r else None
+    /// The F# signature
+    static member inline InvokeOnInstance (value: string) = (^R: (static member TryParse : string -> 'R option) value)
 
-    static member inline TryParse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
-    static member inline TryParse (_: 'R, _: Default1) = fun x -> (^R: (static member TryParse : string -> 'R option) x)
+    /// The .Net signature
+    static member inline InvokeOnConvention (value: string) =
+        let mutable r = Unchecked.defaultof< ^R>
+        if (^R: (static member TryParse : _ * _ -> _) (value, &r)) then Some r else None
+
+    #if NET7_0
+    /// IParsable<'T>
+    static member InvokeOnInterface<'T when 'T :> IParsable<'T>> (value: string) =
+        let mutable r = Unchecked.defaultof<'T>
+        if ('T.TryParse(value, CultureInfo.InvariantCulture, &r)) then Some r else None
+    #endif
+
 
 type Parse =
     inherit Default1
-    static member inline Parse (_: ^R                  , _: Default1) = fun (x:string) -> (^R: (static member Parse : _ -> ^R) x)
     static member inline Parse (_: ^R                  , _: Parse   ) = fun (x:string) -> (^R: (static member Parse : _ * _ -> ^R) (x, CultureInfo.InvariantCulture))
 
     static member inline Parse (_: 'T when 'T : enum<_>, _: Parse   ) = fun (x:string) ->
@@ -139,6 +160,16 @@ type Parse =
             | _         -> invalidArg "value" ("Requested value '" + x + "' was not found.")
         ) : 'enum
 
+    #if !FABLE_COMPILER
+    static member Parse (_: DateTime      , _: Parse) = fun (x:string) ->
+        match DateTime.TryParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffZ"; "yyyy-MM-ddTHH:mm:ssZ"|], null, DateTimeStyles.RoundtripKind) with
+        | true, x -> x
+        | _ -> DateTime.Parse (x, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal)
+
+    static member Parse (_: DateTimeOffset, _: Parse) = fun (x:string) ->
+        try DateTimeOffset.ParseExact (x, [|"yyyy-MM-ddTHH:mm:ss.fffK"; "yyyy-MM-ddTHH:mm:ssK"|], null, DateTimeStyles.AssumeUniversal)
+        with _ -> DateTimeOffset.Parse (x, CultureInfo.InvariantCulture)
+    #endif
 
     static member Parse (_: bool         , _: Parse) = fun (x:string) -> Boolean.Parse (x)
 
@@ -150,5 +181,47 @@ type Parse =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member Parse : _*_ -> _) b, a)
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
         call Unchecked.defaultof<Parse> value
+
+    static member inline InvokeOnInstance (value: string) = (^R: (static member Parse : _ -> ^R) value)
+
+
+type Parse with
+
+    static member inline Parse (_: ^R                  , _: Default4) = fun (value: string) ->
+        match TryParse.InvokeOnConvention value with
+        | Some x -> x : ^R
+        | None -> invalidArg "value" ("Error parsing value '" + value + "'.")
+
+    static member inline Parse (_: ^R                  , _: Default3) = fun (value: string) ->
+        match TryParse.InvokeOnInstance value with
+        | Some x -> x : ^R
+        | None -> invalidArg "value" ("Error parsing value '" + value + "'.")
+    
+    static member inline Parse (_: ^R                  , _: Default2) : string -> ^R  = Parse.InvokeOnInstance
+
+    #if NET7_0
+    static member Parse<'T when 'T :> IParsable<'T>> (_: 'T, _: Default1) = fun (x: string) -> 'T.Parse (x, CultureInfo.InvariantCulture)
+    static member inline Parse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
+    #else
+    static member inline Parse (_: ^t when ^t: null and ^t: struct, _: Default2) = id
+    #endif
+
+type TryParse with
+
+    static member inline TryParse (_: 'R, _: Default4) : string -> 'R option = fun (value: string) ->
+        try Some (Parse.InvokeOnInstance value) with
+        | :? ArgumentNullException | :? FormatException -> None 
+        | _ -> reraise ()
+
+    static member inline TryParse (_: 'R, _: Default3) : string -> 'R option = TryParse.InvokeOnConvention
+
+    static member inline TryParse (_: 'R, _: Default2) : string -> 'R option = TryParse.InvokeOnInstance
+
+    #if NET7_0
+    static member inline TryParse (_: 'R, _: Default1) : string -> 'R option = TryParse.InvokeOnInterface
+    static member inline TryParse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
+    #else
+    static member inline TryParse (_: ^t when ^t: null and ^t: struct, _: Default2) = id
+    #endif
 
 #endif

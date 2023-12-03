@@ -11,7 +11,7 @@ namespace FSharpPlus
 
 #nowarn "40"
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Constructs to express generic computations
 [<AutoOpenAttribute>]

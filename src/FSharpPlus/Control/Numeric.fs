@@ -42,7 +42,7 @@ type FromBigInt =
         call Unchecked.defaultof<FromBigInt> x
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type FromInt64 =
     inherit Default1
@@ -193,7 +193,7 @@ type Zero with
         s.SetResult v
         s.Task
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member inline Zero (_: ValueTask<'a>, _: Zero) : ValueTask<'a> =
         let (v: 'a) = Zero.Invoke ()
         ValueTask<'a>(v)

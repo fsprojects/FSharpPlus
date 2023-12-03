@@ -11,12 +11,14 @@ before_build:
 init:
   - git config --global core.autocrlf input
 install:
-  - cmd: choco install dotnetcore-sdk -y
+  - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
+  - ps: ./dotnet-install.ps1 -Version 8.0.100 -InstallDir "C:\Program Files\dotnet"
+  #- cmd: winget install Microsoft.DotNet.SDK.8
   - cmd: git submodule update --init --recursive
 build_script:
   - cmd: dotnet restore ./FSharpPlus.sln
   - cmd: dotnet build -c Release ./FSharpPlus.sln
-  - cmd: dotnet test -c Release tests/FSharpPlus.Tests
+  - cmd: dotnet test -c Test tests/FSharpPlus.Tests
   - ps: if ($env:VersionSuffix) { dotnet pack build.proj --version-suffix $env:VersionSuffix } else { dotnet pack build.proj }
 test: off
 artifacts:

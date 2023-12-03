@@ -5,7 +5,7 @@ namespace FSharpPlus.Data
 open System.ComponentModel
 open FSharpPlus
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 open FSharpPlus.Lens
 #endif
 
@@ -89,7 +89,7 @@ module Validation =
         | Success a -> folder a state
         | Failure _ -> state
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// Traverse the Success case with the supplied function.
     let inline traverse (f: 'T -> '``Functor<'U>``) (source: Validation<'Error, 'T>) : '``Functor<Validation<'Error, 'U>>`` =
@@ -186,6 +186,18 @@ module Validation =
     /// Creates a Validation<'Error,'T> from a Choice<'T,'Error>.
     let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
 
+    /// <summary>Converts an option to a Validation.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The option value.</param>
+    /// <returns>The resulting Validation value.</returns>
+    let ofOptionWith (errorValue: 'Error) (source: 'T option) = match source with Some x -> Success x | None -> Failure errorValue
+
+    /// <summary>Converts a voption to a Validation.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The voption value.</param>
+    /// <returns>The resulting Validation value.</returns>
+    let ofValueOptionWith (errorValue: 'Error) (source: 'T voption) = match source with ValueSome x -> Success x | ValueNone -> Failure errorValue
+    
     /// <summary> Extracts a value from either side of a Validation.</summary>
     /// <param name="successMapper">Function to be applied to source, if it contains a Success value.</param>
     /// <param name="failureMapper">Function to be applied to source, if it contains a Failure value.</param>
@@ -196,7 +208,7 @@ module Validation =
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
@@ -218,7 +230,7 @@ module Validation =
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
     let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x
     #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     let inline isoValidationResult x = x |> iso toResult ofResult
     #endif
     
@@ -270,7 +282,7 @@ type Validation<'error, 't> with
     static member inline Lift3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
 
     // as Alternative (inherits from Applicative)
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     static member inline get_Empty () = Failure (getEmpty ())
     static member inline (<|>) (x: Validation<'Error, 'T>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
     #endif
@@ -289,7 +301,7 @@ type Validation<'error, 't> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Bimap (x: Validation<'T, 'V>, f: 'T -> 'U, g: 'V -> 'W) : Validation<'U, 'W> = Validation.bimap f g x
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]

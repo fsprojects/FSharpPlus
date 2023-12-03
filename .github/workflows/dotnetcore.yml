@@ -8,7 +8,7 @@ env:
   # GitHub Packages Feed settings
   GITHUB_FEED: https://nuget.pkg.github.com/fsprojects
   GITHUB_USER: fsprojects
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   push:
@@ -23,13 +23,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.100
+        dotnet-version: |
+          8.0.x
+          7.0.x
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.2
+      with:
+        timezoneWindows: "Nepal Standard Time"
     - name: Test with dotnet
       run: dotnet test build.proj -v n
 
@@ -38,17 +44,15 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core 7
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.100
-    - name: Setup .NET Core 6
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.201
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
     - name: Restore
       run: git submodule update --init --recursive
-
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -70,30 +74,26 @@ jobs:
       with:
         name: nupkg
         path: ./bin/nupkg/*.nupkg
-    - name: Push to GitHub Feed
-      shell: bash
-      run: |
-          for f in ./bin/nupkg/*.nupkg
-          do
-            curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-          done
+    #- name: Push to GitHub Feed
+    #  shell: bash
+    #  run: |
+    #      for f in ./bin/nupkg/*.nupkg
+    #      do
+    #        curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+    #      done
 
   docs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core 7
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 7.0.100
-    - name: Setup .NET Core 6
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 6.0.201
-    - name: Setup .NET Core 5
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.405
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+          5.0.x
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build All Docs

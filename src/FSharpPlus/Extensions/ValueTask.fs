@@ -1,6 +1,6 @@
 namespace FSharpPlus
 
-#if NETSTANDARD2_1 && !FABLE_COMPILER
+#if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
 
 /// Additional operations on ValueTask<'T>
 [<RequireQualifiedAccess>]
@@ -109,9 +109,14 @@ module ValueTask =
             Unchecked.defaultof<_>
         else
             new ValueTask (source.AsTask ())
-        
+
 
     /// Raises an exception in the ValueTask
     let raise (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
         
+
+    #if NET5_0_OR_GREATER
+    /// Creates a ValueTask from a value
+    let result value = ValueTask.FromResult value
+    #endif
 #endif

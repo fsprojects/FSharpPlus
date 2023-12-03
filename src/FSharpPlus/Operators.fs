@@ -29,7 +29,7 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline uncurry f (x: 'T1, y: 'T2) : 'Result = f x y
     
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// <summary>
     /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
     /// </summary>
@@ -116,7 +116,7 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline tuple8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7, 'T8> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) (t8: 'T8) = t1, t2, t3, t4, t5, t6, t7, t8
          
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // Functor ----------------------------------------------------------------
 
@@ -185,7 +185,6 @@ module Operators =
     let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
     [<System.Obsolete("Use lift2 instead.")>]
-    /// <category index="2">Applicative</category>
     let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
 
     /// <summary>
@@ -207,11 +206,9 @@ module Operators =
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
     [<System.Obsolete("Use flip (<*>) instead.")>]
-    /// <category index="2">Applicative</category>
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     [<System.Obsolete("Use opt instead.")>]
-    /// <category index="2">Applicative</category>
     let inline optional v = Some <!> v </Append.Invoke/> result None
 
     /// <summary>
@@ -389,7 +386,7 @@ module Operators =
     let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
 
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // Category ---------------------------------------------------------------
 
@@ -1315,7 +1312,7 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     
     // Converter
 
@@ -1361,7 +1358,7 @@ module Operators =
 
     #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// <summary>
     /// Converts to a value from its string representation.
@@ -1510,7 +1507,7 @@ module Operators =
 
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // Additional functions
 
@@ -1559,7 +1556,7 @@ module Operators =
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
     
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =

@@ -22,7 +22,7 @@ Minimal complete definition
 *)
 (**
     static member Return (x: 'T) : 'Monad<'T>
-    static member (>>=) (x: Monad<'T>, f: 'T->Monad<'U>) : Monad<'U>
+    static member (>>=) (x: 'Monad<'T>, f: 'T -> 'Monad<'U>) : 'Monad<'U>
 *)
 (**
 
@@ -34,7 +34,7 @@ Other operations
  * ``join``
 *)
 (**
-    static member Join (x:'Monad<'Monad<'T>>) :'Monad<'T>
+    static member Join (x: 'Monad<'Monad<'T>>) : 'Monad<'T>
 *)
 (**
 

@@ -1,10 +1,11 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29709.97
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34031.279
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{1368368E-D2F4-4FEF-BB2F-492E05156E0F}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus", "src\FSharpPlus\FSharpPlus.fsproj", "{1368368E-D2F4-4FEF-BB2F-492E05156E0F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "project", "project", "{BF60BC93-E09B-4E5F-9D85-95A519479D54}"
 	ProjectSection(SolutionItems) = preProject
@@ -34,14 +35,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\abstraction-semigroup.fsx = docsrc\content\abstraction-semigroup.fsx
 		docsrc\content\abstraction-traversable.fsx = docsrc\content\abstraction-traversable.fsx
 		docsrc\content\abstractions.fsx = docsrc\content\abstractions.fsx
-		docsrc\content\abstractions.plantuml = docsrc\content\abstractions.plantuml
 		docsrc\content\applicative-functors.fsx = docsrc\content\applicative-functors.fsx
 		docsrc\content\computation-expressions.fsx = docsrc\content\computation-expressions.fsx
 		docsrc\content\extension-methods.fsx = docsrc\content\extension-methods.fsx
+		docsrc\content\extensions.fsx = docsrc\content\extensions.fsx
+		docsrc\content\favicon.ico = docsrc\content\favicon.ico
 		docsrc\content\generic-doc.fsx = docsrc\content\generic-doc.fsx
 		docsrc\content\index.fsx = docsrc\content\index.fsx
 		docsrc\content\lens.fsx = docsrc\content\lens.fsx
 		docsrc\content\numerics.fsx = docsrc\content\numerics.fsx
+		docsrc\content\operators-common.fsx = docsrc\content\operators-common.fsx
+		docsrc\content\parsing.fsx = docsrc\content\parsing.fsx
 		docsrc\content\tutorial.fsx = docsrc\content\tutorial.fsx
 		docsrc\content\type-all.fsx = docsrc\content\type-all.fsx
 		docsrc\content\type-any.fsx = docsrc\content\type-any.fsx
@@ -62,9 +66,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\type-listt.fsx = docsrc\content\type-listt.fsx
 		docsrc\content\type-matrix.fsx = docsrc\content\type-matrix.fsx
 		docsrc\content\type-mult.fsx = docsrc\content\type-mult.fsx
+		docsrc\content\type-nonempty-map.fsx = docsrc\content\type-nonempty-map.fsx
+		docsrc\content\type-nonempty-set.fsx = docsrc\content\type-nonempty-set.fsx
 		docsrc\content\type-nonempty.fsx = docsrc\content\type-nonempty.fsx
 		docsrc\content\type-optiont.fsx = docsrc\content\type-optiont.fsx
-		docsrc\content\type-valueoptiont.fsx = docsrc\content\type-valueoptiont.fsx
 		docsrc\content\type-parallelarray.fsx = docsrc\content\type-parallelarray.fsx
 		docsrc\content\type-reader.fsx = docsrc\content\type-reader.fsx
 		docsrc\content\type-readert.fsx = docsrc\content\type-readert.fsx
@@ -73,112 +78,138 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "content", "content", "{8E6D
 		docsrc\content\type-state.fsx = docsrc\content\type-state.fsx
 		docsrc\content\type-statet.fsx = docsrc\content\type-statet.fsx
 		docsrc\content\type-validation.fsx = docsrc\content\type-validation.fsx
+		docsrc\content\type-valueoptiont.fsx = docsrc\content\type-valueoptiont.fsx
 		docsrc\content\type-vector.fsx = docsrc\content\type-vector.fsx
 		docsrc\content\type-writer.fsx = docsrc\content\type-writer.fsx
 		docsrc\content\type-writert.fsx = docsrc\content\type-writert.fsx
 		docsrc\content\type-ziplist.fsx = docsrc\content\type-ziplist.fsx
 		docsrc\content\types.fsx = docsrc\content\types.fsx
+		docsrc\content\_template.html = docsrc\content\_template.html
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ED8079DD-2B06-4030-9F0F-DC548F98E1C4}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Tests", "tests\FSharpPlus.Tests\FSharpPlus.Tests.fsproj", "{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Tests", "tests\FSharpPlus.Tests\FSharpPlus.Tests.fsproj", "{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{81F5F559-FD23-4E90-9EE6-3E2A2C1A7F96}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Docs", "src\FSharpPlus.Docs\FSharpPlus.Docs.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Docs", "src\FSharpPlus.Docs\FSharpPlus.Docs.fsproj", "{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.TypeLevel", "src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj", "{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.TypeLevel", "src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj", "{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlus.Providers", "src\FSharpPlus.TypeLevel\Providers\FSharpPlus.Providers.fsproj", "{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlus.Providers", "src\FSharpPlus.TypeLevel\Providers\FSharpPlus.Providers.fsproj", "{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpLib", "tests\CSharpLib\CSharpLib.csproj", "{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpLib", "tests\CSharpLib\CSharpLib.csproj", "{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpPlusFable.Tests", "tests\FSharpPlusFable.Tests\FSharpPlusFable.Tests.fsproj", "{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "FSharpPlusFable.Tests", "tests\FSharpPlusFable.Tests\FSharpPlusFable.Tests.fsproj", "{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Benchmarks", "tests\benchmarks\Benchmarks.fsproj", "{EEFF08EB-8B0C-4F63-9425-4281EFF12087}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "Benchmarks", "tests\benchmarks\Benchmarks.fsproj", "{EEFF08EB-8B0C-4F63-9425-4281EFF12087}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "docsTool", "docsrc\tools\docsTool.fsproj", "{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}"
+Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "docsTool", "docsrc\tools\docsTool.fsproj", "{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{F4D5D32F-D47A-4727-8965-80A4BB7A29DD}"
+	ProjectSection(SolutionItems) = preProject
+		docsrc\tools\templates\abstractions.plantuml = docsrc\tools\templates\abstractions.plantuml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
 		Fable|Any CPU = Fable|Any CPU
 		Fable3|Any CPU = Fable3|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Test|Any CPU = Test|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
 		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Fable3|Any CPU.Build.0 = Fable3|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{1368368E-D2F4-4FEF-BB2F-492E05156E0F}.Test|Any CPU.Build.0 = Test|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
+		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Test|Any CPU.ActiveCfg = Test|Any CPU
+		{FED64B0A-3FD7-4357-98B6-0B01A3A26EC7}.Test|Any CPU.Build.0 = Test|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
 		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Fable3|Any CPU.Build.0 = Fable3|Any CPU
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{B725BEFA-524E-4FD8-BFFF-4AEBCD03D8CF}.Test|Any CPU.Build.0 = Release|Any CPU
 		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
 		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Fable3|Any CPU.Build.0 = Fable3|Any CPU
+		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{AFB80E42-3D22-4C38-B51E-27E9FA4D8111}.Test|Any CPU.Build.0 = Release|Any CPU
 		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
 		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Fable3|Any CPU.Build.0 = Fable3|Any CPU
+		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{9B93F5E5-3D53-42F1-96E2-06E6A7B496A0}.Test|Any CPU.Build.0 = Release|Any CPU
 		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
 		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Fable3|Any CPU.Build.0 = Fable3|Any CPU
+		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{7A5B766E-8141-4D8A-B3EB-91422FDBDF71}.Test|Any CPU.Build.0 = Release|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable|Any CPU.ActiveCfg = Fable|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable|Any CPU.Build.0 = Fable|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable3|Any CPU.ActiveCfg = Fable3|Any CPU
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Fable3|Any CPU.Build.0 = Fable3|Any CPU
+		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83}.Test|Any CPU.Build.0 = Release|Any CPU
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Fable|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Fable|Any CPU.Build.0 = Debug|Any CPU
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Fable3|Any CPU.ActiveCfg = Debug|Any CPU
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Fable3|Any CPU.Build.0 = Debug|Any CPU
+		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{EEFF08EB-8B0C-4F63-9425-4281EFF12087}.Test|Any CPU.Build.0 = Release|Any CPU
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Fable|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Fable|Any CPU.Build.0 = Debug|Any CPU
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Fable3|Any CPU.ActiveCfg = Debug|Any CPU
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Fable3|Any CPU.Build.0 = Debug|Any CPU
+		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Test|Any CPU.ActiveCfg = Release|Any CPU
+		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2}.Test|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -193,6 +224,7 @@ Global
 		{1CCD1BFB-60E4-40AA-B534-3C5EEE5E1E83} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2} = {83F16175-43B1-4C90-A1EE-8E351C33435D}
+		{F4D5D32F-D47A-4727-8965-80A4BB7A29DD} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {789B5FFA-7891-4F60-831E-42C3C5ED2C51}

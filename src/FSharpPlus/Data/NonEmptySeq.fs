@@ -518,6 +518,13 @@ module NonEmptySeq =
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq
 
+    /// <summary>Returns a sequence that contains no duplicate entries according to the generic hash and equality comparisons
+    /// on the keys returned by the given key-generating function.
+    /// If an element occurs multiple times in the sequence then the later occurrences are discarded.</summary>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The resulting sequence without duplicates.</returns>
+    let distinct (source: NonEmptySeq<'T>) = source |> Seq.distinct |> ofSeq
+
     /// <summary>Applies a function to each element of the sequence, threading an accumulator argument
     /// through the computation. Apply the function to the first two elements of the sequence.
     /// Then feed this result into the function along with the third element and so on. 

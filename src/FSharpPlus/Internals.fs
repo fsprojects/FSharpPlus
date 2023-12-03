@@ -1,5 +1,13 @@
 namespace FSharpPlus.Internals
 
+#if TEST_TRACE
+module Traces =
+    let private effects = ResizeArray<string> []
+    let reset () = effects.Clear ()
+    let add x = effects.Add (x)
+    let get () = effects |> Seq.toList
+#endif
+
 /// <namespacedoc>
 /// <summary>
 /// Internal to the library - please ignore
@@ -116,6 +124,12 @@ type Either<'t,'u> =
     | Right of 'u
 
 type DmStruct = struct end
+
+type KeyValuePair2<'TKey, 'TValue> = struct
+    val Key : 'TKey
+    val Value : 'TValue
+    new (key, value) = { Key = key; Value = value }
+end
 
 [<Sealed>]
 type Set2<'T when 'T: comparison >() = class end
@@ -322,7 +336,7 @@ type BitConverter =
         if isNull value then nullArg "value"
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 // findSliceIndex
 module FindSliceIndex =
     open System.Collections.Generic

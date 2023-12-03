@@ -12,6 +12,9 @@ open Helpers
 open FSharpPlus.Math.Applicative
 open CSharpLib
 open System.Threading.Tasks
+#if TEST_TRACE
+open FSharpPlus.Internals
+#endif
 
 module Traversable =
 
@@ -251,9 +254,15 @@ module Traversable =
 
     [<Test>]
     let traverseTask () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
         let a = traverse Task.FromResult [1;2]
         CollectionAssert.AreEqual ([1;2], a.Result)
         Assert.IsInstanceOf<Option<list<int>>> (Some a.Result)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse list"], Traces.get())
+        #endif
         let b = map Task.FromResult [1;2] |> sequence
         CollectionAssert.AreEqual ([1;2], b.Result)
         Assert.IsInstanceOf<Option<list<int>>> (Some b.Result)
@@ -266,6 +275,9 @@ module Traversable =
 
     [<Test>]
     let traverseMap () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
         let m = Map.ofList [("a", 1); ("b", 2); ("c", 3)]
         let r1 = traverse (fun i -> if i = 2 then None else Some i) m
         let r2 = traverse Some m
@@ -278,14 +290,23 @@ module Traversable =
                         Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]]
         let actual = sequence m1
         CollectionAssert.AreEqual (expected, actual)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse Map";"Traverse Map"], Traces.get())
+        #endif
 
     [<Test>]
     let traverseResults () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
         let a = sequence (if true then Ok [1] else Error "no")
         let b = traverse id (if true then Ok [1] else Error "no")
         let expected: Result<int, string> list = [Ok 1]
         CollectionAssert.AreEqual (expected, a)
         CollectionAssert.AreEqual (expected, b)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse Result, 'T -> Functor<'U>"], Traces.get())
+        #endif
 
 
 module Bitraversable =
