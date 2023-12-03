@@ -10,8 +10,8 @@
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;Fable;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
-    <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE;APPLICATIVE_FIX</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER;APPLICATIVE_FIX</DefineConstants>
     <TargetFramework>net7.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>

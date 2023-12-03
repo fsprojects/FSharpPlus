@@ -106,7 +106,7 @@ let lookupTemplate (name:string) (env:Environment) : Template option = tryItem n
 
 /// add a list of resolved definitions to the environment
 let addDefs (defs:(string*string) list) env = { env with variables = plus (Map.ofList defs) env.variables}
-
+#if APPLICATIVE_FIX
 /// resolve a template into a string
 let rec resolve : Template -> Reader<Environment,string>  = function 
                        | T s -> result s
@@ -151,3 +151,5 @@ Recommended reading
    It contains examples using F#+ and an explanation from scratch.
 
 *)
+
+#endif

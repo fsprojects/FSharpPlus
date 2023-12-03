@@ -47,6 +47,7 @@ module GenericBuilders =
         member inline _.Bind (p: '``Monad<'T>``, [<InlineIfLambda>]rest: 'T->'``Monad<'U>``) = p >>= rest : '``Monad<'U>``
         member inline _.MergeSources  (t1: '``Monad<'T>``, t2: '``Monad<'U>``)          : '``Monad<'T * 'U>`` = Lift2.Invoke tuple2 t1 t2
         member inline _.MergeSources3 (t1: '``Monad<'T>``, t2: '``Monad<'U>``, t3: '``Monad<'V>``) : '``Monad<'T * 'U * 'V>`` = Lift3.Invoke tuple3 t1 t2 t3
+        member inline _.BindReturn   (x : '``Monad<'T>``, f: 'T -> 'U)                  : '``Monad<'U>``      = Map.Invoke f x
 
         [<CustomOperation("select", MaintainsVariableSpaceUsingBind=true, AllowIntoPattern=true)>]
         member inline _.Select (x, [<ProjectionParameter>] f) = map f x
