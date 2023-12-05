@@ -20,7 +20,7 @@ module Array =
     /// </code>
     /// </example>
     let apply f x =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(x)) x
         #endif
 
@@ -29,7 +29,7 @@ module Array =
 
     /// Combines all values from the first array with the second, using the supplied mapping function.
     let lift2 f x y =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(x)) x
         raiseIfNull (nameof(y)) y
         #endif
@@ -46,7 +46,7 @@ module Array =
     ///
     /// <returns>Array with values returned from mapping function.</returns>
     let lift3 mapping list1 list2 list3 =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(list1)) list1
         raiseIfNull (nameof(list2)) list2
         raiseIfNull (nameof(list3)) list3
@@ -60,10 +60,10 @@ module Array =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: 'T []) (source: seq<'T []>) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(source)) source
         #endif
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER || NET462
         source |> Seq.intercalate separator |> Seq.toArray
         #else
         let mutable coll = new ArrayCollector<'T> ()
@@ -77,7 +77,7 @@ module Array =
 
     /// Inserts a separator element between each element in the source array.
     let intersperse element (source: 'T []) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(source)) source
         #endif
 
@@ -92,7 +92,7 @@ module Array =
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<_ []>) (source: _ []) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(separators)) separators
         raiseIfNull (nameof(source)) source
         #endif
@@ -101,12 +101,12 @@ module Array =
 
     /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: 'T seq) (newValue: 'T seq) (source: 'T[]) : 'T[] =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(oldValue)) oldValue
         raiseIfNull (nameof(newValue)) newValue
         raiseIfNull (nameof(source)) source
         #endif
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER || NET462
         source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray: 'T []
         #else
         let oldValueArray = oldValue |> Seq.toArray
@@ -174,7 +174,7 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let findSliceIndex (slice: _ []) (source: _ []) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(slice)) slice
         raiseIfNull (nameof(source)) source
         #endif
@@ -193,7 +193,7 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(slice)) slice
         raiseIfNull (nameof(source)) source
         #endif
@@ -210,7 +210,7 @@ module Array =
     /// A tuple with both resulting arrays.
     /// </returns>
     let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: array<'T>) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(source)) source
         #endif
 
@@ -222,7 +222,7 @@ module Array =
     /// to each of the elements of the two arrays pairwise.</summary>
     /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
     let map2Shortest f (a1: 'T []) (a2: 'U []) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(a1)) a1
         raiseIfNull (nameof(a2)) a2
         #endif
@@ -236,7 +236,7 @@ module Array =
     /// <param name="a2">Second input array.</param>
     /// <returns>Array with corresponding pairs of input arrays.</returns>
     let zipShortest (a1: array<'T1>) (a2: array<'T2>) =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(a1)) a1
         raiseIfNull (nameof(a2)) a2
         #endif
@@ -249,7 +249,7 @@ module Array =
     ///
     /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
     let choosei mapping source =
-        #if !NET45
+        #if !NET462
         raiseIfNull (nameof(source)) source
         #endif
 

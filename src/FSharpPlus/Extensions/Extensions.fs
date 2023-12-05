@@ -76,7 +76,7 @@ module Extensions =
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: list<Async<'T>>) : Async<list<'T>> =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER || NET462
             let rec loop acc = function
                 | []    -> async.Return (List.rev acc)
                 | x::xs -> async.Bind (x, fun x -> loop (x::acc) xs)

@@ -47,7 +47,7 @@ module List =
     /// </code>
     /// </example>
     let apply (f: list<'T -> 'U>) (x: list<'T>) : list<'U> =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         List.collect (fun f -> List.map ((<|) f) x) f
     #else
         let mutable coll = ListCollector<'U> ()
@@ -59,7 +59,7 @@ module List =
 
     /// Combines all values from the first list with the second, using the supplied mapping function.
     let lift2 (f: 'T1 -> 'T2 -> 'U) (x1: list<'T1>) (x2: list<'T2>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         List.allPairs x1 x2 |> List.map (fun (x, y) -> f x y)
     #else
         let mutable coll = ListCollector<'U> ()
@@ -77,7 +77,7 @@ module List =
     ///
     /// <returns>List with values returned from mapping function.</returns>
     let lift3 f x1 x2 x3 =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || NET45 || FABLE_COMPILER_4
+    #if !FABLE_COMPILER || FABLE_COMPILER_3 || NET462 || FABLE_COMPILER_4
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
@@ -201,7 +201,7 @@ module List =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: list<'T>) (source: seq<list<'T>>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         source |> Seq.intercalate separator |> Seq.toList
     #else
         let mutable coll = new ListCollector<'T> ()
@@ -215,7 +215,7 @@ module List =
 
     /// Inserts a separator element between each element in the source list.
     let intersperse separator (source: list<'T>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         source |> List.toSeq |> Seq.intersperse separator |> Seq.toList
     #else
         let mutable coll = new ListCollector<'T> ()
@@ -281,7 +281,7 @@ module List =
     /// A tuple with both resulting lists.
     /// </returns>
     let partitionMap (mapping: 'T -> Choice<'T1, 'T2>) (source: list<'T>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         let rec loop ((acc1, acc2) as acc) = function
             | []    -> acc
             | x::xs ->
@@ -304,7 +304,7 @@ module List =
     /// <returns>List with corresponding results of applying the mapping function pairwise over both input lists elments.</returns>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
     let map2Shortest mapping (list1: list<'T1>) (list2: list<'T2>) : list<'U> =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         let rec loop acc = function
             | (l::ls, r::rs) -> loop ((mapping l r)::acc) (ls, rs)
             | (_, _)         -> acc
@@ -326,7 +326,7 @@ module List =
     /// <param name="list2">Second input list.</param>
     /// <returns>List with corresponding pairs of input lists.</returns>
     let zipShortest (list1: list<'T1>) (list2: list<'T2>) : list<'T1 * 'T2> =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER || NET462
         let rec loop acc = function
             | (l::ls, r::rs) -> loop ((l, r)::acc) (ls, rs)
             | (_, _)         -> acc

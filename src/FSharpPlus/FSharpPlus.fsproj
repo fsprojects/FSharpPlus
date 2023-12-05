@@ -5,7 +5,7 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1;net45;net6</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net462;net6</TargetFrameworks>
     <Title>FSharpPlus</Title>
     <AssemblyName>FSharpPlus</AssemblyName>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
@@ -110,7 +110,7 @@
     <Compile Include="Data/Coproduct.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
-    <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />
+    <Content Condition=" '$(TargetFramework)' == 'net462'" Include="App.config" />
   </ItemGroup>
 
   <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
@@ -123,10 +123,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Condition=" '$(TargetFramework)' == 'net45'" Include="System.Runtime" />
+    <Reference Condition=" '$(TargetFramework)' == 'net462'" Include="System.Runtime" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.6.2" Condition=" '$(TargetFramework)' == 'net45'" />
-    <PackageReference Update="FSharp.Core" Version="6.0.6" Condition=" '$(TargetFramework)' != 'net45'" />
+    <PackageReference Update="FSharp.Core" Version="4.6.2" Condition=" '$(TargetFramework)' == 'net462'" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" Condition=" '$(TargetFramework)' != 'net462'" />
   </ItemGroup>
 </Project>
