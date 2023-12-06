@@ -18,7 +18,6 @@ namespace FSharpPlus
 module GenericBuilders =
 
     open FSharpPlus.Operators
-    open FSharpPlus.Data
 
     // Idiom brackets
     type Ii = Ii
