@@ -5,7 +5,9 @@ open System.Runtime.InteropServices
 open System.ComponentModel
 open System.Collections.Generic
 open FSharpPlus
+open FSharpPlus.Extensions
 open FSharpPlus.Control
+open Microsoft.FSharp.Core.CompilerServices
 
 /// A type-safe sequence that contains at least one element.
 [<Interface>]
@@ -78,16 +80,16 @@ type NonEmptySeq<'t> =
 
 
     static member inline Traverse (t: _ seq, f) =
-       let cons x y = seq {yield x; yield! y}
-       let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
-       Map.Invoke NonEmptySeq<_>.unsafeOfSeq (Seq.foldBack cons_f t (result Seq.empty))
+        let cons x y = seq {yield x; yield! y}
+        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+        Map.Invoke NonEmptySeq<_>.unsafeOfSeq (Seq.foldBack cons_f t (result Seq.empty))
 
     static member inline Traverse (t: NonEmptySeq<'T>, f: 'T->'``Functor<'U>``) =
         let mapped = NonEmptySeq<_>.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq<_>.ofList) : '``Functor<NonEmptySeq<'U>>``
 
     #if !FABLE_COMPILER
-    static member Traverse (t: 't NonEmptySeq, f: 't->Async<'u>) : Async<NonEmptySeq<_>> = async {
+    static member Traverse (t: 'T NonEmptySeq, f: 'T->Async<'u>) : Async<NonEmptySeq<_>> = async {
         let! ct = Async.CancellationToken
         return seq {
             use enum = t.GetEnumerator ()
@@ -95,7 +97,25 @@ type NonEmptySeq<'t> =
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq<_>.unsafeOfSeq }
     #endif
 
-    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList)   : '``Applicative<NonEmptySeq<'T>>``
+    static member inline SequenceImpl (t, _, _:obj) = printfn "Using default4"; Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList)
+    static member        SequenceImpl (t: NonEmptySeq<option<'T>>, _: option<NonEmptySeq<'T>>, _:Sequence) : option<NonEmptySeq<'T>> = printfn "Not using default4"; Option.Sequence t |> Option.map NonEmptySeq<_>.unsafeOfSeq
+
+    static member        SequenceImpl (t: NonEmptySeq<Result<'T, 'E>>) : Result<NonEmptySeq<'T>, 'E> = Result.Sequence t |> Result.map NonEmptySeq<_>.unsafeOfSeq
+    static member        SequenceImpl (t: NonEmptySeq<Choice<'T, 'E>>) : Choice<NonEmptySeq<'T>, 'E> = Choice.Sequence t |> Choice.map NonEmptySeq<_>.unsafeOfSeq
+    static member        SequenceImpl (t: NonEmptySeq<list<'T>>  , _: list<NonEmptySeq<'T>>  , _:Sequence) : list<NonEmptySeq<'T>> = printfn "Not using default4"; Sequence.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq<_>.ofList)
+    static member        SequenceImpl (t: NonEmptySeq<'T []>         ) : NonEmptySeq<'T> []          = Sequence.ForInfiniteSequences (t, Array.isEmpty, NonEmptySeq<_>.ofList)
+    #if !FABLE_COMPILER
+    static member        SequenceImpl (t: NonEmptySeq<Async<'T>>     ) : Async<NonEmptySeq<'T>>      = Async.Sequence t |> Async.map NonEmptySeq<_>.unsafeOfSeq
+    #endif
+    
+    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) : '``Applicative<NonEmptySeq<'T>>`` =
+        let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member SequenceImpl : _*_*_ -> _) b, c, a)
+        let inline call (a: 'a, b: 'b) = call_3 (a, b, Unchecked.defaultof<'R>) : 'R
+        call (Unchecked.defaultof<Sequence>, t)
+
+
+
+
 
 /// A type alias for NonEmptySeq<'t>
 type neseq<'t> = NonEmptySeq<'t>

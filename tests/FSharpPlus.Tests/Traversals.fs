@@ -151,7 +151,7 @@ module Traversable =
         let a = sequence (NonEmptySeq.initInfinite toOptions)
         let b = sequence (NonEmptySeq.initInfinite toOptions)
         let c = sequence (NonEmptySeq.initInfinite toChoices)
-        // let d = sequence (NonEmptySeq.initInfinite toLists)
+        let d = sequence (NonEmptySeq.initInfinite toLists)
         let e = sequence (NonEmptySeq.initInfinite toEithers)
 
         CollectionAssert.AreEqual (expectedEffects, SideEffects.get ())
@@ -167,7 +167,7 @@ module Traversable =
         Assert.AreEqual (None, a)
         Assert.AreEqual (None, b)
         Assert.AreEqual (Choice<NonEmptySeq<int>,string>.Choice2Of2 "This is a failure", c)
-        // Assert.True ((d = []))
+        Assert.True ((d = []))
         Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e)
         
 
