@@ -16,7 +16,7 @@ type Matrix< 'Item, 'Row, 'Column > = private { Items: 'Item[,] } with
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   static member UnsafeCreate (_row: 'm, _column: 'n, items: _[,]) : Matrix<_, 'm, 'n> =
     { Items = items }
-  (*
+  
   interface System.Collections.Generic.IReadOnlyCollection<'Item> with
     member this.Count = this.Items.Length
     member this.GetEnumerator() = this.Items.GetEnumerator()
@@ -27,7 +27,7 @@ type Matrix< 'Item, 'Row, 'Column > = private { Items: 'Item[,] } with
           for j = 0 to (items |> Array2D.length2) - 1 do
             yield items.[i,j]
       }).GetEnumerator()
-  *)
+
 
 [<Struct; StructuredFormatDisplayAttribute("{Items}")>]
 type Vector<'Item, 'Length> = private { Items: 'Item[] } with
@@ -36,13 +36,13 @@ type Vector<'Item, 'Length> = private { Items: 'Item[] } with
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   static member UnsafeCreate (_length: 'n, items: _[]) : Vector<_, 'n> =
     { Items = items }
-  (*
+  
   interface System.Collections.Generic.IReadOnlyList<'Item> with
     member this.Count = this.Items.Length
     member this.Item with get i = this.Items.[i]
     member this.GetEnumerator() = this.Items.GetEnumerator()
     member this.GetEnumerator() = (this.Items :> seq<_>).GetEnumerator()
-  *)
+
  
 module Vector =
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]

@@ -12,9 +12,9 @@ env:
 
 on:
   push:
-    branches: [ master, v1.2, v1.3, v1.4, v1.5 ]
+    branches: [ master, v1.2, v1.3, v1.4, v1.5, v1.6 ]
   pull_request:
-    branches: [ master, v1.2, v1.3, v1.4, v1.5 ]
+    branches: [ master, v1.2, v1.3, v1.4, v1.5, v1.6 ]
 jobs:
   build:
 
@@ -23,13 +23,19 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.201
+        dotnet-version: |
+          8.0.x
+          7.0.x
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.2
+      with:
+        timezoneWindows: "Nepal Standard Time"
     - name: Test with dotnet
       run: dotnet test build.proj -v n
 
@@ -39,12 +45,14 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.201
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
     - name: Restore
       run: git submodule update --init --recursive
-
     - name: Extract branch name
       shell: bash
       run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
@@ -78,14 +86,14 @@ jobs:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Setup .NET Core 6
-      uses: actions/setup-dotnet@v1
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 6.0.201
-    - name: Setup .NET Core 5
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.405
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+          5.0.x
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build All Docs

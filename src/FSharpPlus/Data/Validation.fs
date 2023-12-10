@@ -186,6 +186,18 @@ module Validation =
     /// Creates a Validation<'Error,'T> from a Choice<'T,'Error>.
     let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
 
+    /// <summary>Converts an option to a Validation.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The option value.</param>
+    /// <returns>The resulting Validation value.</returns>
+    let ofOptionWith (errorValue: 'Error) (source: 'T option) = match source with Some x -> Success x | None -> Failure errorValue
+
+    /// <summary>Converts a voption to a Validation.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The voption value.</param>
+    /// <returns>The resulting Validation value.</returns>
+    let ofValueOptionWith (errorValue: 'Error) (source: 'T voption) = match source with ValueSome x -> Success x | ValueNone -> Failure errorValue
+    
     /// <summary> Extracts a value from either side of a Validation.</summary>
     /// <param name="successMapper">Function to be applied to source, if it contains a Success value.</param>
     /// <param name="failureMapper">Function to be applied to source, if it contains a Failure value.</param>

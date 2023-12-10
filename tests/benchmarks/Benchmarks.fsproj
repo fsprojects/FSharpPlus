@@ -16,6 +16,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncSequenceBenchmarks.fs" />
+    <Compile Include="ExtensionsBenchmarks.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj" />
   </ItemGroup>
 </Project>

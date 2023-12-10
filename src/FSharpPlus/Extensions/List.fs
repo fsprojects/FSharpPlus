@@ -340,6 +340,48 @@ module List =
                 loop (ls,rs)
         loop (list1, list2)
     #endif
+
+    /// <summary>
+    /// Chunks the list up into groups with the same projected key by applying
+    /// the key-generating projection function to each element and yielding a list of 
+    /// keys tupled with values.
+    /// </summary>
+    ///
+    /// <remarks>
+    /// Each key is tupled with an array of all adjacent elements that match 
+    /// to the key, therefore keys are not unique but can't be adjacent
+    /// as each time the key changes a new group is yield.
+    /// 
+    /// The ordering of the original list is respected.
+    /// </remarks>
+    ///
+    /// <param name="projection">A function that transforms an element of the list into a comparable key.</param>
+    /// <param name="source">The input list.</param>
+    ///
+    /// <returns>The resulting list of keys tupled with a list of matching values</returns>
+    let chunkBy (projection: 'T -> 'Key) (source: _ list) =
+        #if FABLE_COMPILER || NET45
+        Seq.chunkBy projection source |> Seq.map (fun (x, y) -> x, Seq.toList y) |> Seq.toList
+        #else
+        match source with
+        | [] -> []
+        | x::xs ->
+            let mutable acc = new ListCollector<_> ()
+            let mutable members = new ListCollector<_> ()
+            let rec loop source g =
+                match source with
+                | [] -> acc.Add (g, members.Close ())
+                | x::xs ->
+                    let key = projection x
+                    if g <> key then
+                        acc.Add (g, members.Close ())
+                        members <- new ListCollector<_> ()
+                    members.Add x
+                    loop xs key
+            members.Add x
+            loop xs (projection x)
+            acc.Close ()
+        #endif
         
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
