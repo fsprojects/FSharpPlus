@@ -337,5 +337,5 @@ let foldable = testList "Foldable" [
         equal None sb'
         ())
 #endif
-]
+    ]
 

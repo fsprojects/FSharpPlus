@@ -246,4 +246,4 @@ let indexable = testList "Indexable" [
         SideEffects.are ["Using WrappedListD's FindSliceIndex"]
         equal i1 1)
     #endif
-]
+    ]

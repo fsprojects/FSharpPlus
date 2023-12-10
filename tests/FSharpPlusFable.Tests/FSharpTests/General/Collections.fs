@@ -261,5 +261,5 @@ let collections = testList "Collections" [
         
         let m = choose Some ((ofSeq :seq<_*_> -> Map<_,_>) (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<Map<string,int>>> (Some m))
-   #endif
-]
+    #endif
+    ]
