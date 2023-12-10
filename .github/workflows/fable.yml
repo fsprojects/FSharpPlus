@@ -21,13 +21,11 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
-          8.0.x
-          7.0.x
           6.0.x
     - name: Restore tools
       run: dotnet tool restore
     - name: Install fable
-      run: dotnet tool install --global Fable --version 3.7.20
+      run: dotnet tool install --global Fable --version 3.7.22
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
