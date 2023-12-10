@@ -26,6 +26,9 @@ jobs:
           6.0.x
     - name: Restore tools
       run: dotnet tool restore
+    - name: Create global.json
+      working-directory: tests/FSharpPlusFable.Tests
+      run: mv fable3-global.json global.json
     - name: Install fable
       run: dotnet tool install --global Fable --version 3.7.20
     - name: Use Node.js
