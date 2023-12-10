@@ -15,7 +15,15 @@ type Apply =
     inherit Default1
 
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
-
+    // Compatibility members:
+    static member        ``<*>`` (f: Lazy<'T->'U>     , x: Lazy<'T>             , [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
+    static member        ``<*>`` (f: seq<_>           , x: seq<'T>              , [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
+    static member        ``<*>`` (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>      , [<Optional>]_output: NonEmptySeq<'U>      , [<Optional>]_mthd: Apply) = NonEmptySeq.apply  f x                       : NonEmptySeq<'U>
+    static member        ``<*>`` (f: IEnumerator<_>   , x: IEnumerator<'T>      , [<Optional>]_output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
+    static member        ``<*>`` (f: list<_>          , x: list<'T>             , [<Optional>]_output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
+    static member        ``<*>`` (f: _ []             , x: 'T []                , [<Optional>]_output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
+    static member        ``<*>`` (f: 'r -> _          , g: _ -> 'T              , [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: Apply) = fun x -> let f' = f x in f' (g x)            : 'U
+    // End Compatibility members
     static member        ``<*>`` (struct (f: Lazy<'T->'U>     , x: Lazy<'T>           )  , _output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (struct (f: seq<_>           , x: seq<'T>            )  , _output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
     static member        ``<*>`` (struct (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>    )  , _output: NonEmptySeq<'U>      , [<Optional>]_mthd: Apply) = NonEmptySeq.apply  f x                       : NonEmptySeq<'U>
@@ -26,10 +34,49 @@ type Apply =
     static member inline ``<*>`` (struct ((a: 'Monoid, f)     , (b: 'Monoid, x: 'T)   )  , _output: 'Monoid * 'U         , [<Optional>]_mthd: Apply) = (Plus.Invoke a b, f x)                       : 'Monoid *'U
     static member inline ``<*>`` (struct (struct (a: 'Monoid, f), struct (b: 'Monoid, x: 'T)), _output: struct ('Monoid * 'U), [<Optional>]_mthd: Apply) = struct (Plus.Invoke a b, f x)            : struct ('Monoid * 'U)
     #if !FABLE_COMPILER
+    // Compatibility member:
+    static member        ``<*>`` (f: Task<_>          , x: Task<'T>             , [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
+
     static member        ``<*>`` (struct (f: Task<_>          , x: Task<'T>             ), _output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
 
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    // Compatibility members:
+    static member        ``<*>`` (f: ValueTask<_>     , x: ValueTask<'T>        , [<Optional>]_output: ValueTask<'U>        , [<Optional>]_mthd: Apply) = ValueTask.apply   f x : ValueTask<'U>
+    static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
+    static member        ``<*>`` (f: option<_>        , x: option<'T>           , [<Optional>]_output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
+    static member        ``<*>`` (f: voption<_>       , x: voption<'T>          , [<Optional>]_output: voption<'U>          , [<Optional>]_mthd: Apply) = ValueOption.apply f x : voption<'U>
+    static member        ``<*>`` (f: Result<_,'E>     , x: Result<'T,'E>        , [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: Apply) = Result.apply f x : Result<'U,'E>
+    static member        ``<*>`` (f: Choice<_,'E>     , x: Choice<'T,'E>        , [<Optional>]_output: Choice<'b,'E>        , [<Optional>]_mthd: Apply) = Choice.apply f x : Choice<'U,'E>
+    static member        ``<*>`` (f: Map<'Key,_>      , x: Map<'Key,'T>         , [<Optional>]_output: Map<'Key,'U>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
+       for KeyValue(k, vf) in f do
+           match Map.tryFind k x with
+           | Some vx -> yield k, vf vx
+           | _       -> () })
+    static member        ``<*>`` (f: Dictionary<'Key,_>, x: Dictionary<'Key,'T> , [<Optional>]_output: Dictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U> =
+       let dct = Dictionary ()
+       for KeyValue(k, vf) in f do
+           match x.TryGetValue k with
+           | true, vx -> dct.Add (k, vf vx)
+           | _        -> ()
+       dct
+    static member        ``<*>`` (f: IDictionary<'Key,_>, x: IDictionary<'Key,'T> , [<Optional>]_output: IDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IDictionary<'Key,'U> =
+       let dct = Dictionary ()
+       for KeyValue(k, vf) in f do
+           match x.TryGetValue k with
+           | true, vx -> dct.Add (k, vf vx)
+           | _        -> ()
+       dct :> IDictionary<'Key,'U>
+    static member        ``<*>`` (f: IReadOnlyDictionary<'Key,_>, x: IReadOnlyDictionary<'Key,'T> , [<Optional>]_output: IReadOnlyDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IReadOnlyDictionary<'Key,'U> =
+       let dct = Dictionary ()
+       for KeyValue(k, vf) in f do
+           match x.TryGetValue k with
+           | true, vx -> dct.Add (k, vf vx)
+           | _        -> ()
+       dct :> IReadOnlyDictionary<'Key,'U>
+
+    // End Compatibility members
+
     static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Default2) = ValueTask.apply   f x : ValueTask<'U>
     #endif
     static member        ``<*>`` (struct (f: Async<_>         , x: Async<'T>            ), _output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
@@ -74,8 +121,13 @@ type Apply =
        dct :> IReadOnlyDictionary<'Key,'U>
 
     #if !FABLE_COMPILER
+    // Compatibility member:
+    static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     static member        ``<*>`` (struct (f: Expr<'T->'U>, x: Expr<'T>), _output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     #endif
+    // Compatibility member:
+    static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, [<Optional>]_output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
+
     static member        ``<*>`` (struct (f: ('T->'U) ResizeArray, x: 'T ResizeArray), _output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
 
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
