@@ -30,7 +30,7 @@ jobs:
       working-directory: tests/FSharpPlusFable.Tests
       run: mv fable3-global.json global.json
     - name: Install fable
-      run: dotnet tool install --global Fable --version 3.7.20
+      run: dotnet tool install --global Fable --version 3.7.22
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
