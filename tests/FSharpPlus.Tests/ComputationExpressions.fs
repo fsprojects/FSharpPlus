@@ -14,6 +14,17 @@ module ComputationExpressions =
     let task<'t> = monad'<Task<'t>>
 
     [<Test>]
+    let oneLayerApplicativeWithoutReturn () =
+        // dictionaries don't support Return
+        let testVal14 = applicative {
+            let! x1 = dict [1,1]
+            and! x2 = dict [1,1]
+            and! x3 = dict [1,1]
+            and! x4 = dict [1,1]
+            return x1 + x2 + x3 + x4 }
+        CollectionAssert.AreEqual (dict [1, 4], testVal14)
+    
+    [<Test>]
     let twoLayersApplicatives () =
         let id   : Task<Validation<_, string>>   = Failure (Map.ofList ["Id",   ["Negative number"]]) |> Task.FromResult
         let firstName : Validation<_, string>    = Failure (Map.ofList ["Name", ["Invalid chars"]])

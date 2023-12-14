@@ -1224,6 +1224,10 @@ module Applicative =
         Assert.IsInstanceOf<Option<WrappedSeqF<int>>> (Some res5)
         CollectionAssert.AreEqual (WrappedSeqF [5], res5)
 
+        let testVal11 = (+) "h" <!> dict [1, "i"; 2, "ello"]
+        CollectionAssert.AreEqual (dict [(1, "hi"); (2, "hello")], testVal11)
+
+    [<Test>]
     let testLift2 () =
         let expectedEffects = ["Using WrappedSeqD's Return"; "Using WrappedSeqD's Apply"; "Using WrappedSeqD's Apply"]
         SideEffects.reset ()

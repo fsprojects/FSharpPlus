@@ -124,6 +124,8 @@ type Lift2 =
     static member        Lift2 (f, (x: Choice<'T,'Error>  , y: Choice<'U,'Error>  ), _mthd: Lift2) = Choice.map2 f x y
     static member        Lift2 (f, (x: Map<'Key,'T>       , y : Map<'Key,'U>      ), _mthd: Lift2) = Map.mapValues2 f x y
     static member        Lift2 (f, (x: Dictionary<'Key,'T>, y: Dictionary<'Key,'U>), _mthd: Lift2) = Dictionary.map2 f x y
+    static member        Lift2 (f, (x: IDictionary<'Key,'T>, y: IDictionary<'Key,'U>), _mthd: Lift2) = Dict.map2 f x y
+    static member        Lift2 (f, (x: IReadOnlyDictionary<'Key,'T>, y: IReadOnlyDictionary<'Key,'U>), _mthd: Lift2) = IReadOnlyDictionary.map2 f x y
     #if !FABLE_COMPILER
     static member        Lift2 (f, (x: Expr<'T>           , y: Expr<'U>           ), _mthd: Lift2) = <@ f %x %y @>
     #endif
@@ -171,6 +173,8 @@ type Lift3 =
     static member        Lift3 (f, (x: Choice<'T,'Error>  , y: Choice<'U,'Error>  , z: Choice<'V, 'Error>  ), _mthd: Lift3) = Choice.map3 f x y z
     static member        Lift3 (f, (x: Map<'Key,'T>       , y: Map<'Key,'U>       , z: Map<'Key, 'V>       ), _mthd: Lift3) = Map.mapValues3 f x y z
     static member        Lift3 (f, (x: Dictionary<'Key,'T>, y: Dictionary<'Key,'U>, z: Dictionary<'Key, 'V>), _mthd: Lift3) = Dictionary.map3 f x y z
+    static member        Lift3 (f, (x: IDictionary<'Key,'T>, y: IDictionary<'Key,'U>, z: IDictionary<'Key, 'V>), _mthd: Lift3) = Dict.map3 f x y z
+    static member        Lift3 (f, (x: IReadOnlyDictionary<'Key,'T>, y: IReadOnlyDictionary<'Key,'U>, z: IReadOnlyDictionary<'Key, 'V>), _mthd: Lift3) = IReadOnlyDictionary.map3 f x y z
     #if !FABLE_COMPILER
     static member        Lift3 (f, (x: Expr<'T>           , y: Expr<'U>           , z: Expr<'V>            ), _mthd: Lift3) = <@ f %x %y %z @>
     #endif
