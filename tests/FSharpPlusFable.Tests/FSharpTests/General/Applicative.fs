@@ -115,4 +115,4 @@ let applicative = testList "Applicative" [
         let r3 = lift2 (+) a3 b3
         Assert.AreEqual ("Here's the state SHere's the other state S", (ReaderT.run r3 "S" |> Async.RunSynchronously)))
     #endif
-]
+    ]

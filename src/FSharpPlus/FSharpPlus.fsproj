@@ -21,12 +21,14 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configurations>Debug;Release;Fable;Fable3;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion>6.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
+
     <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4</DefineConstants>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
