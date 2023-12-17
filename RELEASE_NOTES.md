@@ -1,3 +1,11 @@
+#### 1.6.0-RC1  - December 17 2023
+ - Target net 8
+ - Add Result.Sequence
+ - Add Validation.ofOptionWith
+ - Add List.chunkBy
+ - Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
+ - Add limited applicative support to dictionaries
+
 #### 1.5.0  - October 15 2023
  - Support for Fable 4 (some functions had to be removed from Fable in order to it)
  - More IList and IReadOnlyList functions
