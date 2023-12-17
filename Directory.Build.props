@@ -14,7 +14,7 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
     <VersionPrefix>1.6.0</VersionPrefix>
-    <VersionSuffix>RC1</VersionSuffix>
+    <VersionSuffix>RC2</VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
 

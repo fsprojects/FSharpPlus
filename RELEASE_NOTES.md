@@ -1,5 +1,5 @@
-#### 1.6.0-RC1  - December 17 2023
- - Target net 8
+#### 1.6.0-RC2  - December 17 2023
+ - Compile using net6
  - Add Result.Sequence
  - Add Validation.ofOptionWith
  - Add List.chunkBy

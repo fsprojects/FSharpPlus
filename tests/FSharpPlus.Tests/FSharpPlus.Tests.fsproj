@@ -12,7 +12,7 @@
     <Platforms>AnyCPU</Platforms>
     <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
-    <TargetFrameworks>net462;net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net462;net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
