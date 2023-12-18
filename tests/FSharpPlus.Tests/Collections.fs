@@ -28,7 +28,7 @@ module Collections =
 
         #if TEST_TRACE
         CollectionAssert.AreEqual (["ChunkBy, list<'T>"], Traces.get())
-        #endif    
+        #endif
 
     
     let testCollections =
@@ -53,6 +53,11 @@ module Collections =
 
     
     let testSeqConversions =
+        
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
         let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
         let sg: string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
         let sb: Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
@@ -77,12 +82,29 @@ module Collections =
         let _r: IReadOnlyDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let rc: IReadOnlyCollection<_>    = ofSeq (seq [2..7])
         let ut: Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        
+        #if TEST_TRACE
+        CollectionAssert.AreEqual ([], Traces.get())
+        #endif
+        
         let al: ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
-        let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
         let cc: BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+        let cb: ConcurrentBag<_>          = ofSeq {'1'..'3'}
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+        let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
         let cd: ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let _cd:ConcurrentDictionary<_,_> = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let cb: ConcurrentBag<_>          = ofSeq {'1'..'3'}
 
         // now go back
         let _sk'  = toSeq sk
@@ -120,7 +142,15 @@ module Collections =
         let _cols = columns |> toList |> map  (fun x -> x.ColumnName)
 
         // Defaults
+
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
         let _12: WrappedListI<_> = seq [1;2] |> ofSeq
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default4-seq<'t>"], Traces.get())
+        #endif
 
         ()
 
@@ -151,12 +181,30 @@ module Collections =
         let _r: IReadOnlyDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let rc: IReadOnlyCollection<_>    = ofList ([2..5])
         let ut: Hashtable                 = ofList ([1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        
+        #if TEST_TRACE
+        CollectionAssert.AreEqual ([], Traces.get())
+        #endif
+        
         let al: ArrayList                 = ofList (["1";"2";"3"])            // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfList, Default2-#Add"], Traces.get())
+        #endif
+
+        let cc: BlockingCollection<_>     = ofList ['1'..'3']                 // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfList, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+        let cb: ConcurrentBag<_>          = ofList ['1'..'3']
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfList, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+
         let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
-        let cc: BlockingCollection<_>     = ofList ['1'..'3']                     // but it will come back as seq<obj>
         let cd: ConcurrentDictionary<_,_> = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
         let _cd:ConcurrentDictionary<_,_> = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let cb: ConcurrentBag<_>          = ofList ['1'..'3']
 
         // now go back
         let _sk'  = toList sk
