@@ -20,7 +20,8 @@ module Memoization =
         static member getOrAdd (cd: ConcurrentDictionary<MemoizationKeyWrapper<'a>,'b>) (f: 'a -> 'b) k =
             cd.GetOrAdd (MemoizationKeyWrapper k, (fun (MemoizationKeyWrapper x) -> x) >> f)
 
-    let inline memoizeN (f:'``(T1 -> T2 -> ... -> Tn)``): '``(T1 -> T2 -> ... -> Tn)`` =
+    /// Memoizes a function taking an arbitrary number of parameters.
+    let inline memoizeN (f: '``(T1 -> T2 -> ... -> Tn)``) : '``(T1 -> T2 -> ... -> Tn)`` =
         let inline call_2 (a: ^MemoizeN, b: ^b) = ((^MemoizeN or ^b) : (static member MemoizeN : ^MemoizeN * 'b -> _ ) (a, b))
         call_2 (Unchecked.defaultof<MemoizeN>, Unchecked.defaultof<'``(T1 -> T2 -> ... -> Tn)``>) f
 

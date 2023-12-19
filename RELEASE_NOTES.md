@@ -1,3 +1,92 @@
+#### 1.6.0-RC1  - December 17 2023
+ - Target net 8
+ - Add Result.Sequence
+ - Add Validation.ofOptionWith
+ - Add List.chunkBy
+ - Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
+ - Add limited applicative support to dictionaries
+
+#### 1.5.0  - October 15 2023
+ - Support for Fable 4 (some functions had to be removed from Fable in order to it)
+ - More IList and IReadOnlyList functions
+ - Bug fixes in parse, tryParse, seq's TryFinally and (=>>) for ValueTask
+ - Add Free.hoist
+ - Add distinct for NonEmptySeq and NonEmptyList
+ - Add ValueOption.ofOption and Task.result for Task and ValueTask
+
+#### 1.4.0  - February 22 2023
+ - Additional Alternatives available (functions, error monads)
+ - More IReadOnlyDictionary functions
+ - Bug fixes in Map as FoldIndexable and missing <*> for IDictionary and IReadOnlyDictionary
+ - Deprecate IReadOnlyDictionary.map
+ - Guid to/from bytes conversion
+
+#### 1.3.3  - February 5 2023
+ - Fix missing zero overload for voption
+ - Add (>>=) and (>=>) to ReaderT
+ - Add ValueOption.toOption
+ - Deprecate (<**>)
+
+#### 1.3.2  - December 2 2022
+ - Applicative Computation Expressions
+ - Support for ValueOption, ValueTask and ValueTuple
+ - Possibility to use explicit type parameters (plus, Seq.sum, guard, ofBytes, ofBytesWithOptions, ofBytesBE, parse, tryParse)
+ - Use InlineIfLambda attribute in CEs
+ - Small fixes (add lift3 for tuples, fix join for ref tuple and Free.map3)
+ - Small improvements in type inference
+ - Use F# Core 6.0.6
+ - Speed up List and Array extensions using Collectors
+ - Use FSharp.Core implementations for old functions that were adopted there
+ - Add some missing Option, Result zip functions
+ - Add explicit type parameters
+ - Use InlineIfLambda attribute in CEs
+ - Some missing Option, Result zip functions
+ - Add NonEmptyList.sequence
+ - Improve null handling for Array extensions
+
+#### 1.2.4  - May 5 2022
+- Fix: Fable regressions
+- Add additional applicative operators directly to types
+
+#### 1.2.3  - March 31 2022
+- Fix: upcoming problem with new .NET6 overloads
+- Add Choice method and reduce function for NonEmptySeq
+
+#### 1.2.2  - October 7 2021
+- Bugfix: Seq.drop returns an empty sequence instead of intended output
+
+#### 1.2.1  - July 16 2021
+- Bump Fable to 3.2.6
+- Fable compatibility for un/curry functions and CE expressions
+- Add missing Lift2, Lift3, lift3 and use MergeSources3
+- Add bindError function
+- Bug fixes: tryParseArray and Result.map3 signature
+
+#### 1.2.0  - June 6 2021
+- Update to compile with Fable 3
+- Allow specialized builders for generic CEs
+- Add new types: NonEmptySeq, NonEmptySet, NonEmptyMap and MultiMap
+- Integrate Task in strict CEs
+- Add Mapi Support in NonEmpty List
+- Add Cont.eval / ContT.eval
+- Builder for NonEmptySeq
+- Add choose function to Map and Dictionaries modules (in Extensions)
+- Add choosei to several modules
+- Add zipShortest function and use that to make generic Zip safe for collections
+- Add map2Shortest, a safe map2 variant to several modules
+- Add missing map3/lift3 extensions
+- Add TryLast to Foldable and introduce operator tryLast
+- Add tryHead and tryLast to String module (in the Extensions namespace)
+- Add yield! to monad.plus
+- Add SequenceBiApply and partition to Validation
+- Add indexer optic for List and Array
+- Rename Parse active pattern to Parsed
+- Include internal error in Result.get
+- Add support for %o %x %X and %B to scan functions
+- Bugfix: Evaluate traverse left to right
+- Use list instead of array for the generic implementation of sequence
+- Better hiding of internals in parsing
+
 #### 1.1.7  - January 7 2021
 - Fix short-circuiting Traverse
 

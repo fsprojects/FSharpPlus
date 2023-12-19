@@ -1,5 +1,6 @@
 namespace FSharpPlus
 
+open System
 open FSharpPlus.Control
 
 /// Generic functions and operators
@@ -22,21 +23,19 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline curry f (x: 'T1) (y: 'T2) : 'Result = f (x, y)
     
-    #if !FABLE_COMPILER
-    /// <summary>
-    /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
-    /// </summary>
-    /// <category index="0">Common Combinators</category>
-    let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'Result) : 'T1 -> '``T2 -> ... -> 'Tn -> 'Result`` = fun t -> Curry.Invoke f t
-    #endif
-
     /// <summary>
     /// Takes a function expecting two curried arguments and returns a function expecting a tuple of two elements. Same as (&lt;||).
     /// </summary>
     /// <category index="0">Common Combinators</category>
     let inline uncurry f (x: 'T1, y: 'T2) : 'Result = f x y
     
-    #if !FABLE_COMPILER
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    /// <summary>
+    /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
+    /// </summary>
+    /// <category index="0">Common Combinators</category>
+    let inline curryN (f: (^``T1 * ^T2 * ... * ^Tn``) -> 'Result) : 'T1 -> '``T2 -> ... -> 'Tn -> 'Result`` = fun t -> Curry.Invoke f t
+    
     /// <summary>
     /// Takes a function expecting any N number of curried arguments and returns a function expecting a tuple of N elements.
     /// </summary>
@@ -81,44 +80,43 @@ module Operators =
     /// Tuple two arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple2 a b             = a,b
+    let inline tuple2<'T1, 'T2> (t1: 'T1) (t2: 'T2) = t1, t2
 
     /// <summary>
     /// Tuple three arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple3 a b c           = a,b,c
+    let inline tuple3<'T1, 'T2, 'T3> (t1: 'T1) (t2: 'T2) (t3: 'T3) = t1, t2, t3
 
     /// <summary>
     /// Tuple four arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple4 a b c d         = a,b,c,d
+    let inline tuple4<'T1, 'T2, 'T3, 'T4> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) = t1, t2, t3, t4
 
     /// <summary>
     /// Tuple five arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple5 a b c d e       = a,b,c,d,e
+    let inline tuple5<'T1, 'T2, 'T3, 'T4, 'T5> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) = t1, t2, t3, t4, t5
 
     /// Tuple six arguments
     /// <category index="0">Common Combinators</category>
-    let inline tuple6 a b c d e f     = a,b,c,d,e,f
+    let inline tuple6<'T1, 'T2, 'T3, 'T4, 'T5, 'T6> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) = t1, t2, t3, t4, t5, t6
 
     /// <summary>
     /// Tuple seven arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple7 a b c d e f g   = a,b,c,d,e,f,g
+    let inline tuple7<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) = t1, t2, t3, t4, t5, t6, t7
 
     /// <summary>
     /// Tuple eight arguments
     /// </summary>
     /// <category index="0">Common Combinators</category>
-    let inline tuple8 a b c d e f g h = a,b,c,d,e,f,g,h
-
-
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    let inline tuple8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7, 'T8> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) (t8: 'T8) = t1, t2, t3, t4, t5, t6, t7, t8
+         
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // Functor ----------------------------------------------------------------
 
@@ -151,8 +149,6 @@ module Operators =
     /// <category index="1">Functor</category>
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Un-zips (un-tuple) two functors.
     /// </summary>
@@ -167,9 +163,6 @@ module Operators =
     /// </remarks>
     /// <category index="1">Functor</category>
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
-
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     // Applicative ------------------------------------------------------------
     
@@ -192,8 +185,13 @@ module Operators =
     let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
     [<System.Obsolete("Use lift2 instead.")>]
-    /// <category index="2">Applicative</category>
     let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
+
+    /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function. Equivalent to map3 in non list-like types.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline lift3 (f: 'T->'U->'V->'W) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) (z: '``Applicative<'V>``) : '``Applicative<'W>`` = Lift3.Invoke f x y z
 
     /// <summary>
     /// Sequences two applicatives left-to-right, discarding the value of the first argument.
@@ -205,16 +203,12 @@ module Operators =
     /// Sequences two applicatives left-to-right, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``): '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
+    let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
-    /// <summary>
-    /// Apply a lifted argument to a lifted function (flipped): arg &lt;**&gt; f
-    /// </summary>
-    /// <category index="2">Applicative</category>
+    [<System.Obsolete("Use flip (<*>) instead.")>]
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     [<System.Obsolete("Use opt instead.")>]
-    /// <category index="2">Applicative</category>
     let inline optional v = Some <!> v </Append.Invoke/> result None
 
     /// <summary>
@@ -228,9 +222,6 @@ module Operators =
 
     // Monad -----------------------------------------------------------
     
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
     /// <summary>
     /// Takes a function from a plain type to a monadic value and a monadic value, and returns a new monadic value.
     /// </summary>
@@ -260,17 +251,13 @@ module Operators =
     /// </summary>
     /// <category index="3">Monad</category>
     let inline (<=<) (g: 'b->'``Monad<'V>``) (f: 'T->'``Monad<'U>``) : 'T -> '``Monad<'V>`` = fun x -> Bind.Invoke (f x) g
-    #endif
 
     /// <summary>
     /// Flattens two layers of monadic information into one.
     /// </summary>
     /// <category index="3">Monad</category>
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     let inline join (x: '``Monad<Monad<'T>>``) : '``Monad<'T>`` = Join.Invoke x
-    #endif
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Equivalent to map but only for Monads.
     /// </summary>
@@ -292,8 +279,6 @@ module Operators =
     /// <category index="4">Monoid</category>
     let inline zero< ^Monoid when (Zero or ^Monoid) : (static member Zero : ^Monoid * Zero -> ^Monoid) > : ^Monoid = Zero.Invoke ()
     
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     /// <summary>
     /// Combines two monoids in one.
     /// </summary>
@@ -304,18 +289,15 @@ module Operators =
     /// Combines two monoids in one.
     /// </summary>
     /// <category index="4">Monoid</category>
-    let inline plus (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
-    #endif
+    let inline plus< ^Monoid when (Plus or ^Monoid) : (static member ``+`` : ^Monoid * ^Monoid * Plus -> ^Monoid)> (x: 'Monoid) (y: 'Monoid) : 'Monoid = Plus.Invoke x y
+
     
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-    
-    /// S
     module Seq =
         /// <summary>
         /// Folds all values in the sequence using the monoidal addition.
         /// </summary>
         /// <category index="4">Monoid</category>
-        let inline sum (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
+        let inline sum< ^Monoid when (Sum or seq< ^Monoid> or ^Monoid) : (static member Sum: seq<'Monoid> * 'Monoid * Sum -> 'Monoid)> (x: seq<'Monoid>) : 'Monoid = Sum.Invoke x
 
 
     // Alternative/Monadplus/Arrowplus ----------------------------------------
@@ -346,10 +328,11 @@ module Operators =
     /// Common uses of guard include conditionally signaling an error in an error monad and conditionally rejecting the current choice in an Alternative-based parser.
     /// </summary>
     /// <category index="5">Alternative/Monadplus/Arrowplus</category>
-    let inline guard x: '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
+    let inline guard< ^``MonadPlus<unit>`` when (Return or ^``MonadPlus<unit>``) :
+        (static member Return: ^``MonadPlus<unit>`` * Return -> (unit -> ^``MonadPlus<unit>``)) and
+        (Empty or ^``MonadPlus<unit>``) : (static member Empty: ^``MonadPlus<unit>`` * Empty -> ^``MonadPlus<unit>``)> x : '``MonadPlus<unit>`` = if x then Return.Invoke () else Empty.Invoke ()
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    
     // Contravariant/Bifunctor/Profunctor/Invariant ---------------------------
 
     /// <summary>
@@ -403,7 +386,7 @@ module Operators =
     let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
 
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // Category ---------------------------------------------------------------
 
@@ -500,9 +483,6 @@ module Operators =
     /// <category index="10">Arrow Apply</category>
     let inline app< ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` when (App or ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) : (static member App : ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>`` * App -> ^``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``) > =
         App.Invoke () : '``ArrowApply<('ArrowApply<'T,'U> * 'T)>,'U)>``
-
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
 
     /// Foldable
 
@@ -688,9 +668,6 @@ module Operators =
     /// <category index="11">Foldable</category>
     let inline nth (n: int) (source: '``Foldable<'T>``) : 'T = Nth.Invoke n source
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
     // Reducible
 
     /// <summary>Applies a function to each element of the reducible, threading an accumulator argument
@@ -705,9 +682,7 @@ module Operators =
     /// <returns>The final reduced value.</returns>
     let inline reduce reduction (source: '``Reducible<'T>``) = Reduce.Invoke reduction source : 'T
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Traversable
 
     /// <summary>
@@ -717,14 +692,12 @@ module Operators =
     let inline traverse (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = Traverse.Invoke f t
 
     /// <summary>
-    /// Evaluate each action in the structure from left to right, and and collect the results.
+    /// Evaluate each action in the structure from left to right, and collect the results.
     /// </summary>
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Bifoldable
 
     /// <summary>
@@ -766,9 +739,7 @@ module Operators =
     /// <category index="15">Bitraversable</category>
     let inline bisequence (source: '``Bitraversable<'Functor<'T>,'Functor<'U>>``) : '``Functor<'Bitraversable<'T,'U>>`` = Bisequence.Invoke source
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Indexable
 
     /// <summary>
@@ -878,8 +849,6 @@ module Operators =
     let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     // Comonads
 
     /// <summary>
@@ -903,9 +872,7 @@ module Operators =
     /// <category index="17">Comonads</category>
     let inline duplicate (x: '``Comonad<'T>``) : '``Comonad<'Comonad<'T>>`` = Duplicate.Invoke x
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
-
+    
     // Monad Transformers
 
     /// <summary>
@@ -930,25 +897,25 @@ module Operators =
     /// The state from the internals of the monad.
     /// </summary>
     /// <category index="18">Monad Transformers</category>
-    let inline get< ^``MonadState<'S * 'S>`` when ^``MonadState<'S * 'S>`` : (static member Get : ^``MonadState<'S * 'S>``)> = (^``MonadState<'S * 'S>`` : (static member Get : _) ())
+    let inline get< ^``MonadState<'S, 'S>`` when ^``MonadState<'S, 'S>`` : (static member Get : ^``MonadState<'S, 'S>``)> = (^``MonadState<'S, 'S>`` : (static member Get : _) ())
 
     /// <summary>
     /// Gets a value which depends on the current state.
     /// </summary>
     /// <category index="18">Monad Transformers</category>
-    let inline gets (f: 'S->'T) : '``MonadState<'T * 'S>`` = get |> if FSharpPlus.Internals.Prelude.opaqueId false then liftM f else Map.InvokeOnInstance f
+    let inline gets (f: 'S -> 'T) : '``MonadState<'S, 'T>`` = get |> if FSharpPlus.Internals.Prelude.opaqueId false then liftM f else Map.InvokeOnInstance f
 
     /// <summary>
     /// Replaces the state inside the monad.
     /// </summary>
     /// <category index="18">Monad Transformers</category>
-    let inline put (x: 'S) : '``MonadState<unit * 'S>`` = Put.Invoke x
+    let inline put (x: 'S) : '``MonadState<'S, unit>`` = Put.Invoke x
 
     /// <summary>
     /// Modifies the state inside the monad by applying a function.
     /// </summary>
     /// <category index="18">Monad Transformers</category>
-    let inline modify (f: 'S->'S) : '``MonadState<unit * ('S->'S)>`` = get >>= (Put.Invoke << f)
+    let inline modify (f: 'S -> 'S) : '``MonadState<'S, unit>`` = get >>= (Put.Invoke << f)
 
     /// <summary>The environment from the monad.</summary>
     /// <category index="18">Monad Transformers</category>
@@ -969,7 +936,7 @@ module Operators =
 
     /// <summary> Executes the action <paramref name="m"/> and adds its output to the value of the computation. </summary>
     /// <category index="18">Monad Transformers</category>
-    /// 
+    ///
     /// <param name="m">The action to be executed.</param>
     let inline listen (m: '``MonadWriter<'Monoid,'T>``) : '``MonadWriter<'Monoid,('T * 'Monoid)>`` = Listen.Invoke m
 
@@ -985,26 +952,42 @@ module Operators =
     /// <category index="18">Monad Transformers</category>
     let inline throw (error: 'E) : '``'MonadError<'E,'T>`` = Throw.Invoke error
 
-    /// <summary> Executes a handler when the value contained in the Error monad represents an error. </summary>
+    /// <summary>
+    /// Executes a handler when the value contained in the Error monad represents an error.
+    /// This is bindError flipped, which makes it useful when used as an operator.
+    /// </summary>
+    /// <example>
+    /// <code>
+    ///    let doSomeOperation x = ResultT &lt;| async {
+    ///        if x &lt; 10 then return Ok 10
+    ///        else return Error "failure" }
+    ///
+    ///    doSomeOperation &lt;/catch/&gt; (fun s -> throw ("The error was: " + s))
+    /// </code>
+    /// </example>
     /// <category index="18">Monad Transformers</category>
     let inline catch (value: '``'MonadError<'E1,'T>``) (handler: 'E1->'``'MonadError<'E2,'T>``) : '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    /// <summary>
+    /// Executes a handler when the value contained in the Error monad represents an error.
+    /// </summary>
+    /// <category index="18">Monad Transformers</category>
+    let inline bindError  (handler: 'E1->'``'MonadError<'E2,'T>``) (value: '``'MonadError<'E1,'T>``): '``'MonadError<'E2,'T>`` = Catch.Invoke value handler
 
+    
     // Collection
 
     /// <summary>
     /// Converts to a Collection from a list.
     /// </summary>
     /// <category index="19">Collection</category>
-    let inline ofList (source: list<'T>) = OfList.Invoke source : 'Collection
+    let inline ofList (source: list<'T>) = OfList.Invoke source : '``Collection<'T>``
 
     /// <summary>
     /// Converts to a Collection from a seq.
     /// </summary>
     /// <category index="19">Collection</category>
-    let inline ofSeq (source: seq<'T> ) = OfSeq.Invoke source : 'Collection
+    let inline ofSeq (source: seq<'T> ) = OfSeq.Invoke source : '``Collection<'T>``
 
     /// <summary>Returns a new collection containing only the elements of the collection
     /// for which the given predicate returns "true"</summary>
@@ -1013,7 +996,7 @@ module Operators =
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="source">The input collection.</param>
     /// <returns>A collection containing only the elements that satisfy the predicate.</returns>
-    let inline filter (predicate: _->bool) (source: 'Collection) : 'Collection = Filter.Invoke predicate source
+    let inline filter (predicate: 'T -> bool) (source: '``Collection<'T>``) : '``Collection<'T>`` = Filter.Invoke predicate source
 
     /// <summary>Returns a collection that skips N elements of the original collection and then yields the
     /// remaining elements of the collection.</summary>
@@ -1329,7 +1312,7 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     
     // Converter
 
@@ -1338,25 +1321,28 @@ module Operators =
     /// </summary>
     /// <category index="21">Converter</category>
     let inline explicit (value: 'T) : 'U = Explicit.Invoke value
+
     #endif
+
     #if !FABLE_COMPILER
+
     /// <summary>
     /// Convert from a byte array value, given options of little-endian, and startIndex
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesWithOptions (isLtEndian: bool) (startIndex: int) (value: byte[]) = OfBytes.Invoke isLtEndian startIndex value
+    let inline ofBytesWithOptions< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (isLtEndian: bool) (startIndex: int) (value: byte[]) : 'T = OfBytes.Invoke isLtEndian startIndex value
 
     /// <summary>
     /// Convert from a byte array value, assuming little-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytes (value: byte[]) = OfBytes.Invoke true 0 value
+    let inline ofBytes< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke true 0 value
 
     /// <summary>
     /// Convert from a byte array value, assuming big-endian
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline ofBytesBE (value: byte[]) = OfBytes.Invoke false 0 value
+    let inline ofBytesBE< ^T when (OfBytes or ^T) : (static member OfBytes: ^T * OfBytes -> (byte[] * int * bool -> ^T))> (value: byte[]) : 'T = OfBytes.Invoke false 0 value
 
     /// <summary>
     /// Convert to a byte array value, assuming little endian
@@ -1369,19 +1355,22 @@ module Operators =
     /// </summary>
     /// <category index="21">Converter</category>
     let inline toBytesBE value : byte[] = ToBytes.Invoke false value
+
     #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+
     /// <summary>
     /// Converts to a value from its string representation.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline parse (value: string) = Parse.Invoke value
+    let inline parse< ^T when (Parse or ^T) : (static member Parse: ^T * Parse -> (string -> ^T))> (value: string) : 'T = Parse.Invoke value
 
     /// <summary>
     /// Converts to a value from its string representation. Returns None if the convertion doesn't succeed.
     /// </summary>
     /// <category index="21">Converter</category>
-    let inline tryParse (value: string) = TryParse.Invoke value
+    let inline tryParse< ^T when (TryParse or ^T) : (static member TryParse: ^T * TryParse -> (string -> ^T option))> (value: string) : 'T option = TryParse.Invoke value
 
 
     // Numerics
@@ -1415,6 +1404,7 @@ module Operators =
     let inline maxValue< ^Num when (MaxValue or ^Num) : (static member MaxValue : ^Num * MaxValue -> ^Num) > : ^Num = MaxValue.Invoke ()
 
     #endif
+
     #if !FABLE_COMPILER
 
     /// <summary>Converts from BigInteger to the inferred destination type.</summary>
@@ -1515,8 +1505,9 @@ module Operators =
     /// <returns>The absolute value of the input.</returns>
     let inline abs' (value: 'Num) : 'Num = Abs'.Invoke value
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+#endif
+
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // Additional functions
 
@@ -1544,8 +1535,6 @@ module Operators =
     /// <category index="23">Additional Functions</category>
     let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
 
-    #endif
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
     
     [<System.Obsolete("Use Parsed instead.")>]
     /// <category index="23">Additional Functions</category>
@@ -1559,13 +1548,15 @@ module Operators =
 
     #endif
 
+
     /// <summary>
     /// Safely dispose a resource (includes null-checking).
     /// </summary>
     /// <category index="23">Additional Functions</category>
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =

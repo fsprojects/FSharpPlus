@@ -35,6 +35,7 @@ module Extensions =
 
     open System.Threading
     open System.Threading.Tasks
+    open FSharp.Core.CompilerServices
 
     let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
         if t.IsCanceled then Canceled
@@ -66,19 +67,28 @@ module Extensions =
         #if !FABLE_COMPILER
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
+            let startImmediateAsTask ct a =
+                Async.StartImmediateAsTask(a, ct).Result
+
             let! ct = Async.CancellationToken
-            return seq {
-                use enum = t.GetEnumerator ()
-                while enum.MoveNext() do
-                    yield Async.RunSynchronously (enum.Current, cancellationToken = ct) }}
+            return t |> Seq.map (startImmediateAsTask ct) }
         #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: list<Async<_>>) : Async<list<_>> =
+        static member Sequence (t: list<Async<'T>>) : Async<list<'T>> =
+        #if FABLE_COMPILER
             let rec loop acc = function
                 | []    -> async.Return (List.rev acc)
                 | x::xs -> async.Bind (x, fun x -> loop (x::acc) xs)
             loop [] t
+        #else
+            async {
+                let mutable coll = ListCollector<'T> ()
+                for e in t do
+                    let! v = e
+                    coll.Add v
+                return coll.Close () }
+        #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t: array<Async<_>>) : Async<array<_>> = async {
@@ -116,7 +126,8 @@ module Extensions =
     type Option<'t> with
 
         /// Returns None if it contains a None element, otherwise a list of all elements
-        static member Sequence (t: seq<option<'T>>) =
+        static member Sequence (t: seq<option<'t>>) =
+        #if FABLE_COMPILER
             let mutable ok = true
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -125,3 +136,103 @@ module Extensions =
                     | Some v -> yield v
                     | None   -> ok <- false })
             if ok then Some (Array.toSeq res) else None
+        #else
+            let mutable accumulator = ArrayCollector<'t> ()
+            let mutable noneFound = false
+            use e = t.GetEnumerator ()
+            while e.MoveNext () && not noneFound do
+                match e.Current with
+                | Some v -> accumulator.Add v
+                | None -> noneFound <-  true
+                
+            if noneFound
+            then None
+            else
+                Some (accumulator.Close () |> Array.toSeq)
+        #endif
+            
+    type ValueOption<'t> with
+
+        /// Returns None if it contains a None element, otherwise a list of all elements
+        static member Sequence (t: seq<voption<'t>>) =
+        #if FABLE_COMPILER
+            let mutable ok = true
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () && ok do
+                    match e.Current with
+                    | ValueSome v -> yield v
+                    | ValueNone   -> ok <- false })
+            if ok then ValueSome (Array.toSeq res) else ValueNone
+        #else
+            let mutable accumulator = ArrayCollector<'t> ()
+            let mutable noneFound = false
+            use e = t.GetEnumerator ()
+            while e.MoveNext () && not noneFound do
+                match e.Current with
+                | ValueSome v -> accumulator.Add v
+                | ValueNone -> noneFound <-  true
+                
+            if noneFound
+            then ValueNone
+            else
+                ValueSome (accumulator.Close () |> Array.toSeq)
+        #endif
+
+    type Choice<'t, 'error> with
+
+        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
+        static member Sequence (t: seq<Choice<_, _>>) =
+        #if FABLE_COMPILER
+            let mutable error = ValueNone
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () && error.IsNone do
+                    match e.Current with
+                    | Choice1Of2 v -> yield v
+                    | Choice2Of2 e -> error <- ValueSome e })
+
+            match error with
+            | ValueNone -> Choice1Of2 (Array.toSeq res)
+            | ValueSome e -> Choice2Of2 e
+        #else
+            let mutable accumulator = ArrayCollector<'t> ()
+            let mutable error = ValueNone
+            use e = t.GetEnumerator ()
+            while e.MoveNext () && error.IsNone do
+                match e.Current with
+                | Choice1Of2 v -> accumulator.Add v
+                | Choice2Of2 x -> error <- ValueSome x
+            match error with
+            | ValueNone -> Choice1Of2 (accumulator.Close () |> Array.toSeq)
+            | ValueSome x -> Choice2Of2 x
+        #endif
+            
+    type Result<'t, 'error> with
+
+        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
+        static member Sequence (t: seq<Result<_, _>>) =
+        #if FABLE_COMPILER
+            let mutable error = ValueNone
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () && error.IsNone do
+                    match e.Current with
+                    | Ok v -> yield v
+                    | Error e -> error <- ValueSome e })
+
+            match error with
+            | ValueNone -> Ok (Array.toSeq res)
+            | ValueSome e -> Error e
+        #else
+            let mutable accumulator = ArrayCollector<'t> ()
+            let mutable error = ValueNone
+            use e = t.GetEnumerator ()
+            while e.MoveNext () && error.IsNone do
+                match e.Current with
+                | Ok v -> accumulator.Add v
+                | Error x -> error <- ValueSome x
+            match error with
+            | ValueNone -> Ok (accumulator.Close () |> Array.toSeq)
+            | ValueSome x -> Error x
+        #endif

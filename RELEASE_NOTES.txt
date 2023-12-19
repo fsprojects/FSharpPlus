@@ -1,0 +1,9 @@
+Release Notes for FSharpPlus 1.6.0-RC1  - December 17 2023
+----------------------------------------------------------
+
+Target net 8
+Add Result.Sequence
+Add Validation.ofOptionWith
+Add List.chunkBy
+Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
+Add limited applicative support to dictionaries

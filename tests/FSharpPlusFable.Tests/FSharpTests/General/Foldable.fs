@@ -9,7 +9,7 @@ open FSharpPlus.Data
 open System
 open System.Collections.ObjectModel
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 let foldables =
     let _10  = foldBack (+) (seq [1;2;3;4]) 0
     let _323 = toList (seq [3;2;3])
@@ -34,7 +34,7 @@ let foldable = testList "Foldable" [
         SideEffects.are [])
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "filterDefaultCustom" [
         #if !FABLE_COMPILER
         testCase "WrappedListA" (fun () ->
@@ -57,7 +57,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "foldAternatives" [
         testCase "Option list" (fun () ->
             let x = choice [None; Some 3; Some 4; None]
@@ -70,7 +70,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "fromToSeq" [
         #if !FABLE_COMPILER
         testCase "dictionary" (fun () ->
@@ -120,13 +120,13 @@ let foldable = testList "Foldable" [
         Assert.IsInstanceOf<Option<seq<int>>> (Some sortedSeq))
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "intersperse" (fun () ->
         equal "a,b,c,d,e" (intersperse ',' "abcde")
         equal ["a";",";"b";",";"c";",";"d";",";"e"] (intersperse "," ["a";"b";"c";"d";"e"]))
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "intercalate" (fun () ->
         equal "Lorem, ipsum, dolor" (intercalate ", " ["Lorem"; "ipsum"; "dolor"]))
 #endif
@@ -163,7 +163,7 @@ let foldable = testList "Foldable" [
         equal 50 (foldMap ((+) 10) iReadOnlyList))
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "exists" (fun () ->
         SideEffects.reset ()
         let _ = exists ((=) 2) [1..3]
@@ -175,7 +175,7 @@ let foldable = testList "Foldable" [
         ())
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "pick" [
         #if !FABLE_COMPILER
         testCase "StringBuilder" (fun () ->
@@ -201,7 +201,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "minimum" [
         testCase "list" (fun () ->
             let _ = minimum [1..3]
@@ -225,7 +225,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "maxBy" [
         testCase "list" (fun () ->
             let _ = maxBy id [1..3]
@@ -249,7 +249,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "length" [
         testCase "list" (fun () ->
             let _ = length [1..3]
@@ -273,7 +273,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testList "tryHead" [
         testCase "seq" (fun () ->
             let s                = tryHead <| seq [1;2]
@@ -306,7 +306,7 @@ let foldable = testList "Foldable" [
     ]
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "tryLast" (fun () ->
         let s                = tryLast <| seq [1;2]
         let s': int option   = tryLast <| seq []
@@ -337,5 +337,5 @@ let foldable = testList "Foldable" [
         equal None sb'
         ())
 #endif
-]
+    ]
 

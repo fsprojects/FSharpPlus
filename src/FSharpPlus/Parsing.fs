@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 [<AutoOpen>]
 module Parsing =
@@ -73,8 +73,8 @@ module Parsing =
             Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
         static member inline ParseArray (_: unit                        , _: ParseArray) = fun (_: (string * string) []) -> ()
-        static member inline ParseArray (_: Tuple<'t1>                  , _: ParseArray) = fun (g: (string * string) []) -> Tuple<_> (parse g.[0]) : Tuple<'t1>
-        static member inline ParseArray (_: Id<'t1>                     , _: ParseArray) = fun (g: (string * string) []) -> Id<_> (parse g.[0])
+        static member inline ParseArray (_: Tuple<'t1>                  , _: ParseArray) = fun (g: (string * string) []) -> tuple1 (parse g.[0]) : Tuple<'t1>
+        static member inline ParseArray (_: Id<'t1>                     , _: ParseArray) = fun (g: (string * string) []) -> Id<_>  (parse g.[0])
         static member inline ParseArray (_: 't1*'t2                     , _: ParseArray) = fun (g: (string * string) []) -> parse g.[0], parse g.[1]
         static member inline ParseArray (_: 't1*'t2'*'t3                , _: ParseArray) = fun (g: (string * string) []) -> parse g.[0], parse g.[1], parse g.[2]
         static member inline ParseArray (_: 't1*'t2'*'t3*'t4            , _: ParseArray) = fun (g: (string * string) []) -> parse g.[0], parse g.[1], parse g.[2], parse g.[3]
@@ -109,14 +109,14 @@ module Parsing =
             | _ -> None
 
         static member inline TryParseArray (_: unit                        , _: TryParseArray) = fun (_: (string * string) []) -> ()
-        static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: (string * string) []) -> Tuple<_> <!> tryParseElemAt 0 g : Tuple<'t1> option
-        static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: (string * string) []) -> Id<_>    <!> tryParseElemAt 0 g
-        static member inline TryParseArray (_: 't1*'t2                     , _: TryParseArray) = fun (g: (string * string) []) -> tuple2   <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g
-        static member inline TryParseArray (_: 't1*'t2'*'t3                , _: TryParseArray) = fun (g: (string * string) []) -> tuple3   <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g
-        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4            , _: TryParseArray) = fun (g: (string * string) []) -> tuple4   <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g
-        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5        , _: TryParseArray) = fun (g: (string * string) []) -> tuple5   <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g
-        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6    , _: TryParseArray) = fun (g: (string * string) []) -> tuple6   <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g
-        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6*'t7, _: TryParseArray) = fun (g: (string * string) []) -> tuple7   <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g <*> tryParseElemAt 6 g
+        static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: (string * string) []) -> tuple1 <!> tryParseElemAt 0 g : Tuple<'t1> option
+        static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: (string * string) []) -> Id<_>  <!> tryParseElemAt 0 g
+        static member inline TryParseArray (_: 't1*'t2                     , _: TryParseArray) = fun (g: (string * string) []) -> tuple2 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g
+        static member inline TryParseArray (_: 't1*'t2'*'t3                , _: TryParseArray) = fun (g: (string * string) []) -> tuple3 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g
+        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4            , _: TryParseArray) = fun (g: (string * string) []) -> tuple4 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g
+        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5        , _: TryParseArray) = fun (g: (string * string) []) -> tuple5 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g
+        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6    , _: TryParseArray) = fun (g: (string * string) []) -> tuple6 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g
+        static member inline TryParseArray (_: 't1*'t2'*'t3*'t4*'t5*'t6*'t7, _: TryParseArray) = fun (g: (string * string) []) -> tuple7 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g <*> tryParseElemAt 4 g <*> tryParseElemAt 5 g <*> tryParseElemAt 6 g
 
 
     /// Gets a tuple with the result of parsing each element of a string array.
@@ -129,10 +129,10 @@ module Parsing =
     let inline scanfn pf : '``(T1 * T2 * ... * Tn)`` = sscanf pf (Console.ReadLine ())
 
     /// Gets a tuple with the result of parsing each element of a string array. Returns None in case of failure.
-    let inline tryParseArray g : '``(T1 * T2 * ... * Tn)`` option = TryParseArray.Invoke g
+    let inline tryParseArray (source: string []) : '``(T1 * T2 * ... * Tn)`` option = TryParseArray.Invoke (Array.map (fun x -> (x, "")) source)
 
     /// Gets a tuple with the result of parsing each element of a formatted text. Returns None in case of failure.
-    let inline trySscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = getGroups pf s |> tryParseArray
+    let inline trySscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = getGroups pf s |> TryParseArray.Invoke
 
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console. Returns None in case of failure.
     let inline tryScanfn pf : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf (Console.ReadLine ())

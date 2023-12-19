@@ -180,3 +180,49 @@ module MatrixTests =
         let (Matrix(_x1,_x2,_x3)) = m1
         let (Matrix(_y1: int*int*int*int*int*int*int*int*int*int*int*int*int*int*int*int,_y2,_y3,_y4,_y5,_y6,_y7,_y8)) = m2
         ()
+
+open Helpers
+
+module TypeProviderTests =
+    type ``0`` = TypeNat<0>
+    type ``7`` = TypeNat<value = 7>
+    [<Test>]
+    let natTests() =
+        Assert (``0``.Value =^ Z)
+        areEqual 0 (``0``.RuntimeValue ``0``.Value)
+        Assert (``7``.Value =^ (Z |> S |> S |> S |> S |> S |> S |> S))
+        areEqual 7 (``7``.RuntimeValue ``7``.Value)
+        
+    [<Test>]
+    let matrixTests() =
+        let m = matrix ((1, 2, 3), (4, 5, 6), (7, 8, 9))
+        let row1 = Matrix.Row<1>.AsMatrix m
+        let col2 = Matrix.Col<2>.AsVector m
+        let center = Matrix.Slice<1, 1, 1, 1>.Invoke m
+        Assert (Matrix.rowLength center =^ S Z)
+        Assert (Matrix.colLength center =^ S Z)
+        areEqual 5 (Matrix.get Z Z center)
+        Assert (Matrix.rowLength row1 =^ S Z)
+        Assert (Matrix.colLength row1 =^ (Z |> S |> S |> S))
+        areEqual 5 (Matrix.get Z (S Z) row1)
+        areEqual [3; 6; 9] (Vector.toList col2)
+
+module TestFunctors1 =
+    [<Test>]
+    let applicativeOperatorWorks() =
+        let v = vector ((fun i -> i + 1), (fun i -> i * 2))
+        let u = vector (2, 3)
+        let vu = v <*> u
+        NUnit.Framework.Assert.IsInstanceOf<Option<Vector<int,S<S<Z>>>>> (Some vu)
+        CollectionAssert.AreEqual ([|3; 6|], Vector.toArray vu)
+
+module TestFunctors2 =
+    open FSharpPlus
+
+    [<Test>]
+    let applicativeWorksWithoutSubsumption() =
+        let v = vector ((fun i -> i + 1), (fun i -> i * 2))
+        let u = vector (2, 3)
+        let vu = v <*> u
+        NUnit.Framework.Assert.IsInstanceOf<Option<Vector<int,S<S<Z>>>>> (Some vu)
+        CollectionAssert.AreEqual ([|3; 6|], Vector.toArray vu)

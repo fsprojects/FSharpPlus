@@ -129,10 +129,20 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
-    let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
-        let lst = traverse f (toList s) : '``Functor<'List<'U>>``
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+
+    /// <summary>
+    /// Maps each element of the list to an action, evaluates these actions from left to right and collect the results.
+    /// </summary>
+    let inline traverse (f: 'T -> '``Functor<'U>``) (source: NonEmptyList<'T>) =
+        let lst = traverse f (toList source) : '``Functor<'List<'U>>``
         (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
+
+    /// <summary>
+    /// Evaluates each action in the list from left to right and collect the results.
+    /// </summary>
+    let inline sequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` = traverse id source
+
 #endif
 
     /// <summary>Returns the average of the elements in the list.</summary>
@@ -145,6 +155,13 @@ module NonEmptyList =
     /// <param name="list">The input list.</param>
     /// <returns>The resulting average.</returns>
     let inline averageBy (projection: 'T -> ^U) list = List.averageBy projection (list.Head :: list.Tail)
+
+    /// <summary>Returns a list that contains no duplicate entries according to the generic hash and equality comparisons
+    /// on the keys returned by the given key-generating function.
+    /// If an element occurs multiple times in the list then the later occurrences are discarded.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>The resulting list without duplicates.</returns>
+    let distinct (list: NonEmptyList<'T>) = list |> Seq.distinct |> ofSeq
 
     /// <summary>Applies a function to each element of the list, threading an accumulator argument
     /// through the computation. Apply the function to the first two elements of the list.
@@ -190,7 +207,7 @@ module NonEmptyList =
     /// Equivalent to [start..stop] on regular lists.
     let inline range (start: 'T) stop = create start (List.drop 1 [start..stop])
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// Reduces using alternative operator `<|>`.
     let inline choice (list: NonEmptyList<'``Alt<'T>``>) = reduce (<|>) list : '``Alt<'T>``
 #endif
@@ -230,10 +247,11 @@ type NonEmptyList<'t> with
         {Head = r.Head; Tail = r.Tail}
 
     static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
+    static member Lift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.ofList (List.lift3 f (NonEmptyList.toList x) (NonEmptyList.toList y) (NonEmptyList.toList z))
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
     #endif
 
@@ -246,7 +264,7 @@ type NonEmptyList<'t> with
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
     static member Sum (source: seq<NonEmptyList<'T>>) = source |> Seq.map NonEmptyList.toList |> List.concat |> NonEmptyList.ofList
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s    
 
@@ -254,7 +272,10 @@ type NonEmptyList<'t> with
     static member ToSeq (s: NonEmptyList<'a>, [<Optional>]_impl: ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
+    static member inline Traverse (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Sequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.sequence s
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList
@@ -276,11 +297,11 @@ type NonEmptyList<'t> with
 module NonEmptyListBuilder =
     type NelBuilder () =
         [<CompilerMessage("A NonEmptyList doesn't support the Zero operation.", 708, IsError = true)>]
-        member __.Zero () = raise Internals.Errors.exnUnreachable
-        member __.Combine (a: 'T, { Head = b; Tail = c }) = { Head = a; Tail = b::c }
-        member __.Yield x = x
-        member __.Delay expr = expr ()
-        member __.Run (x: NonEmptyList<_>) = x
+        member _.Zero () = raise Internals.Errors.exnUnreachable
+        member _.Combine (a: 'T, { Head = b; Tail = c }) = { Head = a; Tail = b::c }
+        member _.Yield x = x
+        member _.Delay expr = expr ()
+        member _.Run (x: NonEmptyList<_>) = x
         
     [<System.Obsolete("Use nelist instead.")>]
     let nel = NelBuilder ()
@@ -290,5 +311,5 @@ module NonEmptyListBuilder =
 [<AutoOpen>]
 module NonEmptyListBuilderExtensions =
     type NelBuilder with
-        member __.Combine (a: 'T, b: 'T) = { Head = a; Tail = [b] }
-        member __.Run x = { Head = x; Tail = [] }
+        member _.Combine (a: 'T, b: 'T) = { Head = a; Tail = [b] }
+        member _.Run x = { Head = x; Tail = [] }

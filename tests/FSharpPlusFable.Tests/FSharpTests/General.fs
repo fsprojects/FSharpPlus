@@ -158,7 +158,7 @@ let monadTransformers = testList "MonadTransformers" [
     #endif
     ]
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
         static member Dimap ((Fun f): Fun<'B,'C>, g: 'A->'B, h:'C->'D) = Fun (g >> f >> h)
@@ -169,7 +169,7 @@ module ProfunctorDefaults =
     ()
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 module BifunctorDefaults =
     type Tup<'a,'b> = Tup of ('a * 'b) with
         static member Bimap (Tup (a, b), f, g) = Tup (f a, g b)
@@ -180,7 +180,7 @@ module BifunctorDefaults =
     ()
 #endif
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 type StringCodec<'t> = StringCodec of ReaderT<string, Result<'t,string>> * ('t -> Const<string, unit>) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (map f d, contramap g e)
 module StringCodec =
@@ -189,7 +189,7 @@ module StringCodec =
 #endif
 
 let invariant = testList "Invariant" [
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "testStringToIntDerivedFromFloat" (fun () ->
         let floatCodec = StringCodec (ReaderT (tryParse >> Option.toResultWith "Parse error"), string<float> >> Const)
         let floatParsed  = StringCodec.decode floatCodec "1.8"
@@ -205,54 +205,6 @@ let invariant = testList "Invariant" [
 #endif
     ]
 
-type Sum<'a> = Sum of 'a with
-    static member inline get_Zero () = Sum 0
-    static member inline (+) (Sum (x:'n), Sum (y:'n)) = Sum (x + y)
-
-
-let splits = testList "Splits" [
-#if !FABLE_COMPILER
-    testCase "splitArraysAndStrings" (fun () -> 
-        let a1 = "this.isABa.tABCest"  |> split [|"AT" ; "ABC" |]
-        let a2 = "this.isABa.tABCest"B |> split [|"AT"B; "ABC"B|] |> Seq.map System.Text.Encoding.ASCII.GetString
-
-        let b1 = "this.is.a.t...est"  |> split [|"." ; "..." |]
-        let b2 = "this.is.a.t...est"B |> split [|"."B; "..."B|] |> Seq.map System.Text.Encoding.ASCII.GetString
-
-        Assert.IsTrue((toList a1 = toList a2))
-        Assert.IsTrue((toList b1 = toList b2))
-        Assert.IsInstanceOf<Option<string []>> (Some a1))
-#endif
-
-#if !FABLE_COMPILER
-    testCase "replaceArraysAndStrings" (fun () -> 
-        let a1 = "this.isABa.tABCest"  |> replace "AT"  "ABC"
-        let a2 = "this.isABa.tABCest"B |> replace "AT"B "ABC"B |> System.Text.Encoding.ASCII.GetString
-
-        let b1 = "this.is.a.t...est"  |> replace "."  "..."
-        let b2 = "this.is.a.t...est"B |> replace "."B "..."B |> System.Text.Encoding.ASCII.GetString
-
-        Assert.IsTrue ((a1 = a2))
-        Assert.IsTrue ((b1 = b2)))
-#endif
-
-#if !FABLE_COMPILER
-    testCase "intercalateArraysAndStrings" (fun () -> 
-        let a1 = [|"this" ; "is" ; "a" ; "test" |] |> intercalate " "
-        let a2 = [|"this"B; "is"B; "a"B; "test"B|] |> intercalate " "B |> System.Text.Encoding.ASCII.GetString
-
-        //let b = [WrappedListB [1;2]; WrappedListB [3;4]; WrappedListB [6;7]] |> intercalate (WrappedListB [0;1])
-
-        let _c = [| Sum 1; Sum 2 |] |> intercalate (Sum 10)
-        let d  = WrappedListB [Sum 1; Sum 2] |> intercalate (Sum 10)
-        let _e = intercalate 10 (seq [1; 2; 3])
-
-        Assert.IsTrue((a1 = a2))
-        //Assert.IsTrue((b = WrappedListB [1; 2; 0; 1; 3; 4; 0; 1; 6; 7]))
-        // Assert.IsTrue((c = Sum 13))
-        Assert.IsTrue((d = Sum 13)))
-#endif
-    ]
 
 let bitConverter = testList "BitConverter" [
 #if !FABLE_COMPILER
@@ -282,12 +234,18 @@ let bitConverter = testList "BitConverter" [
 
 let curry = testList "Curry" [
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "curryTest" (fun () ->
+    
+        #if !FABLE_COMPILER
         let f1  (x: Tuple<_>) = [x.Item1]
+        #endif
+        
         let f2  (x, y)    = [x + y]
         let f3  (x, y, z) = [x + y + z]
         let f7  (t1, t2, t3, t4, t5, t6, t7) = [t1+t2+t3+t4+t5+t6+t7]
+        
+        #if !FABLE_COMPILER
         let f8  (t1, t2, t3, t4, t5, t6, t7: float, t8: char) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8]
         let f9  (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9]
         let f15 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15]
@@ -295,23 +253,30 @@ let curry = testList "Curry" [
         let f17 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16, t17) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16+t17]
 
         let _x1  = curryN f1 100
+        #endif
+        
         let _x2  = curryN f2 1 2
         let _x3  = curryN f3 1 2 3
         let _x7  = curryN f7 1 2 3 4 5 6 7
+        
+        #if !FABLE_COMPILER
         let _x8  = curryN f8 1 2 3 4 5 6 7. '8'
         let _x9  = curryN f9 1 2 3 4 5 6 7. '8' 9M
         let _x15 = curryN f15 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15
         let _x16 = curryN f16 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16
         let _x17 = curryN f17 1 2 3 4 5 6 7. '8' 9M 10 11 12 13 14 15 16 17
+        #endif
 
         ())
 #endif
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     testCase "uncurryTest" (fun () ->
         let g2  x y   = [x + y]
         let g3  x y z = [x + y + z]
         let g7  a b c d e f g = [a + b + c + d + e + f + g]
+        
+        #if !FABLE_COMPILER
         let g8  t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8]
         let g9  t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal)  = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9]
         let g12 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12]
@@ -319,14 +284,19 @@ let curry = testList "Curry" [
         let g16 t1 t2 t3 t4 t5 t6 (t7: float) (t8: char) (t9: decimal) t10 t11 t12 t13 t14 t15 t16 = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16]
 
         let _y1  = uncurryN string (Tuple<_> 1)
+        #endif
+        
         let _y2  = uncurryN g2 (1, 2)
         let _y3  = uncurryN g3 (1, 2, 3)
         let _y7  = uncurryN g7 (1, 2, 3, 4, 5, 6, 7)
+        
+        #if !FABLE_COMPILER
         let _y8  = uncurryN g8 (1, 2, 3, 4, 5, 6, 7. , '8')
         let _y9  = uncurryN g9 (1, 2, 3, 4, 5, 6, 7. , '8', 9M)
         let _y12 = uncurryN g12 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12)
         let _y15 = uncurryN g15 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15)
         let _y16 = uncurryN g16 (1, 2, 3, 4, 5, 6, 7. , '8', 9M, 10 , 11, 12, 13, 14, 15, 16)
+        #endif
 
         ())
 #endif
@@ -341,7 +311,7 @@ let memoization = testList "Memoization" [
 
         let f x                       = printfn "calculating"; effs.Add "f"; string x
         let g x (y:string) z : uint32 = printfn "calculating"; effs.Add "g"; uint32 (x * int y + int z)
-        let h x y z                   = printfn "calculating"; effs.Add "h"; new System.DateTime (x, y, z)
+        let h (x: int) (y: int) (z: int) = printfn "calculating"; effs.Add "h"; new System.DateTime (x, y, z)
         let sum2 (a:int)       = printfn "calculating"; effs.Add "sum2"; (+) a
         let sum3 a (b:int) c   = printfn "calculating"; effs.Add "sum3"; a + b + c
         let sum4 a b c d : int = printfn "calculating"; effs.Add "sum4"; a + b + c + d
@@ -388,8 +358,10 @@ open General.Foldable
 open General.Functor
 open General.Indexable
 open General.Monad
+open General.MonoidCompile
 open General.Monoid
 open General.Parsing
+open General.Splits
 open General.Traversable
 open General.Lensing
 open General.Numeric
@@ -397,7 +369,6 @@ open General.Numeric
 let generalTests = testList "General" [
     idiomBrackets
     monadTransformers
-    splits
     bitConverter
     curry
     memoization
@@ -408,6 +379,7 @@ let generalTests = testList "General" [
     functor
     indexable
     monad
+    // monoidCompile
     monoid
     parsing
     traversable

@@ -304,17 +304,57 @@ module Fold =
                 return foo |> Option.toResultWith NotFound
             }
 
-    // An example application layer that defines an interpreter for the GetFoo program which targets the async monad
-    module App =
-        let interpreter =
-            Free.fold (function
-                | GetFoo.Read (fooId, next) -> async { return Some({ Id = fooId; Name = "test" }) |> next })
+    [<Test>]
+    let ``should interpret program with fold`` () =
+        let request: GetFoo.Request = { Id = FooId "1" }
+        let response = 
+            request
+            |> GetFoo.handle 
+            |> Free.fold 
+                (function
+                | GetFoo.Read (fooId, next) -> { Id = fooId; Name = "test" } |> Some |> next |> result) 
+            |> Identity.run
+
+        areStEqual (Ok { Id = FooId "1"; Name = "test" }) response
+
+module Lift3 =
+
+    type Instruction<'next> =
+        | Read of int * (string -> 'next)
+        static member Map(i, f) =
+            match i with
+            | Read (x, next) -> Read(x, next >> f)
+
+    let read x = Read(x, id) |> Free.liftF
+
+    type ApplicativeBuilder<'a>() =
+        inherit MonadFxStrictBuilder<'a>()
+
+        member inline _.BindReturn(x, f) = map f x
+
+    let applicative<'a> = ApplicativeBuilder<'a>()
 
     [<Test>]
-    let interpretProgramWithFold =
-        async {
-            let request: GetFoo.Request = { Id = FooId "1" }
-            let! response = request |> GetFoo.handle |> App.interpreter
+    let ``should be able to use applicative CE which requires Lift3`` () =
+        let program = 
+            applicative {
+                let! a = read 1
+                and! b = read 2
+                and! c = read 3
+                return a, b, c
+            }
 
-            Assert.AreEqual(Some({ Id = FooId "1"; Name = "test" }), response)
-        }
+        let result = 
+            program 
+            |> Free.fold 
+                (function 
+                | Read (i, next) -> i |> string |> next |> result) 
+            |> Identity.run
+
+        areStEqual result ("1", "2", "3")
+
+    [<Test>]
+    let hoistFunction () =
+        let x: Free<Result<int, string>, int> = Pure 4
+        let y = Free.hoist Result.toOption x
+        Assert.IsInstanceOf<Option<Free<option<int>, int>>> (Some y)

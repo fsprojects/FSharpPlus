@@ -2,6 +2,7 @@
 
 open System
 open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
 
 type Item1 = static member inline Invoke value = (^t : (member Item1 : _) value)
 type Item2 = static member inline Invoke value = (^t : (member Item2 : _) value)
@@ -25,7 +26,7 @@ type MapItem1 =
         let x1 = (^t : (member Item1: 't1) t)
         Tuple<_,_,_,_,_,_,_,_> (fn x1, x2, x3, x4, x5, x6, x7, xr)
 
-    static member MapItem1 ( x: Tuple<_>         , fn) = Tuple<_> (fn x.Item1)
+    static member MapItem1 ( x: Tuple<_>         , fn) = tuple1 (fn x.Item1)
 
     #endif
 
@@ -160,9 +161,7 @@ type MapItem5 =
         call (Unchecked.defaultof<MapItem5>, value)
 
 
-#if !FABLE_COMPILER
-
-open FSharpPlus.Internals.Prelude
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type Curry =
     static member inline Invoke f =
@@ -174,7 +173,7 @@ type Curry =
             let _f _ = Constraints.whenNestedTuple t : ('t1*'t2*'t3*'t4*'t5*'t6*'t7*'tr)
             f (Tuple<'t1,'t2,'t3,'t4,'t5,'t6,'t7,'tr> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype))
     
-    static member Curry (_: Tuple<'t1>        , _: Curry) = fun f t1                   -> f (Tuple<_> t1)
+    static member Curry (_: Tuple<'t1>        , _: Curry) = fun f t1                   -> f (tuple1 t1)
     static member Curry ((_, _)               , _: Curry) = fun f t1 t2                -> f (t1, t2)
     static member Curry ((_, _, _)            , _: Curry) = fun f t1 t2 t3             -> f (t1, t2, t3)
     static member Curry ((_, _, _, _)         , _: Curry) = fun f t1 t2 t3 t4          -> f (t1, t2, t3, t4)

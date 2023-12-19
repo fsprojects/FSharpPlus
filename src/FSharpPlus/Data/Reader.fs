@@ -23,6 +23,9 @@ module Reader =
 
     /// Combines two Readers into one by applying a mapping function.
     let map2 (mapping: 'T->'U->'V) (Reader x) (Reader y) = Reader (fun r -> mapping (x r) (y r)) : Reader<'R,'V>
+
+    /// Combines three Readers into one by applying a mapping function.
+    let map3 (mapping: 'T->'U->'V->'W) (Reader x) (Reader y) (Reader z) = Reader (fun r -> mapping (x r) (y r) (z r)) : Reader<'R,'W>
     
     /// Zips two Readers into one.
     let zip (x: Reader<'R,'T>) (y: Reader<'R,'U>) = map2 tuple2 x y        : Reader<'R, 'T * 'U>
@@ -40,18 +43,42 @@ type Reader<'r,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map   (x: Reader<'R,'T>, f) = Reader.map f x   : Reader<'R,'U>
 
+    /// <summary>Lifts a function into a Reader. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (f: 'T->'U, x: Reader<'R, 'T>) : Reader<'R, 'U> = Reader.map f x
+
     static member Return x = Reader (fun _ -> x)                 : Reader<'R,'T>
     static member (>>=) (x: Reader<'R,'T>, f) = Reader.bind f x  : Reader<'R,'U>
     static member (<*>) (f, x: Reader<'R,'T>) = Reader.apply f x : Reader<'R,'U>
+
+    /// <summary>
+    /// Sequences two Readers left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member ( *>) (x: Reader<'R, 'T>, y: Reader<'R, 'U>) : Reader<'R, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Reader.map/> x : Reader<'R, 'U->'U>) </Reader.apply/> y
+
+    /// <summary>
+    /// Sequences two Readers left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member (<* ) (x: Reader<'R, 'U>, y: Reader<'R, 'T>) : Reader<'R, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Reader.map/> x : Reader<'R, 'T->'U>) </Reader.apply/> y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift2 (f, x: Reader<'R,'T>, y: Reader<'R,'U>) = Reader.map2 f x y : Reader<'R,'V>
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Lift3 (f, x: Reader<'R,'T>, y: Reader<'R,'U>, z: Reader<'R,'V>) = Reader.map3 f x y z : Reader<'R,'W>
 
     static member get_Ask ()    = Reader.ask                     : Reader<'R,'R>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Local (m, f: 'R1->'R2) = Reader.local f m      : Reader<'R1,'T>
 
-    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Zip (x, y) = Reader.zip x y    
+    static member Zip (x, y) = Reader.zip x y
 
     static member inline Extract (Reader (f : 'Monoid -> 'T)) = f (Zero.Invoke ()) : 'T
     static member inline (=>>)   (Reader (g : 'Monoid -> 'T), f : Reader<'Monoid,'T> -> 'U) = Reader (fun a -> f (Reader (fun b -> (g (Plus.Invoke a b))))) : Reader<'Monoid,'U>
@@ -64,7 +91,7 @@ type Reader<'r,'t> with
     static member Delay (body: unit->Reader<'R,'T>)  = Reader (fun s -> Reader.run (body ()) s) : Reader<'R,'T>
 
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Monad Transformer for Reader<'R, 'T>
 [<Struct>]
@@ -77,34 +104,75 @@ module ReaderT =
 
     let inline hoist (x: Reader<'R, 'T>) = (ReaderT << (fun a -> result << a) << Reader.run) x : ReaderT<'R, '``Monad<'T>``>
 
-    let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m)                                : ReaderT<'R, '``Monad<'U>``>
+    let inline map   (f: 'T->'U) (ReaderT m: ReaderT<'R, '``Monad<'T>``>) = ReaderT (map f << m) : ReaderT<'R, '``Monad<'U>``>
 
     /// Combines two ReaderTs into one by applying a mapping function.
     let inline map2 (f: 'T->'U->'V) (ReaderT x: ReaderT<'R,'``Monad<'T>``>) (ReaderT y: ReaderT<'R,'``Monad<'U>``>) = ReaderT (fun a -> lift2 f (x a) (y a)) : ReaderT<'R,'``Monad<'V>``>
+
+    /// Combines three ReaderTs into one by applying a mapping function.
+    let inline map3 (f: 'T->'U->'V->'W) (ReaderT x: ReaderT<'R,'``Monad<'T>``>) (ReaderT y: ReaderT<'R,'``Monad<'U>``>) (ReaderT z: ReaderT<'R,'``Monad<'V>``>) = ReaderT (fun a -> lift3 f (x a) (y a) (z a)) : ReaderT<'R,'``Monad<'W>``>
 
     let inline apply (ReaderT (f: _ -> '``Monad<'T -> 'U>``)) (ReaderT (x: _->'``Monad<'T>``)) = ReaderT (fun r -> f r <*> x r) : ReaderT<'R, '``Monad<'U>``>
 
     /// Zips two ReaderTs into one.
     let inline zip (x: ReaderT<'S,'``Monad<'T>``>) (y: ReaderT<'S,'``Monad<'U>``>) = apply (map tuple2 x) y : ReaderT<'S,'``Monad<'T * 'U>``>
 
-    let inline bind  (f: 'T->_) (ReaderT (m: _->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r))            : ReaderT<'R, '``Monad<'U>``>
+    let inline bind  (f: 'T->_) (ReaderT (m: _->'``Monad<'T>``)) = ReaderT (fun r -> m r >>= (fun a -> run (f a) r)) : ReaderT<'R, '``Monad<'U>``>
 
     /// Embed a Monad<'T> into an ReaderT<'R, 'Monad<'T>>
-    let lift m = ReaderT (fun _ -> m)                                                                                           : ReaderT<'R, '``Monad<'T>``>
+    let lift m = ReaderT (fun _ -> m) : ReaderT<'R, '``Monad<'T>``>
 
 type ReaderT<'r,'``monad<'t>``> with
 
-    static member inline Return (x: 'T) = ReaderT (fun _ -> result x)                                                 : ReaderT<'R, '``Monad<'T>``>
+    static member inline Return (x: 'T) = ReaderT (fun _ -> result x) : ReaderT<'R, '``Monad<'T>``>
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Map   (x: ReaderT<'R, '``Monad<'T>``>, f: 'T->'U)                        = ReaderT.map   f x : ReaderT<'R, '``Monad<'U>``>
+    static member inline Map   (x: ReaderT<'R, '``Monad<'T>``>, f: 'T->'U) : ReaderT<'R, '``Monad<'U>``> = ReaderT.map f x
+
+    /// <summary>Lifts a function into a ReaderT. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member inline (<!>) (f: 'T->'U, x: ReaderT<'R, '``Monad<'T>``>) : ReaderT<'R, '``Monad<'U>``> = ReaderT.map f x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Lift2 (f: 'T->'U->'V, x: ReaderT<'S,'``Monad<'T>``>, y: ReaderT<'S,'``Monad<'U>``>) : ReaderT<'S,'``Monad<'V>``> = ReaderT.map2 f x y
+    static member inline Lift2 (f: 'T->'U->'V, x: ReaderT<'R,'``Monad<'T>``>, y: ReaderT<'R,'``Monad<'U>``>) : ReaderT<'R,'``Monad<'V>``> = ReaderT.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: ReaderT<'R,'``Monad<'T>``>, y: ReaderT<'R,'``Monad<'U>``>, z: ReaderT<'R,'``Monad<'V>``>) : ReaderT<'R,'``Monad<'W>``> = ReaderT.map3 f x y z
 
     static member inline (<*>) (f: ReaderT<_,'``Monad<'T -> 'U>``>, x: ReaderT<_,'``Monad<'T>``>) = ReaderT.apply f x : ReaderT<'R, '``Monad<'U>``>
+
+    /// <summary>
+    /// Sequences two Readers left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: ReaderT<'R, '``Monad<'T>``>, y: ReaderT<'R, '``Monad<'U>``>) : ReaderT<'R, '``Monad<'U>``> = ((fun (_: 'T) (k: 'U) -> k) </ReaderT.map/> x : ReaderT<'R, '``Monad<'U->'U>``>) </ReaderT.apply/> y
+
+    /// <summary>
+    /// Sequences two Readers left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<* ) (x: ReaderT<'R, '``Monad<'U>``>, y: ReaderT<'R, '``Monad<'T>``>) : ReaderT<'R, '``Monad<'U>``> = ((fun (k: 'U) (_: 'T) -> k ) </ReaderT.map/> x : ReaderT<'R, '``Monad<'T->'U>``>) </ReaderT.apply/> y
+
+    /// <summary>
+    /// Takes a Reader value and a function from a plain type to a Reader value, and returns a new Reader value.
+    /// </summary>
+    /// <category index="2">Monad</category>
     static member inline (>>=) (x: ReaderT<_,'``Monad<'T>``>, f: 'T->ReaderT<'R,'``Monad<'U>``>)  = ReaderT.bind  f x : ReaderT<'R, '``Monad<'U>``>
-    
+
+    /// <summary>
+    /// Composes left-to-right two Reader functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member (>=>) (f, (g: 'U -> _)) : 'T -> Reader<'R, 'V> = fun x -> Reader.bind g (f x)
+
+    /// <summary>
+    /// Composes left-to-right two Reader functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> ReaderT<_,'``Monad<'U>``>, g: 'U -> ReaderT<'R,'``Monad<'V>``>) : 'T -> ReaderT<'R,'``Monad<'V>``> = fun x -> ReaderT.bind g (f x)
+
     static member inline get_Empty () = ReaderT (fun _ -> getEmpty ()) : ReaderT<'R, '``MonadPlus<'T>``>
     static member inline (<|>) (ReaderT m, ReaderT n) = ReaderT (fun r -> m r <|> n r) : ReaderT<'R, '``MonadPlus<'T>``>
 
@@ -121,7 +189,7 @@ type ReaderT<'r,'``monad<'t>``> with
 
     static member inline LiftAsync (x: Async<'T>) = (ReaderT.lift (liftAsync x)         : ReaderT<'R,'``MonadAsync<'T>``>)
 
-    static member inline CallCC (f: ('T -> ReaderT<'R, Cont<_,'U>>) -> _)               : ReaderT<'R,'``MonadCont<'C,'T>``> =
+    static member inline CallCC (f: ('T -> ReaderT<'R, '``MonadCont<'C,'U>``>) -> _)    : ReaderT<'R,'``MonadCont<'C,'T>``> =
         ReaderT (fun r -> callCC <| fun c -> ReaderT.run (f (fun a -> ReaderT <| fun _ -> c a)) r)
           
     static member inline get_Ask () = ReaderT result                                    : ReaderT<'R,'``Monad<'T>``>
@@ -131,11 +199,11 @@ type ReaderT<'r,'``monad<'t>``> with
     static member inline Catch (m: ReaderT<'R,'``MonadError<'E1,'T>``>, h: 'E1 -> _) =
         ReaderT (fun s -> catch (ReaderT.run m s)   (fun e -> ReaderT.run (h e) s))     : ReaderT<'R,'``MonadError<'E2,'T>``>
 
-    static member inline Tell   w           = w |> tell |> ReaderT.lift                 : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
+    static member inline Tell  (w: 'Monoid) = w |> tell |> ReaderT.lift                 : ReaderT<'R, '``MonadWriter<'Monoid,unit>``>
     static member inline Listen (ReaderT m) = ReaderT (fun w -> listen (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T*'Monoid>``>
     static member inline Pass   (ReaderT m) = ReaderT (fun w -> pass   (m w))           : ReaderT<'R, '``MonadWriter<'Monoid,'T>``>   
 
-    static member inline get_Get () = ReaderT.lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
-    static member inline Put x      = x |> put |> ReaderT.lift : ReaderT<'R, '``MonadState<'S, unit>``>
+    static member inline get_Get ()  = ReaderT.lift get         : ReaderT<'R, '``MonadState<'S, 'S>``>
+    static member inline Put (x: 'S) = x |> put |> ReaderT.lift : ReaderT<'R, '``MonadState<'S, unit>``>
 
 #endif

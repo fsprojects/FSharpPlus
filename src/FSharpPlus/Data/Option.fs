@@ -6,7 +6,7 @@ open FSharpPlus.Internals.Prelude
 open FSharpPlus.Control
 
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Additional operations on Option
 [<RequireQualifiedAccess>]
@@ -34,6 +34,7 @@ module OptionT =
     let inline apply (OptionT f: OptionT<'``Monad<option<('T -> 'U)>``>) (OptionT x: OptionT<'``Monad<option<'T>``>) = OptionT (map Option.apply f <*> x) : OptionT<'``Monad<option<'U>``>    
     let inline map  (f: 'T->'U) (OptionT m: OptionT<'``Monad<option<'T>``>)                                          = OptionT (map (Option.map f) m) : OptionT<'``Monad<option<'U>``>
     let inline map2 (f: 'T->'U->'V) (OptionT x: OptionT<'``Monad<option<'T>>``>) (OptionT y: OptionT<'``Monad<option<'U>>``>) = OptionT (lift2 (Option.map2 f) x y) : OptionT<'``Monad<option<'V>>``>
+    let inline map3 (f: 'T->'U->'V->'W) (OptionT x: OptionT<'``Monad<option<'T>>``>) (OptionT y: OptionT<'``Monad<option<'U>>``>) (OptionT z: OptionT<'``Monad<option<'V>>``>) = OptionT (lift3 (Option.map3 f) x y z) : OptionT<'``Monad<option<'W>>``>
 
 type OptionT<'``monad<option<'t>>``> with
     
@@ -45,11 +46,28 @@ type OptionT<'``monad<option<'t>>``> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift2 (f: 'T->'U->'V, x: OptionT<'``Monad<option<'T>``>, y: OptionT<'``Monad<option<'U>``>) = OptionT.map2 f x y  : OptionT<'``Monad<option<'V>``>
 
-    static member inline (<*>)  (f: OptionT<'``Monad<option<('T -> 'U)>``>, x: OptionT<'``Monad<option<'T>``>) = OptionT.apply f x : OptionT<'``Monad<option<'U>``>
-    static member inline (>>=)  (x: OptionT<'``Monad<option<'T>``>, f: 'T -> OptionT<'``Monad<option<'U>``>)   = OptionT.bind  f x
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f: 'T->'U->'V->'W, x: OptionT<'``Monad<option<'T>``>, y: OptionT<'``Monad<option<'U>``>, z: OptionT<'``Monad<option<'W>``>) = OptionT.map3 f x y z : OptionT<'``Monad<option<'W>``>
 
-    static member inline get_Empty () = OptionT <| result None : OptionT<'``MonadPlus<option<'T>``>
-    static member inline (<|>) (OptionT x, OptionT y) = OptionT <| (x  >>= (fun maybe_value -> match maybe_value with Some value -> result (Some value) | _ -> y)) : OptionT<'``MonadPlus<option<'T>``>    
+    static member inline (<*>) (f: OptionT<'``Monad<option<('T -> 'U)>``>, x: OptionT<'``Monad<option<'T>``>) = OptionT.apply f x : OptionT<'``Monad<option<'U>``>
+    static member inline (>>=) (x: OptionT<'``Monad<option<'T>``>, f: 'T -> OptionT<'``Monad<option<'U>``>)   = OptionT.bind  f x
+
+    /// <summary>
+    /// Composes left-to-right two Option functions (Kleisli composition).
+    /// </summary>
+    /// <category index="2">Monad</category>
+    static member inline (>=>) (f: 'T -> OptionT<'``Monad<option<'U>``>, g: 'U -> OptionT<'``Monad<option<'V>``>) : 'T -> OptionT<'``Monad<option<'V>``> = fun x -> OptionT.bind g (f x)
+
+    static member inline get_Zero () : OptionT<'``MonadPlus<option<'T>``> = OptionT <| result None
+    static member inline (+) (OptionT x, OptionT y) : OptionT<'``MonadPlus<option<'T>``> =
+        OptionT <| (x >>= function
+            | None -> y
+            | Some x -> y >>= function
+                | None -> result (Some x)
+                | Some y -> result (Some (x ++ y)))
+    
+    static member inline get_Empty () : OptionT<'``MonadPlus<option<'T>``> = OptionT <| result None
+    static member inline (<|>) (OptionT x, OptionT y) : OptionT<'``MonadPlus<option<'T>``> = OptionT <| (x >>= function Some value -> result (Some value) | _ -> y)
 
     static member inline TryWith (source: OptionT<'``Monad<option<'T>>``>, f: exn -> OptionT<'``Monad<option<'T>>``>) = OptionT (TryWith.Invoke (OptionT.run source) (OptionT.run << f))
     static member inline TryFinally (computation: OptionT<'``Monad<option<'T>>``>, f) = OptionT (TryFinally.Invoke     (OptionT.run computation) f)

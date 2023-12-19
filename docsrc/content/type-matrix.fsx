@@ -1,7 +1,8 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus.TypeLevel/bin/Release/netstandard2.0/FSharpPlus.TypeLevel.dll"
 
 (**
 Matrix<'NumType,'Rows,'Cols>
@@ -31,9 +32,12 @@ Examples
 --------
 *)
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
-#r @"../../src/FSharpPlus.TypeLevel/bin/Release/net45/FSharpPlus.TypeLevel.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+#r @"nuget: FSharpPlus.TypeLevel"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Data

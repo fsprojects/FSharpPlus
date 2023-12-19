@@ -8,15 +8,28 @@ open System.Runtime.InteropServices
 open FSharpPlus
 open FSharpPlus.Internals
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type OfSeq =
     inherit Default1
     
-    static member inline OfSeq ((x: seq<'t>                 , _: 'R                              ), _: Default5) = (^R : (new : seq<'t> -> ^R) x) : 'R
-    static member inline OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: 'R                              ), _: Default5) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
+    static member inline OfSeq ((x: seq<'t>, _: 'R), _: Default5) : 'R =
+        #if TEST_TRACE
+        Traces.add "OfSeq, Default5-seq<'t>"
+        #endif
+        (^R : (new : seq<'t> -> ^R) x)
 
-    static member inline OfSeq ((x: seq<'t>                 , _: '``Foldable'<T>``               ), _: Default4) = x |> Seq.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
+    static member inline OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: 'R), _: Default5) : 'R =
+        #if TEST_TRACE
+        Traces.add "OfSeq, Default5-seq<KeyValuePair<'k,'v>>"
+        #endif
+        (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x))
+
+    static member inline OfSeq ((x: seq<'t>, _: '``Foldable'<T>``), _: Default4) : '``Foldable'<T>`` =
+        #if TEST_TRACE
+        Traces.add "OfSeq, Default4-seq<'t>"
+        #endif
+        x |> Seq.map Return.Invoke |> Sum.Invoke
     
     static member        OfSeq ((x: seq<'t>                 , _: seq<'t>                         ), _: Default3) = x
     static member        OfSeq ((x: seq<'t>                 , _: ICollection<'t>                 ), _: Default3) = let d = ResizeArray () in Seq.iter d.Add x; d :> ICollection<'t>
@@ -34,7 +47,13 @@ type OfSeq =
     static member        OfSeq ((x: seq<'t>                 , _: IReadOnlyCollection<'t>         ), _: Default3) = IReadOnlyCollection.ofSeq x
     #endif
 
-    static member inline OfSeq ((x: seq<'t>                 , _: 'F                              ), _: Default2) = let c = new 'F () in (Seq.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    static member inline OfSeq ((x: seq<'t>, _: 'F), _: Default2) =
+        #if TEST_TRACE
+        Traces.add "OfSeq, Default2-#Add"
+        #endif
+        let coll = new 'F ()
+        (Seq.iter (fun t -> (^F : (member Add : 't -> ^R) coll, t) |> ignore) x)
+        coll
 
     #if !FABLE_COMPILER
     static member        OfSeq ((x: seq<'t>                 , _: 'T when 'T :> ICollection<'t>   ), _: Default1) = let d = new 'T () in x |> Seq.iter d.Add; d
@@ -83,7 +102,13 @@ type OfList =
     #endif
     static member        OfList ((x: list<'t>                 , _: IReadOnlyCollection<'t>         ), _: Default4) = IReadOnlyCollection.ofSeq x
 
-    static member inline OfList ((x: list<'t>                 , _: 'F                              ), _: Default2) = let c = new 'F () in (List.iter (fun t -> ( ^F : (member Add : 't -> ^R) c, t) |> ignore) x); c
+    static member inline OfList ((x: list<'t>, _: 'F), _: Default2) =
+        #if TEST_TRACE
+        Traces.add "OfList, Default2-#Add"
+        #endif
+        let coll = new 'F ()
+        List.iter (fun t -> (^F : (member Add : 't -> ^R) coll, t) |> ignore) x
+        coll
 
     #if !FABLE_COMPILER
     static member        OfList ((x: list<'t>                 , _: 'T when 'T :> ICollection<'t>   ), _: Default1) = let d = new 'T () in x |> List.iter d.Add; d
@@ -289,7 +314,11 @@ type GroupBy =
 type ChunkBy =
     static member ChunkBy (x: Id<'T>  , f: 'T->'Key, _: Id<'Key*Id<'T>>    , [<Optional>]_impl: ChunkBy) = let a = Id.run x in Id.create (f a, x)
     static member ChunkBy (x: seq<'T> , f: 'T->'Key, _: seq<'Key*seq<'T>>  , [<Optional>]_impl: ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, y :> _ seq)
-    static member ChunkBy (x: list<'T>, f: 'T->'Key, _: list<'Key*list<'T>>, [<Optional>]_impl: ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, Seq.toList  y) |> Seq.toList
+    static member ChunkBy (x: list<'T>, f: 'T->'Key, _: list<'Key*list<'T>>, [<Optional>]_impl: ChunkBy) =
+        #if TEST_TRACE
+        Traces.add "ChunkBy, list<'T>"
+        #endif
+        List.chunkBy f x
     static member ChunkBy (x: 'T []   , f: 'T->'Key, _: ('Key*('T [])) []  , [<Optional>]_impl: ChunkBy) = Seq.chunkBy f x |> Seq.map (fun (x,y) -> x, Seq.toArray y) |> Seq.toArray
 
     static member inline Invoke (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = 

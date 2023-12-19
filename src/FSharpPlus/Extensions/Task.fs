@@ -232,13 +232,13 @@ module Task =
         else
             let tcs = TaskCompletionSource<unit> ()
             if task.Status = TaskStatus.Faulted then
-                tcs.SetException task.Exception.InnerExceptions |> ignore
+                tcs.SetException task.Exception.InnerExceptions
             elif task.Status = TaskStatus.Canceled then
                 tcs.SetCanceled ()
             else
                 let k (t: Task) : unit =
-                    if t.IsCanceled  then tcs.SetCanceled () |> ignore
-                    elif t.IsFaulted then tcs.SetException t.Exception |> ignore
+                    if t.IsCanceled  then tcs.SetCanceled ()
+                    elif t.IsFaulted then tcs.SetException t.Exception
                     else tcs.SetResult ()
                 task.ContinueWith k |> ignore
             tcs.Task
@@ -285,6 +285,9 @@ module Task =
             (fun () -> body disp)
             (fun () -> if not (isNull (box disp)) then disp.Dispose ())
 
+    /// Creates a Task from a value
+    let result value = Task.FromResult value
+    
     /// Raises an exception in the Task
     let raise (e: exn) =
         let tcs = TaskCompletionSource<'U> ()

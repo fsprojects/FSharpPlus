@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 open FSharpPlus.Operators
 open FSharpPlus.Data
@@ -117,10 +117,10 @@ module Lens =
     module List =      
         /// Given a specific key, produces a Lens from a List<value> to an Option<value>. When setting,
         /// a Some(value) will insert or replace the value into the list at the given index. Setting a value of
-        /// None will delete the value at the specified index.  Works well together with non.
-        let inline _item i f t = 
+        /// None will delete the value at the specified index. Works well together with non.
+        let inline _item i f t =
             Map.InvokeOnInstance
-                (function | None -> List.removeAt i t | Some x -> List.setAt i x t)
+                (function None -> List.deleteAt i t | Some x -> List.setAt i x t)
                 (f (List.tryItem i t))
 
     [<RequireQualifiedAccess>]

@@ -17,7 +17,7 @@ type neseq<'t> = NonEmptySeq<'t>
 module NonEmptySeq =
     /// <summary>Builds a non empty sequence from the given sequence.</summary>
     /// <param name="seq">The input sequence.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <returns>Non empty sequence containing the elements of the original sequence.</returns>
     /// <remarks>
     ///   **This function does not check whether the sequence is actually non empty or not.**
     /// 
@@ -254,7 +254,7 @@ module NonEmptySeq =
 
     /// <summary>Builds a non empty sequence from the given sequence.</summary>
     /// <param name="seq">The input sequence.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <returns>Non empty sequence containing the elements of the sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input sequence is empty.</exception>
     /// <remarks>
     ///   Throws exception for empty sequence.
@@ -274,7 +274,7 @@ module NonEmptySeq =
 
     /// <summary>Builds a non empty sequence from the given array.</summary>
     /// <param name="array">The input array.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <returns>Non empty sequence containing the elements of the array.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
     /// <remarks>Throws exception for empty array</remarks>
     let ofArray (array: _[]) =
@@ -462,7 +462,7 @@ module NonEmptySeq =
             }
         go head state |> unsafeOfSeq
 
-    /// <summary>Combines the two sequences into a list of pairs. The two sequences need not have equal lengths:
+    /// <summary>Combines the two sequences into a sequence of pairs. The two sequences need not have equal lengths:
     /// when one sequence is exhausted any remaining elements in the other
     /// sequence are ignored.</summary>
     ///
@@ -472,7 +472,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     let zip (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.zip source1 source2 |> unsafeOfSeq
 
-    /// <summary>Combines the three sequences into a list of triples. The sequences need not have equal lengths:
+    /// <summary>Combines the three sequences into a sequence of triples. The sequences need not have equal lengths:
     /// when one sequence is exhausted any remaining elements in the other
     /// sequences are ignored.</summary>
     ///
@@ -518,14 +518,31 @@ module NonEmptySeq =
     let replace (oldValue: NonEmptySeq<'T>) (newValue: NonEmptySeq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> =
         Seq.replace oldValue newValue source |> unsafeOfSeq
 
+    /// <summary>Returns a sequence that contains no duplicate entries according to the generic hash and equality comparisons
+    /// on the keys returned by the given key-generating function.
+    /// If an element occurs multiple times in the sequence then the later occurrences are discarded.</summary>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The resulting sequence without duplicates.</returns>
+    let distinct (source: NonEmptySeq<'T>) = source |> Seq.distinct |> ofSeq
+
+    /// <summary>Applies a function to each element of the sequence, threading an accumulator argument
+    /// through the computation. Apply the function to the first two elements of the sequence.
+    /// Then feed this result into the function along with the third element and so on. 
+    /// Return the final result. If the input function is <c>f</c> and the elements are <c>i0...iN</c> then computes 
+    /// <c>f (... (f i0 i1) i2 ...) iN</c>.</summary>
+    /// <param name="reduction">The function to reduce two sequence elements to a single element.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The final reduced value.</returns>
+    let reduce (reduction: 'T -> 'T -> 'T) source = Seq.reduce reduction source
+
 
 [<AutoOpen>]
 module NonEmptySeqBuilder =
     type NESeqBuilder () =
         [<CompilerMessage("A NonEmptySeq doesn't support the Zero operation.", 708, IsError = true)>]
-        member __.Zero () = raise Internals.Errors.exnUnreachable
-        member __.Combine (a: NonEmptySeq<'T>, b) = NonEmptySeq.append a b
-        member __.Yield x = NonEmptySeq.singleton x
-        member __.Delay expr = expr () : NonEmptySeq<'T>
+        member _.Zero () = raise Internals.Errors.exnUnreachable
+        member _.Combine (a: NonEmptySeq<'T>, b) = NonEmptySeq.append a b
+        member _.Yield x = NonEmptySeq.singleton x
+        member _.Delay expr = expr () : NonEmptySeq<'T>
 
     let neseq = NESeqBuilder ()

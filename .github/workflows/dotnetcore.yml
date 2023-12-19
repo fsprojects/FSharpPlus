@@ -1,11 +1,20 @@
 name: .NET Core
 
+env:
+  # Stop wasting time caching packages
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  # Disable sending usage data to Microsoft
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  # GitHub Packages Feed settings
+  GITHUB_FEED: https://nuget.pkg.github.com/fsprojects
+  GITHUB_USER: fsprojects
+  #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build:
 
@@ -14,12 +23,78 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 5.0.100
+        dotnet-version: |
+          8.0.x
+          7.0.x
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.2
+      with:
+        timezoneWindows: "Nepal Standard Time"
     - name: Test with dotnet
       run: dotnet test build.proj -v n
+
+  package:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Setup Version Suffix
+      shell: pwsh
+      run: |
+          $buildId = $env:GITHUB_RUN_NUMBER.PadLeft(5, '0');
+          $versionSuffixPR = "PR${{ github.event.pull_request.number }}-$buildId";
+          $branchName = "${{ steps.extract_branch.outputs.branch }}".Replace("_","").Replace("/","-");
+          $versionSuffixBRANCH = "$($branchName)-CI$($buildId)"
+          $env:VersionSuffix = if ("${{ github.event.pull_request.number }}") { $versionSuffixPR } else { $versionSuffixBRANCH } 
+          Write-Output "##[set-output name=version_suffix]$($env:VersionSuffix)"
+      id: version_suffix
+    - name: Package 
+      run: dotnet pack build.proj --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./bin/nupkg/*.nupkg
+    #- name: Push to GitHub Feed
+    #  shell: bash
+    #  run: |
+    #      for f in ./bin/nupkg/*.nupkg
+    #      do
+    #        curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
+    #      done
+
+  docs:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+          5.0.x
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Build All Docs
+      run: dotnet msbuild -target:AllDocs build.proj

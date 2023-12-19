@@ -59,7 +59,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
         #endif
 
     /// O(1). Returns the count of elememts.
-    member __.Length = length
+    member _.Length = length
 
     // O(n). FoldBack walks the DList using constant stack space. Implementation is from Norman Ramsey.
     // Called a "fold" in the article processes the linear representation from right to left
@@ -131,22 +131,22 @@ type DList<'T> (length: int, data: DListData<'T>) =
         | _            -> None
 
     /// O(1). Returns a new DList with the element added to the front.
-    member __.Cons (hd: 'T) =
+    member _.Cons (hd: 'T) =
         match data with
         | Nil -> DList (1, Unit hd)
         | _   -> DList (length + 1, Join (Unit hd, data))
 
     /// O(log n). Returns the first element.
-    member __.Head = DList<'T>.head data
+    member _.Head = DList<'T>.head data
 
     /// O(log n). Returns option first element
-    member __.TryHead = DList<'T>.tryHead data
+    member _.TryHead = DList<'T>.tryHead data
 
     /// O(1). Returns true if the DList has no elements.
-    member __.IsEmpty = match data with Nil -> true | _ -> false
+    member _.IsEmpty = match data with Nil -> true | _ -> false
 
     /// O(1). Returns a new DList with the element added to the end.
-    member __.Add (x: 'T) = DList(length + 1, DList<'T>.append (data, Unit x))
+    member _.Add (x: 'T) = DList(length + 1, DList<'T>.append (data, Unit x))
 
     /// O(log n). Returns a new DList of the elements trailing the first element.
     member this.Tail =
@@ -180,7 +180,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
                         if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException ())
                         DList.findi withIndex s
 
-    member __.toSeq () =
+    member _.toSeq () =
         //adaptation of right-hand side of Norman Ramsey's "fold"
         let rec walk rights l = seq {
             match l with
