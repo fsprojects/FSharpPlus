@@ -149,7 +149,7 @@ module Collections =
 
         let _12: WrappedListI<_> = seq [1;2] |> ofSeq
         #if TEST_TRACE
-        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default4-seq<'t>"], Traces.get())
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Return+Sum"], Traces.get())
         #endif
 
         ()
