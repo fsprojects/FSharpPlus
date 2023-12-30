@@ -38,9 +38,9 @@ type Plus =
     #else
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(string x).Append(string y)
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""
-    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
+    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) : exn =
         let f (e: exn) = match e with :? AggregateException as a -> a.Data0 :> seq<_> | _ -> Seq.singleton e
-        AggregateException (seq {yield! f x; yield! f y}) :> exn
+        AggregateException (seq {yield! f x; yield! f y})
     #endif
     
     static member inline Invoke (x: 'Plus) (y: 'Plus) : 'Plus =
