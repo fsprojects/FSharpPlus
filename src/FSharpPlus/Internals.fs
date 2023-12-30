@@ -38,16 +38,6 @@ module internal Prelude =
         unbox<'U> x
     #endif
 
-    let inline tuple1<'t> (x: 't) =
-        #if FABLE_COMPILER
-        let t = ((),(),(),(),(),(),(),x)
-        t.Rest
-        #else
-        System.Tuple<_> x
-        #endif
-
-    let inline valueTuple1<'T1> (t1: 'T1) = ValueTuple.Create t1
-
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
 
