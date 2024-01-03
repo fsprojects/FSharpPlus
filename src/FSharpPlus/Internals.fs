@@ -479,6 +479,22 @@ module FindLastSliceIndex =
         member _.Count = Q.length q
     #endif
 
+    let listImpl (slice: _ list) (source: _ list) =
+        let cache = Queue<_>()
+        // List.length is O(n)
+        let sliceLength = slice.Length
+        let rec go last index source =
+            match source with
+            | h :: t ->
+                cache.Enqueue h
+                if cache.Count = sliceLength then
+                    let last = if sequenceEqual cache slice then index - sliceLength + 1 else last
+                    cache.Dequeue() |> ignore
+                    go last (index + 1) t
+                else go last (index + 1) t
+            | [] -> last
+        go -1 0 source
+
     let arrayImpl (slice: _ []) (source: _ []) =
         let revSlice = slice |> Array.rev
         let cache = Queue<_>()

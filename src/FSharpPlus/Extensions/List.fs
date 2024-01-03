@@ -271,6 +271,33 @@ module List =
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
         let index = Internals.FindSliceIndex.listImpl slice source
         if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then None else Some index
     #endif
 
     /// <summary>
