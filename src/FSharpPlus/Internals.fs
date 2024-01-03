@@ -436,7 +436,7 @@ module FindLastSliceIndex =
                 if cache.Count = slice.Length then
                     let last = if cache.SequenceEqual slice then index - slice.Length + 1 else last
                     cache.Dequeue() |> ignore
-                    go (index - slice.Length + 1) (index + 1)
+                    go last (index + 1)
                 else go last (index + 1)
             else last
         go -1 0
