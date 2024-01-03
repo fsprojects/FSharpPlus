@@ -231,6 +231,22 @@ module String =
             ArgumentException("The specified substring was not found in the string.") |> raise
         else
             index
+
+    /// <summary>
+    /// Returns the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: string) (source: string) =
+        let index = source.LastIndexOf slice
+        if index = -1 then
+            ArgumentException("The specified substring was not found in the string.") |> raise
+        else
+            index
             
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -241,6 +257,17 @@ module String =
     /// </returns>
     let tryFindSliceIndex (slice: string) (source: string) =
         let index = source.IndexOf slice
+        if index = -1 then None else Some index
+
+    /// <summary>
+    /// Returns the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: string) (source: string) =
+        let index = source.LastIndexOf slice
         if index = -1 then None else Some index
 
     #if !FABLE_COMPILER
