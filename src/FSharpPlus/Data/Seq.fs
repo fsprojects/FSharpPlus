@@ -1074,7 +1074,7 @@ module [<AutoOpen>]SeqTOperations =
     let inline (|SeqT|) (x: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T seq>`` = SeqT.run x
 
 
-type SeqT<'``monad<bool>``, 'T> with
+type SeqT<'``monad<bool>``, 't> with
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Return (x: 'T) : SeqT<'``Monad<bool>``, 'T> = SeqT.singleton x
