@@ -14,7 +14,7 @@ module Observable =
     /// Union type that represents different messages that can be sent to the
     /// IObserver interface. The IObserver type is equivalent to a type that has
     /// just OnNext method that gets 'ObservableUpdate' as an argument.
-    type (*internal*) ObservableUpdate<'T> =
+    type internal ObservableUpdate<'T> =
         | Next of 'T
         | Error of ExceptionDispatchInfo
         | Completed
@@ -23,7 +23,7 @@ module Observable =
     /// Turns observable into an observable that only calls OnNext method of the
     /// observer, but gives it a discriminated union that represents different
     /// kinds of events (error, next, completed)
-    let asUpdates (source: IObservable<'T>) = {
+    let internal asUpdates (source: IObservable<'T>) = {
         new IObservable<_> with
             member _.Subscribe observer =
                 source.Subscribe {
@@ -41,19 +41,19 @@ module Observable =
             // The body of this agent returns immediately.  It turns out this is a valid use of an F# agent, and it
             // leaves the agent available as a queue that supports an asynchronous receive.
             //
-            // This makes the cancellation token is somewhat meaningless since the body has already returned.  However
-            // if we don't pass it in then the default cancellation token will be used, so we pass one in for completeness.
+            // This makes the cancellation token somewhat meaningless since the body has already returned.  However
+            // if we don't pass it in, the default cancellation token will be used, so we pass one in for completeness.
             use agent = MailboxProcessor<_>.Start ((fun _inbox -> async.Return ()), cancellationToken = cts.Token)
             use _d = source |> asUpdates |> Observable.subscribe agent.Post
-            let fin = ref false
-            while not fin.Value do 
+            let mutable fin = false
+            while not fin do
                 let! msg = SeqT.lift (agent.Receive ())
                 match msg with
                 | ObservableUpdate.Error e -> e.Throw ()
-                | Completed -> fin := true
-                | Next v -> yield v 
-        finally 
-                // Cancel on early exit 
+                | Completed -> fin <- true
+                | Next v -> yield v
+        finally
+                // Cancel on early exit
                 cts.Cancel () }
 
     let toTaskSeq (source: System.IObservable<'T>) : SeqT<Task<bool>, 'T> = monad.plus {
@@ -62,19 +62,19 @@ module Observable =
             // The body of this agent returns immediately.  It turns out this is a valid use of an F# agent, and it
             // leaves the agent available as a queue that supports an asynchronous receive.
             //
-            // This makes the cancellation token is somewhat meaningless since the body has already returned.  However
-            // if we don't pass it in then the default cancellation token will be used, so we pass one in for completeness.
+            // This makes the cancellation token somewhat meaningless since the body has already returned.  However
+            // if we don't pass it in, the default cancellation token will be used, so we pass one in for completeness.
             use agent = MailboxProcessor<_>.Start ((fun _inbox -> async.Return ()), cancellationToken = cts.Token)
             use _d = source |> asUpdates |> Observable.subscribe agent.Post
-            let fin = ref false
-            while not fin.Value do 
+            let mutable fin = false
+            while not fin do
                 let! msg = SeqT.lift (Async.StartAsTask (agent.Receive (), cancellationToken = cts.Token))
                 match msg with
                 | ObservableUpdate.Error e -> e.Throw ()
-                | Completed -> fin := true
-                | Next v -> yield v 
-        finally 
-                // Cancel on early exit 
+                | Completed -> fin <- true
+                | Next v -> yield v
+        finally
+                // Cancel on early exit
                 cts.Cancel () }
 
 #endif
