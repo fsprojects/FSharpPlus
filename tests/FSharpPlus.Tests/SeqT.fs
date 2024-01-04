@@ -138,6 +138,23 @@ module WellBehaved =
         areEqual (List.map toList r1) ([[0; 1; 1; 1]; [0; 1; 1; 1]; [0; 1; 1; 1]; [0; 1; 1; 1]; [0; 1; 1; 1]])
         areEqual (List.map toList r1) (List.map toList r2)
 
+    [<Test>]
+    let ``SideEffects in squares calc`` () =
+
+        let arr = new ResizeArray<string>()
+        let myTest n : SeqT<_, _> = monad.plus {
+            let squares = SeqT.hoist <| Seq.takeWhile (fun x -> x <= n) (Seq.map (flip pown 2) (Seq.initInfinite id))
+            let! x = squares
+            let! y = squares
+            let! _ = SeqT.lift (async { arr.Add (sprintf "%A" (x, y)); return () })
+            where (x + y = n)
+            let! _ = SeqT.lift (async { arr.Add "Sum of squares" })
+            return (x, y)
+        }
+
+        areEqual (myTest 5 |> SeqT.run |> Async.RunSynchronously |> toList) [(1, 4); (4, 1)]
+        areEqual (toList arr) ["(0, 0)"; "(0, 1)"; "(0, 4)"; "(1, 0)"; "(1, 1)"; "(1, 4)"; "Sum of squares"; "(4, 0)"; "(4, 1)"; "Sum of squares"; "(4, 4)"]
+
 module ComputationExpressions =
 
     type __ = bool
