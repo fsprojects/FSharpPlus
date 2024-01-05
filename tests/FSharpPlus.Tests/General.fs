@@ -112,15 +112,12 @@ type WrappedListD<'s> = WrappedListD of 's list with
         WrappedListD <!> (traversei f x : ^r)
     static member FindIndex (WrappedListD x, y) =
         SideEffects.add "Using WrappedListD's FindIndex"
-        printfn "WrappedListD.FindIndex"
         findIndex y x
     static member FindSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindSliceIndex"
-        printfn "WrappedListD.FindSliceIndex"
         findSliceIndex y x
     static member FindLastSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindLastSliceIndex"
-        printfn "WrappedListD.FindLastSliceIndex"
         findLastSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"

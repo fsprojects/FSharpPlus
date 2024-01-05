@@ -429,7 +429,7 @@ module FindLastSliceIndex =
         // we assume the slice is finite (otherwise it cannot be searched)
         let slice = slice |> Seq.toArray
         use sourceEnumerator = source.GetEnumerator()
-        // we also assume either the source is finite
+        // we also assume the source is finite
         let rec go last index =
             if sourceEnumerator.MoveNext() then
                 cache.Enqueue sourceEnumerator.Current
@@ -503,7 +503,7 @@ module FindLastSliceIndex =
                 let h = source.[index]
                 cache.Enqueue h
                 if cache.Count = slice.Length then
-                    if sequenceEqual cache revSlice then index - slice.Length + 1
+                    if sequenceEqual cache revSlice then index
                     else
                         cache.Dequeue() |> ignore
                         go (index - 1)
