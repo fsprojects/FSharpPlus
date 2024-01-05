@@ -443,30 +443,30 @@ module Extensions =
     areEquivalent [1;2;3] ([1;2;3] |> List.setAt 3 4)
 
   [<Test>]
-  let ``List.removeAt works with good indices`` () =
-    areEquivalent [1;3] ([1;2;3] |> List.removeAt 1)
+  let ``List.deleteAt works with good indices`` () =
+    areEquivalent [1;3] ([1;2;3] |> List.deleteAt 1)
 
   [<Test>]
-  let ``List.removeAt tolerates bad indices`` () =
-    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt -1)
-    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt 3)
+  let ``List.deleteAt tolerates bad indices`` () =
+    areEquivalent [1;2;3] ([1;2;3] |> List.deleteAt -1)
+    areEquivalent [1;2;3] ([1;2;3] |> List.deleteAt 3)
 
   [<Test>]
-  let ``Seq.drop returns seq unaltered with a negative count`` ()=
+  let ``Seq.drop returns seq unaltered with a negative count`` () =
     areEquivalent (seq {1; 2; 3}) (seq {1; 2; 3} |> Seq.drop -1)
 
   [<Test>]
-  let ``Seq.drop returns seq unaltered with a 0 count`` ()=
+  let ``Seq.drop returns seq unaltered with a 0 count`` () =
     areEquivalent (seq {1; 2; 3}) (seq {1; 2; 3} |> Seq.drop 0)
 
   [<Test>]
-  let ``Seq.drop returns empty when seq is empty and count is positive`` ()=
+  let ``Seq.drop returns empty when seq is empty and count is positive`` () =
     areEquivalent Seq.empty (Seq.empty |> Seq.drop 1)
 
   [<Test>]
-  let ``Seq.drop returns empty when count is larger than seq length`` ()=
+  let ``Seq.drop returns empty when count is larger than seq length`` () =
     areEquivalent Seq.empty (seq {1; 2; 3} |> Seq.drop 4)
 
   [<Test>]
-  let ``Seq.drop returns seq with count items dropped when count is positive and less than length`` ()=
+  let ``Seq.drop returns seq with count items dropped when count is positive and less than length`` () =
     areEquivalent (seq {2; 3}) (seq {1; 2; 3} |> Seq.drop 1)
