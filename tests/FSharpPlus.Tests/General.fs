@@ -112,12 +112,13 @@ type WrappedListD<'s> = WrappedListD of 's list with
         WrappedListD <!> (traversei f x : ^r)
     static member FindIndex (WrappedListD x, y) =
         SideEffects.add "Using WrappedListD's FindIndex"
-        printfn "WrappedListD.FindIndex"
         findIndex y x
     static member FindSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindSliceIndex"
-        printfn "WrappedListD.FindSliceIndex"
         findSliceIndex y x
+    static member FindLastSliceIndex (WrappedListD x, WrappedListD y) =
+        SideEffects.add "Using WrappedListD's FindLastSliceIndex"
+        findLastSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -865,6 +866,15 @@ module Foldable =
         SideEffects.reset ()
         let i1 = findSliceIndex m2 m1
         areEquivalent ["Using WrappedListD's FindSliceIndex"] (SideEffects.get ())
+        areEqual i1 1
+
+    [<Test>]
+    let findLastSliceIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findLastSliceIndex m2 m1
+        areEquivalent ["Using WrappedListD's FindLastSliceIndex"] (SideEffects.get ())
         areEqual i1 1
 
 module Monad = 

@@ -848,6 +848,33 @@ module Operators =
     /// </returns>
     let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    /// 
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the source.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let inline findLastSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index = FindLastSliceIndex.Invoke slice source
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    /// 
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let inline tryFindLastSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindLastSliceIndex.Invoke slice source
 
     // Comonads
 

@@ -248,6 +248,49 @@ module Seq =
         let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
         #endif
         if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <remarks>
+    /// It is assumed that both the slice and the source are finite, otherwise it will not return forever.
+    /// Both the slice and the source will always be iterated to the end.
+    /// </remarks>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindLastSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <remarks>
+    /// It is assumed that both the slice and the source are finite, otherwise it will not return forever.
+    /// Both the slice and the source will always be iterated to the end.
+    /// </remarks>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindLastSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
+        if index = -1 then None else Some index
     #endif
     
     /// <summary>Choose with access to the index</summary>
