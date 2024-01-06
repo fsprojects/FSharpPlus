@@ -443,7 +443,7 @@ module FindLastSliceIndex =
     let sequenceEqual (a: _ seq) (b: _ seq) = a.SequenceEqual b
     #else
     let internal sequenceEqual (a: _ seq) (b: _ seq) :bool = Seq.compareWith Operators.compare a b = 0
-    module internal Q=
+    module internal Q =
         type queue<'a> = | Queue of 'a list * 'a list
 
         let empty = Queue([], [])
@@ -475,7 +475,7 @@ module FindLastSliceIndex =
         member _.Enqueue (v) = q <- Q.enqueue q v
         member _.Dequeue () =
             let (dequeued, next) = Q.dequeue q in q <- next
-            match dequeued with | Some v -> v | None -> failwith "Empty queue!"
+            match dequeued with | Some v -> v | None -> invalidOp "Empty queue!"
         member _.Count = Q.length q
     #endif
 
