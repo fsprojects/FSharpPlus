@@ -311,7 +311,7 @@ let memoization = testList "Memoization" [
 
         let f x                       = printfn "calculating"; effs.Add "f"; string x
         let g x (y:string) z : uint32 = printfn "calculating"; effs.Add "g"; uint32 (x * int y + int z)
-        let h x y z                   = printfn "calculating"; effs.Add "h"; new System.DateTime (x, y, z)
+        let h (x: int) (y: int) (z: int) = printfn "calculating"; effs.Add "h"; new System.DateTime (x, y, z)
         let sum2 (a:int)       = printfn "calculating"; effs.Add "sum2"; (+) a
         let sum3 a (b:int) c   = printfn "calculating"; effs.Add "sum3"; a + b + c
         let sum4 a b c d : int = printfn "calculating"; effs.Add "sum4"; a + b + c + d

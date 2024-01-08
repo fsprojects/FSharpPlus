@@ -1,8 +1,9 @@
-Release Notes for FSharpPlus 1.4.0  - February 22 2023
-------------------------------------------------------
+Release Notes for FSharpPlus 1.6.0-RC1  - December 17 2023
+----------------------------------------------------------
 
-Additional Alternatives available (functions, error monads)
-More IReadOnlyDictionary functions
-Bug fixes in Map as FoldIndexable and missing <*> for IDictionary and IReadOnlyDictionary
-Deprecate IReadOnlyDictionary.map
-Guid to/from bytes conversion
+Target net 8
+Add Result.Sequence
+Add Validation.ofOptionWith
+Add List.chunkBy
+Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
+Add limited applicative support to dictionaries

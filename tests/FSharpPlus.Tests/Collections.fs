@@ -1,20 +1,36 @@
-module General.Collections
-open Testing
-open General.Util
-open FSharpPlus
-open System.Collections.Generic
-open FSharpPlus.Data
-#nowarn "686"
+﻿namespace FSharpPlus.Tests
 
-open System
-open System.Collections.ObjectModel
-open System.Collections
+open FSharpPlus
+open FSharpPlus.Data
+open NUnit.Framework
+
+#if TEST_TRACE
+open FSharpPlus.Internals
+#endif
 
 module Collections =
-
+    open System
+    open System.Collections
+    open System.Collections.Generic
     open System.Collections.Concurrent
+    open System.Collections.ObjectModel
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    [<Test>]    
+    let chunkBy () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let source = [1; 2; 3; 5; 7; 9]
+        let expected = [(1, [1]); (0, [2]); (1, [3; 5; 7; 9])]
+        let actual = chunkBy (flip (%) 2) source
+        CollectionAssert.AreEqual(expected, actual)
+
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["ChunkBy, list<'T>"], Traces.get())
+        #endif
+
+    
     let testCollections =
         let bigSeq = seq {1..10000000}
         let bigLst = [ 1..10000000 ]
@@ -22,28 +38,27 @@ module Collections =
         let bigMut = ResizeArray(seq {1..10000000})
 
         let _ = head bigSeq
-        #if !FABLE_COMPILER
         let _ = head bigLst
-        #endif
         let _ = head bigArr
 
-        #if !FABLE_COMPILER
         let _ = skip 1000 bigSeq
-        #endif
         let _ = skip 1000 bigLst
         let _ = skip 1000 bigArr
         let _ = skip 1000 bigMut
         let _ = "hello world" |> skip 6 |> toList
         let _ = ofList ['h';'e';'l';'l';'o';' '] + "world"
         let _ = item 2 "hello"
+        
         ()
-    #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    
     let testSeqConversions =
-        #if !FABLE_COMPILER
-        let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
+        
+        #if TEST_TRACE
+        Traces.reset()
         #endif
+
+        let sk: Generic.Stack<_>          = ofSeq { 1 .. 3 }
         let sg: string                    = ofSeq {'1'..'3'}  // but it will come back as seq<char>
         let sb: Text.StringBuilder        = ofSeq {'1'..'3'}  // but it will come back as seq<char>
         let sq1:_ seq                     = ofSeq { 1 .. 3 }
@@ -52,7 +67,6 @@ module Collections =
         let sq4:_ seq                     = ofSeq (seq [(1, "One", '1', 1M); (2, "Two", '2', 2M)])
         let ls1:_ list                    = ofSeq {'1'..'3'}
         let ls2:_ list                    = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
-        #if !FABLE_COMPILER
         let st1:_ Set                     = ofSeq {'1'..'3'}
         let st2:_ Set                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
         let ss: Generic.SortedSet<_>      = ofSeq (seq [3..6])
@@ -68,17 +82,32 @@ module Collections =
         let _r: IReadOnlyDictionary<_,_>  = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
         let rc: IReadOnlyCollection<_>    = ofSeq (seq [2..7])
         let ut: Hashtable                 = ofSeq (seq [1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        
+        #if TEST_TRACE
+        CollectionAssert.AreEqual ([], Traces.get())
+        #endif
+        
         let al: ArrayList                 = ofSeq (seq ["1";"2";"3"])            // but it will come back as seq<obj>
-        let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
         let cc: BlockingCollection<_>     = ofSeq {'1'..'3'}                     // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+        let cb: ConcurrentBag<_>          = ofSeq {'1'..'3'}
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+        let us: SortedList                = ofSeq (seq [4,'2';3,'4'])            // but it will come back as seq<obj>
         let cd: ConcurrentDictionary<_,_> = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
         let _cd:ConcurrentDictionary<_,_> = ofSeq (seq [KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let cb: ConcurrentBag<_>          = ofSeq {'1'..'3'}
-        #endif
+
         // now go back
-        #if !FABLE_COMPILER
         let _sk'  = toSeq sk
-        #endif
         let _sg'  = toSeq sg
         let _sb'  = toSeq sb
         let _sq1' = toSeq sq1
@@ -87,7 +116,6 @@ module Collections =
         let _sq4' = toSeq sq4
         let _ls1' = toSeq ls1
         let _ls2' = toSeq ls2
-        #if !FABLE_COMPILER
         let _st1' = toSeq st1
         let _st2' = toSeq st2
         let _ss'  = toSeq ss 
@@ -103,35 +131,33 @@ module Collections =
         let _us'  = toSeq us 
         let _cc'  = toSeq cc 
         let _cd'  = toSeq cd 
-        let _cb'  = toSeq cb
-        #endif
+        let _cb'  = toSeq cb 
 
         // there are some 'one-way' collections that can only be converted toSeq
-
-        #if !FABLE_COMPILER
         let columns = 
             let d = new Data.DataTable () 
             [|new Data.DataColumn "id";new Data.DataColumn "column1";new Data.DataColumn "column2"|] |> d.Columns.AddRange
             d.Columns
         let _col1 = columns |> find (fun x -> x.ColumnName = "column1")
         let _cols = columns |> toList |> map  (fun x -> x.ColumnName)
-        #endif
+
         // Defaults
-        
-        #if !FABLE_COMPILER
+
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
         let _12: WrappedListI<_> = seq [1;2] |> ofSeq
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default4-seq<'t>"], Traces.get())
         #endif
 
         ()
-    #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     let testListConversions =
 
         // From sequence
-        #if !FABLE_COMPILER
         let sk: Generic.Stack<_>          = ofList [ 1 .. 3 ]
-        #endif
         let sg: string                    = ofList ['1'..'3']  // but it will come back as seq<char>
         let sb: Text.StringBuilder        = ofList ['1'..'3']  // but it will come back as seq<char>
         let sq1:_ seq                     = ofList [ 1 .. 3 ]
@@ -140,7 +166,6 @@ module Collections =
         let sq4:_ seq                     = ofList ([(1, "One", '1', 1M); (2, "Two", '2', 2M)])
         let ls1:_ list                    = ofList ['1'..'3']
         let ls2:_ list                    = ofList ([(1, "One", '1'); (2, "Two", '2')])
-        #if !FABLE_COMPILER
         let st1:_ Set                     = ofList ['1'..'3']
         let st2:_ Set                     = ofList ([(1, "One", '1'); (2, "Two", '2')])
         let ss: Generic.SortedSet<_>      = ofList ([3..6])
@@ -150,28 +175,39 @@ module Collections =
         let dc :Generic.Dictionary<_,_>   = ofList ([(1, "One"); (2, "Two")]) // but it will come back as KeyValuePair
         let mp :Map<_,_>                  = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
         let _mp:Map<_,_>                  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        #endif
         let d : Generic.IDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
         let _d: Generic.IDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        #if !FABLE_COMPILER
         let r : IReadOnlyDictionary<_,_>  = ofList ([("One", 1)])             // but it will come back as ...
         let _r: IReadOnlyDictionary<_,_>  = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        #endif
         let rc: IReadOnlyCollection<_>    = ofList ([2..5])
-        #if !FABLE_COMPILER
         let ut: Hashtable                 = ofList ([1,'1';2, '2';3,'3'])     // but it will come back as seq<obj>
+        
+        #if TEST_TRACE
+        CollectionAssert.AreEqual ([], Traces.get())
+        #endif
+        
         let al: ArrayList                 = ofList (["1";"2";"3"])            // but it will come back as seq<obj>
-        let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
-        let cc: BlockingCollection<_>     = ofList ['1'..'3']                     // but it will come back as seq<obj>
-        let cd: ConcurrentDictionary<_,_> = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
-        let _cd:ConcurrentDictionary<_,_> = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
-        let cb: ConcurrentBag<_>          = ofList ['1'..'3']
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfList, Default2-#Add"], Traces.get())
         #endif
 
-        // now go back
-        #if !FABLE_COMPILER
-        let _sk'  = toList sk
+        let cc: BlockingCollection<_>     = ofList ['1'..'3']                 // but it will come back as seq<obj>
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfList, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
         #endif
+
+        let cb: ConcurrentBag<_>          = ofList ['1'..'3']
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["OfList, Default2-#Add"; "OfSeq, Default2-#Add"; "OfSeq, Default2-#Add"], Traces.get())
+        #endif
+
+
+        let us: SortedList                = ofList ([4,'2';3,'4'])            // but it will come back as seq<obj>
+        let cd: ConcurrentDictionary<_,_> = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
+        let _cd:ConcurrentDictionary<_,_> = ofList ([KeyValuePair(1, "One"); KeyValuePair(2, "Two")])
+
+        // now go back
+        let _sk'  = toList sk
         let _sg'  = toList sg
         let _sb'  = toList sb
         let _sq1' = toList sq1
@@ -180,7 +216,6 @@ module Collections =
         let _sq4' = toList sq4
         let _ls1' = toList ls1
         let _ls2' = toList ls2
-        #if !FABLE_COMPILER
         let _st1' = toList st1
         let _st2' = toList st2
         let _ss'  = toList ss
@@ -188,25 +223,18 @@ module Collections =
         let _sl'  = toList sl
         let _dc'  = toList dc
         let _mp'  = toList mp
-        #endif
         let _d'   = toList d
-        #if !FABLE_COMPILER
         let _r'   = toList r
-        #endif
         let _rc'  = toList rc
-        #if !FABLE_COMPILER
         let _ut'  = toList ut
         let _al'  = toList al
         let _us'  = toList us
         let _cc'  = toList cc
         let _cd'  = toList cd
         let _cb'  = toList cb
-        #endif
 
         ()
-    #endif
 
-    #if !FABLE_COMPILER
     let testSorts =
         let _r1 = [4..1] |> sort
         let _r2 = [4..1] |> sortBy string
@@ -214,11 +242,8 @@ module Collections =
         let _r4 = seq [4..1] |> sortBy string
         let _r5 = ResizeArray [4..1] |> sort
         let _r6 = ResizeArray [4..1] |> sortBy string
-
         ()
-    #endif
 
-    #if !FABLE_COMPILER
     let testGeneralizableValues () =
         let a: list<_> = empty
         let _ =  0 ::a
@@ -229,27 +254,24 @@ module Collections =
         let _ = WrappedSeqA ['0'] <|> b
          
         ()
-    #endif
 
-let collections = testList "Collections" [
-
-    #if !FABLE_COMPILER
-    testCase "readOnlyNth" (fun () ->
+    [<Test>]
+    let readOnlyNth () =
         let readOnlyCollection = ReadOnlyCollection [|1..10|]
         let iReadOnlyList = readOnlyCollection :> IReadOnlyList<_>
-        equal 2 (nth 1 [1..10])
-        equal 2 (nth 1 readOnlyCollection)
-        equal 2 (nth 1 iReadOnlyList))
+        Assert.AreEqual (2, nth 1 [1..10])
+        Assert.AreEqual (2, nth 1 readOnlyCollection)
+        Assert.AreEqual (2, nth 1 iReadOnlyList)
 
-    testCase "readOnlyNthIndex" (fun () ->
+    [<Test>]
+    let readOnlyNthIndex () =
         let l = ListOnlyIndex [1..10]
-        equal 2 (nth 1 l)
+        Assert.AreEqual (2, nth 1 l)
         let rl = ReadOnlyListOnlyIndex [1..10]
-        equal 2 (nth 1 rl))
-    #endif
+        Assert.AreEqual (2, nth 1 rl)
 
-    #if !FABLE_COMPILER
-    testCase "choose" (fun () -> 
+    [<Test>]
+    let choose () = 
         let d = choose Some ((ofSeq :seq<_*_> -> Dictionary<_,_>) (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<Dictionary<string,int>>> (Some d)
 
@@ -260,6 +282,4 @@ let collections = testList "Collections" [
         Assert.IsInstanceOf<Option<IReadOnlyDictionary<string,int>>> (Some rd)
         
         let m = choose Some ((ofSeq :seq<_*_> -> Map<_,_>) (seq ["a", 1; "b", 2]))
-        Assert.IsInstanceOf<Option<Map<string,int>>> (Some m))
-    #endif
-    ]
+        Assert.IsInstanceOf<Option<Map<string,int>>> (Some m)

@@ -271,6 +271,33 @@ module List =
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
         let index = Internals.FindSliceIndex.listImpl slice source
         if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then None else Some index
     #endif
 
     /// <summary>
@@ -356,6 +383,48 @@ module List =
                 loop (ls,rs)
         loop (list1, list2)
     #endif
+
+    /// <summary>
+    /// Chunks the list up into groups with the same projected key by applying
+    /// the key-generating projection function to each element and yielding a list of 
+    /// keys tupled with values.
+    /// </summary>
+    ///
+    /// <remarks>
+    /// Each key is tupled with an array of all adjacent elements that match 
+    /// to the key, therefore keys are not unique but can't be adjacent
+    /// as each time the key changes a new group is yield.
+    /// 
+    /// The ordering of the original list is respected.
+    /// </remarks>
+    ///
+    /// <param name="projection">A function that transforms an element of the list into a comparable key.</param>
+    /// <param name="source">The input list.</param>
+    ///
+    /// <returns>The resulting list of keys tupled with a list of matching values</returns>
+    let chunkBy (projection: 'T -> 'Key) (source: _ list) =
+        #if FABLE_COMPILER
+        Seq.chunkBy projection source |> Seq.map (fun (x, y) -> x, Seq.toList y) |> Seq.toList
+        #else
+        match source with
+        | [] -> []
+        | x::xs ->
+            let mutable acc = new ListCollector<_> ()
+            let mutable members = new ListCollector<_> ()
+            let rec loop source g =
+                match source with
+                | [] -> acc.Add (g, members.Close ())
+                | x::xs ->
+                    let key = projection x
+                    if g <> key then
+                        acc.Add (g, members.Close ())
+                        members <- new ListCollector<_> ()
+                    members.Add x
+                    loop xs key
+            members.Add x
+            loop xs (projection x)
+            acc.Close ()
+        #endif
         
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>

@@ -12,7 +12,7 @@
     <Platforms>AnyCPU</Platforms>
     <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
@@ -23,10 +23,12 @@
     <Compile Include="Parsing.fs" />
     <Compile Include="Traversals.fs" />
     <Compile Include="Indexables.fs" />
+    <Compile Include="Collections.fs" />
     <Compile Include="Validations.fs" />
     <Compile Include="Task.fs" />
     <Compile Include="ValueTask.fs" />
     <Compile Include="Free.fs" />
+    <Compile Include="SeqT.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
@@ -50,7 +52,8 @@
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="FsCheck" Version="2.16.5" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="FsCheck.NUnit" Version="2.16.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
   </ItemGroup>
 </Project>

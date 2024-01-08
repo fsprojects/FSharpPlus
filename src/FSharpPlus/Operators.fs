@@ -192,7 +192,6 @@ module Operators =
     let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
     [<System.Obsolete("Use lift2 instead.")>]
-    /// <category index="2">Applicative</category>
     let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
 
     /// <summary>
@@ -214,11 +213,9 @@ module Operators =
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
     [<System.Obsolete("Use flip (<*>) instead.")>]
-    /// <category index="2">Applicative</category>
     let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
     
     [<System.Obsolete("Use opt instead.")>]
-    /// <category index="2">Applicative</category>
     let inline optional v = Some <!> v </Append.Invoke/> result None
 
     /// <summary>
@@ -858,6 +855,33 @@ module Operators =
     /// </returns>
     let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    /// 
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the source.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let inline findLastSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index = FindLastSliceIndex.Invoke slice source
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    /// 
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let inline tryFindLastSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindLastSliceIndex.Invoke slice source
 
     // Comonads
 

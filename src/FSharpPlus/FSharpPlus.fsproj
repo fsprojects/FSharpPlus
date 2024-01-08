@@ -1,115 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup Condition="'$(CompilerTest)' == 'true'">
-		<FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
-		<FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
-	</PropertyGroup>
-	<PropertyGroup>
-		<Title>FSharpPlus</Title>
-		<AssemblyName>FSharpPlus</AssemblyName>
-		<AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
-		<FileVersion>$(VersionPrefix).0</FileVersion>
-		<ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
-		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-		<OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
-		<GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
-		<GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
-		<GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-		<GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
-		<GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
-		<GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
-		<AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-		<Configurations>Debug;Release;Fable;Fable3;Test</Configurations>
-		<Platforms>AnyCPU</Platforms>
-		<LangVersion>6.0</LangVersion>
-		<DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
-		<DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
-		<DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
-		<DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4</DefineConstants>
-		<TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
-		<!--<OutputPath>..\..\bin</OutputPath>-->
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Include="Internals.fs" />
-		<Compile Include="Extensions/Option.fs" />
-		<Compile Include="Extensions/ValueOption.fs" />
-		<Compile Include="Extensions/Nullable.fs" />
-		<Compile Include="Extensions/Result.fs" />
-		<Compile Include="Extensions/Choice.fs" />
-		<Compile Include="Extensions/Seq.fs" />
-		<Compile Include="Extensions/IList.fs" />
-		<Compile Include="Extensions/List.fs" />
-		<Compile Include="Extensions/Array.fs" />
-		<Compile Include="Extensions/ResizeArray.fs" />
-		<Compile Include="Extensions/String.fs" />
-		<Compile Include="Extensions/IReadOnlyCollection.fs" />
-		<Compile Include="Extensions/IReadOnlyList.fs" />
-		<Compile Include="Extensions/Lazy.fs" />
-		<Compile Include="Extensions/Map.fs" />
-		<Compile Include="Extensions/Dictionary.fs" />
-		<Compile Include="Extensions/Dict.fs" />
-		<Compile Include="Extensions/IReadOnlyDictionary.fs" />
-		<Compile Include="Extensions/Enumerator.fs" />
-		<Compile Include="Extensions/Task.fs" />
-		<Compile Include="Extensions/ValueTask.fs" />
-		<Compile Include="Extensions/Async.fs" />
-		<Compile Include="Extensions/Extensions.fs" />
-		<Compile Include="Extensions/Tuple.fs" />
-		<Compile Include="Extensions/ValueTuple.fs" />
-		<Compile Include="Data/NonEmptySeq.fs" />
-		<Compile Include="Control/Converter.fs" />
-		<Compile Include="Control/Numeric.fs" />
-		<Compile Include="Control/Monoid.fs" />
-		<Compile Include="Control/Monad.fs" />
-		<Compile Include="Control/Foldable.fs" />
-		<Compile Include="Control/Alternative.fs" />
-		<Compile Include="Control/Applicative.fs" />
-		<Compile Include="Control/Parallel.fs" />
-		<Compile Include="Control/Functor.fs" />
-		<Compile Include="Control/MonadOps.fs" />
-		<Compile Include="Control/Comonad.fs" />
-		<Compile Include="Control/Invokable.fs" />
-		<Compile Include="Control/Category.fs" />
-		<Compile Include="Control/Arrow.fs" />
-		<Compile Include="Control/ArrowChoice.fs" />
-		<Compile Include="Control/ArrowApply.fs" />
-		<Compile Include="Control/Bifoldable.fs" />
-		<Compile Include="Control/Bitraversable.fs" />
-		<Compile Include="Control/Traversable.fs" />
-		<Compile Include="Control/Indexable.fs" />
-		<Compile Include="Control/MonadTrans.fs" />
-		<Compile Include="Control/Collection.fs" />
-		<Compile Include="Control/Tuple.fs" />
-		<Compile Include="Operators.fs" />
-		<Compile Include="Math/Applicative.fs" />
-		<Compile Include="Math/Generic.fs" />
-		<Compile Include="Builders.fs" />
-		<Compile Include="Data/Identity.fs" />
-		<Compile Include="Data/List.fs" />
-		<Compile Include="Data/Seq.fs" />
-		<Compile Include="Data/Option.fs" />
-		<Compile Include="Data/ValueOption.fs" />
-		<Compile Include="Data/Error.fs" />
-		<Compile Include="Data/Cont.fs" />
-		<Compile Include="Data/Reader.fs" />
-		<Compile Include="Data/Writer.fs" />
-		<Compile Include="Data/State.fs" />
-		<Compile Include="Data/Monoids.fs" />
-		<Compile Include="Data/MultiMap.fs" />
-		<Compile Include="Lens.fs" />
-		<Compile Include="Data/NonEmptyList.fs" />
-		<Compile Include="Data/NonEmptySet.fs" />
-		<Compile Include="Data/NonEmptyMap.fs" />
-		<Compile Include="Data/ZipList.fs" />
-		<Compile Include="Data/ParallelArray.fs" />
-		<Compile Include="Data/DList.fs" />
-		<Compile Include="Data/Validation.fs" />
-		<Compile Include="Data/Kleisli.fs" />
-		<Compile Include="Data/Free.fs" />
-		<Compile Include="Data/Coproduct.fs" />
-		<Compile Include="Memoization.fs" />
-		<Compile Include="Parsing.fs" />
-	</ItemGroup>
+  <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
+    <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
+    <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Title>FSharpPlus</Title>
+    <AssemblyName>FSharpPlus</AssemblyName>
+    <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
+    <FileVersion>$(VersionPrefix).0</FileVersion>
+    <ProjectGuid>1368368e-d2f4-4fef-bb2f-492e05156e0f</ProjectGuid>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+    <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
+    <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
+    <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Configurations>Debug;Release;Fable;Fable3;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <LangVersion>8.0</LangVersion>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
+
+    <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4</DefineConstants>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
+    <!--<OutputPath>..\..\bin</OutputPath>-->
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Internals.fs" />
+    <Compile Include="Extensions/Option.fs" />
+    <Compile Include="Extensions/ValueOption.fs" />
+    <Compile Include="Extensions/Nullable.fs" />
+    <Compile Include="Extensions/Result.fs" />
+    <Compile Include="Extensions/Choice.fs" />
+    <Compile Include="Extensions/Seq.fs" />
+    <Compile Include="Extensions/IList.fs" />
+    <Compile Include="Extensions/List.fs" />
+    <Compile Include="Extensions/Array.fs" />
+    <Compile Include="Extensions/ResizeArray.fs" />
+    <Compile Include="Extensions/String.fs" />
+    <Compile Include="Extensions/IReadOnlyCollection.fs" />
+    <Compile Include="Extensions/IReadOnlyList.fs" />
+    <Compile Include="Extensions/Lazy.fs" />
+    <Compile Include="Extensions/Map.fs" />
+    <Compile Include="Extensions/Dictionary.fs" />
+    <Compile Include="Extensions/Dict.fs" />
+    <Compile Include="Extensions/IReadOnlyDictionary.fs" />
+    <Compile Include="Extensions/Enumerator.fs" />
+    <Compile Include="Extensions/Task.fs" />
+    <Compile Include="Extensions/ValueTask.fs" />
+    <Compile Include="Extensions/Async.fs" />
+    <Compile Include="Extensions/Extensions.fs" />
+    <Compile Include="Extensions/Tuple.fs" />
+    <Compile Include="Extensions/ValueTuple.fs" />
+    <Compile Include="Data/NonEmptySeq.fs" />
+    <Compile Include="Control/Converter.fs" />
+    <Compile Include="Control/Numeric.fs" />
+    <Compile Include="Control/Monoid.fs" />
+    <Compile Include="Control/Monad.fs" />
+    <Compile Include="Control/Foldable.fs" />
+    <Compile Include="Control/Alternative.fs" />
+    <Compile Include="Control/Applicative.fs" />
+    <Compile Include="Control/Parallel.fs" />
+    <Compile Include="Control/Functor.fs" />
+    <Compile Include="Control/MonadOps.fs" />
+    <Compile Include="Control/Comonad.fs" />
+    <Compile Include="Control/Invokable.fs" />
+    <Compile Include="Control/Category.fs" />
+    <Compile Include="Control/Arrow.fs" />
+    <Compile Include="Control/ArrowChoice.fs" />
+    <Compile Include="Control/ArrowApply.fs" />
+    <Compile Include="Control/Bifoldable.fs" />
+    <Compile Include="Control/Bitraversable.fs" />
+    <Compile Include="Control/Traversable.fs" />
+    <Compile Include="Control/Indexable.fs" />
+    <Compile Include="Control/MonadTrans.fs" />
+    <Compile Include="Control/Collection.fs" />
+    <Compile Include="Control/Tuple.fs" />
+    <Compile Include="Operators.fs" />
+    <Compile Include="Math/Applicative.fs" />
+    <Compile Include="Math/Generic.fs" />
+    <Compile Include="Builders.fs" />
+    <Compile Include="Data/Identity.fs" />
+    <Compile Include="Data/List.fs" />
+    <Compile Include="Data/Seq.fs" />
+    <Compile Include="Data/Option.fs" />
+    <Compile Include="Data/ValueOption.fs" />
+    <Compile Include="Data/Error.fs" />
+    <Compile Include="Data/Cont.fs" />
+    <Compile Include="Data/Reader.fs" />
+    <Compile Include="Data/Writer.fs" />
+    <Compile Include="Data/State.fs" />
+    <Compile Include="Data/Monoids.fs" />
+    <Compile Include="Data/MultiMap.fs" />
+    <Compile Include="Lens.fs" />
+    <Compile Include="Data/NonEmptyList.fs" />
+    <Compile Include="Data/NonEmptySet.fs" />
+    <Compile Include="Data/NonEmptyMap.fs" />
+    <Compile Include="Data/ZipList.fs" />
+    <Compile Include="Data/ParallelArray.fs" />
+    <Compile Include="Data/DList.fs" />
+    <Compile Include="Data/Validation.fs" />
+    <Compile Include="Data/Kleisli.fs" />
+    <Compile Include="Data/Free.fs" />
+    <Compile Include="Data/Coproduct.fs" />
+    <Compile Include="Extensions/Observable.fs" />
+    <Compile Include="Extensions/AsyncEnumerable.fs" />
+    <Compile Include="Memoization.fs" />
+    <Compile Include="Parsing.fs" />
+  </ItemGroup>
 
 	<!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
 	<ItemGroup>

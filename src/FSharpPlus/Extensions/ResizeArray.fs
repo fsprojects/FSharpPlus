@@ -83,6 +83,33 @@ module ResizeArray =
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
+
+    /// <summary>
+    /// Returns the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: _ []) (source: _ []) =
+        let index = Internals.FindLastSliceIndex.arrayImpl slice source
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Returns the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: _ []) (source: _ []) =
+        let index = Internals.FindLastSliceIndex.arrayImpl slice source
+        if index = -1 then None else Some index
     #endif
 
     /// <summary>

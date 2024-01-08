@@ -73,6 +73,23 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'U>
 
+    /// <summary>Combines values from three dictionaries using mapping function.</summary>
+    /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
+    /// <param name="mapping">The mapping function.</param>
+    /// <param name="source1">First input dictionary.</param>
+    /// <param name="source2">Second input dictionary.</param>
+    /// <param name="source3">Third input dictionary.</param>
+    ///
+    /// <returns>The mapped dictionary.</returns>
+    let map3 mapping (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
+        for KeyValue(k, vx) in source1 do
+            match tryGetValue k source2, tryGetValue k source3 with
+            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+            | _      , _       -> ()
+        dct :> IDictionary<'Key, 'U>
+
     /// <summary>Applies given function to each value of the given dictionary.</summary>
     /// <param name="chooser">The mapping function.</param>
     /// <param name="source">The input dictionary.</param>
