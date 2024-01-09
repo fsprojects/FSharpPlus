@@ -176,14 +176,7 @@ module Operators =
     /// Apply a lifted argument to a lifted function: f &lt;*&gt; arg
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
-
-    /// <summary>
-    /// Apply a lifted argument to a lifted function: f &lt;/&gt; arg.
-    /// Same as &lt;*&gt; but for parallel applicatives.
-    /// </summary>
-    /// <category index="2">Applicative</category>
-    let inline (</>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = ParApply.Invoke f x : '``Applicative<'U>``
+    let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``    
 
     /// <summary>
     /// Applies 2 lifted arguments to a non-lifted function. Equivalent to map2 in non list-like types.
@@ -224,6 +217,32 @@ module Operators =
     /// </summary>
     /// <category index="2">Applicative</category>
     let inline opt (v: '``Alternative<'T>``) : '``Alternative<option<'T>>`` = (Some : 'T -> _) <!> v </Append.Invoke/> result (None: option<'T>)
+
+
+    /// <summary>
+    /// Lifts a value into a Functor. Same as return in Computation Expressions.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline presult (x: 'T) : '``Functor<'T>`` = ParReturn.Invoke x
+
+    /// <summary>
+    /// Apply a lifted argument to a lifted function: f &lt;/&gt; arg.
+    /// Same as &lt;*&gt; but for parallel applicatives.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (</>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = ParApply.Invoke f x : '``Applicative<'U>``
+
+    /// <summary>
+    /// Applies 2 lifted arguments to a non-lifted function with parallel semantics.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline plift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = ParLift2.Invoke f x y
+
+    /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function with parallel semantics.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline plift3 (f: 'T->'U->'V->'W) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) (z: '``Applicative<'V>``) : '``Applicative<'W>`` = ParLift3.Invoke f x y z
 
 
 

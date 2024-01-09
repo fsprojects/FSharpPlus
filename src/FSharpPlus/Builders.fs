@@ -220,6 +220,16 @@ module GenericBuilders =
         member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = ParLift3.Invoke tuple3 t1 t2 t3
         member        _.Run f = f : '``Applicative<'T>``
 
+    /// Generic 2 layers Parallel Applicative CE builder.
+    type ParallelBuilder2<'``applicative1<applicative2<'t>>``> () =
+        member        _.ReturnFrom expr : '``applicative1<applicative2<'t>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (presult >> presult) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (presult >> presult) x
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (plift2 >> plift2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (plift3 >> plift3) tuple3 t1 t2 t3
+        member        _.Run x : '``Applicative1<Applicative2<'T>>`` = x
+
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
 
@@ -237,5 +247,8 @@ module GenericBuilders =
 
     /// Creates a parallel applicative computation expression.
     let par<'``Applicative<'T>``> = ParallelBuilder<'``Applicative<'T>``> ()
+
+    /// Creates a parallel applicative computation expression which compose effects of two Applicatives.
+    let par2<'``Applicative1<Applicative2<'T>>``> = ParallelBuilder2<'``Applicative1<Applicative2<'T>>``> ()
 
 #endif
