@@ -238,6 +238,15 @@ module Array =
 
         Array.init (min a1.Length a2.Length) (fun i -> f a1.[i] a2.[i])
     
+    /// <summary>Safely build a new array whose elements are the results of applying the given function
+    /// to each of the elements of the three arrays pairwise.</summary>
+    /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
+    let map3Shortest f (a1: 'T1 []) (a2: 'T2 []) (a3: 'T3 []) =
+        raiseIfNull (nameof a1) a1
+        raiseIfNull (nameof a2) a2
+        raiseIfNull (nameof a3) a3
+        Array.init (min a1.Length a2.Length |> min a3.Length) (fun i -> f a1.[i] a2.[i] a3.[i])
+    
     /// <summary>
     /// Zip safely two arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
     /// </summary>
@@ -249,6 +258,19 @@ module Array =
         raiseIfNull (nameof(a2)) a2
 
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
+
+    /// <summary>
+    /// Zip safely three arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
+    /// </summary>
+    /// <param name="a1">First input array.</param>
+    /// <param name="a2">Second input array.</param>
+    /// <param name="a3">Third input array.</param>
+    /// <returns>Array with corresponding tuple of input arrays.</returns>
+    let zip3Shortest (a1: array<'T1>) (a2: array<'T2>) (a3: array<'T3>) =
+        raiseIfNull (nameof a1) a1
+        raiseIfNull (nameof a2) a2
+        raiseIfNull (nameof a3) a3
+        Array.init (min a1.Length a2.Length |> min a3.Length) (fun i -> a1.[i], a2.[i], a3.[i])
 
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
