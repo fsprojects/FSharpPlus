@@ -24,31 +24,36 @@ type ParReturn =
     
     
 
-    static member        ParReturn (_: seq<'a>        , _: Default2) = fun  x      -> Seq.initInfinite (fun _ -> x) : seq<'a>
-    static member        ParReturn (_: NonEmptySeq<'a>, _: Default2) = fun  x      -> NonEmptySeq.initInfinite (fun _ -> x) : NonEmptySeq<'a>
-    static member        ParReturn (x: IEnumerator<'a>, y: Default2) = Return.Return (x, y)
-    static member inline ParReturn (_: 'R             , _: Default1) = fun (x: 'T) -> ParReturn.InvokeOnInstance x         : 'R
-    static member        ParReturn (x: Lazy<'a>       , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (_: seq<'a>         , _: Default2 ) = fun  x      -> Seq.initInfinite (fun _ -> x) : seq<'a>
+    static member        ParReturn (_: NonEmptySeq<'a> , _: Default2 ) = fun  x      -> NonEmptySeq.initInfinite (fun _ -> x) : NonEmptySeq<'a>
+    static member        ParReturn (_: IEnumerator<'a> , _: Default2 ) = Enumerator.unfold (fun x -> Some (x, x)) : _ -> IEnumerator<'a>
+    static member inline ParReturn (_: 'R              , _: Default1 ) = fun (x: 'T) -> ParReturn.InvokeOnInstance x         : 'R
+    static member        ParReturn (x: Lazy<'a>        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>) : _ -> Lazy<'a>
     #if !FABLE_COMPILER
-    static member        ParReturn (_: 'T Task        , _: ParReturn  ) = fun x -> Task.FromResult x                    : 'T Task
+    static member        ParReturn (_: 'T Task         , _: ParReturn) = fun x -> Task.FromResult x                    : 'T Task
     #endif
     #if NETSTANDARD2_1 && !FABLE_COMPILER
-    static member        ParReturn (_: 'T ValueTask   , _: ParReturn  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
+    static member        ParReturn (_: 'T ValueTask    , _: ParReturn) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
     #endif
-    static member inline ParReturn (x: option<'a>     , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member inline ParReturn (x: voption<'a>    , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member        ParReturn (_: list<'a>       , _: ParReturn  ) = fun x -> List.cycle [x]                       : list<'a>
-    // static member        ParReturn (x: 'a []          , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member        ParReturn (x: 'r -> 'a       , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member inline ParReturn (x:  'm * 'a       , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member inline ParReturn (x: struct ('m * 'a), _: ParReturn ) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member        ParReturn (_: 'a Async       , _: ParReturn  ) = fun (x: 'a) -> async.Return x
-    static member inline ParReturn (_: Result<'t, 'e> , _: ParReturn  ) = fun x -> if opaqueId false then Error (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Ok x              : Result<'t,'e>
-    static member inline ParReturn (_: Choice<'t, 'e> , _: ParReturn  ) = fun x -> if opaqueId false then Choice2Of2 (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Choice1Of2 x : Choice<'t,'e>
+    static member        ParReturn (x: option<'a>      , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (x: voption<'a>     , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (_: list<'a>        , _: ParReturn) = fun x -> List.cycle [x]                       : list<'a>
+    
+    [<CompilerMessage("No parallel applicative Return operation for 't []", 10720, IsError = true)>]
+    static member        ParReturn (x: 'a []          , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+
+    static member        ParReturn (x: 'r -> 'a        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member inline ParReturn (x:  'm * 'a        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member inline ParReturn (x: struct ('m * 'a), _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (_: 'a Async        , _: ParReturn) = fun (x: 'a) -> async.Return x
+    static member inline ParReturn (_: Result<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Error (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Ok x              : Result<'t,'e>
+    static member inline ParReturn (_: Choice<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Choice2Of2 (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Choice1Of2 x : Choice<'t,'e>
     #if !FABLE_COMPILER
-    static member        ParReturn (x: Expr<'a>       , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (x: Expr<'a>        , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
     #endif
-    // static member        ParReturn (x: ResizeArray<'a>, _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
+    
+    [<CompilerMessage("No parallel applicative Return operation for ResizeArray<'t>", 10720, IsError = true)>]
+    static member        ParReturn (x: ResizeArray<'a>, _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
 
 #endif
 
