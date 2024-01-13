@@ -134,6 +134,16 @@ module ResizeArray =
             ra.Add (f a1.[i] a2.[i])
         ra
     
+    /// <summary>Safely build a new ResizeArray whose elements are the results of applying the given function
+    /// to each of the elements of the three ResizeArrays pairwise.</summary>
+    /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
+    let map3Shortest f (a1: ResizeArray<'T1>) (a2: ResizeArray<'T2>) (a3: ResizeArray<'T3>) =
+        let len = min a1.Count a2.Count |> min a3.Count
+        let ra = ResizeArray len
+        for i in 0..(len-1) do
+            ra.Add (f a1.[i] a2.[i] a3.[i])
+        ra
+    
     /// <summary>
     /// Zip safely two ResizeArrays. If one ResizeArray is shorter, excess elements are discarded from the right end of the longer ResizeArray. 
     /// </summary>
@@ -145,4 +155,18 @@ module ResizeArray =
         let ra = ResizeArray(len)
         for i in 0..(len-1) do
             ra.Add (a1.[i], a2.[i])
+        ra
+
+    /// <summary>
+    /// Zip safely three ResizeArrays. If one ResizeArray is shorter, excess elements are discarded from the right end of the longer ResizeArray.
+    /// </summary>
+    /// <param name="a1">First input ResizeArray.</param>
+    /// <param name="a2">Second input ResizeArray.</param>
+    /// <param name="a3">Third input ResizeArray.</param>
+    /// <returns>ResizeArray with corresponding pairs of input ResizeArrays.</returns>
+    let zip3Shortest (a1: ResizeArray<'T1>) (a2: ResizeArray<'T2>) (a3: ResizeArray<'T3>) =
+        let len = min a1.Count a2.Count |> min a3.Count
+        let ra = ResizeArray len
+        for i in 0..(len-1) do
+            ra.Add (a1.[i], a2.[i], a3.[i])
         ra
