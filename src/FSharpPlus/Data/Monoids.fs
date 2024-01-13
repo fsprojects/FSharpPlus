@@ -180,6 +180,15 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
     static member inline get_Empty ()                 = Compose (getEmpty ()) : Compose<'``AlternativeF<'ApplicativeG<'T>``>
     static member inline (<|>) (Compose x, Compose y) = Compose (x <|> y)     : Compose<'``AlternativeF<'ApplicativeG<'T>``>
 
+    // Parallel Applicative
+    static member inline (</>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T->'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
+        Compose ((((</>) : '``ApplicativeG<'T->'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T>->'ApplicativeG<'U>`` ) </> x: '``ApplicativeF<'ApplicativeG<'U>``)
+
+    static member inline ParLift2 (f: 'T -> 'U -> 'V, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``)) =
+        Compose (ParLift2.Invoke (ParLift2.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>``) x y: '``ApplicativeF<'ApplicativeG<'V>``)
+
+    static member inline ParLift3 (f: 'T -> 'U -> 'V -> 'W, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``), Compose (z: '``ApplicativeF<'ApplicativeG<'V>``)) =
+        Compose (ParLift3.Invoke (ParLift3.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>`` -> '``ApplicativeG<'W>``) x y z: '``ApplicativeF<'ApplicativeG<'W>``)
 
 /// Basic operations on Compose
 [<RequireQualifiedAccess>]

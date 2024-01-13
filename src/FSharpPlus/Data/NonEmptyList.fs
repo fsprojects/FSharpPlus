@@ -86,6 +86,11 @@ module NonEmptyList =
     /// to each of the elements of the two non empty list pairwise.</summary>
     /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
     let map2Shortest f l1 l2 = { Head = f l1.Head l2.Head; Tail = List.map2Shortest f l1.Tail l2.Tail }
+
+    /// <summary>Safely build a new non empty list whose elements are the results of applying the given function
+    /// to each of the elements of the three non empty list pointwise.</summary>
+    /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
+    let map3Shortest f l1 l2 l3 = { Head = f l1.Head l2.Head l3.Head; Tail = List.map3Shortest f l1.Tail l2.Tail l3.Tail }
     
     /// <summary>Build a new non empty list whose elements are the results of applying the given function with index
     /// to each of the elements of the non empty list.</summary>
@@ -246,8 +251,16 @@ type NonEmptyList<'t> with
         let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
+    static member (</>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) = NonEmptyList.map2Shortest (<|) f x
+
     static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
     static member Lift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.ofList (List.lift3 f (NonEmptyList.toList x) (NonEmptyList.toList y) (NonEmptyList.toList z))
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member ParLift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.map2Shortest f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member ParLift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.map3Shortest f x y z
 
     static member Extract   {Head = h; Tail = _} = h : 't
 

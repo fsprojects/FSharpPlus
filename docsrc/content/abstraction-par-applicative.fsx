@@ -29,6 +29,14 @@ Other operations
 (**
    static member ParLift2 (f: 'T1 -> 'T2 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
 *)
+
+(**
+* ``plift3``
+*)
+(**
+   static member ParLift3 (f: 'T1 -> 'T2 -> 'T3 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>, x3: 'Applicative<'T3>) : 'Applicative<'T>
+*)
+
 (**
 
 
@@ -54,61 +62,33 @@ From F#
  
  -  ``seq<'T>``
  -  ``list<'T>``
- -  ``array<'T>``    *
- -  ``'T [,]``       *
- -  ``'T [,,]``      *
- -  ``'T [,,,]``     *
  -  ``option<'T>``   *
  -  ``voption<'T>``  *
- -  ``IObservable<'T>``
  -  ``Lazy<'T>``     *
  -  ``Async<'T>``
- -  ``Result<'T,'U>`` 
- -  ``Choice<'T,'U>``
- -  ``KeyValuePair<'Key,'T>`` *
- -  ``'Monoid * 'T`` *
+ -  ``Result<'T, 'U>``
+ -  ``Choice<'T, 'U>``
+ -  ``KeyValuePair<'Key, 'T>``  *
+ -  ``'Monoid * 'T``            *
  -  ``ValueTuple<'Monoid, 'T>`` *
  -  ``Task<'T>``
  -  ``ValueTask<'T>``
- -  ``'R->'T``          *
+ -  ``'R -> 'T``        *
  -  ``Expr<'T>``        *
- -  ``ResizeArray<'T>`` *
+ 
  
 From F#+
 
- -  [``Identity<'T>``](type-identity.html)
- -  [``Cont<'R,'T>``](type-cont.html)
- -  [``ContT<'R,'T>``](type-contt.html)
- -  [``Reader<'R,'T>``](type-reader.html)
- -  [``ReaderT<'R,'Monad<'T>>``](type-readert.html)
- -  [``Writer<'Monoid,'T>``](type-writer.html)
- -  [``WriterT<'Monad<'T * 'Monoid>>``](type-writert.html)
- -  [``State<'S,'T * 'S>``](type-state.html)
- -  [``StateT<'S,'Monad<'T * 'S>>``](type-statet.html)
- -  [``OptionT<'Monad<option<'T>>``](type-optiont.html)
- -  [``ValueOptionT<'Monad<voption<'T>>``](type-valueoptiont.html)
- -  [``SeqT<'Monad<seq<'T>>``](type-seqt.html)
- -  [``ListT<'Monad<list<'T>>``](type-listt.html)
- -  [``ResultT<'Monad<Result<'T,'TError>>``](type-resultt.html)
- -  [``ChoiceT<'Monad<Choice<'T,'TError>>``](type-choicet.html)
- -  [``Free<'Functor<'T>,'T>``](type-free.html)
+ -  [``NonEmptySeq<'T>``]
  -  [``NonEmptyList<'T>``](type-nonempty.html)
- -  [``Validation<'Error,'T>``](type-validation.html)
- -  [``ZipList<'T>``](type-ziplist.html)
- -  [``ParallelArray<'T>``](type-parallelarray.html)
- -  [``Const<'C,'T>``](type-const.html)
  -  [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html)
- -  [``DList<'T>``](type-dlist.html)
- -  [``Vector<'T,'Dimension>``](type-vector.html)
- -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
+
+ (*) The operation is the same as that for the normal applicative
  
-Restricted:
- -  ``string``
- -  ``StringBuilder``
- -  ``Set<'T>``
- -  ``IEnumerator<'T>``
 
 Only for <*> operation:
+ -  ``array<'T>``
+ -  ``ResizeArray<'T>``
  -  ``Map<'Key, 'T>``
  -  ``Dictionary<'Key, 'T>``
  -  ``IDictionary<'Key, 'T>``
