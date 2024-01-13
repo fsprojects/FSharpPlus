@@ -134,6 +134,28 @@ module Task =
                                 ) |> ignore) |> ignore) |> ignore
             tcs.Task
 
+    /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
+    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First task workflow.</param>
+    /// <param name="y">Second task workflow.</param>
+    let pmap2 f x y = task {
+        let! x' = x
+        let! y' = y
+        return f x' y' }
+
+    /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
+    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First task workflow.</param>
+    /// <param name="y">Second task workflow.</param>
+    /// <param name="z">Third task workflow.</param>
+    let pmap3 f x y z = task {
+        let! x' = x
+        let! y' = y
+        let! z' = z
+        return f x' y' z' }
+
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
     /// to the resulting value of another task workflow</summary>
     /// <param name="f">Task workflow returning a function</param>

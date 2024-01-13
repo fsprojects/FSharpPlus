@@ -62,6 +62,35 @@ module ValueTask =
                     with e -> tcs.SetException e)))
         tcs.Task |> ValueTask<'W>
 
+    /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
+    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First ValueTask workflow.</param>
+    /// <param name="y">Second ValueTask workflow.</param>
+    /// <param name="z">Third ValueTask workflow.</param>
+    let pmap2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
+        task {
+            let! x' = x
+            let! y' = y
+            return f x' y'
+        }
+        |> ValueTask<'V>
+
+    /// <summary>Creates a ValueTask workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
+    /// <remarks>Similar to map3 but workflows are run in parallel.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First ValueTask workflow.</param>
+    /// <param name="y">Second ValueTask workflow.</param>
+    /// <param name="z">Third ValueTask workflow.</param>
+    let pmap3 (f: 'T -> 'U -> 'V -> 'W) (x: ValueTask<'T>) (y: ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
+        task {
+            let! x' = x
+            let! y' = y
+            let! z' = z
+            return f x' y' z'
+        }
+        |> ValueTask<'W>
+
     /// <summary>Creates a ValueTask workflow that is the result of applying the resulting function of a ValueTask workflow
     /// to the resulting value of another ValueTask workflow</summary>
     /// <param name="f">ValueTask workflow returning a function</param>
