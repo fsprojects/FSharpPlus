@@ -21,26 +21,24 @@ type ParReturn =
     static member inline Invoke (x: 'T) : '``ParApplicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member ParReturn : _*_ -> _) output, mthd)
         call (Unchecked.defaultof<ParReturn>, Unchecked.defaultof<'``ParApplicative<'T>``>) x
-    
-    
 
-    static member        ParReturn (_: seq<'a>         , _: Default2 ) = fun  x      -> Seq.initInfinite (fun _ -> x) : seq<'a>
-    static member        ParReturn (_: NonEmptySeq<'a> , _: Default2 ) = fun  x      -> NonEmptySeq.initInfinite (fun _ -> x) : NonEmptySeq<'a>
-    static member        ParReturn (_: IEnumerator<'a> , _: Default2 ) = Enumerator.unfold (fun x -> Some (x, x)) : _ -> IEnumerator<'a>
-    static member inline ParReturn (_: 'R              , _: Default1 ) = fun (x: 'T) -> ParReturn.InvokeOnInstance x         : 'R
+    static member        ParReturn (_: seq<'a>         , _: Default2 ) = fun x -> Seq.initInfinite (fun _ -> x)         : seq<'a>
+    static member        ParReturn (_: NonEmptySeq<'a> , _: Default2 ) = fun x -> NonEmptySeq.initInfinite (fun _ -> x) : NonEmptySeq<'a>
+    static member        ParReturn (_: IEnumerator<'a> , _: Default2 ) = fun x -> Enumerator.upto None (fun _ -> x)     : IEnumerator<'a>
+    static member inline ParReturn (_: 'R              , _: Default1 ) = fun (x: 'T) -> ParReturn.InvokeOnInstance x    : 'R
     static member        ParReturn (x: Lazy<'a>        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>) : _ -> Lazy<'a>
     #if !FABLE_COMPILER
-    static member        ParReturn (_: 'T Task         , _: ParReturn) = fun x -> Task.FromResult x                    : 'T Task
+    static member        ParReturn (_: 'T Task         , _: ParReturn) = fun x -> Task.FromResult x                     : 'T Task
     #endif
     #if NETSTANDARD2_1 && !FABLE_COMPILER
-    static member        ParReturn (_: 'T ValueTask    , _: ParReturn) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
+    static member        ParReturn (_: 'T ValueTask    , _: ParReturn) = fun (x: 'T) -> ValueTask<'T> x                 : 'T ValueTask
     #endif
     static member        ParReturn (x: option<'a>      , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
     static member        ParReturn (x: voption<'a>     , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
-    static member        ParReturn (_: list<'a>        , _: ParReturn) = fun x -> List.cycle [x]                       : list<'a>
+    static member        ParReturn (_: list<'a>        , _: ParReturn) = fun x -> List.cycle [x]                        : list<'a>
     
     [<CompilerMessage("No parallel applicative Return operation for 't []", 10720, IsError = true)>]
-    static member        ParReturn (x: 'a []          , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (x: 'a []           , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
 
     static member        ParReturn (x: 'r -> 'a        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
     static member inline ParReturn (x:  'm * 'a        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
@@ -49,7 +47,7 @@ type ParReturn =
     static member inline ParReturn (_: Result<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Error (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Ok x              : Result<'t,'e>
     static member inline ParReturn (_: Choice<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Choice2Of2 (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Choice1Of2 x : Choice<'t,'e>
     #if !FABLE_COMPILER
-    static member        ParReturn (x: Expr<'a>        , _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
+    static member        ParReturn (x: Expr<'a>        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
     #endif
     
     [<CompilerMessage("No parallel applicative Return operation for ResizeArray<'t>", 10720, IsError = true)>]
@@ -61,7 +59,7 @@ type ParApply =
     inherit Default1
  
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
-    // static member inline ``</>`` (struct (f: '``ParApplicative<'T->'U>``, x: '``ParApplicative<'T>``), [<Optional>]_output: '``ParApplicative<'U>``, [<Optional>]_mthd:Default1) : '``ParApplicative<'U>`` = ((^``ParApplicative<'T->'U>`` or ^``ParApplicative<'T>`` or ^``ParApplicative<'U>``) : (static member (</>) : _*_ -> _) f, x)
+
     static member        ``</>`` (struct (f: Lazy<'T->'U>        , x: Lazy<'T>             ), [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: ParApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member        ``</>`` (struct (f: seq<_>              , x: seq<'T>              ), [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: ParApply) = Seq.map2 (<|) f x
     static member        ``</>`` (struct (f: NonEmptySeq<_>      , x: NonEmptySeq<'T>      ), [<Optional>]_output: NonEmptySeq<'U>      , [<Optional>]_mthd: ParApply) = NonEmptySeq.map2 (<|) f x
@@ -107,10 +105,10 @@ type ParApply =
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type ParApply with
-    // static member inline ``</>`` (struct (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``     ) , _output: '``Monad<'U>``      , [<Optional>]_mthd:Default2) : '``Monad<'U>``     = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
+
     static member inline ``</>`` (struct (_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct), _output: ^r when ^r : null and ^r: struct, _mthd: Default1) = id
-    
-    static member inline ``</>`` (struct (f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``), _output: '``Applicative<'U>``, [<Optional>]_mthd: Default1) : '``Applicative<'U>`` = ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (</>) : _*_ -> _) f, x)
+    static member inline ``</>`` (struct (f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``), _output: '``Applicative<'U>``, [<Optional>]_mthd: Default1) : '``Applicative<'U>`` =
+        ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (</>) : _*_ -> _) f, x)
 
 
 type ParLift2 =
@@ -209,16 +207,16 @@ type ParLift3 with
 type IsParLeftZero =
     inherit Default1
 
-    static member IsParLeftZero (t: ref<seq<_>>      , _mthd: IsParLeftZero) = Seq.isEmpty t.Value
+    static member IsParLeftZero (t: ref<seq<_>>        , _mthd: IsParLeftZero) = Seq.isEmpty t.Value
     static member IsParLeftZero (_: ref<NonEmptySeq<_>>, _mthd: IsParLeftZero) = false
-    static member IsParLeftZero (t: ref<list<_>>     , _mthd: IsParLeftZero) = List.isEmpty t.Value
-    static member IsParLeftZero (t: ref<array<_>>    , _mthd: IsParLeftZero) = Array.isEmpty t.Value
-    static member IsParLeftZero (t: ref<option<_>>   , _mthd: IsParLeftZero) = IsLeftZero.IsLeftZero (t, Unchecked.defaultof<IsLeftZero>)
+    static member IsParLeftZero (t: ref<list<_>>       , _mthd: IsParLeftZero) = List.isEmpty t.Value
+    static member IsParLeftZero (t: ref<array<_>>      , _mthd: IsParLeftZero) = Array.isEmpty t.Value
+    static member IsParLeftZero (t: ref<option<_>>     , _mthd: IsParLeftZero) = IsLeftZero.IsLeftZero (t, Unchecked.defaultof<IsLeftZero>)
     #if !FABLE_COMPILER
-    static member IsParLeftZero (t: ref<voption<_>>  , _mthd: IsParLeftZero) = IsLeftZero.IsLeftZero (t, Unchecked.defaultof<IsLeftZero>)
+    static member IsParLeftZero (t: ref<voption<_>>    , _mthd: IsParLeftZero) = IsLeftZero.IsLeftZero (t, Unchecked.defaultof<IsLeftZero>)
     #endif
-    static member IsParLeftZero (_: ref<Result<_,_>> , _mthd: IsParLeftZero) = false
-    static member IsParLeftZero (_: ref<Choice<_,_>> , _mthd: IsParLeftZero) = false
+    static member IsParLeftZero (_: ref<Result<_,_>>   , _mthd: IsParLeftZero) = false
+    static member IsParLeftZero (_: ref<Choice<_,_>>   , _mthd: IsParLeftZero) = false
 
     static member inline Invoke (x: '``ParApplicative<'T>``) : bool =
         let inline call (mthd: ^M, input: ^I) =
