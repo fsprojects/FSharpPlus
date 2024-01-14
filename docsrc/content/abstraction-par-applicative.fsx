@@ -110,6 +110,16 @@ Examples
 
 open FSharpPlus
 
+
+// pointwise operations
+
+let arr1 = (+) <!> [|1;2;3|] <*> [|10;20;30|]
+let arr2 = (+) <!> [|1;2;3|] </> [|10;20;30|]
+
+// val arr1: int array = [|11; 21; 31; 12; 22; 32; 13; 23; 33|]
+// val arr2: int array = [|11; 22; 33|]
+
+
 // Validations
 
 let validated = par2 {
