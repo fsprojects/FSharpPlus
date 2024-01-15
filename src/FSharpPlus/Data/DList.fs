@@ -206,7 +206,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
         override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)
 
 
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+[<RequireQualifiedAccess>]
 module DList =
     /// O(1). Returns a new DList of two lists.
     let append left right = DList<'T>.appendLists (left, right)
