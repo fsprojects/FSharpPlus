@@ -7,12 +7,10 @@ open FSharpPlus
 // DList from FSharpx.Collections
 //This implementation adds an additional parameter to allow O(1) retrieval of the list length.
 
-
 type DListData<'T> =
     | Nil
     | Unit of 'T
     | Join of DListData<'T> * DListData<'T>
-
 
 /// DList is an ordered linear structure implementing the List signature (head, tail, cons), 
 /// end-insertion (add), and O(1) append. Ordering is by insertion history.
@@ -25,11 +23,11 @@ type DList<'T> (length: int, data: DListData<'T>) =
 
     static member ofSeq (s: seq<'T>) =
          DList (Seq.fold (fun (i, state) x ->
-            (i+1, 
+            (i + 1,
                 match state with
-                | Nil       -> Unit x
-                | Unit _    -> Join (state, Unit x)
-                | Join(_,_) -> Join (state, Unit x))) (0, Nil) s)
+                | Nil        -> Unit x
+                | Unit _     -> Join (state, Unit x)
+                | Join(_, _) -> Join (state, Unit x))) (0, Nil) s)
 
     override this.GetHashCode () =
         match hashCode with
@@ -44,14 +42,14 @@ type DList<'T> (length: int, data: DListData<'T>) =
     override this.Equals other =
         #if FABLE_COMPILER
         let y = other :?> DList<'T>
-        if this.Length <> y.Length then false 
+        if this.Length <> y.Length then false
         else
             if hash this <> hash y then false
             else Seq.forall2 Unchecked.equals this y
         #else
         match other with
-        | :? DList<'T> as y -> 
-            if this.Length <> y.Length then false 
+        | :? DList<'T> as y ->
+            if this.Length <> y.Length then false
             else
                 if this.GetHashCode () <> y.GetHashCode () then false
                 else Seq.forall2 Unchecked.equals this y
@@ -65,7 +63,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
     // Called a "fold" in the article processes the linear representation from right to left
     // and so is more appropriately implemented under the foldBack signature
     // See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
-    static member  foldBack (f: 'T -> 'State -> 'State) (l: DList<'T>)  (state: 'State) =
+    static member foldBack (f: 'T -> 'State -> 'State) (l: DList<'T>) (state: 'State) =
         let rec walk lefts l xs =
             match l with
             | Nil         -> finish lefts xs
@@ -78,37 +76,35 @@ type DList<'T> (length: int, data: DListData<'T>) =
         walk [] l.dc state
 
     // making only a small adjustment to Ramsey's algorithm we get a left to right fold
-    static member  fold (f: 'State -> 'T -> 'State) (state: 'State) (l: DList<'T>)  =
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+    static member fold (f: 'State -> 'T -> 'State) (state: 'State) (l: DList<'T>) =
+        let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt f
         let rec walk rights l xs =
             match l with
-            | Nil       -> finish rights xs
-            | Unit x    -> finish rights <| f.Invoke (xs, x)
-            | Join(x,y) -> walk (y::rights) x xs
+            | Nil         -> finish rights xs
+            | Unit x      -> finish rights <| f.Invoke (xs, x)
+            | Join (x, y) -> walk (y::rights) x xs
         and finish rights xs =
             match rights with
             | []    -> xs
             | t::ts -> walk ts t xs
         walk [] l.dc state
 
-    static member private tryFindi (f: (int -> 'T -> bool)) (l: DList<'T>)  =
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt f
+    static member private tryFindi (f: (int -> 'T -> bool)) (l: DList<'T>) =
+        let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt f
         let rec walk rights l i =
             match l with
-            | Nil       -> finish rights i
-            | Unit x    -> 
-                if f.Invoke (i, x) then
-                    Some x
-                else
-                    finish rights (i+1)
-            | Join(x,y) -> walk (y::rights) x i
+            | Nil         -> finish rights i
+            | Unit x      ->
+                if f.Invoke (i, x) then Some x
+                else finish rights (i + 1)
+            | Join (x, y) -> walk (y::rights) x i
         and finish rights xs =
             match rights with
             | []    -> None
             | t::ts -> walk ts t xs
         walk [] l.dc 0
     static member private findi (f: (int -> 'T -> bool)) (l: DList<'T>) =
-        match DList.tryFindi f l with | Some v ->v | None -> raise (System.Collections.Generic.KeyNotFoundException ()) 
+        match DList.tryFindi f l with Some v -> v | None -> raise (KeyNotFoundException ())
 
     static member append (left, right) =
         match left, right with
@@ -161,13 +157,13 @@ type DList<'T> (length: int, data: DListData<'T>) =
     member this.TryTail =
         let rec step (xs: DListData<'T>) (acc: DListData<'T>) =
             match xs with
-            | Nil -> acc | Unit _ -> acc
-            | Join (x, y)         -> step x (DList<'T>.append (y, acc))
+            | Nil | Unit _ -> acc
+            | Join (x, y)  -> step x (DList<'T>.append (y, acc))
         if this.IsEmpty then None
         else Some (DList (length - 1, step data Nil))
 
     /// O(log n). Returns the first element and tail.
-    member this.Uncons = (DList<'T>.head data, this.Tail)
+    member this.Uncons = DList<'T>.head data, this.Tail
 
     /// O(log n). Returns option first element and tail.
     member this.TryUncons =
@@ -175,10 +171,11 @@ type DList<'T> (length: int, data: DListData<'T>) =
         | Some x -> Some (x, this.Tail)
         | None   -> None
 
-    member s.Item with get (index: int) =
-                        let withIndex i _ = (i = index)
-                        if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException ())
-                        DList.findi withIndex s
+    member s.Item
+        with get (index: int) =
+            let withIndex i _ = (i = index)
+            if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException ())
+            DList.findi withIndex s
 
     member _.toSeq () =
         //adaptation of right-hand side of Norman Ramsey's "fold"
@@ -186,15 +183,14 @@ type DList<'T> (length: int, data: DListData<'T>) =
             match l with
             | Nil ->
                 match rights with
-                | []    -> () 
+                | []    -> ()
                 | t::ts -> yield! walk ts t
             | Unit x ->
                 yield x
                 match rights with
                 | []    -> ()
                 | t::ts -> yield! walk ts t
-            | Join (x, y) -> yield! walk (y::rights) x}
-               
+            | Join (x, y) -> yield! walk (y::rights) x }               
         (walk [] data).GetEnumerator ()
 
     interface IEnumerable<'T> with
@@ -207,13 +203,13 @@ type DList<'T> (length: int, data: DListData<'T>) =
         member s.Item with get index = s.Item index
 
     interface System.Collections.IEnumerable with
-        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)            
+        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)
 
 
 [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module DList =
     /// O(1). Returns a new DList of two lists.
-    let append left right = DList<'T>.appendLists(left, right)
+    let append left right = DList<'T>.appendLists (left, right)
 
     /// O(1). Returns a new DList with the element added to the beginning.
     let cons hd (l: DList<'T>) = 
@@ -272,7 +268,7 @@ module DList =
 
     // additions to fit F#+ :
     let inline map f (x: DList<_>) = DList.foldBack (cons << f ) x empty
-    let concat x = DList.fold append empty x 
+    let concat x = DList.fold append empty x
     let inline ap f x = concat <| map (fun y -> map ((|>) y) f) x
     let inline bind m k = DList.foldBack (append << k) empty m
 
@@ -283,13 +279,13 @@ type DList<'T> with
     static member (<|>) (x: DList<_>, y: DList<_>) = DList.append x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ToSeq  x = DList.toSeq  x
+    static member ToSeq x = DList.toSeq x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList x = DList.toList x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member OfSeq  x = DList.ofSeq  x
+    static member OfSeq x = DList.ofSeq x
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Fold (x, f, z) = DList.fold f x z
