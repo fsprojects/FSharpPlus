@@ -194,17 +194,11 @@ type DList<'T> (length: int, data: DListData<'T>) =
             | Join (x, y) -> yield! walk (y::rights) x }               
         (walk [] data).GetEnumerator ()
 
-    interface IEnumerable<'T> with
-        member s.GetEnumerator () = s.toSeq ()
-
-    interface IReadOnlyCollection<'T> with
-        member s.Count = s.Length
-
     interface IReadOnlyList<'T> with
         member s.Item with get index = s.Item index
-
-    interface System.Collections.IEnumerable with
-        override s.GetEnumerator () = (s.toSeq () :> System.Collections.IEnumerator)
+        member s.Count = s.Length
+        member s.GetEnumerator () = s.toSeq ()
+        member s.GetEnumerator () = s.toSeq () :> System.Collections.IEnumerator
 
 
 [<RequireQualifiedAccess>]
