@@ -64,10 +64,11 @@ type DList<'T> (length: int, data: DListData<'T>) =
     // and so is more appropriately implemented under the foldBack signature
     // See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
     static member foldBack (f: 'T -> 'State -> 'State) (l: DList<'T>) (state: 'State) =
+        let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt f
         let rec walk lefts l xs =
             match l with
             | Nil         -> finish lefts xs
-            | Unit x      -> finish lefts <| f x xs
+            | Unit x      -> finish lefts <| f.Invoke (x, xs)
             | Join (x, y) -> walk (x::lefts) y xs
         and finish lefts xs =
             match lefts with
