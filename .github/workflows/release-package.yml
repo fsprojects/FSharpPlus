@@ -1,4 +1,4 @@
-name: .NET Core
+name: Build release package
 
 env:
   # Stop wasting time caching packages
