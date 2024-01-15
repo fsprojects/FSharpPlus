@@ -1,5 +1,6 @@
 ﻿namespace FSharpPlus.Data
 
+open System
 open System.Collections.Generic
 open System.ComponentModel
 open FSharpPlus
@@ -40,21 +41,9 @@ type DList<'T> (length: int, data: DListData<'T>) =
         | Some hash -> hash
 
     override this.Equals other =
-        #if FABLE_COMPILER
-        let y = other :?> DList<'T>
-        if this.Length <> y.Length then false
-        else
-            if hash this <> hash y then false
-            else Seq.forall2 Unchecked.equals this y
-        #else
         match other with
-        | :? DList<'T> as y ->
-            if this.Length <> y.Length then false
-            else
-                if this.GetHashCode () <> y.GetHashCode () then false
-                else Seq.forall2 Unchecked.equals this y
+        | :? DList<'T> as y -> (this :> IEquatable<DList<'T>>).Equals y
         | _ -> false
-        #endif
 
     /// O(1). Returns the count of elememts.
     member _.Length = length
@@ -175,7 +164,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
     member s.Item
         with get (index: int) =
             let withIndex i _ = (i = index)
-            if index < 0 || index >= s.Length then raise (System.IndexOutOfRangeException ())
+            if index < 0 || index >= s.Length then raise (IndexOutOfRangeException ())
             DList.findi withIndex s
 
     member _.toSeq () =
@@ -193,6 +182,12 @@ type DList<'T> (length: int, data: DListData<'T>) =
                 | t::ts -> yield! walk ts t
             | Join (x, y) -> yield! walk (y::rights) x }               
         (walk [] data).GetEnumerator ()
+
+    interface IEquatable<DList<'T>> with
+        member this.Equals(y: DList<'T>) =
+            if this.Length <> y.Length then false
+            elif this.GetHashCode () <> y.GetHashCode () then false
+            else Seq.forall2 Unchecked.equals this y
 
     interface IReadOnlyList<'T> with
         member s.Item with get index = s.Item index
