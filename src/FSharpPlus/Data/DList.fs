@@ -266,6 +266,20 @@ module DList =
     /// O(n). Returns a seq of the DList elements.
     let inline toSeq (l: DList<'T>) = l :> seq<'T>
 
+    let pairwise (source: DList<'T>) =
+        let (|Cons|Nil|) (l: DList<'T>) = match l.TryUncons with Some (a, b) -> Cons (a, b) | None -> Nil
+        let rec pairWiseDListData cons lastvalue = function
+            | Nil            -> cons
+            | Cons (x, Nil)  -> Join (cons, Unit (lastvalue, x))
+            | Cons (x, rest) -> pairWiseDListData (Join (cons, Unit (lastvalue, x))) x rest
+        let dlistData =
+            match source with
+            | Nil | Cons (_, Nil)        -> Nil
+            | Cons (x, (Cons (y, rest))) -> pairWiseDListData (Unit (x, y)) y rest
+        match source.Length with
+        | 0 -> DList (0, Nil)
+        | _ -> DList (source.Length - 1, dlistData)
+
     // additions to fit F#+ :
     let inline map f (x: DList<_>) = DList.foldBack (cons << f ) x empty
     let concat x = DList.fold append empty x
