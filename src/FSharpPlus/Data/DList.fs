@@ -184,26 +184,6 @@ type DList<'T> (length: int, data: DListData<'T>) =
             | Join (x, y) -> yield! walk (y::rights) x }               
         (walk [] data).GetEnumerator ()
 
-    member internal this.toList () =
-    #if FABLE_COMPILER
-        DList<'T>.foldBack List.cons this []
-    #else
-        let mutable coll = new ListCollector<_> ()
-        let rec walk rights = function
-            | Nil ->
-                match rights with
-                | []    -> ()
-                | t::ts -> walk ts t
-            | Unit x ->
-                coll.Add x
-                match rights with
-                | []    -> ()
-                | t::ts -> walk ts t
-            | Join (x, y) -> walk (y::rights) x
-        walk [] data
-        coll.Close ()
-    #endif
-
     interface IEquatable<DList<'T>> with
         member this.Equals(y: DList<'T>) =
             if this.Length <> y.Length then false
@@ -271,8 +251,30 @@ module DList =
     /// O(n). Returns a DList of the seq.
     let ofSeq s = DList<'T>.ofSeq s
 
-    /// O(n). Returns a list of the DList elements.
-    let toList (l: DList<'T>) = l.toList ()
+    /// Iterates over each element of the list.
+    let iter action (source: DList<'T>) =
+        let rec walk rights = function
+            | Nil ->
+                match rights with
+                | []    -> ()
+                | t::ts -> walk ts t
+            | Unit x ->
+                action x
+                match rights with
+                | []    -> ()
+                | t::ts -> walk ts t
+            | Join (x, y) -> walk (y::rights) x
+        walk [] source.dc    
+
+    /// Returns a list of the DList elements.
+    let toList (source: DList<'T>) =
+    #if FABLE_COMPILER
+        DList<'T>.foldBack List.cons source []
+    #else
+        let mutable coll = new ListCollector<_> ()
+        iter (fun x -> coll.Add x) source
+        coll.Close ()
+    #endif
 
     /// O(n). Returns a seq of the DList elements.
     let inline toSeq (l: DList<'T>) = l :> seq<'T>
