@@ -276,6 +276,16 @@ module DList =
         coll.Close ()
     #endif
 
+    /// Returns an array of the DList elements.
+    let toArray (source: DList<'T>) =
+    #if FABLE_COMPILER
+        source :> seq<'T> |> Seq.toArray
+    #else
+        let mutable coll = new ArrayCollector<_> ()
+        iter (fun x -> coll.Add x) source
+        coll.Close ()
+    #endif
+
     /// O(n). Returns a seq of the DList elements.
     let inline toSeq (l: DList<'T>) = l :> seq<'T>
 
