@@ -49,7 +49,7 @@ type DList<'T> (length: int, data: DListData<'T>) =
     /// O(1). Returns the count of elememts.
     member _.Length = length
 
-    // O(n). FoldBack walks the DList using constant stack space. Implementation is from Norman Ramsey.
+    // O(2n). FoldBack walks the DList using constant stack space. Implementation is from Norman Ramsey.
     // Called a "fold" in the article processes the linear representation from right to left
     // and so is more appropriately implemented under the foldBack signature
     // See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
@@ -212,8 +212,7 @@ module DList =
     [<GeneralizableValue>]
     let empty<'T> : DList<'T> = DList(0, Nil)
 
-    /// O(n). Fold walks the DList using constant stack space. Implementation is from Norman Ramsey.
-    /// See http://stackoverflow.com/questions/5324623/functional-o1-append-and-on-iteration-from-first-element-list-data-structure/5334068#5334068
+    /// Fold walks the DList using constant stack space.
     let foldBack (f: 'T -> 'State -> 'State) (l: DList<'T>) (state: 'State) = DList<'T>.foldBack f l state
 
     let fold (f: 'State -> 'T -> 'State) (state: 'State) (l: DList<'T>) = DList<'T>.fold f state l
@@ -248,7 +247,7 @@ module DList =
     /// O(log n). Returns option first element and tail.
     let inline tryUncons (l: DList<'T>) = l.TryUncons
 
-    /// O(n). Returns a DList of the seq.
+    /// Returns a DList of the seq.
     let ofSeq s = DList<'T>.ofSeq s
 
     /// Iterates over each element of the list.
@@ -286,7 +285,7 @@ module DList =
         coll.Close ()
     #endif
 
-    /// O(n). Returns a seq of the DList elements.
+    /// Returns a seq of the DList elements.
     let inline toSeq (l: DList<'T>) = l :> seq<'T>
 
     let pairwise (source: DList<'T>) =
