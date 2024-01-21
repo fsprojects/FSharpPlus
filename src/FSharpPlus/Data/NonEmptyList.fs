@@ -148,6 +148,18 @@ module NonEmptyList =
     /// </summary>
     let inline sequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` = traverse id source
 
+    /// <summary>
+    /// Maps each element of the list to an action, evaluates these actions from left to right, pointwise, and/or in parallel, and collect the results.
+    /// </summary>
+    let inline ptraverse (f: 'T -> '``Functor<'U>``) (source: NonEmptyList<'T>) =
+        ParSequence.ForInfiniteSequences (Seq.map f source, IsParLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
+
+    /// <summary>
+    /// Evaluates each action in the list from left to right, pointwise, and/or in parallel and collect the results.
+    /// </summary>
+    let inline psequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` =
+        ParSequence.ForInfiniteSequences (source, IsParLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
+
 #endif
 
     /// <summary>Returns the average of the elements in the list.</summary>
@@ -251,6 +263,7 @@ type NonEmptyList<'t> with
         let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
+    static member ParReturn (x: 'a) = { Head = x; Tail = List.cycle [x] }
     static member (</>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) = NonEmptyList.map2Shortest (<|) f x
 
     static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
@@ -289,6 +302,12 @@ type NonEmptyList<'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Sequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.sequence s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline ParTraverse (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.ptraverse f s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline ParSequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.psequence s
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList

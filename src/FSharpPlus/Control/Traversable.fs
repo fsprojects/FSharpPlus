@@ -254,7 +254,7 @@ type ParSequence =
     static member inline InvokeOnInstance (t: '``ParTraversable<'Functor<'T>>``) = (^``ParTraversable<'Functor<'T>>`` : (static member ParSequence : _ -> _) t) : '``Functor<'ParTraversable<'T>>``
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline ForInfiniteSequences (t: seq<_>, isFailure, conversion) =
+    static member inline ForInfiniteSequences (t: seq<_>, [<InlineIfLambda>]isFailure, [<InlineIfLambda>]conversion, [<InlineIfLambda>]result) =
         let add x y = y :: x
         let mutable go = true
         let mutable r = Unchecked.defaultof<_>
@@ -265,7 +265,7 @@ type ParSequence =
             if isEmpty then r <- Map.Invoke List.singleton e.Current
             else r <- Map.Invoke add r </> e.Current
             isEmpty <- false
-        if isEmpty then ParReturn.Invoke (conversion [])
+        if isEmpty then result (conversion [])
         else Map.Invoke (List.rev >> conversion) r
 
 type ParTraverse =
@@ -306,14 +306,14 @@ type ParTraverse =
         Traces.add "ParTraverse seq, 'T -> Functor<'U>"
         #endif
         let mapped = Seq.map f t
-        ParSequence.ForInfiniteSequences (mapped, IsParLeftZero.Invoke, List.toSeq) : '``Functor<seq<'U>>``
+        ParSequence.ForInfiniteSequences (mapped, IsParLeftZero.Invoke, List.toSeq, ParReturn.Invoke) : '``Functor<seq<'U>>``
 
     static member inline ParTraverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) =
         #if TEST_TRACE
         Traces.add "ParTraverse NonEmptySeq, 'T -> Functor<'U>"
         #endif
         let mapped = NonEmptySeq.map f t
-        ParSequence.ForInfiniteSequences (mapped, IsParLeftZero.Invoke, NonEmptySeq.ofList) : '``Functor<NonEmptySeq<'U>>``
+        ParSequence.ForInfiniteSequences (mapped, IsParLeftZero.Invoke, NonEmptySeq.ofList, ParReturn.Invoke) : '``Functor<NonEmptySeq<'U>>``
 
     static member inline ParTraverse (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
         #if TEST_TRACE
@@ -429,7 +429,7 @@ type ParSequence with
         Seq.foldBack cons_f t (ParReturn.Invoke Seq.empty)
 
     static member inline ParSequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<seq<'T>>`` =
-        ParSequence.ForInfiniteSequences (t, IsParLeftZero.Invoke, List.toSeq)
+        ParSequence.ForInfiniteSequences (t, IsParLeftZero.Invoke, List.toSeq, ParReturn.Invoke)
 
     static member        ParSequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) : option<seq<'t>> = Option.Sequence t
     #if !FABLE_COMPILER
@@ -437,18 +437,17 @@ type ParSequence with
     #endif
     static member inline ParSequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<seq<'t>, 'e> = Result.Parallel ((++), t)
     static member inline ParSequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<seq<'t>, 'e> = Choice.Parallel ((++), t)
-    static member        ParSequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) : list<seq<'t>> = ParSequence.ForInfiniteSequences (t, List.isEmpty, List.toSeq)
-    // static member        ParSequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) : seq<'t> [] = ParSequence.ForInfiniteSequences (t, Array.isEmpty, List.toSeq)
+    static member        ParSequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) : list<seq<'t>> = ParSequence.ForInfiniteSequences (t, List.isEmpty, List.toSeq, List.singleton >> List.cycle)
 
     #if !FABLE_COMPILER
     static member        ParSequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) : Async<seq<'t>> = Async.Parallel t |> Async.map Array.toSeq
     #endif
-    static member inline ParSequence (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = ParSequence.ForInfiniteSequences (t, IsParLeftZero.Invoke, NonEmptySeq.ofList)
+    static member inline ParSequence (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``, [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = ParSequence.ForInfiniteSequences (t, IsParLeftZero.Invoke, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
     static member        ParSequence (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequence t |> Option.map NonEmptySeq.unsafeOfSeq
     static member inline ParSequence (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<NonEmptySeq<'t>, 'e> = Result.Parallel ((++), t) |> Result.map NonEmptySeq.unsafeOfSeq
     static member inline ParSequence (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<NonEmptySeq<'t>, 'e> = Choice.Parallel ((++), t) |> Choice.map NonEmptySeq.unsafeOfSeq
-    static member        ParSequence (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = ParSequence.ForInfiniteSequences(t, List.isEmpty , NonEmptySeq.ofList)
-    // static member        ParSequence (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) : NonEmptySeq<'t> []          = ParSequence.ForInfiniteSequences(t, Array.isEmpty, NonEmptySeq.ofList)
+    static member        ParSequence (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = ParSequence.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
+    static member        ParSequence (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) : NonEmptySeq<'t> []          = ParSequence.ForInfiniteSequences (t, Array.isEmpty, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
     #if !FABLE_COMPILER
     static member        ParSequence (t: NonEmptySeq<Async<'t>>    , [<Optional>]_output: Async<NonEmptySeq<'t>>     , [<Optional>]_impl: Default3) = Async.Parallel t |> Async.map NonEmptySeq.unsafeOfSeq                                                         : Async<NonEmptySeq<'t>>
     #endif
@@ -460,7 +459,7 @@ type ParSequence with
     #if !FABLE_COMPILER
     static member inline ParSequence (t: voption<_>, [<Optional>]_output: 'R, [<Optional>]_impl: ParSequence) : 'R = match t with ValueSome x -> Map.Invoke ValueSome x | _ -> ParReturn.Invoke ValueNone
     #endif
-    static member inline ParSequence (t: list<_>   , [<Optional>]_output: 'R, [<Optional>]_impl: ParSequence) : 'R = ParSequence.ForInfiniteSequences(t, IsParLeftZero.Invoke, id)
+    static member inline ParSequence (t: list<_>   , [<Optional>]_output: 'R, [<Optional>]_impl: ParSequence) : 'R = ParSequence.ForInfiniteSequences (t, IsParLeftZero.Invoke, id, ParReturn.Invoke)
 
     static member inline ParSequence (t: Map<_,_>  , [<Optional>]_output: 'R, [<Optional>]_impl: ParSequence) : 'R =
        let insert_f k x ys = Map.Invoke (Map.add k) x </> ys
@@ -476,11 +475,11 @@ type ParSequence with
         | Choice1Of2 a -> Map.Invoke Choice<'T,'Error>.Choice1Of2 a
         | Choice2Of2 e -> ParReturn.Invoke (Choice<'T,'Error>.Choice2Of2 e)
 
-    static member inline ParSequence (t: _ []                         , [<Optional>]_output: 'R                            , [<Optional>]_impl: ParSequence) : 'R = ParSequence.ForInfiniteSequences(t, IsParLeftZero.Invoke, Array.ofList)
+    static member inline ParSequence (t: _ []                         , [<Optional>]_output: 'R                           , [<Optional>]_impl: ParSequence) : 'R = ParSequence.ForInfiniteSequences (t, IsParLeftZero.Invoke, Array.ofList, ParReturn.Invoke)
  
-    static member inline ParSequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``          , [<Optional>]_impl: ParSequence) : '``Functor<Id<'T>>`` = ParTraverse.Invoke id t
+    static member inline ParSequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``         , [<Optional>]_impl: ParSequence) : '``Functor<Id<'T>>`` = ParTraverse.Invoke id t
  
-    static member inline ParSequence (t: ResizeArray<'``Functor<'T>``>, [<Optional>]_output: '``Functor<ResizeArray<'T>>`` , [<Optional>]_impl: ParSequence) : '``Functor<ResizeArray<'T>>``= ParTraverse.Invoke id t
+    static member inline ParSequence (t: ResizeArray<'``Functor<'T>``>, [<Optional>]_output: '``Functor<ResizeArray<'T>>``, [<Optional>]_impl: ParSequence) : '``Functor<ResizeArray<'T>>``= ParTraverse.Invoke id t
 
     static member inline Invoke (t: '``ParTraversable<'Applicative<'T>>``) : '``Applicative<'ParTraversable<'T>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member ParSequence : _*_*_ -> _) b, c, a)
