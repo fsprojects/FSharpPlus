@@ -724,6 +724,21 @@ module Operators =
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
     
+    // Traversable (Parallel / Pointwise)
+
+    /// <summary>
+    /// Map each element of a structure to an action, evaluate these actions from left to right, pointwise, or in parallel, and collect the results.
+    /// </summary>
+    /// <category index="13">Traversable</category>
+    let inline ptraverse (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = ParTraverse.Invoke f t
+
+    /// <summary>
+    /// Evaluate each action in the structure from left to right, pointwise, or in parallel, and collect the results.
+    /// </summary>
+    /// <category index="13">Traversable</category>
+    let inline psequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = ParSequence.Invoke t
+
+    
     // Bifoldable
 
     /// <summary>

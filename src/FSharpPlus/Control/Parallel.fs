@@ -1,6 +1,7 @@
 ﻿namespace FSharpPlus.Control
 
 open System
+open System.Text
 open System.Runtime.InteropServices
 open System.Collections.Generic
 open System.Threading.Tasks
@@ -53,6 +54,15 @@ type ParReturn =
     [<CompilerMessage("No parallel applicative Return operation for ResizeArray<'t>", 10720, IsError = true)>]
     static member        ParReturn (x: ResizeArray<'a>, _: ParReturn  ) = Return.Return (x, Unchecked.defaultof<Return>)
 
+    //Restricted
+    [<CompilerMessage("No parallel applicative Return operation for string", 10720, IsError = true)>]
+    static member        ParReturn (_: string         , _: ParReturn  ) = fun (x: char) -> string x : string
+    [<CompilerMessage("No parallel applicative Return operation for StringBuilder", 10720, IsError = true)>]
+    static member        ParReturn (_: StringBuilder  , _: ParReturn  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
+    [<CompilerMessage("No parallel applicative Return operation for Set", 10720, IsError = true)>]
+    static member        ParReturn (_: 'a Set         , _: ParReturn  ) = fun (x: 'a  ) -> Set.singleton x
+    static member        ParReturn (_: 'a Set2        , _: ParReturn  ) = fun (_: 'a  ) -> Set2() : 'a Set2
+
 #endif
 
 type ParApply =
@@ -80,7 +90,12 @@ type ParApply =
     static member        ``</>`` (struct (f: voption<_>          , x: voption<'T>          ), [<Optional>]_output: voption<'U>          , [<Optional>]_mthd: ParApply)                        = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member inline ``</>`` (struct (f: Result<_,'E>        , x: Result<'T,'E>        ), [<Optional>]_output: Result<'b,'E>        , [<Optional>]_mthd: ParApply) : Result<'U, 'E>       = Result.apply2With Plus.Invoke (<|) f x
     static member inline ``</>`` (struct (f: Choice<_,'E>        , x: Choice<'T,'E>        ), [<Optional>]_output: Choice<'b,'E>        , [<Optional>]_mthd: ParApply) : Choice<'U, 'E>       = Choice.apply2With Plus.Invoke (<|) f x
-    static member inline ``</>`` (struct (f: KeyValuePair<'Key,_>, x: KeyValuePair<'Key,'T>), [<Optional>]_output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: ParApply)                        = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
+    static member inline ``</>`` (struct (f: KeyValuePair<'Key,_>, x: KeyValuePair<'Key,'T>), [<Optional>]_output: KeyValuePair<'Key,'U>, [<Optional>]_mthd: Default2)                        = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
+    static member inline ``</>`` (struct (f: KeyValuePair2<_,_>, x: KeyValuePair2<_,'T> )   ,             _output: KeyValuePair2<_,'U>  ,             _mthd: Default2) : KeyValuePair2<'Key,'U> =
+        let a, b = f.Key, x.Key
+        let f, x = f.Value, x.Value
+        KeyValuePair2 (Plus.Invoke a b, f x)
+
 
     static member        ``</>`` (struct (f: Map<'Key,_>         , x: Map<'Key,'T>         ), [<Optional>]_output: Map<'Key,'U>         , [<Optional>]_mthd: ParApply) : Map<'Key,'U>         = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member        ``</>`` (struct (f: Dictionary<'Key,_>  , x: Dictionary<'Key,'T>  ), [<Optional>]_output: Dictionary<'Key,'U>  , [<Optional>]_mthd: ParApply) : Dictionary<'Key,'U>  = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
