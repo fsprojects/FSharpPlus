@@ -45,8 +45,8 @@ type ParReturn =
     static member inline ParReturn (x:  'm * 'a        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
     static member inline ParReturn (x: struct ('m * 'a), _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
     static member        ParReturn (_: 'a Async        , _: ParReturn) = fun (x: 'a) -> async.Return x
-    static member inline ParReturn (_: Result<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Error (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Ok x              : Result<'t,'e>
-    static member inline ParReturn (_: Choice<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Choice2Of2 (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e> : 'e) else Choice1Of2 x : Choice<'t,'e>
+    static member inline ParReturn (_: Result<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Error      (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e>) else Ok x         : Result<'t, 'e>
+    static member inline ParReturn (_: Choice<'t, 'e>  , _: ParReturn) = fun x -> if opaqueId false then Choice2Of2 (Plus.Invoke Unchecked.defaultof<'e> Unchecked.defaultof<'e>) else Choice1Of2 x : Choice<'t, 'e>
     #if !FABLE_COMPILER
     static member        ParReturn (x: Expr<'a>        , _: ParReturn) = Return.Return (x, Unchecked.defaultof<Return>)
     #endif
@@ -120,7 +120,6 @@ type ParApply =
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type ParApply with
-
     static member inline ``</>`` (struct (_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct), _output: ^r when ^r : null and ^r: struct, _mthd: Default1) = id
     static member inline ``</>`` (struct (f: '``Applicative<'T->'U>``, x: '``Applicative<'T>``), _output: '``Applicative<'U>``, [<Optional>]_mthd: Default1) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (</>) : _*_ -> _) f, x)
@@ -137,7 +136,7 @@ type ParLift2 =
     static member        ParLift2 (f, (x: _ []               , y: _ []               ), _mthd: ParLift2) = Array.map2Shortest f x y
     static member        ParLift2 (f, (x: 'R -> 'T           , y: 'R -> 'U           ), _mthd: ParLift2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
     static member inline ParLift2 (f, (x: 'Monoid * 'T       , y: 'Monoid * 'U       ), _mthd: ParLift2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
-    static member inline ParLift2 (f, (x: struct ('Monoid * 'T), y: struct ('Monoid * 'U)), _mthd: ParLift2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
+    static member inline ParLift2 (f, (x: struct ('Monoid*'T), y: struct ('Monoid*'U)), _mthd: ParLift2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
     #if !FABLE_COMPILER
     static member        ParLift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: ParLift2) = Task.pmap2 f x y
     #endif
@@ -184,7 +183,7 @@ type ParLift3 =
     static member        ParLift3 (f, (x: _ []               , y: _ []               , z: _ []                ), _mthd: ParLift3) = Array.map3Shortest f x y z
     static member        ParLift3 (f, (x: 'R -> 'T           , y: 'R -> 'U           , z: 'R -> 'V            ), _mthd: ParLift3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     static member inline ParLift3 (f, (x: 'Monoid * 'T       , y: 'Monoid * 'U       , z: 'Monoid * 'V        ), _mthd: ParLift3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
-    static member inline ParLift3 (f, (x: struct ('Monoid * 'T), y: struct ('Monoid * 'U), z: struct ('Monoid * 'T)), _mthd: ParLift3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
+    static member inline ParLift3 (f, (x: struct ('Monoid*'T), y: struct ('Monoid*'U), z: struct ('Monoid* 'T)), _mthd: ParLift3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     #if !FABLE_COMPILER
     static member        ParLift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: ParLift3) = Task.pmap3 f x y z
     #endif

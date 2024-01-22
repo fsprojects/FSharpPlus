@@ -207,7 +207,7 @@ module Extensions =
             | ValueNone -> Choice1Of2 (accumulator.Close () |> Array.toSeq)
             | ValueSome x -> Choice2Of2 x
         #endif
-            
+
         /// Returns all Errors combined, otherwise a sequence of all elements.
         static member Parallel (combiner, t: seq<Choice<_, _>>) =
             let mutable error = ValueNone
