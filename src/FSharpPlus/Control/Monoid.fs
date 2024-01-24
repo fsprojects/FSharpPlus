@@ -116,13 +116,13 @@ type Plus with
 #if !FABLE_COMPILER
 type Plus with    
     
-    static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.map2 Plus.Invoke x y
+    static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.lift2 Plus.Invoke x y
 #endif
 
 #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
 type Plus with    
     
-    static member inline ``+`` (x: 'a ValueTask, y: 'a ValueTask, [<Optional>]_mthd: Plus) = ValueTask.map2 Plus.Invoke x y
+    static member inline ``+`` (x: 'a ValueTask, y: 'a ValueTask, [<Optional>]_mthd: Plus) = ValueTask.lift2 Plus.Invoke x y
 
 #endif
     
@@ -138,7 +138,7 @@ type Plus with
 
     static member inline ``+`` (f: 'T->'Monoid, g: 'T->'Monoid, [<Optional>]_mthd: Plus) = (fun x -> Plus.Invoke (f x) (g x)) : 'T->'Monoid
 
-    static member inline ``+`` (x: 'S Async   , y: 'S Async   , [<Optional>]_mthd: Plus) = Async.map2 Plus.Invoke x y
+    static member inline ``+`` (x: 'S Async   , y: 'S Async   , [<Optional>]_mthd: Plus) = Async.lift2 Plus.Invoke x y
 
     static member inline ``+`` (x: 'a Expr    , y: 'a Expr    , [<Optional>]_mthd: Plus) : 'a Expr =
                     let inline f (x: 'a)  : 'a -> 'a = Plus.Invoke x

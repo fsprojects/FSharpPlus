@@ -4,37 +4,42 @@
 #r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
-Par-Applicative
-===============
-A functor with application, providing operations to embed pure expressions (``preturn``), parallel computations and combine their results (``</>``).
+ZipApplicative
+==============
+A functor with application, providing operations to embed pure expressions (``pur``), run computations pointwise and/or paralell and combine their results (``<.>``).
 ___
 Minimal complete definition
 ---------------------------
- * ``preturn x`` &nbsp; / &nbsp; ``result x``
- * ``(</>) f x``
+ * ``pur x`` &nbsp; . &nbsp; ``result x``
+ * ``(<.>) f x``
 *)
 (**
-    static member ParReturn (x: 'T) : 'Applicative<'T>
-    static member (</>) (f: 'Applicative<'T -> 'U>, x: 'Applicative<'T>) : 'Applicative<'U>
+    static member Pure (x: 'T) : 'ZipApplicative<'T>
+    static member (<.>) (f: 'ZipApplicative<'T -> 'U>, x: 'ZipApplicative<'T>) : 'ZipApplicative<'U>
 *)
 (**
-Note: ``preturn`` can't be used outside computation expressions, use ``result`` instead.
 
 
 Other operations
 ----------------
 
-* ``plift2``
+* ``zip``
 *)
 (**
-   static member ParLift2 (f: 'T1 -> 'T2 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
+   static member Zip (x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T1 * 'T2>
+*)
+(**
+* ``map2``
+*)
+(**
+   static member Map2 (f: 'T1 -> 'T2 -> 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T>
 *)
 
 (**
-* ``plift3``
+* ``map3``
 *)
 (**
-   static member ParLift3 (f: 'T1 -> 'T2 -> 'T3 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>, x3: 'Applicative<'T3>) : 'Applicative<'T>
+   static member Map3 (f: 'T1 -> 'T2 -> 'T3 -> 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>, x3: 'ZipApplicative<'T3>) : 'ZipApplicative<'T>
 *)
 
 (**
@@ -44,17 +49,17 @@ Rules
 -----
 *)
 (**
-    presult id </> v = v
-    presult (<<) </> u </> v </> w = u </> (v </> w)
-    presult f <*> presult x = presult (f x)
-    u <*> presult y = presult ((|>) y) </> u
+    pur id <.> v = v
+    pur (<<) <.> u <.> v <.> w = u <.> (v <.> w)
+    pur f <*> pur x = pur (f x)
+    u <*> pur y = pur ((|>) y) <.> u
 *)
 (**
 Related Abstractions
 --------------------
- - [Functor](abstraction-functor.html): A parallel applicative is a functor whose ``map`` operation can be splitted in ``preturn`` and ``(</>)`` operations,
+ - [Functor](abstraction-functor.html): A zipApplicative is a functor whose ``map`` operation can be splitted in ``pur`` and ``(<.>)`` operations,
  
- - [Applicative](abstraction-applicative.html) : Parallel Applicatives are applicatives which usually don't form a [Monad](abstraction-monad.html).
+ - [ZipApplicative](abstraction-applicative.html) : ZipApplicatives are applicatives which usually don't form a [Monad](abstraction-monad.html).
 
 Concrete implementations
 ------------------------
@@ -81,7 +86,7 @@ From F#+
 
  -  [``NonEmptySeq<'T>``]
  -  [``NonEmptyList<'T>``](type-nonempty.html)
- -  [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html)
+ -  [``Compose<'ZipApplicative1<'ZipApplicative2<'T>>>``](type-compose.html)
 
  (*) The operation is the same as that for the normal applicative
  
@@ -114,7 +119,7 @@ open FSharpPlus
 // pointwise operations
 
 let arr1 = (+) <!> [|1;2;3|] <*> [|10;20;30|]
-let arr2 = (+) <!> [|1;2;3|] </> [|10;20;30|]
+let arr2 = (+) <!> [|1;2;3|] <.> [|10;20;30|]
 
 // val arr1: int array = [|11; 21; 31; 12; 22; 32; 13; 23; 33|]
 // val arr2: int array = [|11; 22; 33|]
@@ -122,7 +127,7 @@ let arr2 = (+) <!> [|1;2;3|] </> [|10;20;30|]
 
 // Validations
 
-let validated = par2 {
+let validated = zapp2 {
     let! x = async { return Ok 1 }
     and! y = async { return Ok 2 }
     and! z = async { return Error ["Error"] }

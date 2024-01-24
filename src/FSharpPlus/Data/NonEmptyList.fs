@@ -149,16 +149,16 @@ module NonEmptyList =
     let inline sequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` = traverse id source
 
     /// <summary>
-    /// Maps each element of the list to an action, evaluates these actions from left to right, pointwise, and/or in parallel, and collect the results.
+    /// Maps each element of the list to an action, evaluates these actions from left to right, pointwise, and/or in parallel then collect results.
     /// </summary>
-    let inline ptraverse (f: 'T -> '``Functor<'U>``) (source: NonEmptyList<'T>) =
-        ParSequence.ForInfiniteSequences (Seq.map f source, IsParLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
+    let inline gather (f: 'T -> '``ZipFunctor<'U>``) (source: NonEmptyList<'T>) =
+        Transpose.ForInfiniteSequences (Seq.map f source, IsZipLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
 
     /// <summary>
-    /// Evaluates each action in the list from left to right, pointwise, and/or in parallel and collect the results.
+    /// Evaluates each action in the list from left to right, pointwise, and/or in parallel then collect results.
     /// </summary>
-    let inline psequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` =
-        ParSequence.ForInfiniteSequences (source, IsParLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
+    let inline transpose (source: NonEmptyList<'``ZipFunctor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` =
+        Transpose.ForInfiniteSequences (source, IsZipLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
 
 #endif
 
@@ -263,17 +263,17 @@ type NonEmptyList<'t> with
         let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
-    static member ParReturn (x: 'a) = { Head = x; Tail = List.cycle [x] }
-    static member (</>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) = NonEmptyList.map2Shortest (<|) f x
+    static member Pure (x: 'a) = { Head = x; Tail = List.cycle [x] }
+    static member (<.>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) = NonEmptyList.map2Shortest (<|) f x
 
     static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
     static member Lift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.ofList (List.lift3 f (NonEmptyList.toList x) (NonEmptyList.toList y) (NonEmptyList.toList z))
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ParLift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.map2Shortest f x y
+    static member Map2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.map2Shortest f x y
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member ParLift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.map3Shortest f x y z
+    static member Map3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.map3Shortest f x y z
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
@@ -304,10 +304,10 @@ type NonEmptyList<'t> with
     static member inline Sequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.sequence s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline ParTraverse (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.ptraverse f s
+    static member inline Gather (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.gather f s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline ParSequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.psequence s
+    static member inline Transpose (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.transpose s
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList

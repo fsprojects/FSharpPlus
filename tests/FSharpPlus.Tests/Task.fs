@@ -36,14 +36,14 @@ module Task =
             let a = Task.map string x1
             require a.IsCompleted "Task.map didn't short-circuit"
 
-            let b = Task.zip x1 x2
-            require b.IsCompleted "Task.zip didn't short-circuit"
+            let b = Task.zipSequentially x1 x2
+            require b.IsCompleted "Task.zipSequentially didn't short-circuit"
 
-            let c = Task.map2 (+) x1 x2
-            require c.IsCompleted "Task.map2 didn't short-circuit"
+            let c = Task.lift2 (+) x1 x2
+            require c.IsCompleted "Task.lift2 didn't short-circuit"
             
-            let d = Task.map3 (fun x y z -> x + y + z) x1 x2 x3
-            require d.IsCompleted "Task.map3 didn't short-circiut"
+            let d = Task.lift3 (fun x y z -> x + y + z) x1 x2 x3
+            require d.IsCompleted "Task.lift3 didn't short-circiut"
 
         [<Test>]
         let erroredTasks () =
@@ -71,16 +71,16 @@ module Task =
             let r02 = Task.map (mapping true) (x1 ())
             r02.Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
 
-            let r03 = Task.zip (e1 ()) (x2 ())
+            let r03 = Task.zipSequentially (e1 ()) (x2 ())
             r03.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r04 = Task.zip (e1 ()) (e2 ())
+            let r04 = Task.zipSequentially (e1 ()) (e2 ())
             r04.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r05 = Task.map2 (mapping2 false) (e1 ()) (x2 ())
+            let r05 = Task.lift2 (mapping2 false) (e1 ()) (x2 ())
             r05.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
-            let r06 = Task.map2 (mapping2 false) (e1 ()) (e2 ())
+            let r06 = Task.lift2 (mapping2 false) (e1 ()) (e2 ())
             r06.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
 
             let r07 = Task.bind (binding true) (e1 ())
@@ -139,17 +139,17 @@ module Task =
                | AggregateException [e]               -> failwithf "Something else came in: %A" e
                | AggregateException e                 -> failwithf "Many errors came in: %A" e
             
-            let r15 = Task.map3 (mapping3 false) (e1 ()) (e2 ()) (e3 ())
+            let r15 = Task.lift3 (mapping3 false) (e1 ()) (e2 ()) (e3 ())
             r15.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
-            let r16 = Task.map3 (mapping3 false) (e1 ()) (x2 ()) (e3 ())
+            let r16 = Task.lift3 (mapping3 false) (e1 ()) (x2 ()) (e3 ())
             r16.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
-            let r17 = Task.map3 (mapping3 false) (e1 ()) (e2 ()) (x3 ())
+            let r17 = Task.lift3 (mapping3 false) (e1 ()) (e2 ()) (x3 ())
             r17.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
-            let r18 = Task.map3 (mapping3 false) (e1 ()) (x2 ()) (x3 ())
+            let r18 = Task.lift3 (mapping3 false) (e1 ()) (x2 ()) (x3 ())
             r18.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 1"]
-            let r19 = Task.map3 (mapping3 false) (x1 ()) (e2 ()) (e3 ())
+            let r19 = Task.lift3 (mapping3 false) (x1 ()) (e2 ()) (e3 ())
             r19.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 2"]
-            let r20 = Task.map3 (mapping3 false) (x1 ()) (x2 ()) (e3 ())
+            let r20 = Task.lift3 (mapping3 false) (x1 ()) (x2 ()) (e3 ())
             r20.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 3"]
     
     module TaskBuilderTests =

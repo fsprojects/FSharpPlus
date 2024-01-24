@@ -176,7 +176,7 @@ module Operators =
     /// Apply a lifted argument to a lifted function: f &lt;*&gt; arg
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``    
+    let inline (<*>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = Apply.Invoke f x : '``Applicative<'U>``
 
     /// <summary>
     /// Applies 2 lifted arguments to a non-lifted function. Equivalent to map2 in non list-like types.
@@ -220,29 +220,29 @@ module Operators =
 
 
     /// <summary>
-    /// Lifts a value into a Functor. Same as return in Computation Expressions.
+    /// Lifts a value into a ZipFunctor. Same as return in (zip) Computation Expressions.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline presult (x: 'T) : '``Functor<'T>`` = ParReturn.Invoke x
+    let inline pur (x: 'T) : '``ZipFunctor<'T>`` = Pure.Invoke x
 
     /// <summary>
     /// Apply a lifted argument to a lifted function: f &lt;/&gt; arg.
-    /// Same as &lt;*&gt; but for parallel applicatives.
+    /// Same as &lt;*&gt; but for non sequential applicatives.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (</>) (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` = ParApply.Invoke f x : '``Applicative<'U>``
+    let inline (<.>) (f: '``ZipApplicative<'T -> 'U>``) (x: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` = ZipApply.Invoke f x : '``ZipApplicative<'U>``
 
     /// <summary>
-    /// Applies 2 lifted arguments to a non-lifted function with parallel semantics.
+    /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline plift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = ParLift2.Invoke f x y
+    let inline map2 (f: 'T->'U->'V) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) : '``ZipApplicative<'V>`` = Map2.Invoke f x y
 
     /// <summary>
-    /// Applies 3 lifted arguments to a non-lifted function with parallel semantics.
+    /// Applies 3 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline plift3 (f: 'T->'U->'V->'W) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) (z: '``Applicative<'V>``) : '``Applicative<'W>`` = ParLift3.Invoke f x y z
+    let inline map3 (f: 'T->'U->'V->'W) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) (z: '``ZipApplicative<'V>``) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
 
 
 
@@ -723,20 +723,20 @@ module Operators =
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
-    
+
     // Traversable (Parallel / Pointwise)
 
     /// <summary>
-    /// Map each element of a structure to an action, evaluate these actions from left to right, pointwise, or in parallel, and collect the results.
+    /// Map each element of a structure to an action, evaluate these actions from left to right, pointwise, and/or in parallel, and collect the results.
     /// </summary>
     /// <category index="13">Traversable</category>
-    let inline ptraverse (f: 'T->'``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` = ParTraverse.Invoke f t
+    let inline gather (f: 'T->'``ZipFunctor<'U>``) (t: '``Traversable<'T>``) : '``ZipFunctor<'Traversable<'U>>`` = Gather.Invoke f t
 
     /// <summary>
-    /// Evaluate each action in the structure from left to right, pointwise, or in parallel, and collect the results.
+    /// Evaluate each action in the structure from left to right, pointwise, and/or in parallel, and collect the results.
     /// </summary>
     /// <category index="13">Traversable</category>
-    let inline psequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = ParSequence.Invoke t
+    let inline transpose (t: '``Traversable<'ZipFunctor<'T>>``) : '``ZipFunctor<'Traversable<'T>>`` = Transpose.Invoke t
 
     
     // Bifoldable

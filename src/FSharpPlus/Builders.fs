@@ -210,24 +210,24 @@ module GenericBuilders =
         member        _.Run x : '``Applicative1<Applicative2<Applicative3<'T>>>`` = x
 
 
-    /// Generic Parallel Applicative CE builder.
-    type ParallelBuilder<'``applicative<'t>``> () =
+    /// Generic ZipApplicative CE builder.
+    type ZipApplicativeBuilder<'``applicative<'t>``> () =
         member        _.ReturnFrom (expr) = expr   : '``applicative<'t>``
-        member inline _.Return (x: 'T) = ParReturn.Invoke x : '``Applicative<'T>``
-        member inline _.Yield  (x: 'T) = ParReturn.Invoke x : '``Applicative<'T>``
+        member inline _.Return (x: 'T) = pur x : '``Applicative<'T>``
+        member inline _.Yield  (x: 'T) = pur x : '``Applicative<'T>``
         member inline _.BindReturn(x, [<InlineIfLambda>]f) = map f x : '``Applicative<'U>``
-        member inline _.MergeSources  (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``) : '``Applicative<'T * 'U>`` = ParLift2.Invoke tuple2 t1 t2
-        member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = ParLift3.Invoke tuple3 t1 t2 t3
-        member        _.Run f = f : '``Applicative<'T>``
+        member inline _.MergeSources  (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``) : '``Applicative<'T * 'U>`` = map2 tuple2 t1 t2
+        member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = map3 tuple3 t1 t2 t3
+        member        _.Run f : '``Applicative<'T>`` = f
 
-    /// Generic 2 layers Parallel Applicative CE builder.
-    type ParallelBuilder2<'``applicative1<applicative2<'t>>``> () =
+    /// Generic 2 layers ZipApplicative CE builder.
+    type ZipApplicativeBuilder2<'``applicative1<applicative2<'t>>``> () =
         member        _.ReturnFrom expr : '``applicative1<applicative2<'t>>`` = expr
-        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (presult >> presult) x
-        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (presult >> presult) x
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (pur >> pur) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (pur >> pur) x
         member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
-        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (plift2 >> plift2) tuple2 t1 t2
-        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (plift3 >> plift3) tuple3 t1 t2 t3
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (map2 >> map2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (map3 >> map3) tuple3 t1 t2 t3
         member        _.Run x : '``Applicative1<Applicative2<'T>>`` = x
 
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
@@ -245,10 +245,10 @@ module GenericBuilders =
     /// Creates an applicative computation expression which compose effects of three Applicatives.
     let applicative3<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
 
-    /// Creates a parallel applicative computation expression.
-    let par<'``Applicative<'T>``> = ParallelBuilder<'``Applicative<'T>``> ()
+    /// Creates a (non sequential) applicative computation expression.
+    let zapp<'``Applicative<'T>``> = ZipApplicativeBuilder<'``Applicative<'T>``> ()
 
-    /// Creates a parallel applicative computation expression which compose effects of two Applicatives.
-    let par2<'``Applicative1<Applicative2<'T>>``> = ParallelBuilder2<'``Applicative1<Applicative2<'T>>``> ()
+    /// Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
+    let zapp2<'``Applicative1<Applicative2<'T>>``> = ZipApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
 
 #endif

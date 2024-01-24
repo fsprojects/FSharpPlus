@@ -66,7 +66,7 @@
     <Compile Include="Control/Foldable.fs" />
     <Compile Include="Control/Alternative.fs" />
     <Compile Include="Control/Applicative.fs" />
-    <Compile Include="Control/Parallel.fs" />
+    <Compile Include="Control/ZipApplicative.fs" />
     <Compile Include="Control/Functor.fs" />
     <Compile Include="Control/MonadOps.fs" />
     <Compile Include="Control/Comonad.fs" />

@@ -109,12 +109,12 @@ type Lift2 =
     static member inline Lift2 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   ), _mthd: Lift2) = Plus.Invoke a b, f x y
     static member inline Lift2 (f, (struct (a: 'Monoid, x: 'T), struct (b: 'Monoid, y: 'U)), _mthd: Lift2) = struct (Plus.Invoke a b, f x y)
     #if !FABLE_COMPILER
-    static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.map2  f x y
+    static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.lift2  f x y
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        Lift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Lift2) = ValueTask.map2  f x y
+    static member        Lift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Lift2) = ValueTask.lift2  f x y
     #endif
-    static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.map2  f x y
+    static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.lift2  f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Option.map2 f x y
     
     #if !FABLE_COMPILER
@@ -158,12 +158,12 @@ type Lift3 =
     static member inline Lift3 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   , (c: 'Monoid, z: 'U)    ), _mthd: Lift3) = Plus.Invoke (Plus.Invoke a b) c, f x y z
     static member inline Lift3 (f, (struct (a: 'Monoid, x: 'T), struct (b: 'Monoid, y: 'U), struct (c: 'Monoid, z: 'U)), _mthd: Lift3) = struct (Plus.Invoke (Plus.Invoke a b) c, f x y z)
     #if !FABLE_COMPILER
-    static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.map3  f x y z
+    static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.lift3  f x y z
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        Lift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Lift3) = ValueTask.map3  f x y z
+    static member        Lift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Lift3) = ValueTask.lift3  f x y z
     #endif
-    static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.map3  f x y z
+    static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.lift3  f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Option.map3 f x y z
     
     #if !FABLE_COMPILER
