@@ -219,12 +219,12 @@ type Zip =
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip              x y
     static member Zip ((x: voption<'T>                , y: voption<'U>              , _output: voption<'T*'U>                ), _mthd: Zip) = ValueOption.zip         x y
     static member Zip ((x: Result<'T, 'Error>         , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.zip              x y
-    static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zipSequentially   x y
+    static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
-    static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zipSequentially    x y
+    static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member Zip ((x: ValueTask<'T>              , y: ValueTask<'U>             , _output: ValueTask<'T*'U>             ), _mthd: Zip) = ValueTask.zipSequentially x y
+    static member Zip ((x: ValueTask<'T>              , y: ValueTask<'U>             , _output: ValueTask<'T*'U>             ), _mthd: Zip) = ValueTask.zip           x y
     #endif
 
     static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) =
