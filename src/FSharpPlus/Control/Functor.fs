@@ -217,8 +217,9 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zipShortest       x y
     static member Zip ((x: ResizeArray<'T>            , y: ResizeArray<'U>           , _output: ResizeArray<'T*'U>           ), _mthd: Zip) = ResizeArray.zipShortest x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip              x y
-    static member Zip ((x: voption<'T>                , y: voption<'U>              , _output: voption<'T*'U>                ), _mthd: Zip) = ValueOption.zip         x y
-    static member Zip ((x: Result<'T, 'Error>         , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.zip              x y
+    static member Zip ((x: voption<'T>                , y: voption<'U>               , _output: voption<'T*'U>               ), _mthd: Zip) = ValueOption.zip         x y
+    static member inline Zip ((x: Result<'T, 'Error>  , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.apply2With Plus.Invoke (fun a b -> a, b) x y
+    static member inline Zip ((x: Choice<'T, 'Error>  , y: Choice<'U, 'Error>        , _output: Choice<'T * 'U, 'Error>      ), _mthd: Zip) = Choice.apply2With Plus.Invoke (fun a b -> a, b) x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
