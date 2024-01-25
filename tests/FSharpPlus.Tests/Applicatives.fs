@@ -20,7 +20,7 @@ module Applicatives =
     
     [<Test>]
     let zipApply () =        
-        let arr1 = zapp2 {
+        let arr1 = app2 {
             let! x1 = async { return [|1; 2; 3|] }
             and! x2 = async { return [|10; 20; 30|] }
             and! x3 = async { return [|100; 200; 300|] }

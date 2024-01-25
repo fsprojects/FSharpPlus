@@ -127,7 +127,7 @@ let arr2 = (+) <!> [|1;2;3|] <.> [|10;20;30|]
 
 // Validations
 
-let validated = zapp2 {
+let validated = app2 {
     let! x = async { return Ok 1 }
     and! y = async { return Ok 2 }
     and! z = async { return Error ["Error"] }

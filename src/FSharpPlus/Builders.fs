@@ -236,19 +236,19 @@ module GenericBuilders =
     /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad'<'``monad<'t>``> = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
-    /// Creates an applicative computation expression.
+    /// Creates a (sequential) applicative computation expression.
     let applicative<'``Applicative<'T>``> = ApplicativeBuilder<'``Applicative<'T>``> ()
 
-    /// Creates an applicative computation expression which compose effects of two Applicatives.
+    /// Creates a (sequential) applicative computation expression which compose effects of two Applicatives.
     let applicative2<'``Applicative1<Applicative2<'T>>``> = ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
 
-    /// Creates an applicative computation expression which compose effects of three Applicatives.
+    /// Creates a (sequential) applicative computation expression which compose effects of three Applicatives.
     let applicative3<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
 
     /// Creates a (non sequential) applicative computation expression.
-    let zapp<'``Applicative<'T>``> = ZipApplicativeBuilder<'``Applicative<'T>``> ()
+    let app<'``ZipApplicative<'T>``> = ZipApplicativeBuilder<'``ZipApplicative<'T>``> ()
 
     /// Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
-    let zapp2<'``Applicative1<Applicative2<'T>>``> = ZipApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
+    let app2<'``ZipApplicative1<ZipApplicative2<'T>>``> = ZipApplicativeBuilder2<'``ZipApplicative1<ZipApplicative2<'T>>``> ()
 
 #endif
