@@ -88,6 +88,19 @@ module Result =
     /// <returns>A result of the output type of the binder.</returns>
     let inline bindError (binder: 'Error->Result<'T,'Error2>) (source: Result<'T,'Error>) = match source with Ok v -> Ok v | Error e -> binder e
 
+    /// <summary><c>iterError f inp</c> executes <c>match inp with Ok _ -> () | Error x -> f x</c>.</summary>
+    ///
+    /// <param name="action">A function to apply to the error part of the source value.</param>
+    /// <param name="source">The input result.</param>
+    ///
+    /// <example id="iter-1">
+    /// <code lang="fsharp">
+    /// Ok "Hello world" |> Result.iter (printfn "%s") // does nothing
+    /// Error "Hello world" |> Result.iter (printfn "%s") // prints "Hello world"
+    /// </code>
+    /// </example>
+    let inline iterError ([<InlineIfLambda>]action: 'Error -> unit) (source: Result<'T, 'Error>) = match source with Ok _ -> () | Error x -> action x
+
     /// <summary>Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
