@@ -22,13 +22,17 @@ module Identity =
 type Identity<'t> with
     
     static member Return x = Identity x                                             : Identity<'T>
+    static member Pure x = Identity x                                               : Identity<'T>
     
     static member Lift2 (f, Identity (x: 'T), Identity (y: 'U)) = Identity (f x y)  : Identity<'V>
     static member Lift3 (f, Identity (x: 'T), Identity (y: 'U), Identity (z: 'V))   : Identity<'W> = Identity (f x y z)
     static member Map   (Identity x, f : 'T->'U) = Identity (f x)                   : Identity<'U>
+    static member Map2  (f, Identity (x: 'T), Identity (y: 'U)) = Identity (f x y)  : Identity<'V>
+    static member Map3  (f, Identity (x: 'T), Identity (y: 'U), Identity (z: 'V))   : Identity<'W> = Identity (f x y z)
     static member Zip   (Identity x, Identity y) = Identity (x, y)                  : Identity<'T * 'U>
 
     static member (<*>) (Identity (f: 'T -> 'U), Identity (x: 'T)) : Identity<'U> = Identity (f x)
+    static member (<.>) (Identity (f: 'T -> 'U), Identity (x: 'T)) : Identity<'U> = Identity (f x)
     
     static member (>>=) (Identity x, f: 'T -> Identity<'U>) : Identity<'U> = f x
 
