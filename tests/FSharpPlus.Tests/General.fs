@@ -397,6 +397,13 @@ module Functor =
         areEqual 2 (testVal10 |> Async.RunSynchronously)
 
     [<Test>]
+    let mapSquared () =
+        let x =
+            [Some 1; Some 2]
+            |>>> string
+        Assert.AreEqual ([Some "1"; Some "2"], x)    
+    
+    [<Test>]
     let unzip () = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)

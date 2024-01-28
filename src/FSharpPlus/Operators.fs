@@ -145,6 +145,19 @@ module Operators =
     let inline (|>>) (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
 
     /// <summary>
+    /// Lifts a function into two Functors.
+    /// To be used in pipe-forward style expressions
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (|>>>) (x: '``Functor1<Functor2<'T>>``) (f: 'T -> 'U) : '``Functor1<Functor2<'U>>`` = (Map.Invoke >> Map.Invoke) f x
+
+    /// <summary>
+    /// Lifts a function into two Functors.
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (<<<|) (f: 'T -> 'U) (x: '``Functor1<Functor2<'T>>``) : '``Functor1<Functor2<'U>`` = (Map.Invoke >> Map.Invoke) f x
+
+    /// <summary>
     /// Like map but ignoring the results.
     /// </summary>
     /// <category index="1">Functor</category>

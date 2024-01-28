@@ -55,7 +55,7 @@ module Array =
         let lenx, leny, lenz = Array.length list1, Array.length list2, Array.length list3
         let combinedFirstTwo = Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in (list1.[d], list2.[r]))
 
-        Array.init (lenx * leny * lenz) (fun i -> let (d, r) = Math.DivRem (i, leny) in combinedFirstTwo.[d], list3.[r])
+        Array.init (lenx * leny * lenz) (fun i -> let (d, r) = Math.DivRem (i, lenz) in combinedFirstTwo.[d], list3.[r])
         |> Array.map (fun x -> mapping (fst (fst x)) (snd (fst x)) (snd x))
 
     /// Concatenates all elements, using the specified separator between each element.
