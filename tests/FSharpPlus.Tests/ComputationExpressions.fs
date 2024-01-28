@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Tests
 
+#nowarn "10710" // This monad doesn't seem to be lazy ...
+
 open System
 open System.Threading.Tasks
 open NUnit.Framework
@@ -180,8 +182,8 @@ module ComputationExpressions =
             yield (failwith "error !!!"; 2)
             yield 3
         }
-        let x:seq<int> = monad.plus { for x in source do yield x }
-        x.GetEnumerator ()
+        let x: seq<int> = monad.plus { for x in source do yield x }
+        x.GetEnumerator () |> ignore
         ()
 
     open FsCheck

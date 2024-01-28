@@ -271,6 +271,33 @@ module List =
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
         let index = Internals.FindSliceIndex.listImpl slice source
         if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then None else Some index
     #endif
 
     /// <summary>
@@ -317,6 +344,22 @@ module List =
                 coll.Add (mapping l r)
                 loop (ls, rs)
         loop (list1, list2)
+    #endif
+
+    let map3Shortest mapping (list1: list<'T1>) (list2: list<'T2>) (list3: list<'T3>) : list<'U> =
+    #if FABLE_COMPILER || NET45
+        let rec loop acc = function
+            | (l1::l1s, l2::l2s, l3::l3s) -> loop ((mapping l1 l2 l3)::acc) (l1s, l2s, l3s)
+            | (_, _, _)                   -> acc
+        loop [] (list1, list2, list3) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'U> ()
+        let rec loop = function
+            | ([], _, _) | (_, [], _)| (_, _, []) -> coll.Close ()
+            | (l1::l1s, l2::l2s, l3::l3s) ->
+                coll.Add (mapping l1 l2 l3)
+                loop (l1s, l2s, l3s)
+        loop (list1, list2, list3)
     #endif
         
     /// <summary>
@@ -420,3 +463,27 @@ module List =
         if List.length lst > i && i >= 0 then
             lst.[0..i-1] @ x::lst.[i+1..]
         else lst
+
+    #if !FABLE_COMPILER
+    open System.Reflection
+
+    /// Creates an infinite list which cycles the element of the source.
+    let cycle lst =
+        let last = ref lst
+        let rec copy = function
+            | [] -> failwith "empty list"
+            | [z] -> 
+                let v = [z]
+                last.Value <- v
+                v
+            | x::xs ->  x::copy xs
+        let cycled = copy lst
+        let strs = last.Value.GetType().GetFields(BindingFlags.NonPublic ||| BindingFlags.Instance) |> Array.map (fun field -> field.Name)
+        let tailField = last.Value.GetType().GetField(Array.find(fun (s:string) -> s.ToLower().Contains("tail")) strs, BindingFlags.NonPublic ||| BindingFlags.Instance)
+        tailField.SetValue(last.Value, cycled)
+        cycled
+    #else
+    let cycle lst = lst
+    // TODO does it get garbage collected ? Is there a way to implement it in fable ?
+    #endif
+

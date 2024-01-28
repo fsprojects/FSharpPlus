@@ -18,6 +18,7 @@
     <Compile Include="Helpers.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
+    <Compile Include="Applicatives.fs" />
     <Compile Include="Splits.fs" />
     <Compile Include="Monoid.fs" />
     <Compile Include="Parsing.fs" />
@@ -28,6 +29,7 @@
     <Compile Include="Task.fs" />
     <Compile Include="ValueTask.fs" />
     <Compile Include="Free.fs" />
+    <Compile Include="SeqT.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
@@ -55,6 +57,7 @@
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="FsCheck" Version="2.16.5" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="FsCheck.NUnit" Version="2.16.5" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
   </ItemGroup>
 </Project>

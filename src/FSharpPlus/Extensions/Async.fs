@@ -14,7 +14,7 @@ module Async =
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First async workflow.</param>
     /// <param name="y">Second async workflow.</param>
-    let map2 f x y = async {
+    let lift2 f x y = async {
         let! a = x
         let! b = y
         return f a b}
@@ -25,17 +25,68 @@ module Async =
     /// <param name="x">First async workflow.</param>
     /// <param name="y">Second async workflow.</param>
     /// <param name="z">third async workflow.</param>
-    let map3 f x y z = async {
+    let lift3 f x y z = async {
         let! a = x
         let! b = y
         let! c = z
         return f a b c}
 
+    /// <summary>Creates an async workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
+    /// <remarks>Similar to lift2 but although workflows are started in sequence they might end independently in different order.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First async workflow.</param>
+    /// <param name="y">Second async workflow.</param>
+    #if FABLE_COMPILER
+    let map2 f x y = lift2 f x y
+    #else
+    let map2 f x y = async {
+        let! ct = Async.CancellationToken
+        let x = Async.StartImmediateAsTask (x, ct)
+        let y = Async.StartImmediateAsTask (y, ct)
+        let! x' = Async.AwaitTask x
+        let! y' = Async.AwaitTask y
+        return f x' y' }
+    #endif
+
+    /// <summary>Creates an async workflow from three workflows 'x', 'y' and 'z', mapping its results with 'f'.</summary>
+    /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order.</remarks>
+    /// <param name="f">The mapping function.</param>
+    /// <param name="x">First async workflow.</param>
+    /// <param name="y">Second async workflow.</param>
+    /// <param name="z">third async workflow.</param>
+    #if FABLE_COMPILER
+    let map3 f x y z = lift3 f x y z
+    #else
+    let map3 f x y z = async {
+        let! ct = Async.CancellationToken
+        let x = Async.StartImmediateAsTask (x, ct)
+        let y = Async.StartImmediateAsTask (y, ct)
+        let z = Async.StartImmediateAsTask (z, ct)
+        let! x' = Async.AwaitTask x
+        let! y' = Async.AwaitTask y
+        let! z' = Async.AwaitTask z
+        return f x' y' z' }
+    #endif
+
     /// <summary>Creates an async workflow from two workflows 'x' and 'y', tupling its results.</summary>
-    let zip x y = async {
+    let zipSequentially x y = async {
         let! a = x
         let! b = y
         return a, b}
+
+    /// <summary>Creates an async workflow from two workflows 'x' and 'y', tupling its results.</summary>
+    /// <remarks>Similar to zipSequentially but although workflows are started in sequence they might end independently in different order.</remarks>
+    #if FABLE_COMPILER
+    let zip x y = zipSequentially x y
+    #else
+    let zip x y = async {
+        let! ct = Async.CancellationToken
+        let x = Async.StartImmediateAsTask (x, ct)
+        let y = Async.StartImmediateAsTask (y, ct)
+        let! x' = Async.AwaitTask x
+        let! y' = Async.AwaitTask y
+        return x', y' }
+    #endif
 
     /// Flatten two nested asyncs into one.
     let join x = async.Bind (x, id)

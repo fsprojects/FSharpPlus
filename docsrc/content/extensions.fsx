@@ -186,6 +186,7 @@ The String type:
    * truncate, drop
    * findIndex, tryFindIndex
    * findSliceIndex, tryFindSliceIndex
+   * findLastSliceIndex, tryFindLastSliceIndex
    * toArray, ofArray, toList, ofList, toSeq, ofSeq, toCodePoints, ofCodePoints
    * getBytes
 
@@ -195,6 +196,7 @@ Collections / Traversable types:
    * intercalate, intersperse,
    * split, replace,
    * findSliceIndex, trySliceIndex,
+   * findLastSliceIndex, tryLastSliceIndex,
    * partitionMap
  * [IList](reference/fsharpplus-ilist.html)
    * toIReadOnlyList
@@ -207,6 +209,7 @@ Collections / Traversable types:
    * split, replace,
    * toIReadOnlyList,
    * findSliceIndex, tryFindSliceIndex,
+   * findLastSliceIndex, tryLastSliceIndex,
    * partitionMap
    * setAt, removeAt
  * [Enumerator](reference/fsharpplus-enumerator.html)
@@ -232,6 +235,7 @@ Collections / Traversable types:
     * replicate
     * toIReadOnlyList
     * findSliceIndex, tryFindSliceIndex
+    * findLastSliceIndex, tryLastSliceIndex,
  * [ IReadOnlyCollection ](reference/fsharpplus-ireadonlycollection.html)
      * ofArray, ofList, ofSeq
      * map

@@ -88,6 +88,23 @@ module Result =
     /// <returns>A result of the output type of the binder.</returns>
     let inline bindError (binder: 'Error->Result<'T,'Error2>) (source: Result<'T,'Error>) = match source with Ok v -> Ok v | Error e -> binder e
 
+    /// <summary><c>iterError f inp</c> executes <c>match inp with Ok _ -> () | Error x -> f x</c>.</summary>
+    ///
+    /// <param name="action">A function to apply to the error part of the source value.</param>
+    /// <param name="source">The input result.</param>
+    ///
+    /// <example id="iter-1">
+    /// <code lang="fsharp">
+    /// Ok "Hello world" |> Result.iter (printfn "%s") // does nothing
+    /// Error "Hello world" |> Result.iter (printfn "%s") // prints "Hello world"
+    /// </code>
+    /// </example>
+    #if !NET45
+    let inline iterError ([<InlineIfLambda>]action: 'Error -> unit) (source: Result<'T, 'Error>) = match source with Ok _ -> () | Error x -> action x
+    #else
+    let inline iterError (action: 'Error -> unit) (source: Result<'T, 'Error>) = match source with Ok _ -> () | Error x -> action x
+    #endif
+
     /// <summary>Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
@@ -159,3 +176,16 @@ module Result =
         List.iter (function Ok e -> coll1.Add e | Error e -> coll2.Add e) source
         coll1.Close (), coll2.Close ()
     #endif
+
+    let apply2With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> =
+        match x, y with
+        | Ok a, Ok b -> Ok (f a b)
+        | Error e, Ok _ | Ok _, Error e -> Error e
+        | Error e1, Error e2 -> Error (combiner e1 e2)
+
+    let apply3With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) (z: Result<'V,'Error>) : Result<'W,'Error> =
+        match x, y, z with
+        | Ok a, Ok b, Ok c -> Ok (f a b c)
+        | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
+        | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
+        | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)

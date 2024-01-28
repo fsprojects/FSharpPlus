@@ -323,4 +323,44 @@ type TryFindSliceIndex =
         let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
         call (Unchecked.defaultof<TryFindSliceIndex>, source, slice)
 
+type FindLastSliceIndex =
+    inherit Default1
+    static member        FindLastSliceIndex (x: string           , e                   , [<Optional>]_impl: FindLastSliceIndex) = String.findLastSliceIndex e x
+    #if !FABLE_COMPILER || FABLE_COMPILER_3
+    static member        FindLastSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: FindLastSliceIndex) = Seq.findLastSliceIndex e x
+    static member        FindLastSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: FindLastSliceIndex) = Array.findLastSliceIndex e x
+    static member        FindLastSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: FindLastSliceIndex) = List.findLastSliceIndex e x
+    static member        FindLastSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: FindLastSliceIndex) = List.findLastSliceIndex [e.getValue] [x.getValue]
+    #endif
+    
+    static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
+        (^``Collection<'T>``: (static member FindLastSliceIndex: _*_->_) source, slice)
+    static member        FindLastSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.findLastSliceIndex e x
+    static member inline FindLastSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index = FindLastSliceIndex.InvokeOnInstance e x
+    static member inline FindLastSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
+
+    static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member FindLastSliceIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<FindLastSliceIndex>, source, slice)
+
+type TryFindLastSliceIndex =
+    inherit Default1
+    static member        TryFindLastSliceIndex (x: 'a ResizeArray   , e: 'a ResizeArray   , [<Optional>]_impl: TryFindLastSliceIndex) = Seq.tryFindLastSliceIndex e x
+    static member        TryFindLastSliceIndex (x: string           , e                   , [<Optional>]_impl: TryFindLastSliceIndex) = String.tryFindLastSliceIndex e x
+    static member        TryFindLastSliceIndex (x: 'a []            , e                   , [<Optional>]_impl: TryFindLastSliceIndex) = Array.tryFindLastSliceIndex e x
+    static member        TryFindLastSliceIndex (x: list<'a>         , e                   , [<Optional>]_impl: TryFindLastSliceIndex) = List.tryFindLastSliceIndex e x
+    static member        TryFindLastSliceIndex (x: 'a Id            , e: 'a Id            , [<Optional>]_impl: TryFindLastSliceIndex) = List.tryFindLastSliceIndex [e.getValue] [x.getValue]
+
+    static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
+        (^``Collection<'T>``: (static member TryFindLastSliceIndex: _*_->_) source, slice)
+    static member        TryFindLastSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.tryFindLastSliceIndex e x
+    static member inline TryFindLastSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index option = TryFindLastSliceIndex.InvokeOnInstance e x
+    static member inline TryFindLastSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
+
+    static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
+        let inline call_2 (a: ^a, b: ^b, n) = ((^a or ^b) : (static member TryFindLastSliceIndex : _*_*_ -> _) b, n, a)
+        let inline call (a: 'a, b: 'b, n) = call_2 (a, b, n)
+        call (Unchecked.defaultof<TryFindLastSliceIndex>, source, slice)
+
 #endif

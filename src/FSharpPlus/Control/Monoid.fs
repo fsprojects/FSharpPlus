@@ -34,13 +34,15 @@ type Plus =
     static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
     static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
         let f (e: exn) = match e with :? AggregateException as a -> a.InnerExceptions :> seq<_> | _ -> Seq.singleton e
-        new AggregateException (seq {yield! f x; yield! f y}) :> exn
+        let left = f x
+        new AggregateException (seq { yield! left; yield! Seq.except left (f y) }) :> exn
     #else
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(string x).Append(string y)
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""
-    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
+    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) : exn =
         let f (e: exn) = match e with :? AggregateException as a -> a.Data0 :> seq<_> | _ -> Seq.singleton e
-        AggregateException (seq {yield! f x; yield! f y}) :> exn
+        let left = f x
+        AggregateException (seq { yield! left; yield! Seq.except left (f y) }) :> exn
     #endif
     
     static member inline Invoke (x: 'Plus) (y: 'Plus) : 'Plus =
@@ -116,13 +118,13 @@ type Plus with
 #if !FABLE_COMPILER
 type Plus with    
     
-    static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.map2 Plus.Invoke x y
+    static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.lift2 Plus.Invoke x y
 #endif
 
 #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
 type Plus with    
     
-    static member inline ``+`` (x: 'a ValueTask, y: 'a ValueTask, [<Optional>]_mthd: Plus) = ValueTask.map2 Plus.Invoke x y
+    static member inline ``+`` (x: 'a ValueTask, y: 'a ValueTask, [<Optional>]_mthd: Plus) = ValueTask.lift2 Plus.Invoke x y
 
 #endif
     
@@ -138,7 +140,7 @@ type Plus with
 
     static member inline ``+`` (f: 'T->'Monoid, g: 'T->'Monoid, [<Optional>]_mthd: Plus) = (fun x -> Plus.Invoke (f x) (g x)) : 'T->'Monoid
 
-    static member inline ``+`` (x: 'S Async   , y: 'S Async   , [<Optional>]_mthd: Plus) = Async.map2 Plus.Invoke x y
+    static member inline ``+`` (x: 'S Async   , y: 'S Async   , [<Optional>]_mthd: Plus) = Async.lift2 Plus.Invoke x y
 
     static member inline ``+`` (x: 'a Expr    , y: 'a Expr    , [<Optional>]_mthd: Plus) : 'a Expr =
                     let inline f (x: 'a)  : 'a -> 'a = Plus.Invoke x

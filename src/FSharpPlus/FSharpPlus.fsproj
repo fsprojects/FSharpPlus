@@ -68,6 +68,7 @@
     <Compile Include="Control/Foldable.fs" />
     <Compile Include="Control/Alternative.fs" />
     <Compile Include="Control/Applicative.fs" />
+    <Compile Include="Control/ZipApplicative.fs" />
     <Compile Include="Control/Functor.fs" />
     <Compile Include="Control/MonadOps.fs" />
     <Compile Include="Control/Comonad.fs" />
@@ -110,6 +111,8 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
+    <Compile Include="Extensions/Observable.fs" />
+    <Compile Include="Extensions/AsyncEnumerable.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
     <Content Condition=" '$(TargetFramework)' == 'net45'" Include="App.config" />

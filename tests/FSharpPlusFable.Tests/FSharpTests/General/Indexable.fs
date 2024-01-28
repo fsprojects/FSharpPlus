@@ -245,5 +245,13 @@ let indexable = testList "Indexable" [
         let i1 = findSliceIndex m2 m1
         SideEffects.are ["Using WrappedListD's FindSliceIndex"]
         equal i1 1)
+
+    testCase "findLastSliceIndexUsage" (fun () ->
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findLastSliceIndex m2 m1
+        SideEffects.are ["Using WrappedListD's FindLastSliceIndex"]
+        equal i1 1)
     #endif
     ]

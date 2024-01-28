@@ -21,8 +21,20 @@ Minimal complete definition
  * ``traverse f x`` | ``sequence x``
 *)
 (**
-    static member Traverse (t:'Traversable<'T>, f: 'T -> 'Functor<'U>) : 'Functor<'Traversable<'U>>
-    static member Sequence (t:'Traversable<'Functor<'T>>) : 'Functor<'Traversable<'T>>
+    static member Traverse (t: 'Traversable<'T>, f: 'T -> 'Applicative<'U>) : 'Applicative<'Traversable<'U>>
+    static member Sequence (t: 'Traversable<'Applicative<'T>>) : 'Applicative<'Traversable<'T>>
+*)
+(**
+
+
+Other operations
+----------------
+
+ * ``gather f x`` | ``transpose x`` (same as traverse and sequence but operating on ZipApplicatives)
+*)
+(**
+    static member Gather (t: 'Traversable<'T>, f: 'T -> 'ZipApplicative<'U>) : 'ZipApplicative<'Traversable<'U>>
+    static member Transpose (t: 'Traversable<'ZipApplicative<'T>>) : 'ZipApplicative<'Traversable<'T>>
 *)
 (**
 

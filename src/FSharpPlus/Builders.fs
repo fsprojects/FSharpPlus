@@ -372,6 +372,33 @@ module GenericBuilders =
         member        _.Run x : '``Applicative1<Applicative2<Applicative3<'T>>>`` = x
 
 
+    /// Generic ZipApplicative CE builder.
+    type ZipApplicativeBuilder<'``applicative<'t>``> () =
+        member        _.ReturnFrom (expr) = expr   : '``applicative<'t>``
+        member inline _.Return (x: 'T) = pur x : '``Applicative<'T>``
+        member inline _.Yield  (x: 'T) = pur x : '``Applicative<'T>``
+        #if !NET45
+        member inline _.BindReturn(x, [<InlineIfLambda>]f) = map f x : '``Applicative<'U>``
+        #else
+        member inline _.BindReturn(x, f) = map f x : '``Applicative<'U>``
+        #endif
+        member inline _.MergeSources  (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``) : '``Applicative<'T * 'U>`` = map2 tuple2 t1 t2
+        member inline _.MergeSources3 (t1: '``Applicative<'T>``, t2: '``Applicative<'U>``, t3: '``Applicative<'V>``) : '``Applicative<'T * 'U * 'V>`` = map3 tuple3 t1 t2 t3
+        member        _.Run f : '``Applicative<'T>`` = f
+
+    /// Generic 2 layers ZipApplicative CE builder.
+    type ZipApplicativeBuilder2<'``applicative1<applicative2<'t>>``> () =
+        member        _.ReturnFrom expr : '``applicative1<applicative2<'t>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (pur >> pur) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<'T>>`` = (pur >> pur) x
+        #if !NET45
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        #else
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<'T>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map) f x
+        #endif
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<'T>>`` = (map2 >> map2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (map3 >> map3) tuple3 t1 t2 t3
+        member        _.Run x : '``Applicative1<Applicative2<'T>>`` = x
 
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
@@ -379,13 +406,19 @@ module GenericBuilders =
     /// Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad'<'``monad<'t>``> = new MonadFxStrictBuilder<'``monad<'t>``> ()
 
-    /// Creates an applicative computation expression.
+    /// Creates a (sequential) applicative computation expression.
     let applicative<'``Applicative<'T>``> = ApplicativeBuilder<'``Applicative<'T>``> ()
 
-    /// Creates an applicative computation expression which compose effects of two Applicatives.
+    /// Creates a (sequential) applicative computation expression which compose effects of two Applicatives.
     let applicative2<'``Applicative1<Applicative2<'T>>``> = ApplicativeBuilder2<'``Applicative1<Applicative2<'T>>``> ()
 
-    /// Creates an applicative computation expression which compose effects of three Applicatives.
+    /// Creates a (sequential) applicative computation expression which compose effects of three Applicatives.
     let applicative3<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
+
+    /// Creates a (non sequential) applicative computation expression.
+    let app<'``ZipApplicative<'T>``> = ZipApplicativeBuilder<'``ZipApplicative<'T>``> ()
+
+    /// Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
+    let app2<'``ZipApplicative1<ZipApplicative2<'T>>``> = ZipApplicativeBuilder2<'``ZipApplicative1<ZipApplicative2<'T>>``> ()
 
 #endif
