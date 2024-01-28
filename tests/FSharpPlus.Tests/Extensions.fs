@@ -385,10 +385,10 @@ module Extensions =
     Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (result 3) (throw 5) |> areEqual (throw 5: Choice<int, int>)
     
     // Async
-    Async.map3 (fun x y z -> x + y + z) (async {return 1}) (async {return 3}) (async {return 5}) |> Async.RunSynchronously |> areEqual 9
+    Async.lift3 (fun x y z -> x + y + z) (async {return 1}) (async {return 3}) (async {return 5}) |> Async.RunSynchronously |> areEqual 9
     
     // Task
-    Task.map3 (fun x y z -> x + y + z) (async {return 1} |> Async.StartAsTask) (async {return 3} |> Async.StartAsTask) (async {return 5} |> Async.StartAsTask) 
+    Task.lift3 (fun x y z -> x + y + z) (async {return 1} |> Async.StartAsTask) (async {return 3} |> Async.StartAsTask) (async {return 5} |> Async.StartAsTask) 
      |> Async.AwaitTask |> Async.RunSynchronously |> areEqual 9
 
     // List

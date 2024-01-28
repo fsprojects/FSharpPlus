@@ -45,7 +45,7 @@ module Task =
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First task workflow.</param>
     /// <param name="y">Second task workflow.</param>
-    let map2 (f: 'T -> 'U -> 'V) (x: Task<'T>) (y: Task<'U>) : Task<'V> =
+    let lift2 (f: 'T -> 'U -> 'V) (x: Task<'T>) (y: Task<'U>) : Task<'V> =
         if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion then
             try Task.FromResult (f x.Result y.Result)
             with e ->
@@ -97,7 +97,7 @@ module Task =
     /// <param name="x">First task workflow.</param>
     /// <param name="y">Second task workflow.</param>
     /// <param name="z">Third task workflow.</param>
-    let map3 (f : 'T -> 'U -> 'V -> 'W) (x : Task<'T>) (y : Task<'U>) (z: Task<'V>) : Task<'W> =
+    let lift3 (f : 'T -> 'U -> 'V -> 'W) (x : Task<'T>) (y : Task<'U>) (z: Task<'V>) : Task<'W> =
         if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion && z.Status = TaskStatus.RanToCompletion then
             try Task.FromResult (f x.Result y.Result z.Result)
             with e ->
@@ -135,22 +135,22 @@ module Task =
             tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
-    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <remarks>Similar to lift2 but although workflows are started in sequence they might end independently in different order.</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First task workflow.</param>
     /// <param name="y">Second task workflow.</param>
-    let pmap2 f x y = task {
+    let map2 f x y = task {
         let! x' = x
         let! y' = y
         return f x' y' }
 
     /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
-    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order.</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First task workflow.</param>
     /// <param name="y">Second task workflow.</param>
     /// <param name="z">Third task workflow.</param>
-    let pmap3 f x y z = task {
+    let map3 f x y z = task {
         let! x' = x
         let! y' = y
         let! z' = z
@@ -207,7 +207,7 @@ module Task =
             tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', tupling its results.</summary>
-    let zip (x: Task<'T>) (y: Task<'U>) : Task<'T * 'U> =
+    let zipSequentially (x: Task<'T>) (y: Task<'U>) : Task<'T * 'U> =
         if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion then
             Task.FromResult (x.Result, y.Result)
         else
@@ -240,6 +240,13 @@ module Task =
                             | Faulted e    -> tcs.SetException e.InnerExceptions
                             | Completed r' -> tcs.SetResult (r, r')) |> ignore) |> ignore
             tcs.Task
+
+    /// <summary>Creates a task workflow from two workflows 'x' and 'y', tupling its results.</summary>
+    /// <remarks>Similar to zipSequentially but although workflows are started in sequence they might end independently in different order.</remarks>
+    let zip x y = task {
+        let! x' = x
+        let! y' = y
+        return x', y' }
 
     /// Flattens two nested tasks into one.
     let join (source: Task<Task<'T>>) : Task<'T> = source.Unwrap()
