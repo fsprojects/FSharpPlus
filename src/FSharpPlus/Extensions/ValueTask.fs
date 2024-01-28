@@ -39,7 +39,7 @@ module ValueTask =
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First ValueTask workflow.</param>
     /// <param name="y">Second ValueTask workflow.</param>
-    let map2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
+    let lift2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
         let tcs = TaskCompletionSource<'V> ()
         continueTask tcs x (fun x ->
             continueTask tcs y (fun y ->
@@ -53,7 +53,7 @@ module ValueTask =
     /// <param name="x">First ValueTask workflow.</param>
     /// <param name="y">Second ValueTask workflow.</param>
     /// <param name="z">Third ValueTask workflow.</param>
-    let map3 (f: 'T -> 'U -> 'V -> 'W) (x: ValueTask<'T>) (y: ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
+    let lift3 (f: 'T -> 'U -> 'V -> 'W) (x: ValueTask<'T>) (y: ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
         let tcs = TaskCompletionSource<'W> ()
         continueTask tcs x (fun x ->
             continueTask tcs y (fun y ->
@@ -63,12 +63,12 @@ module ValueTask =
         tcs.Task |> ValueTask<'W>
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
-    /// <remarks>Similar to map2 but workflows are run in parallel.</remarks>
+    /// <remarks>Similar to lift2 but although workflows are started in sequence they might end independently in different order.</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First ValueTask workflow.</param>
     /// <param name="y">Second ValueTask workflow.</param>
     /// <param name="z">Third ValueTask workflow.</param>
-    let pmap2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
+    let map2 (f: 'T -> 'U -> 'V) (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'V> =
         task {
             let! x' = x
             let! y' = y
@@ -77,12 +77,12 @@ module ValueTask =
         |> ValueTask<'V>
 
     /// <summary>Creates a ValueTask workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
-    /// <remarks>Similar to map3 but workflows are run in parallel.</remarks>
+    /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order.</remarks>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">First ValueTask workflow.</param>
     /// <param name="y">Second ValueTask workflow.</param>
     /// <param name="z">Third ValueTask workflow.</param>
-    let pmap3 (f: 'T -> 'U -> 'V -> 'W) (x: ValueTask<'T>) (y: ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
+    let map3 (f: 'T -> 'U -> 'V -> 'W) (x: ValueTask<'T>) (y: ValueTask<'U>) (z: ValueTask<'V>) : ValueTask<'W> =
         task {
             let! x' = x
             let! y' = y
@@ -104,12 +104,22 @@ module ValueTask =
         tcs.Task |> ValueTask<'U>
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', tupling its results.</summary>
-    let zip (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'T * 'U> =
+    let zipSequentially (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'T * 'U> =
         let tcs = TaskCompletionSource<'T * 'U> ()
         continueTask tcs x (fun x ->
             continueTask tcs y (fun y ->
                 tcs.SetResult (x, y)))
         tcs.Task |> ValueTask<'T * 'U>
+
+    /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', tupling its results.</summary>
+    /// <remarks>Similar to zipSequentially but although workflows are started in sequence they might end independently in different order.</remarks>
+    let zip (x: ValueTask<'T>) (y: ValueTask<'U>) : ValueTask<'T * 'U> =
+        task {
+            let! x' = x
+            let! y' = y
+            return x', y'
+        }
+        |> ValueTask<'T * 'U>
     
     /// Flattens two nested ValueTask into one.
     let join (source: ValueTask<ValueTask<'T>>) : ValueTask<'T> =

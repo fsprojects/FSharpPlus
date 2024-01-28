@@ -49,6 +49,17 @@ module Validation =
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
 
+    let inline zip x y : Validation<'Error, 'T *'U> =
+        match (x: Validation<'Error, 'T>), (y: Validation<'Error, 'U>) with
+        #if !FABLE_COMPILER
+        | Failure e1, Failure e2 -> Failure (plus e1 e2)
+        #else
+        | Failure e1, Failure e2 -> Failure (e1 + e2)
+        #endif
+        | Failure e1, Success _  -> Failure e1
+        | Success _ , Failure e2 -> Failure e2
+        | Success x , Success y  -> Success (x, y)
+
     let inline map2 f x y : Validation<'Error,'V> =
         match (x: Validation<'Error,'T>), (y: Validation<'Error,'U>) with
         #if !FABLE_COMPILER
@@ -280,6 +291,21 @@ type Validation<'error, 't> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Lift3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
+
+    // as ZipApplicative (same behavior)
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Zip (x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'T * 'U> = Validation.zip x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Pure x = Success x
+
+    static member inline (<.>)  (f: Validation<'Error, 'T -> 'U>, x: Validation<_, 'T>) : Validation<_, _> = Validation.apply f x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map2 (f, x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'V> = Validation.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
 
     // as Alternative (inherits from Applicative)
     #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4

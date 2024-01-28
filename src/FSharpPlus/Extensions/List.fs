@@ -76,12 +76,12 @@ module List =
     /// <param name="x3">Third list.</param>
     ///
     /// <returns>List with values returned from mapping function.</returns>
-    let lift3 f x1 x2 x3 =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    let lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: list<'T1>) (x2: list<'T2>) (x3: list<'T3>) =
+    #if FABLE_COMPILER
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
-        |> List.map (fun (x, y, z) -> f x y z)
+        |> List.map (fun (x, y, z) -> f z x y)
     #else
         let mutable coll = ListCollector<'U> ()
         x1 |> List.iter (fun x1 ->
@@ -345,6 +345,22 @@ module List =
                 loop (ls, rs)
         loop (list1, list2)
     #endif
+
+    let map3Shortest mapping (list1: list<'T1>) (list2: list<'T2>) (list3: list<'T3>) : list<'U> =
+    #if FABLE_COMPILER
+        let rec loop acc = function
+            | (l1::l1s, l2::l2s, l3::l3s) -> loop ((mapping l1 l2 l3)::acc) (l1s, l2s, l3s)
+            | (_, _, _)                   -> acc
+        loop [] (list1, list2, list3) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'U> ()
+        let rec loop = function
+            | ([], _, _) | (_, [], _)| (_, _, []) -> coll.Close ()
+            | (l1::l1s, l2::l2s, l3::l3s) ->
+                coll.Add (mapping l1 l2 l3)
+                loop (l1s, l2s, l3s)
+        loop (list1, list2, list3)
+    #endif
         
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
@@ -447,3 +463,27 @@ module List =
         if List.length lst > i && i >= 0 then
             lst.[0..i-1] @ x::lst.[i+1..]
         else lst
+
+    #if !FABLE_COMPILER
+    open System.Reflection
+
+    /// Creates an infinite list which cycles the element of the source.
+    let cycle lst =
+        let last = ref lst
+        let rec copy = function
+            | [] -> failwith "empty list"
+            | [z] -> 
+                let v = [z]
+                last.Value <- v
+                v
+            | x::xs ->  x::copy xs
+        let cycled = copy lst
+        let strs = last.Value.GetType().GetFields(BindingFlags.NonPublic ||| BindingFlags.Instance) |> Array.map (fun field -> field.Name)
+        let tailField = last.Value.GetType().GetField(Array.find(fun (s:string) -> s.ToLower().Contains("tail")) strs, BindingFlags.NonPublic ||| BindingFlags.Instance)
+        tailField.SetValue(last.Value, cycled)
+        cycled
+    #else
+    let cycle lst = lst
+    // TODO does it get garbage collected ? Is there a way to implement it in fable ?
+    #endif
+

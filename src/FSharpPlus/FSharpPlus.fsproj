@@ -66,6 +66,7 @@
     <Compile Include="Control/Foldable.fs" />
     <Compile Include="Control/Alternative.fs" />
     <Compile Include="Control/Applicative.fs" />
+    <Compile Include="Control/ZipApplicative.fs" />
     <Compile Include="Control/Functor.fs" />
     <Compile Include="Control/MonadOps.fs" />
     <Compile Include="Control/Comonad.fs" />
@@ -114,16 +115,16 @@
     <Compile Include="Parsing.fs" />
   </ItemGroup>
 
-  <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
-  <ItemGroup>
-    <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
-    <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
-    <Content Include="Control/*.fs" PackagePath="fable/Control" />
-    <Content Include="Math/*.fs" PackagePath="fable/Math" />
-    <Content Include="Data/*.fs" PackagePath="fable/Data" />
-  </ItemGroup>
+	<!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
+	<ItemGroup>
+		<Content Include="*.fsproj; *.fs" PackagePath="fable/" />
+		<Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
+		<Content Include="Control/*.fs" PackagePath="fable/Control" />
+		<Content Include="Math/*.fs" PackagePath="fable/Math" />
+		<Content Include="Data/*.fs" PackagePath="fable/Data" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.6" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="FSharp.Core" Version="6.0.6" />
+	</ItemGroup>
 </Project>

@@ -207,7 +207,24 @@ module Extensions =
             | ValueNone -> Choice1Of2 (accumulator.Close () |> Array.toSeq)
             | ValueSome x -> Choice2Of2 x
         #endif
-            
+
+        /// Returns all Errors combined, otherwise a sequence of all elements.
+        static member Parallel (combiner, t: seq<Choice<_, _>>) =
+            let mutable error = ValueNone
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () do
+                    match e.Current, error with
+                    | Choice1Of2 v, ValueNone   -> yield v
+                    | Choice2Of2 e, ValueNone   -> error <- ValueSome e
+                    | Choice2Of2 e, ValueSome x -> error <- ValueSome (combiner x e)
+                    | _                         -> () })
+
+            match error with
+            | ValueNone -> Choice1Of2 (Array.toSeq res)
+            | ValueSome e -> Choice2Of2 e
+
+
     type Result<'t, 'error> with
 
         /// Returns the first Error if it contains an Error element, otherwise a list of all elements
@@ -236,3 +253,19 @@ module Extensions =
             | ValueNone -> Ok (accumulator.Close () |> Array.toSeq)
             | ValueSome x -> Error x
         #endif
+
+        /// Returns all Errors combined, otherwise a sequence of all elements.
+        static member Parallel (combiner, t: seq<Result<_, _>>) =
+            let mutable error = ValueNone
+            let res = Seq.toArray (seq {
+                use e = t.GetEnumerator ()
+                while e.MoveNext () do
+                    match e.Current, error with
+                    | Ok v   , ValueNone   -> yield v
+                    | Error e, ValueNone   -> error <- ValueSome e
+                    | Error e, ValueSome x -> error <- ValueSome (combiner x e)
+                    | _                         -> () })
+
+            match error with
+            | ValueNone -> Ok (Array.toSeq res)
+            | ValueSome e -> Error e

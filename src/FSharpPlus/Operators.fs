@@ -144,6 +144,19 @@ module Operators =
     let inline (|>>) (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
 
     /// <summary>
+    /// Lifts a function into two Functors.
+    /// To be used in pipe-forward style expressions
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (|>>>) (x: '``Functor1<Functor2<'T>>``) (f: 'T -> 'U) : '``Functor1<Functor2<'U>>`` = (Map.Invoke >> Map.Invoke) f x
+
+    /// <summary>
+    /// Lifts a function into two Functors.
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (<<<|) (f: 'T -> 'U) (x: '``Functor1<Functor2<'T>>``) : '``Functor1<Functor2<'U>`` = (Map.Invoke >> Map.Invoke) f x
+
+    /// <summary>
     /// Like map but ignoring the results.
     /// </summary>
     /// <category index="1">Functor</category>
@@ -217,6 +230,32 @@ module Operators =
     /// </summary>
     /// <category index="2">Applicative</category>
     let inline opt (v: '``Alternative<'T>``) : '``Alternative<option<'T>>`` = (Some : 'T -> _) <!> v </Append.Invoke/> result (None: option<'T>)
+
+
+    /// <summary>
+    /// Lifts a value into a ZipFunctor. Same as return in (zip) Computation Expressions.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline pur (x: 'T) : '``ZipFunctor<'T>`` = Pure.Invoke x
+
+    /// <summary>
+    /// Apply a lifted argument to a lifted function: f &lt;/&gt; arg.
+    /// Same as &lt;*&gt; but for non sequential applicatives.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (<.>) (f: '``ZipApplicative<'T -> 'U>``) (x: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` = ZipApply.Invoke f x : '``ZipApplicative<'U>``
+
+    /// <summary>
+    /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline map2 (f: 'T->'U->'V) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) : '``ZipApplicative<'V>`` = Map2.Invoke f x y
+
+    /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline map3 (f: 'T->'U->'V->'W) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) (z: '``ZipApplicative<'V>``) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
 
 
 
@@ -696,6 +735,21 @@ module Operators =
     /// </summary>
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
+
+
+    // Traversable (Parallel / Pointwise)
+
+    /// <summary>
+    /// Map each element of a structure to an action, evaluate these actions from left to right, pointwise, and/or in parallel, and collect the results.
+    /// </summary>
+    /// <category index="13">Traversable</category>
+    let inline gather (f: 'T->'``ZipFunctor<'U>``) (t: '``Traversable<'T>``) : '``ZipFunctor<'Traversable<'U>>`` = Gather.Invoke f t
+
+    /// <summary>
+    /// Evaluate each action in the structure from left to right, pointwise, and/or in parallel, and collect the results.
+    /// </summary>
+    /// <category index="13">Traversable</category>
+    let inline transpose (t: '``Traversable<'ZipFunctor<'T>>``) : '``ZipFunctor<'Traversable<'T>>`` = Transpose.Invoke t
 
     
     // Bifoldable
