@@ -76,12 +76,12 @@ module List =
     /// <param name="x3">Third list.</param>
     ///
     /// <returns>List with values returned from mapping function.</returns>
-    let lift3 f x1 x2 x3 =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    let lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: list<'T1>) (x2: list<'T2>) (x3: list<'T3>) =
+    #if FABLE_COMPILER
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
-        |> List.map (fun (x, y, z) -> f x y z)
+        |> List.map (fun (x, y, z) -> f z x y)
     #else
         let mutable coll = ListCollector<'U> ()
         x1 |> List.iter (fun x1 ->
