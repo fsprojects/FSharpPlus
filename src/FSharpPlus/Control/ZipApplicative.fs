@@ -13,6 +13,13 @@ open FSharpPlus
 open FSharpPlus.Data
 
 
+[<System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
+module ZipApplivativeConts =
+    let [<Literal>]MessagePure = "'Pure' operation is not defined for "
+    let [<Literal>]Code = 10707
+
+open ZipApplivativeConts
+
 type Pure =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``ZipApplicative<'T>`` : (static member Pure : ^T -> ^``ZipApplicative<'T>``) x)
@@ -38,7 +45,7 @@ type Pure =
     static member        Pure (x: voption<'a>     , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>)
     static member        Pure (_: list<'a>        , _: Pure) = fun x -> List.cycle [x]                        : list<'a>
     
-    [<CompilerMessage("No parallel applicative Return operation for 't []", 10720, IsError = true)>]
+    [<CompilerMessage(MessagePure + "'t [].", Code, IsError = true)>]
     static member        Pure (x: 'a []           , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>)
 
     static member        Pure (x: 'r -> 'a        , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>)
@@ -51,15 +58,15 @@ type Pure =
     static member        Pure (x: Expr<'a>        , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>)
     #endif
     
-    [<CompilerMessage("No parallel applicative Return operation for ResizeArray<'t>", 10720, IsError = true)>]
+    [<CompilerMessage(MessagePure + "ResizeArray<'t>.", Code, IsError = true)>]
     static member        Pure (x: ResizeArray<'a>, _: Pure  ) = Return.Return (x, Unchecked.defaultof<Return>)
 
     //Restricted
-    [<CompilerMessage("No parallel applicative Return operation for string", 10720, IsError = true)>]
+    [<CompilerMessage(MessagePure + "string.", Code, IsError = true)>]
     static member        Pure (_: string         , _: Pure  ) = fun (x: char) -> string x : string
-    [<CompilerMessage("No parallel applicative Return operation for StringBuilder", 10720, IsError = true)>]
+    [<CompilerMessage(MessagePure + "StringBuilder.", Code, IsError = true)>]
     static member        Pure (_: StringBuilder  , _: Pure  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
-    [<CompilerMessage("No parallel applicative Return operation for Set", 10720, IsError = true)>]
+    [<CompilerMessage(MessagePure + "Set.", Code, IsError = true)>]
     static member        Pure (_: 'a Set         , _: Pure  ) = fun (x: 'a  ) -> Set.singleton x
     static member        Pure (_: 'a Set2        , _: Pure  ) = fun (_: 'a  ) -> Set2() : 'a Set2
 
