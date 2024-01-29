@@ -56,6 +56,12 @@ module Operators =
     let inline (/>) x = flip x
     
     /// <summary>
+    /// Executes a side-effect function and returns the original input value. Same as 'tap' but with arguments flipped.
+    /// </summary>
+    /// <category index="0">Common Combinators</category>
+    let inline (|-) source ([<InlineIfLambda>]f: 'T -> unit) = f source; source
+
+    /// <summary>
     /// Executes a side-effect function and returns the original input value.
     /// </summary>
     /// <category index="0">Common Combinators</category>
