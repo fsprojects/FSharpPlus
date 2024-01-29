@@ -230,6 +230,16 @@ module GenericBuilders =
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<'T>>`` = (map3 >> map3) tuple3 t1 t2 t3
         member        _.Run x : '``Applicative1<Applicative2<'T>>`` = x
 
+    /// Generic 3 layers ZipApplicative CE builder.
+    type ZipApplicativeBuilder3<'``applicative1<applicative2<applicative3<'t>>>``> () =
+        member        _.ReturnFrom expr : '``applicative1<applicative2<applicative3<'t>>>`` = expr
+        member inline _.Return (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (pur >> pur >> pur) x
+        member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (pur >> pur >> pur) x
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (map2 >> map2 >> map2) tuple2 t1 t2
+        member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (map3 >> map3 >> map3) tuple3 t1 t2 t3
+        member        _.Run x : '``Applicative1<Applicative2<Applicative3<'T>>>`` = x
+
     /// Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
     let monad<'``monad<'t>``> = new MonadFxBuilder<'``monad<'t>``> ()
 
@@ -250,5 +260,8 @@ module GenericBuilders =
 
     /// Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
     let applicative2'<'``ZipApplicative1<ZipApplicative2<'T>>``> = ZipApplicativeBuilder2<'``ZipApplicative1<ZipApplicative2<'T>>``> ()
+
+    /// Creates a (non sequential) applicative computation expression which compose effects of three Applicatives.
+    let applicative3'<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ZipApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
 
 #endif
