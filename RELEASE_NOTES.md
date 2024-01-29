@@ -1,10 +1,17 @@
-#### 1.6.0-RC2  - December 17 2023
- - Compile using net6
- - Add Result.Sequence
- - Add Validation.ofOptionWith
- - Add List.chunkBy
+#### 1.6.0  - January 29 2024
+ - Add Non-sequential-Applicative operators and computation expressions
+ - Add proper SeqT implementation
  - Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
  - Add limited applicative support to dictionaries
+ - Add (forward) tee operator (|-)
+ - Add "mapsquared" pipe operators (|>>>) and (<<<|)
+ - Add some functions, interfaces and optimizations to DList<'T>
+ - Add findLastSliceIndex and tryFindLastSliceIndex
+ - Add Result.Sequence
+ - Add Result.iterError
+ - Add Validation.ofOptionWith
+ - Add List.chunkBy
+ - Fix bug in lift3 for List and Array
 
 #### 1.5.0  - October 15 2023
  - Support for Fable 4 (some functions had to be removed from Fable in order to it)
