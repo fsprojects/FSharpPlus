@@ -7,14 +7,14 @@
       A complete and extensible base library for F#.
     </Description>
     <Authors>gusty; wallymathieu</Authors>
-    <Copyright>2012-2023 Gustavo M. Wild - Oskar Gewalli (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
+    <Copyright>2012-2024 Gustavo M. Wild - Oskar Gewalli (and contributors https://github.com/fsprojects/FSharpPlus/graphs/contributors)</Copyright>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/fsprojects/FSharpPlus</PackageProjectUrl>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageTags>f# FSharp Applicative Monad MonadTransformer Arrow Overloading</PackageTags>
     <VersionPrefix>1.6.0</VersionPrefix>
-    <VersionSuffix>RC2</VersionSuffix>
+    <VersionSuffix></VersionSuffix>
     <Version Condition=" '$(VersionSuffix)' != '' ">$(VersionPrefix)-$(VersionSuffix)</Version>
     <Version Condition=" '$(VersionSuffix)' == '' ">$(VersionPrefix)</Version>
 
