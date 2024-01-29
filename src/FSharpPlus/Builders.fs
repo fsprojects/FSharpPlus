@@ -405,7 +405,11 @@ module GenericBuilders =
         member        _.ReturnFrom expr : '``applicative1<applicative2<applicative3<'t>>>`` = expr
         member inline _.Return (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (pur >> pur >> pur) x
         member inline _.Yield  (x: 'T) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (pur >> pur >> pur) x
+        #if !NET45
         member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, [<InlineIfLambda>]f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        #else
+        member inline _.BindReturn (x: '``Applicative1<Applicative2<Applicative3<'T>>>``, f: _ -> _) : '``Applicative1<Applicative2<'U>>`` = (map >> map >> map) f x
+        #endif
         member inline _.MergeSources  (t1, t2)     : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (map2 >> map2 >> map2) tuple2 t1 t2
         member inline _.MergeSources3 (t1, t2, t3) : '``Applicative1<Applicative2<Applicative3<'T>>>`` = (map3 >> map3 >> map3) tuple3 t1 t2 t3
         member        _.Run x : '``Applicative1<Applicative2<Applicative3<'T>>>`` = x

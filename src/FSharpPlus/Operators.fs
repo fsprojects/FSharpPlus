@@ -58,7 +58,11 @@ module Operators =
     /// Executes a side-effect function and returns the original input value. Same as 'tap' but with arguments flipped.
     /// </summary>
     /// <category index="0">Common Combinators</category>
+    #if !NET45
     let inline (|-) source ([<InlineIfLambda>]f: 'T -> unit) = f source; source
+    #else
+    let inline (|-) source (f: 'T -> unit) = f source; source
+    #endif
 
     /// <summary>
     /// Executes a side-effect function and returns the original input value.
