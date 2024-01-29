@@ -3,6 +3,7 @@ namespace FSharpPlus.Data
 #if !FABLE_COMPILER
 
 open System.Runtime.CompilerServices
+open System.ComponentModel
 open FSharpPlus.Control
 open FSharpPlus.TypeLevel
 open TypeLevelOperators
@@ -294,6 +295,13 @@ module Matrix =
     { Items =
         Array2D.init (Array2D.length1 m1.Items) (Array2D.length2 m1.Items)
           (fun i j -> f m1.Items.[i, j] m2.Items.[i, j] ) }
+
+  [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
+  let map3 (f: 'a -> 'b -> 'c -> 'd) (m1: Matrix<'a, 'm, 'n>) (m2: Matrix<'b, 'm, 'n>) (m3: Matrix<'c, 'm, 'n>) : Matrix<'d, 'm, 'n> =
+    { Items =
+        Array2D.init (Array2D.length1 m1.Items) (Array2D.length2 m1.Items)
+          (fun i j -> f m1.Items.[i, j] m2.Items.[i, j] m3.Items.[i, j] ) }
+
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let mapi (f: int -> int -> 'a -> 'b) (m: Matrix<'a, 'm, 'n>) : Matrix<'b, 'm, 'n> =
     { Items = Array2D.mapi (fun i j -> f i j) m.Items }
@@ -554,8 +562,17 @@ module Matrix =
 type Matrix<'Item, 'Row, 'Column> with
   static member inline Item (mtx: Matrix<'a, 'm, 'n>, (m, n)) = Matrix.get m n mtx
   static member inline Map  (mtx: Matrix<'a, 'm, 'n>, f: 'a -> 'b) = Matrix.map f mtx
+
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  static member inline Map2 (f, m1, m2) : Matrix<'x, 'm, 'n> = Matrix.map2 f m1 m2
+
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  static member inline Map3 (f, m1, m2, m3) : Matrix<'x, 'm, 'n> = Matrix.map3 f m1 m2 m3
+
   static member inline Return (x: 'x) : Matrix<'x, 'm, 'n> = Matrix.replicate Singleton Singleton x
+  static member inline Pure   (x: 'x) : Matrix<'x, 'm, 'n> = Matrix.replicate Singleton Singleton x
   static member inline ( <*> ) (f: Matrix<'x -> 'y, 'm, 'n>, x: Matrix<'x, 'm, 'n>) = Matrix.map2 id f x
+  static member inline ( <.> ) (f: Matrix<'x -> 'y, 'm, 'n>, x: Matrix<'x, 'm, 'n>) = Matrix.map2 id f x
   static member inline get_Zero () : Matrix<'a, 'm, 'n> = Matrix.zero
   static member inline ( + ) (m1, m2) = Matrix.map2 (+) m1 m2
   static member inline ( - ) (m1, m2) = Matrix.map2 (-) m1 m2
@@ -579,9 +596,21 @@ type Matrix<'Item, 'Row, 'Column> with
 type Vector<'Item, 'Length> with
   static member inline Item (v: Vector<'a, 'n>, i) = Vector.get i v
   static member inline Map (v: Vector<'a, 'n>, f: 'a -> 'b) : Vector<'b, 'n> = Vector.map f v
+  
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  static member inline Map2 (f, vec1, vec2) : Vector<'x, 'n> = Vector.map2 f vec1 vec2
+
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
+  static member inline Map3 (f, vec1, vec2, vec3) : Vector<'x, 'n> = Vector.map3 f vec1 vec2 vec3
+
   static member inline Return (x: 'x) : Vector<'x, 'n> = Vector.replicate Singleton x
+  static member inline Pure   (x: 'x) : Vector<'x, 'n> = Vector.replicate Singleton x
   static member inline ( <*> ) (f: Vector<'x -> 'y, 'n>, x: Vector<'x, 'n>) : Vector<'y, 'n> = Vector.apply f x
+  static member inline ( <.> ) (f: Vector<'x -> 'y, 'n>, x: Vector<'x, 'n>) : Vector<'y, 'n> = Vector.apply f x
+  
+  [<EditorBrowsable(EditorBrowsableState.Never)>]
   static member inline Zip (x, y) = Vector.zip x y
+
   static member inline get_Zero () : Vector<'x, 'n> = Vector.zero
   static member inline ( + ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (+) v1 v2
   static member inline ( - ) (v1: Vector<_, 'n>, v2: Vector<_, 'n>) = Vector.map2 (-) v1 v2
