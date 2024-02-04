@@ -64,7 +64,67 @@ module Extensions =
 
     type Async<'t> with
 
+        static member internal Map f x = async.Bind (x, async.Return << f)
+
         #if !FABLE_COMPILER
+
+        // See https://github.com/fsharp/fslang-suggestions/issues/840
+
+        /// <summary>Return an asynchronous computation that will wait for the given task to complete and return
+        /// its result.</summary>
+        ///
+        /// <param name="task">The task to await.</param>
+        ///
+        /// <remarks>Prefer this over <c>Async.AwaitTask</c>.
+        ///
+        /// If an exception occurs in the asynchronous computation then an exception is re-raised by this function.
+        ///
+        /// If the task is cancelled then <see cref="F:System.Threading.Tasks.TaskCanceledException"/> is raised. Note
+        /// that the task may be governed by a different cancellation token to the overall async computation where the
+        /// Await occurs. In practice you should normally start the task with the cancellation token returned by
+        /// <c>let! ct = Async.CancellationToken</c>, and catch any <see cref="F:System.Threading.Tasks.TaskCanceledException"/>
+        /// at the point where the overall async is started.
+        /// </remarks>
+        static member Await (task: Task<'T>) : Async<'T> =
+            Async.FromContinuations (fun (sc, ec, _) ->
+                task.ContinueWith (fun (task: Task<'T>) ->
+                    if task.IsFaulted then
+                        let e = task.Exception
+                        if e.InnerExceptions.Count = 1 then ec e.InnerExceptions[0]
+                        else ec e
+                    elif task.IsCanceled then ec (TaskCanceledException ())
+                    else sc task.Result)
+                |> ignore)
+        
+        
+        /// <summary>Return an asynchronous computation that will wait for the given task to complete and return
+        /// its result.</summary>
+        ///
+        /// <param name="task">The task to await.</param>
+        ///
+        /// <remarks>Prefer this over <c>Async.AwaitTask</c>.
+        ///
+        /// If an exception occurs in the asynchronous computation then an exception is re-raised by this function.
+        ///
+        /// If the task is cancelled then <see cref="F:System.Threading.Tasks.TaskCanceledException"/> is raised. Note
+        /// that the task may be governed by a different cancellation token to the overall async computation where the
+        /// Await occurs. In practice you should normally start the task with the cancellation token returned by
+        /// <c>let! ct = Async.CancellationToken</c>, and catch any <see cref="F:System.Threading.Tasks.TaskCanceledException"/>
+        /// at the point where the overall async is started.
+        /// </remarks>
+        static member Await (task: Task) : Async<unit> =
+            Async.FromContinuations (fun (sc, ec, _) ->
+                task.ContinueWith (fun (task: Task) ->
+                    if task.IsFaulted then
+                        let e = task.Exception
+                        if e.InnerExceptions.Count = 1 then ec e.InnerExceptions[0]
+                        else ec e
+                    elif task.IsCanceled then ec (TaskCanceledException ())
+                    else sc ())
+                |> ignore)
+
+        
+
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
             let startImmediateAsTask ct a =
@@ -102,26 +162,26 @@ module Extensions =
         /// Creates an async Result from a Result where the Ok case is async.
         static member Sequence (t: Result<Async<'T>, 'Error>) : Async<Result<'T,'Error>> =
             match t with
-            | Ok a    -> Async.map Ok a
+            | Ok a    -> Async.Map Ok a
             | Error e -> async.Return (Error e)
 
         /// Creates an async Choice from a Choice where the Choice1Of2 case is async.
         static member Sequence (t: Choice<Async<'T>, 'Choice2Of2>) : Async<Choice<'T,'Choice2Of2>> =
             match t with
-            | Choice1Of2 a -> Async.map Choice1Of2 a
+            | Choice1Of2 a -> Async.Map Choice1Of2 a
             | Choice2Of2 e -> async.Return (Choice2Of2 e)
 
         /// Creates an async Result from a Result where both cases are async.
         static member Bisequence (t: Result<Async<'T>, Async<'Error>>) : Async<Result<'T,'Error>> =
             match t with
-            | Ok a    -> Async.map Ok a
-            | Error e -> Async.map Error e
+            | Ok a    -> Async.Map Ok a
+            | Error e -> Async.Map Error e
 
         /// Creates an async Choice from a Choice where both cases are async.
         static member Bisequence (t: Choice<Async<'T>, Async<'Choice2Of2>>) : Async<Choice<'T,'Choice2Of2>> =
             match t with
-            | Choice1Of2 a -> Async.map Choice1Of2 a
-            | Choice2Of2 e -> Async.map Choice2Of2 e
+            | Choice1Of2 a -> Async.Map Choice1Of2 a
+            | Choice2Of2 e -> Async.Map Choice2Of2 e
 
     type Option<'t> with
 
