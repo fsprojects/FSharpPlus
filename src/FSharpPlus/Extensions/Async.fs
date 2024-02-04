@@ -4,7 +4,7 @@ namespace FSharpPlus
 [<RequireQualifiedAccess>]
 module Async =
 
-    open System
+    open FSharpPlus.Extensions
 
     /// <summary>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</summary>
     let map f x = async.Bind (x, async.Return << f)
@@ -43,8 +43,8 @@ module Async =
         let! ct = Async.CancellationToken
         let x = Async.StartImmediateAsTask (x, ct)
         let y = Async.StartImmediateAsTask (y, ct)
-        let! x' = Async.AwaitTask x
-        let! y' = Async.AwaitTask y
+        let! x' = Async.Await x
+        let! y' = Async.Await y
         return f x' y' }
     #endif
 
@@ -62,9 +62,9 @@ module Async =
         let x = Async.StartImmediateAsTask (x, ct)
         let y = Async.StartImmediateAsTask (y, ct)
         let z = Async.StartImmediateAsTask (z, ct)
-        let! x' = Async.AwaitTask x
-        let! y' = Async.AwaitTask y
-        let! z' = Async.AwaitTask z
+        let! x' = Async.Await x
+        let! y' = Async.Await y
+        let! z' = Async.Await z
         return f x' y' z' }
     #endif
 
@@ -83,8 +83,8 @@ module Async =
         let! ct = Async.CancellationToken
         let x = Async.StartImmediateAsTask (x, ct)
         let y = Async.StartImmediateAsTask (y, ct)
-        let! x' = Async.AwaitTask x
-        let! y' = Async.AwaitTask y
+        let! x' = Async.Await x
+        let! y' = Async.Await y
         return x', y' }
     #endif
 
