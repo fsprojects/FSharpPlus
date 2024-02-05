@@ -6,6 +6,7 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open FSharpPlus.Data
+open FSharpPlus.Extensions
 
 /// Additional operations on Observable<'T>
 [<RequireQualifiedAccess>]
@@ -17,11 +18,11 @@ module AsyncEnumerable =
         use _ =
             { new IDisposable with
                 member _.Dispose () =
-                    e.DisposeAsync().AsTask () |> Async.AwaitTask |> Async.RunSynchronously }
+                    e.DisposeAsync().AsTask () |> Async.Await |> Async.RunSynchronously }
 
         let mutable currentResult = true
         while currentResult do
-            let! r = e.MoveNextAsync().AsTask () |> Async.AwaitTask |> SeqT.lift
+            let! r = e.MoveNextAsync().AsTask () |> Async.Await |> SeqT.lift
             currentResult <- r
             if r then yield e.Current
     }
