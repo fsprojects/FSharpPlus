@@ -31,11 +31,8 @@ type Plus =
     #if !FABLE_COMPILER
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(x).Append(y)
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""    
-    static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = new AggregateException (seq {yield! x.InnerExceptions; yield! y.InnerExceptions})
-    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) =
-        let f (e: exn) = match e with :? AggregateException as a -> a.InnerExceptions :> seq<_> | _ -> Seq.singleton e
-        let left = f x
-        new AggregateException (seq { yield! left; yield! Seq.except left (f y) }) :> exn
+    static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = Exception.add x y
+    static member        ``+`` (x: exn               , y: exn               , [<Optional>]_mthd: Plus    ) = Exception.add x y :> exn
     #else
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(string x).Append(string y)
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""
