@@ -12,6 +12,7 @@ module Task =
     exception TestException of string
     
     module TaskTests =
+        open System.Threading
 
         let createTask isFailed delay value =
             if not isFailed && delay = 0 then Task.FromResult value
@@ -39,11 +40,17 @@ module Task =
             let b = Task.zipSequentially x1 x2
             require b.IsCompleted "Task.zipSequentially didn't short-circuit"
 
+            let b1 = Task.zip3 x1 x2 x3
+            require b1.IsCompleted "Task.zip3 didn't short-circuit"
+
             let c = Task.lift2 (+) x1 x2
             require c.IsCompleted "Task.lift2 didn't short-circuit"
             
             let d = Task.lift3 (fun x y z -> x + y + z) x1 x2 x3
-            require d.IsCompleted "Task.lift3 didn't short-circiut"
+            require d.IsCompleted "Task.lift3 didn't short-circuit"
+
+            let d2 = Task.map3 (fun x y z -> x + y + z) x1 x2 x3
+            require d2.IsCompleted "Task.map3 didn't short-circuit"
 
         [<Test>]
         let erroredTasks () =
@@ -151,6 +158,75 @@ module Task =
             r19.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 2"]
             let r20 = Task.lift3 (mapping3 false) (x1 ()) (x2 ()) (e3 ())
             r20.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 3"]
+
+        [<Test>]
+        let testTaskZip () =
+            let t1 = createTask true 0 1
+            let t2 = createTask true 0 2
+            let t3 = createTask true 0 3
+
+            let c = new CancellationToken true
+            let t4 = Task.FromCanceled<int> c
+
+            let t5 = createTask false 0 5
+            let t6 = createTask false 0 6
+
+            let t12 =    Task.WhenAll [t1; t2]
+            let t12t12 = Task.WhenAll [t12; t12]
+            let t33    = Task.WhenAll [t3; t3]
+
+            Task.WaitAny t12    |> ignore
+            Task.WaitAny t12t12 |> ignore
+            Task.WaitAny t33    |> ignore
+
+            let t12123 = Task.zip3 t12t12 t33 t4
+            let ac1 =
+                try
+                    t12123.Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+                with e ->
+                    failwithf "Failure in testTaskZip. Task status is %A . Exception is %A" t12123.Status e
+
+            CollectionAssert.AreEquivalent ([1; 2; 1; 2; 3], ac1, "Task.zip(3) should add only non already existing exceptions.")
+
+            let t13 = Task.zip3 (Task.zip t1 t3) t4 (Task.zip t5 t6)
+            Assert.AreEqual (true, t13.IsFaulted, "Task.zip(3) between a value, an exception and a cancellation -> exception wins.")
+            let ac2 = t13.Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+            CollectionAssert.AreEquivalent ([1; 3], ac2, "Task.zip between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
+
+        [<Test>]
+        let testTaskZipAsync () =
+            let t1 = createTask true 20 1
+            let t2 = createTask true 10 2
+            let t3 = createTask true 30 3
+
+            let c = new CancellationToken true
+            let t4 = Task.FromCanceled<int> c
+
+            let t5 = createTask false 20 5
+            let t6 = createTask false 10 6
+
+            let t12 =    Task.WhenAll [t1; t2]
+            let t12t12 = Task.WhenAll [t12; t12]
+            let t33    = Task.WhenAll [t3; t3]
+
+            Task.WaitAny t12    |> ignore
+            Task.WaitAny t12t12 |> ignore
+            Task.WaitAny t33    |> ignore
+
+            let t12123 = Task.zip3 t12t12 t33 t4            
+            let ac1 =
+                try
+                    t12123.Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+                with e ->
+                    failwithf "Failure in testTaskZipAsync. Task status is %A . Exception is %A" t12123.Status e
+
+            CollectionAssert.AreEquivalent ([1; 2; 1; 2; 3], ac1, "Task.zip(3)Async should add only non already existing exceptions.")
+
+            let t13 = Task.zip3 (Task.zip t1 t3) t4 (Task.zip t5 t6)
+            Assert.AreEqual (true, t13.IsFaulted, "Task.zip(3)Async between a value, an exception and a cancellation -> exception wins.")
+            let ac2 = t13.Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+            CollectionAssert.AreEquivalent ([1; 3], ac2, "Task.zipAsync between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
+
     
     module TaskBuilderTests =
         
