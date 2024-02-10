@@ -7,6 +7,7 @@ namespace FSharpPlus
 module Task =
 
     open System
+    open System.Threading
     open System.Threading.Tasks
     
     let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
@@ -134,27 +135,101 @@ module Task =
                                 ) |> ignore) |> ignore) |> ignore
             tcs.Task
 
-    /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
-    /// <remarks>Similar to lift2 but although workflows are started in sequence they might end independently in different order.</remarks>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">First task workflow.</param>
-    /// <param name="y">Second task workflow.</param>
-    let map2 f x y = task {
-        let! x' = x
-        let! y' = y
-        return f x' y' }
+    /// <summary>Creates a Task workflow from two workflows, mapping its results with a specified function.</summary>
+    /// <remarks>Similar to lift2 but although workflows are started in sequence they might end independently in different order
+    /// and all errors are collected.
+    /// </remarks>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="task1">First Task workflow.</param>
+    /// <param name="task2">Second Task workflow.</param>
+    let map2 mapper (task1: Task<'T1>) (task2: Task<'T2>) : Task<'U> =
+        if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion then
+            try Task.FromResult (mapper task1.Result task2.Result)
+            with e ->
+                let tcs = TaskCompletionSource<_> ()
+                tcs.SetException e
+                tcs.Task
+        else
+        let tcs = TaskCompletionSource<_> ()
+        let r1 = ref Unchecked.defaultof<_>
+        let r2 = ref Unchecked.defaultof<_>
+        let mutable cancelled = false
+        let failures = [|IReadOnlyCollection.empty; IReadOnlyCollection.empty|]
+        let pending = ref 2
 
-    /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
-    /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order.</remarks>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">First task workflow.</param>
-    /// <param name="y">Second task workflow.</param>
-    /// <param name="z">Third task workflow.</param>
-    let map3 f x y z = task {
-        let! x' = x
-        let! y' = y
-        let! z' = z
-        return f x' y' z' }
+        let trySet () =
+            if Interlocked.Decrement pending = 0 then
+                let noFailures = Array.forall IReadOnlyCollection.isEmpty failures
+                if noFailures && not cancelled then
+                    try tcs.TrySetResult (mapper r1.Value r2.Value) |> ignore
+                    with e -> tcs.TrySetException e |> ignore
+                elif noFailures then tcs.TrySetCanceled () |> ignore
+                else tcs.TrySetException (failures |> Seq.map AggregateException |> Seq.reduce Exception.add).InnerExceptions |> ignore
+
+        let k (v: ref<_>) i t =
+            match t with
+            | Canceled    -> cancelled <- true
+            | Faulted e   -> failures[i] <- e.InnerExceptions
+            | Completed r -> v.Value <- r
+            trySet ()
+
+        if task1.IsCompleted && task2.IsCompleted then
+            task1 |> k r1 0
+            task2 |> k r2 1
+        else
+            task1.ContinueWith (k r1 0) |> ignore
+            task2.ContinueWith (k r2 1) |> ignore
+        tcs.Task
+
+    /// <summary>Creates a Task workflow from three workflows, mapping its results with a specified function.</summary>
+    /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order
+    /// and all errors are collected.
+    /// </remarks>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="task1">First Task workflow.</param>
+    /// <param name="task2">Second Task workflow.</param>
+    /// <param name="task3">Third Task workflow.</param>
+    let map3 mapper (task1: Task<'T1>) (task2: Task<'T2>) (task3: Task<'T3>) : Task<'U> =
+        if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion && task3.Status = TaskStatus.RanToCompletion then
+            try Task.FromResult (mapper task1.Result task2.Result task3.Result)
+            with e ->
+                let tcs = TaskCompletionSource<_> ()
+                tcs.SetException e
+                tcs.Task
+        else
+        let tcs = TaskCompletionSource<_> ()
+        let r1 = ref Unchecked.defaultof<_>
+        let r2 = ref Unchecked.defaultof<_>
+        let r3 = ref Unchecked.defaultof<_>
+        let mutable cancelled = false
+        let failures = [|IReadOnlyCollection.empty<exn>; IReadOnlyCollection.empty; IReadOnlyCollection.empty|]
+        let pending = ref 3
+
+        let trySet () =
+            if Interlocked.Decrement pending = 0 then
+                let noFailures = Array.forall IReadOnlyCollection.isEmpty failures
+                if noFailures && not cancelled then
+                    try tcs.TrySetResult (mapper r1.Value r2.Value r3.Value) |> ignore
+                    with e -> tcs.TrySetException e |> ignore
+                elif noFailures then tcs.TrySetCanceled () |> ignore
+                else tcs.TrySetException (failures |> Seq.map AggregateException |> Seq.reduce Exception.add).InnerExceptions |> ignore
+
+        let k (v: ref<_>) i t =
+            match t with
+            | Canceled    -> cancelled <- true
+            | Faulted e   -> failures[i] <- e.InnerExceptions
+            | Completed r -> v.Value <- r
+            trySet ()
+
+        if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
+            task1 |> k r1 0
+            task2 |> k r2 1
+            task3 |> k r3 2
+        else
+            task1.ContinueWith (k r1 0) |> ignore
+            task2.ContinueWith (k r2 1) |> ignore
+            task3.ContinueWith (k r3 2) |> ignore
+        tcs.Task
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
     /// to the resulting value of another task workflow</summary>
@@ -241,12 +316,17 @@ module Task =
                             | Completed r' -> tcs.SetResult (r, r')) |> ignore) |> ignore
             tcs.Task
 
-    /// <summary>Creates a task workflow from two workflows 'x' and 'y', tupling its results.</summary>
-    /// <remarks>Similar to zipSequentially but although workflows are started in sequence they might end independently in different order.</remarks>
-    let zip x y = task {
-        let! x' = x
-        let! y' = y
-        return x', y' }
+    /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', tupling its results.</summary>
+    /// <remarks>Similar to zipSequentially but although workflows are started in sequence they might end independently in different order
+    /// and all errors are collected.
+    /// </remarks>
+    let zip (task1: Task<'T1>) (task2: Task<'T2>) = map2 (fun x y -> x, y) task1 task2
+
+    /// <summary>Creates a task workflow from two workflows 'task1', 'task2' and 'task3', tupling its results.</summary>
+    /// <remarks>Similar to zipSequentially but although workflows are started in sequence they might end independently in different order
+    /// and all errors are collected.
+    /// </remarks>
+    let zip3 (task1: Task<'T1>) (task2: Task<'T2>) (task3: Task<'T3>) = map3 (fun x y z -> x, y, z) task1 task2 task3
 
     /// Flattens two nested tasks into one.
     let join (source: Task<Task<'T>>) : Task<'T> = source.Unwrap()
