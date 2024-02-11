@@ -11,6 +11,7 @@ open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
+open FSharpPlus.Extensions
 open FSharpPlus.Data
 
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && ! FABLE_COMPILER_4
@@ -21,7 +22,7 @@ type Iterate =
     static member Iterate (x: Lazy<'T>   , action) = action x.Value : unit
     static member Iterate (x: seq<'T>    , action) = Seq.iter action x
     static member Iterate (x: option<'T> , action) = match x with Some x -> action x | _ -> ()
-    static member Iterate (x: voption<'T> , action) = match x with ValueSome x -> action x | _ -> ()
+    static member Iterate (x: voption<'T>, action) = match x with ValueSome x -> action x | _ -> ()
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
@@ -35,10 +36,10 @@ type Iterate =
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
     #endif
-    #if !FABLE_COMPILER
+    #if FABLE_COMPILER
     static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
     #else
-    static member Iterate (x: Async<'T>            , action) = action (x |> Async.Ignore |> Async.StartImmediate) : unit
+    static member Iterate (x: Async<'T>            , action: 'T -> unit) = (x |> Async.map action |> Async.AsTask).Wait ()
     #endif
     static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()

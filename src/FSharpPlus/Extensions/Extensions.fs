@@ -68,6 +68,55 @@ module Extensions =
 
         #if !FABLE_COMPILER
 
+        /// <summary>Runs an asynchronous computation, starting immediately on the current operating system
+        /// thread, but also returns the execution as <see cref="T:System.Threading.Tasks.Task`1"/>
+        /// This behaves exactly like Async.StartImmediateAsTask but without unexpected exceptions-wrapping.
+        /// </summary>
+        ///
+        /// <remarks>If no cancellation token is provided then the default cancellation token is used.
+        /// You may prefer using this method if you want to achive a similar behviour to async await in C# as 
+        /// async computation starts on the current thread with an ability to return a result.
+        /// </remarks>
+        ///
+        /// <param name="computation">The asynchronous computation to execute.</param>
+        /// <param name="cancellationToken">The <c>CancellationToken</c> to associate with the computation.
+        /// The default is used if this parameter is not provided.</param>
+        ///
+        /// <returns>A <see cref="T:System.Threading.Tasks.Task"/> that will be completed
+        /// in the corresponding state once the computation terminates (produces the result, throws exception or gets canceled)</returns>
+        ///
+        /// <category index="0">FSharp.Core Extensions</category>
+        ///
+        /// <example id="as-task-1">
+        /// <code lang="fsharp">
+        /// printfn "A"
+        ///
+        /// let t =
+        ///     async {
+        ///         printfn "B"
+        ///         do! Async.Sleep(1000)
+        ///         printfn "C"
+        ///     } |> Async.AsTask
+        ///
+        /// printfn "D"
+        /// t.Wait()
+        /// printfn "E"
+        /// </code>
+        /// Prints "A", "B", "D" immediately, then "C", "E" in 1 second.
+        /// </example>
+        static member AsTask (computation: Async<'T>, ?cancellationToken) : Task<'T> =
+            let cancellationToken = defaultArg cancellationToken (new CancellationToken ())
+            let ts = TaskCompletionSource<'T> ()
+            Async.StartWithContinuations (
+                computation,
+                ts.SetResult,
+                (function
+                    | :? AggregateException as agg -> ts.SetException agg.InnerExceptions
+                    | exn -> ts.SetException exn),
+                (fun _ -> ts.SetCanceled ()),
+                cancellationToken)
+            ts.Task
+
         // See https://github.com/fsharp/fslang-suggestions/issues/840
 
         /// <summary>Return an asynchronous computation that will wait for the given task to complete and return
@@ -126,12 +175,9 @@ module Extensions =
         
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t:seq<Async<_>>) : Async<seq<_>> = async {
-            let startImmediateAsTask ct a =
-                Async.StartImmediateAsTask(a, ct).Result
-
+        static member Sequence (t: seq<Async<'T>>) : Async<seq<_>> = async {
             let! ct = Async.CancellationToken
-            return t |> Seq.map (startImmediateAsTask ct) }
+            return Seq.map (fun t -> Async.AsTask(t, ct).Result) t }
         #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
