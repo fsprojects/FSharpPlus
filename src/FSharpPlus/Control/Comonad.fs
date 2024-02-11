@@ -5,17 +5,18 @@ open System.Runtime.InteropServices
 open System.Threading.Tasks
 
 open FSharpPlus
+open FSharpPlus.Extensions
 open FSharpPlus.Internals
 #if !FABLE_COMPILER4
 
 // Comonad class ----------------------------------------------------------
 
 type Extract =
-    static member        Extract (x: Async<'T>    ) =
+    static member        Extract (x: Async<'T>) =
     #if FABLE_COMPILER_3 || FABLE_COMPILER_4
         Async.RunSynchronously x
     #else
-        Async.StartImmediateAsTask(x).Result
+        Async.AsTask(x).Result
     #endif
     static member        Extract (x: Lazy<'T>     ) = x.Value
     static member        Extract ((_: 'W, a: 'T)  ) = a

@@ -15,10 +15,7 @@ module AsyncEnumerable =
     let toAsyncSeq (source: Collections.Generic.IAsyncEnumerable<_>) : SeqT<Async<_>, _> = monad.plus {
         let! ct = SeqT.lift Async.CancellationToken
         let e = source.GetAsyncEnumerator ct
-        use _ =
-            { new IDisposable with
-                member _.Dispose () =
-                    e.DisposeAsync().AsTask () |> Async.Await |> Async.RunSynchronously }
+        use _ = { new IDisposable with member _.Dispose () = e.DisposeAsync().AsTask().Wait () }
 
         let mutable currentResult = true
         while currentResult do

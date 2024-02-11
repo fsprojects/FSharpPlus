@@ -7,20 +7,6 @@ module Async =
     open System
     open System.Threading.Tasks
     
-    #if !FABLE_COMPILER
-    // Proper Async.StartImmediateAsTask implementation, without aggregate exception wrapping.
-    let private startImmediateAsTask (computation: Async<'T>, cancellationToken) : Task<'T> =        
-        let ts = TaskCompletionSource<'T> ()
-        Async.StartWithContinuations (
-            computation,
-            ts.SetResult,
-            (function
-                | :? AggregateException as agg -> ts.SetException agg.InnerExceptions
-                | exn -> ts.SetException exn),
-            (fun _ -> ts.SetCanceled ()),
-            cancellationToken)
-        ts.Task
-    #endif
     open FSharpPlus.Extensions
 
     /// <summary>Creates an async workflow from another workflow 'x', mapping its result with 'f'.</summary>
@@ -61,8 +47,8 @@ module Async =
     #else
     let map2 mapper (async1: Async<'T1>) (async2: Async<'T2>) : Async<'U> = async {
         let! ct = Async.CancellationToken
-        let t1 = startImmediateAsTask (async1, ct)
-        let t2 = startImmediateAsTask (async2, ct)
+        let t1 = Async.AsTask (async1, ct)
+        let t2 = Async.AsTask (async2, ct)
         return! Async.Await (Task.map2 mapper t1 t2) }
     #endif
 
@@ -80,9 +66,9 @@ module Async =
     #else
     let map3 mapper (async1: Async<'T1>) (async2: Async<'T2>) (async3: Async<'T3>) : Async<'U> = async {
         let! ct = Async.CancellationToken
-        let t1 = startImmediateAsTask (async1, ct)
-        let t2 = startImmediateAsTask (async2, ct)
-        let t3 = startImmediateAsTask (async3, ct)
+        let t1 = Async.AsTask (async1, ct)
+        let t2 = Async.AsTask (async2, ct)
+        let t3 = Async.AsTask (async3, ct)
         return! Async.Await (Task.map3 mapper t1 t2 t3) }
     #endif
 

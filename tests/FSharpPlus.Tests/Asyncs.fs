@@ -16,25 +16,12 @@ module Async =
     exception TestException of string
     
     type Async with
-        static member StartImmediateAsTaskCorrect (computation: Async<'T>, ?cancellationToken) : Task<'T> =
-            let cancellationToken = defaultArg cancellationToken (new CancellationToken ())
-            let ts = TaskCompletionSource<'T> ()
-            Async.StartWithContinuations (
-                computation,
-                ts.SetResult,
-                (function
-                    | :? AggregateException as agg -> ts.SetException agg.InnerExceptions
-                    | exn -> ts.SetException exn),
-                (fun _ -> ts.SetCanceled ()),
-                cancellationToken)
-            ts.Task
-
         static member AsTaskAndWait computation =
-            let t = Async.StartImmediateAsTaskCorrect computation
+            let t = Async.AsTask computation
             Task.WaitAny t |> ignore
             t
 
-        static member WhenAll (source: Async<'T> seq) = source |> Seq.map (fun x -> Async.StartImmediateAsTaskCorrect x) |> Task.WhenAll |> Async.Await
+        static member WhenAll (source: Async<'T> seq) = source |> Seq.map (fun x -> Async.AsTask x) |> Task.WhenAll |> Async.Await
 
 
     module AsyncTests =

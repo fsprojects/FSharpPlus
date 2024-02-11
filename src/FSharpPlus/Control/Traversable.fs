@@ -89,7 +89,7 @@ type Traverse =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
     #endif
 
     #if !FABLE_COMPILER
@@ -102,7 +102,7 @@ type Traverse =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } |> NonEmptySeq.unsafeOfSeq }
     #endif
     
     static member Traverse (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) =
@@ -332,7 +332,7 @@ type Gather =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
     #endif
 
     #if !FABLE_COMPILER
@@ -345,7 +345,7 @@ type Gather =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } |> NonEmptySeq.unsafeOfSeq }
     #endif
     
     static member Gather (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Gather) =
