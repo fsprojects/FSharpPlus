@@ -5,6 +5,7 @@
 module ResizeArray =
 
     open System
+    open FSharpPlus.Internals.Errors
 
     /// <summary>Builds a new ResizeArray whose elements are the results of applying the given function
     /// to each of the elements of the ResizeArray.</summary>
@@ -15,11 +16,16 @@ module ResizeArray =
     /// <returns>The result ResizeArray.</returns>
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input ResizeArray is null.</exception>
-    let map (mapping: 'T->'U) (source: ResizeArray<'T>) = ResizeArray (Seq.map mapping source)
+    let map (mapping: 'T->'U) (source: ResizeArray<'T>) =
+        #if !NET45
+        raiseIfNull (nameof source) source
+        #endif
+        
+        ResizeArray (Seq.map mapping source)
 
     /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
     /// <param name="f">The functions.</param>
-    /// <param name="x">The values.</param>
+    /// <param name="ra">The values.</param>
     /// <returns>A concatenated list of the resulting ResizeArray after applying each function to each value.</returns>
     /// 
     /// <example>
@@ -28,32 +34,71 @@ module ResizeArray =
     /// val it : int list = [2; 4; 6; 3; 6; 9]
     /// </code>
     /// </example>
-    let apply (f: ResizeArray<'T->'U>) (x: ResizeArray<'T>) = ResizeArray (Seq.apply f x)
+    let apply (f: ResizeArray<'T->'U>) (ra: ResizeArray<'T>) = 
+        #if !NET45
+        raiseIfNull (nameof ra) ra
+        #endif
+        
+        ResizeArray (Seq.apply f ra)
 
     /// Combines all values from the first ResizeArray with the second, using the supplied mapping function.
-    let lift2 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) = ResizeArray (Seq.lift2 mapping x1 x2)
+    let lift2 mapping (ra1: ResizeArray<'T>) (ra2: ResizeArray<'U>) =
+        #if !NET45
+        raiseIfNull (nameof ra1) ra1
+        raiseIfNull (nameof ra2) ra2
+        #endif
+        
+        ResizeArray (Seq.lift2 mapping ra1 ra2)
 
     /// <summary>Combines values from three ResizeArrays and calls a mapping function on this combination.</summary>
     /// <param name="mapping">Mapping function taking three element combination as input.</param>
-    /// <param name="x1">First ResizeArray.</param>
-    /// <param name="x2">Second ResizeArray.</param>
-    /// <param name="x3">Third ResizeArray.</param>
+    /// <param name="ra1">First ResizeArray.</param>
+    /// <param name="ra2">Second ResizeArray.</param>
+    /// <param name="ra3">Third ResizeArray.</param>
     ///
     /// <returns>ResizeArray with values returned from mapping function.</returns>
-    let lift3 mapping (x1: ResizeArray<'T>) (x2: ResizeArray<'U>) (x3: ResizeArray<'V>) =
-        ResizeArray (Seq.lift3 mapping x1 x2 x3)
+    let lift3 mapping (ra1: ResizeArray<'T>) (ra2: ResizeArray<'U>) (ra3: ResizeArray<'V>) =
+        #if !NET45
+        raiseIfNull (nameof ra1) ra1
+        raiseIfNull (nameof ra2) ra2
+        raiseIfNull (nameof ra3) ra3
+        #endif
+        
+        ResizeArray (Seq.lift3 mapping ra1 ra2 ra3)
     
     /// Concatenates all elements, using the specified separator between each element.
-    let intercalate (separator: _ []) (source: seq<_ []>) = source |> Seq.intercalate separator |> Seq.toArray
+    let intercalate (separator: _ []) (source: seq<_ []>) =
+        #if !NET45
+        raiseIfNull (nameof separator) separator
+        raiseIfNull (nameof source) source
+        #endif
+        
+        source |> Seq.intercalate separator |> Seq.toArray
 
     /// Inserts a separator element between each element in the source ResizeArray.
-    let intersperse element source = source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
+    let intersperse element source =
+        #if !NET45
+        raiseIfNull (nameof element) element
+        raiseIfNull (nameof source) source
+        #endif
+        
+        source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
-    let split (separators: seq<_ []>) (source: _ []) = source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
+    let split (separators: seq<_ []>) (source: _ []) =
+        #if !NET45
+        raiseIfNull (nameof separators) separators
+        raiseIfNull (nameof source) source
+        #endif
+        source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
     /// Replaces a subsequence of the source array with the given replacement array.
-    let replace (oldValue: _ []) (newValue: _ []) source = source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
+    let replace (oldValue: _ []) (newValue: _ []) source =
+        #if !NET45
+        raiseIfNull (nameof oldValue) oldValue
+        raiseIfNull (nameof source) source
+        #endif
+        source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
 
     #if !FABLE_COMPILER
 
@@ -67,6 +112,11 @@ module ResizeArray =
     /// The index of the slice.
     /// </returns>
     let findSliceIndex (slice: _ []) (source: _ []) =
+        #if !NET45
+        raiseIfNull (nameof slice) slice
+        raiseIfNull (nameof source) source
+        #endif
+        
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then
             ArgumentException("The specified slice was not found in the sequence.") |> raise
@@ -81,6 +131,11 @@ module ResizeArray =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: _ []) (source: _ []) =
+        #if !NET45
+        raiseIfNull (nameof slice) slice
+        raiseIfNull (nameof source) source
+        #endif
+        
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
 
@@ -120,6 +175,10 @@ module ResizeArray =
     /// A tuple with both resulting arrays.
     /// </returns>
     let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: array<'T>) =
+        #if !NET45
+        raiseIfNull (nameof source) source
+        #endif
+        
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
         x.ToArray (), y.ToArray ()
@@ -128,10 +187,15 @@ module ResizeArray =
     /// to each of the elements of the two ResizeArrays pairwise.</summary>
     /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
     let map2Shortest f (a1: ResizeArray<_>) (a2: ResizeArray<_>) =
+        #if !NET45
+        raiseIfNull (nameof a1) a1
+        raiseIfNull (nameof a2) a2
+        #endif
+        
         let len = min a1.Count a2.Count
         let ra = ResizeArray(len)
         for i in 0..(len-1) do
-            ra.Add (f a1.[i] a2.[i])
+            ra.Add (f a1[i] a2[i])
         ra
     
     /// <summary>Safely build a new ResizeArray whose elements are the results of applying the given function
@@ -151,10 +215,15 @@ module ResizeArray =
     /// <param name="a2">Second input ResizeArray.</param>
     /// <returns>ResizeArray with corresponding pairs of input ResizeArrays.</returns>
     let zipShortest (a1: ResizeArray<'T1>) (a2: ResizeArray<'T2>) =
+        #if !NET45
+        raiseIfNull (nameof a1) a1
+        raiseIfNull (nameof a2) a2
+        #endif
+        
         let len = min a1.Count a2.Count
         let ra = ResizeArray(len)
         for i in 0..(len-1) do
-            ra.Add (a1.[i], a2.[i])
+            ra.Add (a1[i], a2[i])
         ra
 
     /// <summary>

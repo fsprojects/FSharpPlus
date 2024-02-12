@@ -90,7 +90,7 @@ type Traverse =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
     #endif
 
     #if !FABLE_COMPILER
@@ -103,7 +103,7 @@ type Traverse =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } |> NonEmptySeq.unsafeOfSeq }
     #endif
     
     static member Traverse (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) =
@@ -193,26 +193,26 @@ type Sequence with
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<seq<'T>>`` =
         Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq)
 
-    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) : option<seq<'t>> = Option.Sequence t
+    static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) : option<seq<'t>> = Option.Sequential t
     #if !FABLE_COMPILER
-    static member        Sequence (t: seq<voption<'t>>  , [<Optional>]_output: voption<seq<'t>>   , [<Optional>]_impl: Default3) : voption<seq<'t>> = ValueOption.Sequence t
+    static member        Sequence (t: seq<voption<'t>>  , [<Optional>]_output: voption<seq<'t>>   , [<Optional>]_impl: Default3) : voption<seq<'t>> = ValueOption.Sequential t
     #endif
-    static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<seq<'t>, 'e> = Result.Sequence t
-    static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<seq<'t>, 'e> = Choice.Sequence t
+    static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<seq<'t>, 'e> = Result.Sequential t
+    static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<seq<'t>, 'e> = Choice.Sequential t
     static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) : list<seq<'t>> = Sequence.ForInfiniteSequences (t, List.isEmpty, List.toSeq)
     static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) : seq<'t> [] = Sequence.ForInfiniteSequences (t, Array.isEmpty, List.toSeq)
 
     #if !FABLE_COMPILER
-    static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) : Async<seq<'t>> = Async.Sequence t
+    static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) : Async<seq<'t>> = Async.SequentialLazy t
     #endif
     static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq.ofList)
-    static member        Sequence (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequence t |> Option.map NonEmptySeq.unsafeOfSeq
-    static member        Sequence (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<NonEmptySeq<'t>, 'e> = Result.Sequence t |> Result.map NonEmptySeq.unsafeOfSeq
-    static member        Sequence (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<NonEmptySeq<'t>, 'e> = Choice.Sequence t |> Choice.map NonEmptySeq.unsafeOfSeq
+    static member        Sequence (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequential t |> Option.map NonEmptySeq.unsafeOfSeq
+    static member        Sequence (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<NonEmptySeq<'t>, 'e> = Result.Sequential t |> Result.map NonEmptySeq.unsafeOfSeq
+    static member        Sequence (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<NonEmptySeq<'t>, 'e> = Choice.Sequential t |> Choice.map NonEmptySeq.unsafeOfSeq
     static member        Sequence (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = Sequence.ForInfiniteSequences(t, List.isEmpty , NonEmptySeq.ofList)
     static member        Sequence (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) : NonEmptySeq<'t> []          = Sequence.ForInfiniteSequences(t, Array.isEmpty, NonEmptySeq.ofList)
     #if !FABLE_COMPILER
-    static member        Sequence (t: NonEmptySeq<Async<'t>>    , [<Optional>]_output: Async<NonEmptySeq<'t>>     , [<Optional>]_impl: Default3) = Async.Sequence t |> Async.map NonEmptySeq.unsafeOfSeq                                                         : Async<NonEmptySeq<'t>>
+    static member        Sequence (t: NonEmptySeq<Async<'t>>    , [<Optional>]_output: Async<NonEmptySeq<'t>>     , [<Optional>]_impl: Default3) = Async.SequentialLazy t |> Async.map NonEmptySeq.unsafeOfSeq                                                         : Async<NonEmptySeq<'t>>
     #endif
 
     static member inline Sequence (t: ^a        , [<Optional>]_output: 'R, [<Optional>]_impl: Default2) : 'R = Traverse.InvokeOnInstance id t
@@ -341,7 +341,7 @@ type Gather =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) }}
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
     #endif
 
     #if !FABLE_COMPILER
@@ -354,7 +354,7 @@ type Gather =
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
-                yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq.unsafeOfSeq }
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } |> NonEmptySeq.unsafeOfSeq }
     #endif
     
     static member Gather (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Gather) =
@@ -440,9 +440,9 @@ type Transpose with
     static member inline Transpose (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<seq<'T>>`` =
         Transpose.ForInfiniteSequences (t, IsZipLeftZero.Invoke, List.toSeq, Pure.Invoke)
 
-    static member        Transpose (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) : option<seq<'t>> = Option.Sequence t
+    static member        Transpose (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) : option<seq<'t>> = Option.Sequential t
     #if !FABLE_COMPILER
-    static member        Transpose (t: seq<voption<'t>>  , [<Optional>]_output: voption<seq<'t>>   , [<Optional>]_impl: Default3) : voption<seq<'t>> = ValueOption.Sequence t
+    static member        Transpose (t: seq<voption<'t>>  , [<Optional>]_output: voption<seq<'t>>   , [<Optional>]_impl: Default3) : voption<seq<'t>> = ValueOption.Sequential t
     #endif
     static member inline Transpose (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<seq<'t>, 'e> = Result.Parallel ((++), t)
     static member inline Transpose (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<seq<'t>, 'e> = Choice.Parallel ((++), t)
@@ -452,7 +452,7 @@ type Transpose with
     static member        Transpose (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) : Async<seq<'t>> = Async.Parallel t |> Async.map Array.toSeq
     #endif
     static member inline Transpose (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``, [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = Transpose.ForInfiniteSequences (t, IsZipLeftZero.Invoke, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
-    static member        Transpose (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequence t |> Option.map NonEmptySeq.unsafeOfSeq
+    static member        Transpose (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequential t |> Option.map NonEmptySeq.unsafeOfSeq
     static member inline Transpose (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<NonEmptySeq<'t>, 'e> = Result.Parallel ((++), t) |> Result.map NonEmptySeq.unsafeOfSeq
     static member inline Transpose (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<NonEmptySeq<'t>, 'e> = Choice.Parallel ((++), t) |> Choice.map NonEmptySeq.unsafeOfSeq
     static member        Transpose (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = Transpose.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)

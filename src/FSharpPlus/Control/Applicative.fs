@@ -77,7 +77,8 @@ type Apply =
 
     // End Compatibility members
 
-    static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Default2) = ValueTask.apply   f x : ValueTask<'U>
+    static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Apply) : ValueTask<'U> = ValueTask.apply f x
+    static member        ``<*>`` (struct (_: DmStruct1<_>     , _: DmStruct1<'T>        ), _output: DmStruct1<'U>        , [<Optional>]_mthd: Apply) : DmStruct1<'U> = Unchecked.defaultof<DmStruct1<'U>>
     #endif
     static member        ``<*>`` (struct (f: Async<_>         , x: Async<'T>            ), _output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` (struct (f: option<_>        , x: option<'T>           ), _output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>

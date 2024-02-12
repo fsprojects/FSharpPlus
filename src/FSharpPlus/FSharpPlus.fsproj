@@ -40,6 +40,7 @@
     <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
+    <Compile Include="Extensions/Exception.fs" />
     <Compile Include="Extensions/Seq.fs" />
     <Compile Include="Extensions/IList.fs" />
     <Compile Include="Extensions/List.fs" />
@@ -56,8 +57,8 @@
     <Compile Include="Extensions/Enumerator.fs" />
     <Compile Include="Extensions/Task.fs" />
     <Compile Include="Extensions/ValueTask.fs" />
-    <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
+    <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Tuple.fs" />
     <Compile Include="Extensions/ValueTuple.fs" />
     <Compile Include="Data/NonEmptySeq.fs" />
@@ -98,6 +99,8 @@
     <Compile Include="Data/Reader.fs" />
     <Compile Include="Data/Writer.fs" />
     <Compile Include="Data/State.fs" />
+    <Compile Include="Data/Const.fs" />
+    <Compile Include="Data/Compose.fs" />
     <Compile Include="Data/Monoids.fs" />
     <Compile Include="Data/MultiMap.fs" />
     <Compile Include="Lens.fs" />

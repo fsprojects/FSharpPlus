@@ -6,6 +6,7 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open FSharpPlus.Data
+open FSharpPlus.Extensions
 
 /// Additional operations on Observable<'T>
 [<RequireQualifiedAccess>]
@@ -14,14 +15,11 @@ module AsyncEnumerable =
     let toAsyncSeq (source: Collections.Generic.IAsyncEnumerable<_>) : SeqT<Async<_>, _> = monad.plus {
         let! ct = SeqT.lift Async.CancellationToken
         let e = source.GetAsyncEnumerator ct
-        use _ =
-            { new IDisposable with
-                member _.Dispose () =
-                    e.DisposeAsync().AsTask () |> Async.AwaitTask |> Async.RunSynchronously }
+        use _ = { new IDisposable with member _.Dispose () = e.DisposeAsync().AsTask().Wait () }
 
         let mutable currentResult = true
         while currentResult do
-            let! r = e.MoveNextAsync().AsTask () |> Async.AwaitTask |> SeqT.lift
+            let! r = e.MoveNextAsync().AsTask () |> Async.Await |> SeqT.lift
             currentResult <- r
             if r then yield e.Current
     }
