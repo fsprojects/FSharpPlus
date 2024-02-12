@@ -227,6 +227,18 @@ module Task =
             let ac2 = t13.Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Task.zipAsync between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
 
+        [<Test>]
+        let testTaskTraversals =
+            let t1 = createTask true  20 1
+            let t2 = createTask true  10 2
+            let t3 = createTask false 30 3
+
+            let t123 = Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3
+            let t123' = transpose [t1; t2; t3]
+            let t123'' = sequence [t1; t2; t3]
+            CollectionAssert.AreEquivalent (t123.Exception.InnerExceptions, t123'.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
+            CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
+
     
     module TaskBuilderTests =
         

@@ -67,7 +67,7 @@ type Extend =
                 tcs.Task
     #endif
 
-    #if (!NET45 && !NETSTANDARD2_0) && !FABLE_COMPILER
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        (=>>) (g: ValueTask<'T>     , f: ValueTask<'T> -> 'U ) : ValueTask<'U> =
         if g.IsCompletedSuccessfully then
             try
