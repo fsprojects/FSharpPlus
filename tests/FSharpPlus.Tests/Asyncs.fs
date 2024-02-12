@@ -104,7 +104,7 @@ module Async =
 
             let t123 = Async.map3 (fun x y z -> [x; y; z]) t1 t2 t3
             let t123' = transpose [t1; t2; t3]
-            let t123'' = sequence [t1; t2; t3]
+            let t123'' = sequence [t1; t2; t3] : Async<int list>
             CollectionAssert.AreEquivalent ((Async.AsTaskAndWait t123).Exception.InnerExceptions, (Async.AsTaskAndWait t123').Exception.InnerExceptions, "Async.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent ((Async.AsTaskAndWait t123).Exception.InnerExceptions, (Async.AsTaskAndWait t123'').Exception.InnerExceptions, "Async.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
