@@ -146,6 +146,7 @@ type Return =
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Return (_: 'T ValueTask   , _: Return  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
+    static member        Return (_: 'T DmStruct1   , _: Return  ) = fun (_: 'T) -> Unchecked.defaultof<_>         : 'T DmStruct1
     #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_  : voption<'a>  , _: Return  ) = fun x -> ValueSome x                          : voption<'a>
