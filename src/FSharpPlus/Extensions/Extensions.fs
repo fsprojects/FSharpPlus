@@ -173,15 +173,16 @@ module Extensions =
                 |> ignore)
 
         
-
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: seq<Async<'T>>) : Async<seq<_>> = async {
+        /// Similar to Async.Sequential but the returned Async contains a sequence, which is lazily evaluated.
+        static member SequentialLazy (t: seq<Async<'T>>) : Async<seq<_>> = async {
             let! ct = Async.CancellationToken
             return Seq.map (fun t -> Async.AsTask(t, ct).Result) t }
+        [<Obsolete("Renamed to Async.Sequential or Async.SequentialLazy")>]static member Sequence (t: seq<Async<_>>) = Async.SequentialLazy t
         #endif
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: list<Async<'T>>) : Async<list<'T>> =
+        static member Sequential (t: list<Async<'T>>) : Async<list<'T>> =
         #if FABLE_COMPILER
             let rec loop acc = function
                 | []    -> async.Return (List.rev acc)
@@ -195,44 +196,56 @@ module Extensions =
                     coll.Add v
                 return coll.Close () }
         #endif
+        [<Obsolete("Renamed to Async.Sequential")>]static member Sequence (t: list<Async<'T>>) = Async<_>.Sequential t
+
 
         /// Combine all asyncs in one, chaining them in sequence order.
-        static member Sequence (t: array<Async<_>>) : Async<array<_>> = async {
+        static member Sequential (t: array<Async<_>>) : Async<array<_>> = async {
             let siz = Array.length t
             let arr = Array.zeroCreate siz
             for i in 0 .. siz-1 do
                 let! v = t.[i]
                 arr.[i] <- v
             return arr }
+        [<Obsolete("Renamed to Async.Sequential")>]static member Sequence (t: array<Async<_>>) = Async<_>.Sequential t
+
 
         /// Creates an async Result from a Result where the Ok case is async.
-        static member Sequence (t: Result<Async<'T>, 'Error>) : Async<Result<'T,'Error>> =
+        static member Sequential (t: Result<Async<'T>, 'Error>) : Async<Result<'T,'Error>> =
             match t with
             | Ok a    -> Async.Map Ok a
             | Error e -> async.Return (Error e)
+        [<Obsolete("Renamed to Async.Sequential")>]static member Sequence (t: Result<Async<'T>, 'Error>) = Async<_>.Sequential t
+
 
         /// Creates an async Choice from a Choice where the Choice1Of2 case is async.
-        static member Sequence (t: Choice<Async<'T>, 'Choice2Of2>) : Async<Choice<'T,'Choice2Of2>> =
+        static member Sequential (t: Choice<Async<'T>, 'Choice2Of2>) : Async<Choice<'T,'Choice2Of2>> =
             match t with
             | Choice1Of2 a -> Async.Map Choice1Of2 a
             | Choice2Of2 e -> async.Return (Choice2Of2 e)
+        [<Obsolete("Renamed to Async.Sequential")>]static member Sequence (t: Choice<Async<'T>, 'Choice2Of2>) = Async<_>.Sequential t
+
 
         /// Creates an async Result from a Result where both cases are async.
-        static member Bisequence (t: Result<Async<'T>, Async<'Error>>) : Async<Result<'T,'Error>> =
+        static member Bisequential (t: Result<Async<'T>, Async<'Error>>) : Async<Result<'T,'Error>> =
             match t with
             | Ok a    -> Async.Map Ok a
             | Error e -> Async.Map Error e
+        [<Obsolete("Renamed to Async.Bisequential")>]static member Bisequence (t: Result<Async<'T>, Async<'Error>>) = Async.Bisequential t
+
 
         /// Creates an async Choice from a Choice where both cases are async.
-        static member Bisequence (t: Choice<Async<'T>, Async<'Choice2Of2>>) : Async<Choice<'T,'Choice2Of2>> =
+        static member Bisequential (t: Choice<Async<'T>, Async<'Choice2Of2>>) : Async<Choice<'T,'Choice2Of2>> =
             match t with
             | Choice1Of2 a -> Async.Map Choice1Of2 a
             | Choice2Of2 e -> Async.Map Choice2Of2 e
+        [<Obsolete("Renamed to Async.Bisequential")>]static member Bisequence (t: Choice<Async<'T>, Async<'Choice2Of2>>) = Async.Bisequential t
+
 
     type Option<'t> with
 
-        /// Returns None if it contains a None element, otherwise a list of all elements
-        static member Sequence (t: seq<option<'t>>) =
+        /// Returns None if it contains a None element, otherwise a list of all elements.
+        static member Sequential (t: seq<option<'t>>) =
         #if FABLE_COMPILER
             let mutable ok = true
             let res = Seq.toArray (seq {
@@ -253,14 +266,15 @@ module Extensions =
                 
             if noneFound
             then None
-            else
-                Some (accumulator.Close () |> Array.toSeq)
+            else accumulator.Close () |> Array.toSeq |> Some
         #endif
+        [<Obsolete("Renamed to Option.Sequential")>]static member Sequence (t: seq<option<'t>>) = Option.Sequential t
             
+
     type ValueOption<'t> with
 
-        /// Returns None if it contains a None element, otherwise a list of all elements
-        static member Sequence (t: seq<voption<'t>>) =
+        /// Returns None if it contains a None element, otherwise a list of all elements.
+        static member Sequential (t: seq<voption<'t>>) =
         #if FABLE_COMPILER
             let mutable ok = true
             let res = Seq.toArray (seq {
@@ -281,14 +295,15 @@ module Extensions =
                 
             if noneFound
             then ValueNone
-            else
-                ValueSome (accumulator.Close () |> Array.toSeq)
+            else accumulator.Close () |> Array.toSeq |> ValueSome
         #endif
+        [<Obsolete("Renamed to ValueOption.Sequential")>]static member Sequence (t: seq<voption<'t>>) = ValueOption.Sequential t
 
-    type Choice<'t, 'error> with
 
-        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
-        static member Sequence (t: seq<Choice<_, _>>) =
+    type Choice<'T1, 'T2> with
+
+        /// Returns the first Choice2Of2 if it contains a Choice2Of2 element, otherwise a list of all Choice1Of2 elements.
+        static member Sequential (t: seq<Choice<'T1, 'T2>>) =
         #if FABLE_COMPILER
             let mutable error = ValueNone
             let res = Seq.toArray (seq {
@@ -302,7 +317,7 @@ module Extensions =
             | ValueNone -> Choice1Of2 (Array.toSeq res)
             | ValueSome e -> Choice2Of2 e
         #else
-            let mutable accumulator = ArrayCollector<'t> ()
+            let mutable accumulator = ArrayCollector<'T1> ()
             let mutable error = ValueNone
             use e = t.GetEnumerator ()
             while e.MoveNext () && error.IsNone do
@@ -313,9 +328,11 @@ module Extensions =
             | ValueNone -> Choice1Of2 (accumulator.Close () |> Array.toSeq)
             | ValueSome x -> Choice2Of2 x
         #endif
+        [<Obsolete("Renamed to Choice.Sequential")>]static member Sequence (t: seq<Choice<_, _>>) = Choice<_, _>.Sequential t
 
-        /// Returns all Errors combined, otherwise a sequence of all elements.
-        static member Parallel (combiner, t: seq<Choice<_, _>>) =
+
+        /// Returns all Choice2Of2's combined, otherwise a sequence of all Choice1Of2 elements.
+        static member Parallel (choice2Combiner, t: seq<Choice<'T1, 'T2>>) =
             let mutable error = ValueNone
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -323,7 +340,7 @@ module Extensions =
                     match e.Current, error with
                     | Choice1Of2 v, ValueNone   -> yield v
                     | Choice2Of2 e, ValueNone   -> error <- ValueSome e
-                    | Choice2Of2 e, ValueSome x -> error <- ValueSome (combiner x e)
+                    | Choice2Of2 e, ValueSome x -> error <- ValueSome (choice2Combiner x e)
                     | _                         -> () })
 
             match error with
@@ -331,10 +348,10 @@ module Extensions =
             | ValueSome e -> Choice2Of2 e
 
 
-    type Result<'t, 'error> with
+    type Result<'T, 'Error> with
 
-        /// Returns the first Error if it contains an Error element, otherwise a list of all elements
-        static member Sequence (t: seq<Result<_, _>>) =
+        /// Returns the first Error if it contains an Error element, otherwise a sequence of all elements.
+        static member Sequential (t: seq<Result<'T, 'Error>>) =
         #if FABLE_COMPILER
             let mutable error = ValueNone
             let res = Seq.toArray (seq {
@@ -348,7 +365,7 @@ module Extensions =
             | ValueNone -> Ok (Array.toSeq res)
             | ValueSome e -> Error e
         #else
-            let mutable accumulator = ArrayCollector<'t> ()
+            let mutable accumulator = ArrayCollector<'T> ()
             let mutable error = ValueNone
             use e = t.GetEnumerator ()
             while e.MoveNext () && error.IsNone do
@@ -359,9 +376,10 @@ module Extensions =
             | ValueNone -> Ok (accumulator.Close () |> Array.toSeq)
             | ValueSome x -> Error x
         #endif
+        [<Obsolete("Renamed to Result.Sequential")>]static member Sequence (t: seq<Result<_, _>>) = Result.Sequential t
 
         /// Returns all Errors combined, otherwise a sequence of all elements.
-        static member Parallel (combiner, t: seq<Result<_, _>>) =
+        static member Parallel (errorCombiner, t: seq<Result<'T, 'Error>>) =
             let mutable error = ValueNone
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -369,8 +387,8 @@ module Extensions =
                     match e.Current, error with
                     | Ok v   , ValueNone   -> yield v
                     | Error e, ValueNone   -> error <- ValueSome e
-                    | Error e, ValueSome x -> error <- ValueSome (combiner x e)
-                    | _                         -> () })
+                    | Error e, ValueSome x -> error <- ValueSome (errorCombiner x e)
+                    | _                    -> () })
 
             match error with
             | ValueNone -> Ok (Array.toSeq res)
