@@ -11,7 +11,6 @@ module Async =
     open FSharpPlus
     open FSharpPlus.Data
     open FSharpPlus.Extensions
-    open FSharpPlus.Tests.Helpers
     
     exception TestException of string
     
@@ -21,7 +20,7 @@ module Async =
             Task.WaitAny t |> ignore
             t
 
-        static member WhenAll (source: Async<'T> seq) = source |> Seq.map (fun x -> Async.AsTask x) |> Task.WhenAll |> Async.Await
+        static member WhenAll (source: Async<'T> seq) = source |> Seq.map Async.AsTask |> Task.WhenAll |> Async.Await
 
 
     module AsyncTests =
@@ -55,15 +54,15 @@ module Async =
             let t12123 = Async.zip3 t12t12 t33 t4
             let ac1 =
                 try
-                    (t12123 |> Async.AsTaskAndWait).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+                    Async.AsTaskAndWait(t12123).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
                 with e ->
-                    failwithf "Failure in testAsyncZip. Async status is %A . Exception is %A" (t12123 |> Async.AsTaskAndWait).Status e
+                    failwithf "Failure in testAsyncZip. Async status is %A . Exception is %A" (Async.AsTaskAndWait t12123).Status e
 
             CollectionAssert.AreEquivalent ([1; 2; 1; 2; 3], ac1, "Async.zip(3) should add only non already existing exceptions.")
 
             let t13 = Async.zip3 (Async.zip t1 t3) t4 (Async.zip t5 t6)
-            Assert.AreEqual (true, (t13 |> Async.AsTaskAndWait).IsFaulted, "Async.zip(3) between a value, an exception and a cancellation -> exception wins.")
-            let ac2 = (t13 |> Async.AsTaskAndWait).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+            Assert.AreEqual (true, Async.AsTaskAndWait(t13).IsFaulted, "Async.zip(3) between a value, an exception and a cancellation -> exception wins.")
+            let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Async.zip between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
 
         [<Test>]
@@ -85,15 +84,15 @@ module Async =
             let t12123 = Async.zip3 t12t12 t33 t4            
             let ac1 =
                 try
-                    (t12123 |> Async.AsTaskAndWait).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+                    Async.AsTaskAndWait(t12123).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
                 with e ->
-                    failwithf "Failure in testAsyncZipAsync. Async status is %A . Exception is %A" (t12123  |> Async.AsTaskAndWait).Status e
+                    failwithf "Failure in testAsyncZipAsync. Async status is %A . Exception is %A" (Async.AsTaskAndWait t12123).Status e
 
             CollectionAssert.AreEquivalent ([1; 2; 1; 2; 3], ac1, "Async.zip(3)Async should add only non already existing exceptions.")
 
             let t13 = Async.zip3 (Async.zip t1 t3) t4 (Async.zip t5 t6)
-            Assert.AreEqual (true, (t13 |> Async.AsTaskAndWait).IsFaulted, "Async.zip(3)Async between a value, an exception and a cancellation -> exception wins.")
-            let ac2 = (t13 |> Async.AsTaskAndWait).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+            Assert.AreEqual (true, Async.AsTaskAndWait(t13).IsFaulted, "Async.zip(3)Async between a value, an exception and a cancellation -> exception wins.")
+            let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Async.zipAsync between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
      
         [<Test>]

@@ -235,7 +235,7 @@ module Task =
 
             let t123 = Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3
             let t123' = transpose [t1; t2; t3]
-            let t123'' = sequence [t1; t2; t3]            
+            let t123'' = sequence [t1; t2; t3]
             CollectionAssert.AreEquivalent (t123.Exception.InnerExceptions, t123'.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
