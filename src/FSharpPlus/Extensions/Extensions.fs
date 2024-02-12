@@ -60,6 +60,26 @@ module Extensions =
                         tcs.SetResult results
                 t.ContinueWith (continuation, cancellationToken, TaskContinuationOptions.ExecuteSynchronously, TaskScheduler.Default) |> ignore)
             tcs.Task
+
+
+        /// Creates a task Result from a Result where the Ok case is a task.
+        static member Sequential (t: Result<Task<'T>, 'Error>) : Task<Result<'T, 'Error>> = Result.either (Task.map Ok) (Task.result << Error) t
+
+        /// Creates a task Result from a Result where the Ok case is a task.
+        static member Sequential (t: Choice<Task<'T>, 'Error>) : Task<Choice<'T, 'Error>> = Choice.either (Task.map Choice1Of2) (Task.result << Choice2Of2) t
+
+    #endif
+
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+
+    type ValueTask<'t> with
+
+        /// Creates a task Result from a Result where the Ok case is a task.
+        static member Sequential (t: Result<ValueTask<'T>, 'Error>) : ValueTask<Result<'T, 'Error>> = Result.either (ValueTask.map Ok) (ValueTask.result << Error) t
+
+        /// Creates a task Result from a Result where the Ok case is a task.
+        static member Sequential (t: Choice<ValueTask<'T>, 'Error>) : ValueTask<Choice<'T, 'Error>> = Choice.either (ValueTask.map Choice1Of2) (ValueTask.result << Choice2Of2) t
+
     #endif
 
     type Async<'t> with
@@ -171,8 +191,8 @@ module Extensions =
                     elif task.IsCanceled then cc (TaskCanceledException ())
                     else sc ())
                 |> ignore)
-
         
+
         /// Combine all asyncs in one, chaining them in sequence order.
         /// Similar to Async.Sequential but the returned Async contains a sequence, which is lazily evaluated.
         static member SequentialLazy (t: seq<Async<'T>>) : Async<seq<_>> = async {
@@ -393,3 +413,44 @@ module Extensions =
             match error with
             | ValueNone -> Ok (Array.toSeq res)
             | ValueSome e -> Error e
+
+        /// Returns the first Error if it contains an Error element, otherwise a list of all elements.
+        static member Sequential (t: list<Result<'T, 'Error>>) =
+        #if FABLE_COMPILER
+            let mutable error = ValueNone
+            let res = Seq.toList (seq {
+                use e = (t :> seq<_>).GetEnumerator ()
+                while e.MoveNext () && error.IsNone do
+                    match e.Current with
+                    | Ok v -> yield v
+                    | Error e -> error <- ValueSome e })
+
+            match error with
+            | ValueNone -> Ok res
+            | ValueSome e -> Error e
+        #else
+            let mutable accumulator = ListCollector<'T> ()
+            let mutable error = ValueNone
+            use e = (t :> seq<_>).GetEnumerator ()
+            while e.MoveNext () && error.IsNone do
+                match e.Current with
+                | Ok v -> accumulator.Add v
+                | Error x -> error <- ValueSome x
+            match error with
+            | ValueNone -> Ok (accumulator.Close ())
+            | ValueSome x -> Error x
+        #endif
+
+        /// Returns the Error if it contains an Error element, otherwise the option inside an Ok.
+        static member Sequential (t: option<Result<'T, 'Error>>) =
+            match t with
+            | Some (Ok x)    -> Ok (Some x)
+            | None           -> Ok None
+            | Some (Error x) -> Error x
+
+        /// Returns the Error if it contains an Error element, otherwise the voption inside an Ok.
+        static member Sequential (t: voption<Result<'T, 'Error>>) =
+            match t with
+            | ValueSome (Ok x)    -> Ok (ValueSome x)
+            | ValueNone           -> Ok ValueNone
+            | ValueSome (Error x) -> Error x
