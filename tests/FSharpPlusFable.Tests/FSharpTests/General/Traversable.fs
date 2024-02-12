@@ -135,7 +135,7 @@ let traversable = testList "Traversable" [
 
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
@@ -243,7 +243,7 @@ let traversable = testList "Traversable" [
         testCase "e" (fun () ->
             let expectedEffects =
                 [
-                    """f(x) <*> Right 0"""
+                    // map does this  -> """f(x) <*> Right 0"""
                     """f(x) <*> Right 1"""
                     """f(x) <*> Right 2"""
                     """f(x) <*> Right 3"""
@@ -262,7 +262,7 @@ let traversable = testList "Traversable" [
         testCase "f" (fun () ->
             let expectedEffects =
                 [
-                    """f(x) <*> Right 0"""
+                    // map does this  -> """f(x) <*> Right 0"""
                     """f(x) <*> Right 1"""
                     """f(x) <*> Right 2"""
                     """f(x) <*> Right 3"""
