@@ -115,7 +115,7 @@ module Traversable =
         // It hangs if we try to share this value between tests
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
@@ -180,7 +180,7 @@ module Traversable =
         // It hangs if we try to share this value between tests
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
