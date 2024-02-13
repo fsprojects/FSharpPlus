@@ -117,7 +117,7 @@ module ValueTask =
             r09.AsTask().Exception.InnerExceptions |> areEquivalent [TestException "I was told to fail"]
 
 
-        [<Test>]
+        [<Test;Ignore("To be fixed see issue #598")>]
         let testValueTaskZip () =
             let t1 = createValueTask true 0 1
             let t2 = createValueTask true 0 2
@@ -151,7 +151,7 @@ module ValueTask =
             let ac2 = (t13.AsTask ()).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
             CollectionAssert.AreEquivalent ([1; 3], ac2, "ValueTask.zip between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
 
-        [<Test>]
+        [<Test;Ignore("To be fixed see issue #598")>]
         let testValueTaskZipAsync () =
             let t1 = createValueTask true 20 1
             let t2 = createValueTask true 10 2

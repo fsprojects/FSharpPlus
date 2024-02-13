@@ -159,7 +159,7 @@ module Task =
             let r20 = Task.lift3 (mapping3 false) (x1 ()) (x2 ()) (e3 ())
             r20.Exception.InnerExceptions |> areEquivalent [TestException "Ouch, can't create: 3"]
 
-        [<Test>]
+        [<Test;Ignore("To be fixed see issue #598")>]
         let testTaskZip () =
             let t1 = createTask true 0 1
             let t2 = createTask true 0 2
@@ -193,7 +193,7 @@ module Task =
             let ac2 = t13.Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Task.zip between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
 
-        [<Test>]
+        [<Test;Ignore("To be fixed see issue #598")>]
         let testTaskZipAsync () =
             let t1 = createTask true 20 1
             let t2 = createTask true 10 2

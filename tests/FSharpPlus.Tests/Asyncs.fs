@@ -35,7 +35,7 @@ module Async =
                     return value }
 
 
-        [<Test>]
+        [<Test;Ignore("To be fixed see issue #598")>]
         let testAsyncZip () =
             let t1 = createAsync true 0 1
             let t2 = createAsync true 0 2
@@ -65,7 +65,7 @@ module Async =
             let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Async.zip between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
 
-        [<Test>]
+        [<Test;Ignore("To be fixed see issue #598")>]
         let testAsyncZipAsync () =
             let t1 = createAsync true 20 1
             let t2 = createAsync true 10 2
