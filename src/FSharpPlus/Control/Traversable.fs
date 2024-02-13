@@ -16,15 +16,19 @@ type Sequence =
     static member inline InvokeOnInstance (t: '``Traversable<'Functor<'T>>``) = (^``Traversable<'Functor<'T>>`` : (static member Sequence : _ -> _) t) : '``Functor<'Traversable<'T>>``
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline ForInfiniteSequences (t: seq<_>, isFailure, conversion) =
+    static member inline ForInfiniteSequences (t: seq<_>, [<InlineIfLambda>]isFailure, [<InlineIfLambda>]conversion, [<InlineIfLambda>]result) =
         let add x y = y :: x
         let mutable go = true
-        let mutable r = result []
+        let mutable r = Unchecked.defaultof<_>
+        let mutable isEmpty = true
         use e = t.GetEnumerator ()
         while go && e.MoveNext () do
             if isFailure e.Current then go <- false
-            r <- Map.Invoke add r <*> e.Current
-        Map.Invoke (List.rev >> conversion) r
+            if isEmpty then r <- Map.Invoke List.singleton e.Current
+            else r <- Map.Invoke add r <*> e.Current
+            isEmpty <- false
+        if isEmpty then result (conversion [])
+        else Map.Invoke (List.rev >> conversion) r
 
 type Traverse =
     inherit Default1
@@ -64,14 +68,14 @@ type Traverse =
         Traces.add "Traverse seq, 'T -> Functor<'U>"
         #endif
         let mapped = Seq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq) : '``Functor<seq<'U>>``
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq, Return.Invoke) : '``Functor<seq<'U>>``
 
     static member inline Traverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) =
         #if TEST_TRACE
         Traces.add "Traverse NonEmptySeq, 'T -> Functor<'U>"
         #endif
         let mapped = NonEmptySeq.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofList) : '``Functor<NonEmptySeq<'U>>``
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofList, Return.Invoke) : '``Functor<NonEmptySeq<'U>>``
 
     static member inline Traverse (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
         #if TEST_TRACE
@@ -191,7 +195,7 @@ type Sequence with
         Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<seq<'T>>`` =
-        Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq)
+        Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, List.toSeq, Return.Invoke)
 
     static member        Sequence (t: seq<option<'t>>   , [<Optional>]_output: option<seq<'t>>    , [<Optional>]_impl: Default3) : option<seq<'t>> = Option.Sequential t
     #if !FABLE_COMPILER
@@ -199,18 +203,18 @@ type Sequence with
     #endif
     static member        Sequence (t: seq<Result<'t,'e>>, [<Optional>]_output: Result<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<seq<'t>, 'e> = Result.Sequential t
     static member        Sequence (t: seq<Choice<'t,'e>>, [<Optional>]_output: Choice<seq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<seq<'t>, 'e> = Choice.Sequential t
-    static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) : list<seq<'t>> = Sequence.ForInfiniteSequences (t, List.isEmpty, List.toSeq)
-    static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) : seq<'t> [] = Sequence.ForInfiniteSequences (t, Array.isEmpty, List.toSeq)
+    static member        Sequence (t: seq<list<'t>>     , [<Optional>]_output: list<seq<'t>>      , [<Optional>]_impl: Default3) : list<seq<'t>> = Sequence.ForInfiniteSequences (t, List.isEmpty, List.toSeq, List.singleton)
+    static member        Sequence (t: seq<'t []>        , [<Optional>]_output: seq<'t> []         , [<Optional>]_impl: Default3) : seq<'t> [] = Sequence.ForInfiniteSequences (t, Array.isEmpty, List.toSeq, Array.singleton)
 
     #if !FABLE_COMPILER
     static member        Sequence (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) : Async<seq<'t>> = Async.SequentialLazy t
     #endif
-    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq.ofList)
+    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``, [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
     static member        Sequence (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequential t |> Option.map NonEmptySeq.unsafeOfSeq
     static member        Sequence (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<NonEmptySeq<'t>, 'e> = Result.Sequential t |> Result.map NonEmptySeq.unsafeOfSeq
     static member        Sequence (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<NonEmptySeq<'t>, 'e> = Choice.Sequential t |> Choice.map NonEmptySeq.unsafeOfSeq
-    static member        Sequence (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = Sequence.ForInfiniteSequences(t, List.isEmpty , NonEmptySeq.ofList)
-    static member        Sequence (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) : NonEmptySeq<'t> []          = Sequence.ForInfiniteSequences(t, Array.isEmpty, NonEmptySeq.ofList)
+    static member        Sequence (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = Sequence.ForInfiniteSequences(t, List.isEmpty , NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
+    static member        Sequence (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) : NonEmptySeq<'t> []          = Sequence.ForInfiniteSequences(t, Array.isEmpty, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
     #if !FABLE_COMPILER
     static member        Sequence (t: NonEmptySeq<Async<'t>>    , [<Optional>]_output: Async<NonEmptySeq<'t>>     , [<Optional>]_impl: Default3) = Async.SequentialLazy t |> Async.map NonEmptySeq.unsafeOfSeq                                                         : Async<NonEmptySeq<'t>>
     #endif
@@ -222,7 +226,7 @@ type Sequence with
     #if !FABLE_COMPILER
     static member inline Sequence (t: voption<_>, [<Optional>]_output: 'R, [<Optional>]_impl: Sequence) : 'R = match t with ValueSome x -> Map.Invoke ValueSome x | _ -> result ValueNone
     #endif
-    static member inline Sequence (t: list<_>   , [<Optional>]_output: 'R, [<Optional>]_impl: Sequence) : 'R = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, id)
+    static member inline Sequence (t: list<_>   , [<Optional>]_output: 'R, [<Optional>]_impl: Sequence) : 'R = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, id, Return.Invoke)
 
     static member inline Sequence (t: Map<_,_>  , [<Optional>]_output: 'R, [<Optional>]_impl: Sequence) : 'R =
        let insert_f k x ys = Map.Invoke (Map.add k) x <*> ys
@@ -238,7 +242,7 @@ type Sequence with
         | Choice1Of2 a -> Map.Invoke Choice<'T,'Error>.Choice1Of2 a
         | Choice2Of2 e -> Return.Invoke (Choice<'T,'Error>.Choice2Of2 e)
 
-    static member inline Sequence (t: _ []                         , [<Optional>]_output: 'R                            , [<Optional>]_impl: Sequence) : 'R = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, Array.ofList)
+    static member inline Sequence (t: _ []                         , [<Optional>]_output: 'R                            , [<Optional>]_impl: Sequence) : 'R = Sequence.ForInfiniteSequences(t, IsLeftZero.Invoke, Array.ofList, Return.Invoke)
  
     static member inline Sequence (t: Id<'``Functor<'T>``>         , [<Optional>]_output: '``Functor<Id<'T>>``          , [<Optional>]_impl: Sequence) : '``Functor<Id<'T>>`` = Traverse.Invoke id t
  
