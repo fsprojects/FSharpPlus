@@ -29,9 +29,11 @@ module Async =
             if not isFailed && delay = 0 then async.Return value
             else
                 async {
-                    if delay = 0 then do! Async.raise (TestException (sprintf "Ouch, can't create: %A" value ))
+                    let excn = TestException (sprintf "Ouch, can't create: %A" value)
+                    excn.Data.Add("key", value)
+                    if delay = 0 then do! Async.raise excn
                     do! Async.Sleep delay
-                    if isFailed then do! Async.raise (TestException (sprintf "Ouch, can't create: %A" value ))
+                    if isFailed then do! Async.raise excn
                     return value }
 
 
@@ -54,7 +56,7 @@ module Async =
             let t12123 = Async.zip3 t12t12 t33 t4
             let ac1 =
                 try
-                    Async.AsTaskAndWait(t12123).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+                    Async.AsTaskAndWait(t12123).Exception.InnerExceptions |> Seq.map (fun x -> x.Data["key"] :?> int)
                 with e ->
                     failwithf "Failure in testAsyncZip. Async status is %A . Exception is %A" (Async.AsTaskAndWait t12123).Status e
 
@@ -62,7 +64,7 @@ module Async =
 
             let t13 = Async.zip3 (Async.zip t1 t3) t4 (Async.zip t5 t6)
             Assert.AreEqual (true, Async.AsTaskAndWait(t13).IsFaulted, "Async.zip(3) between a value, an exception and a cancellation -> exception wins.")
-            let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+            let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> x.Data["key"] :?> int)
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Async.zip between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
 
         [<Test;Ignore("To be fixed see issue #598")>]
@@ -84,7 +86,7 @@ module Async =
             let t12123 = Async.zip3 t12t12 t33 t4            
             let ac1 =
                 try
-                    Async.AsTaskAndWait(t12123).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+                    Async.AsTaskAndWait(t12123).Exception.InnerExceptions |> Seq.map (fun x -> x.Data["key"] :?> int)
                 with e ->
                     failwithf "Failure in testAsyncZipAsync. Async status is %A . Exception is %A" (Async.AsTaskAndWait t12123).Status e
 
@@ -92,7 +94,7 @@ module Async =
 
             let t13 = Async.zip3 (Async.zip t1 t3) t4 (Async.zip t5 t6)
             Assert.AreEqual (true, Async.AsTaskAndWait(t13).IsFaulted, "Async.zip(3)Async between a value, an exception and a cancellation -> exception wins.")
-            let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> int (Char.GetNumericValue x.Message.[35]))
+            let ac2 = Async.AsTaskAndWait(t13).Exception.InnerExceptions |> Seq.map (fun x -> x.Data["key"] :?> int)
             CollectionAssert.AreEquivalent ([1; 3], ac2, "Async.zipAsync between 2 exceptions => both exceptions returned, even after combining with cancellation and values.")
      
         [<Test>]
