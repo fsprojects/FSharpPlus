@@ -18,9 +18,11 @@ module Task =
             if not isFailed && delay = 0 then Task.FromResult value
             else
                 let tcs = TaskCompletionSource<_> ()
-                if delay = 0 then tcs.SetException (TestException (sprintf "Ouch, can't create: %A" value ))
+                let excn = TestException (sprintf "Ouch, can't create: %A" value)
+                excn.Data.Add("key", value)
+                if delay = 0 then tcs.SetException (excn)
                 else (Task.Delay delay).ContinueWith (fun _ ->
-                    if isFailed then tcs.SetException (TestException (sprintf "Ouch, can't create: %A" value )) else tcs.SetResult value) |> ignore
+                    if isFailed then tcs.SetException (excn) else tcs.SetResult value) |> ignore
                 tcs.Task
 
         let (|AggregateException|_|) (x: exn) =
