@@ -517,3 +517,9 @@ module FindLastSliceIndex =
 exception AggregateException of Exception seq
 
 #endif
+
+#if NET45
+type InlineIfLambdaAttribute()=class
+    inherit Attribute()
+end
+#endif

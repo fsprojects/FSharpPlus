@@ -5,6 +5,7 @@ namespace FSharpPlus
 module Result =
     open FSharp.Core.CompilerServices
     open System
+    open FSharpPlus.Internals
     
     /// Creates an Ok with the supplied value.
     [<Obsolete("Prefer Result.Ok")>]
@@ -99,11 +100,7 @@ module Result =
     /// Error "Hello world" |> Result.iter (printfn "%s") // prints "Hello world"
     /// </code>
     /// </example>
-    #if !NET45
     let inline iterError ([<InlineIfLambda>]action: 'Error -> unit) (source: Result<'T, 'Error>) = match source with Ok _ -> () | Error x -> action x
-    #else
-    let inline iterError (action: 'Error -> unit) (source: Result<'T, 'Error>) = match source with Ok _ -> () | Error x -> action x
-    #endif
 
     /// <summary>Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
