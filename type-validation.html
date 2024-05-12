@@ -319,9 +319,9 @@ It contains examples using F#+ and an explanation from scratch.
   interface IComparable&lt;string&gt;
   interface IConvertible
   interface IEquatable&lt;string&gt;
+  interface IParsable&lt;string&gt;
+  interface ISpanParsable&lt;string&gt;
   new: value: nativeptr&lt;char&gt; -&gt; unit + 8 overloads
-  member Clone: unit -&gt; obj
-  member CompareTo: value: obj -&gt; int + 1 overload
   ...<br /><em>&lt;summary&gt;Represents text as a sequence of UTF-16 code units.&lt;/summary&gt;</em><br /><br />--------------------<br />String(value: nativeptr&lt;char&gt;) : String<br />String(value: char array) : String<br />String(value: ReadOnlySpan&lt;char&gt;) : String<br />String(value: nativeptr&lt;sbyte&gt;) : String<br />String(c: char, count: int) : String<br />String(value: nativeptr&lt;char&gt;, startIndex: int, length: int) : String<br />String(value: char array, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int, enc: Text.Encoding) : String</div>
 <div class="fsdocs-tip" id="fs13">val nonEmpty: x: string -&gt; Validation&lt;VError list,string&gt;</div>
 <div class="fsdocs-tip" id="fs14">val x: string</div>
@@ -335,10 +335,11 @@ from FSharpPlus.Data<br /><br />--------------------<br />type Validation&lt;&#3
   static member (&lt;!&gt;) : f: (&#39;T -&gt; &#39;U) * x: Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt;
   static member ( &lt;* ) : x: Validation&lt;&#39;Error,&#39;U&gt; * y: Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt; (requires member ``+``)
   static member (&lt;*&gt;) : f: Validation&lt;&#39;Error,(&#39;T -&gt; &#39;U)&gt; * x: Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt; (requires member ``+``)
+  static member (&lt;.&gt;) : f: Validation&lt;&#39;Error,(&#39;T -&gt; &#39;U)&gt; * x: Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;U&gt; (requires member ``+``)
   static member (&lt;|&gt;) : x: Validation&lt;&#39;Error,&#39;T&gt; * y: Validation&lt;&#39;Error,&#39;T&gt; -&gt; Validation&lt;&#39;Error,&#39;T&gt; (requires member ``&lt;|&gt;``)
-  static member Return: x: &#39;a2 -&gt; Validation&lt;&#39;a3,&#39;a2&gt;
+  static member Return: x: &#39;a -&gt; Validation&lt;&#39;b,&#39;a&gt;
   static member SequenceBiApply: t: Validation&lt;&#39;Error,&#39;T&gt; list -&gt; Validation&lt;&#39;Error list,&#39;T list&gt; + 1 overload
-  static member get_Empty: unit -&gt; Validation&lt;&#39;a2,&#39;a3&gt; (requires member Empty)<br /><em>&lt;summary&gt;
+  static member get_Empty: unit -&gt; Validation&lt;&#39;a,&#39;b&gt; (requires member Empty)<br /><em>&lt;summary&gt;
  A &#39;Validation&#39; is either a value of the type &#39;error or &#39;t, similar to &#39;Result&#39;. However,
  the &#39;Applicative&#39; instance for &#39;Validation&#39; accumulates errors using a &#39;Semigroup&#39; on &#39;error.
  In contrast, the Applicative for &#39;Result&#39; returns only the first error.
@@ -360,7 +361,7 @@ from FSharpPlus.Data<br /><br />--------------------<br />type Validation&lt;&#3
 <div class="fsdocs-tip" id="fs28">val x: decimal</div>
 <div class="fsdocs-tip" id="fs29">Multiple items<br />[&lt;Struct&gt;]
 type DateTime =
-  new: year: int * month: int * day: int -&gt; unit + 14 overloads
+  new: year: int * month: int * day: int -&gt; unit + 16 overloads
   member Add: value: TimeSpan -&gt; DateTime
   member AddDays: value: float -&gt; DateTime
   member AddHours: value: float -&gt; DateTime
@@ -370,7 +371,7 @@ type DateTime =
   member AddMonths: months: int -&gt; DateTime
   member AddSeconds: value: float -&gt; DateTime
   member AddTicks: value: int64 -&gt; DateTime
-  ...<br /><em>&lt;summary&gt;Represents an instant in time, typically expressed as a date and time of day.&lt;/summary&gt;</em><br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+  ...<br /><em>&lt;summary&gt;Represents an instant in time, typically expressed as a date and time of day.&lt;/summary&gt;</em><br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(date: DateOnly, time: TimeOnly) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(date: DateOnly, time: TimeOnly, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
 <div class="fsdocs-tip" id="fs30">val classicMovie: year: int -&gt; d: DateTime -&gt; Validation&lt;VError list,DateTime&gt;</div>
 <div class="fsdocs-tip" id="fs31">val year: int</div>
 <div class="fsdocs-tip" id="fs32">val d: DateTime</div>
@@ -425,7 +426,7 @@ from Type-validation.MovieValidations</div>
 <div class="fsdocs-tip" id="fs60">val oldie: Validation&lt;VError list,Movie&gt;</div>
 <div class="fsdocs-tip" id="fs61">val titleToLong: Validation&lt;VError list,Movie&gt;</div>
 <div class="fsdocs-tip" id="fs62">String.Concat&lt;&#39;T&gt;(values: Collections.Generic.IEnumerable&lt;&#39;T&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat([&lt;ParamArray&gt;] values: string array) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat([&lt;ParamArray&gt;] args: obj array) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(arg0: obj) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(values: Collections.Generic.IEnumerable&lt;string&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: string, str1: string) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: ReadOnlySpan&lt;char&gt;, str1: ReadOnlySpan&lt;char&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(arg0: obj, arg1: obj) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: string, str1: string, str2: string) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: ReadOnlySpan&lt;char&gt;, str1: ReadOnlySpan&lt;char&gt;, str2: ReadOnlySpan&lt;char&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
-<div class="fsdocs-tip" id="fs63">Multiple items<br />val seq: sequence: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs63">Multiple items<br />val seq: sequence: &#39;T seq -&gt; &#39;T seq<br /><br />--------------------<br />type &#39;T seq = Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs64">Name.unName: String</div>
 <div class="fsdocs-tip" id="fs65">val s: String</div>
 <div class="fsdocs-tip" id="fs66">Email.unEmail: String</div>

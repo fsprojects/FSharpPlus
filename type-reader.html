@@ -113,10 +113,10 @@ in order to pass around dependencies. The below code comes from <a href="https:/
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">Data</span>
 
 <span class="k">type</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="if">IUserRepository</span> <span class="o">=</span>
-    <span class="k">abstract</span> <span class="fn">GetUser</span> <span class="pn">:</span> <span class="id">email</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="rt">string</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="rt">string</span>
+    <span class="k">abstract</span> <span class="fn">GetUser</span> <span class="pn">:</span> <span class="fn">email</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="rt">string</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="rt">string</span>
 
 <span class="k">type</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="if">IShoppingListRepository</span> <span class="o">=</span>
-    <span class="k">abstract</span> <span class="fn">AddToCart</span> <span class="pn">:</span> <span class="id">shoppingList</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="rt">string</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="rt">list</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs5', 11)" onmouseover="showTip(event, 'fs5', 11)" class="rt">string</span>
+    <span class="k">abstract</span> <span class="fn">AddToCart</span> <span class="pn">:</span> <span class="fn">shoppingList</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs5', 9)" onmouseover="showTip(event, 'fs5', 9)" class="rt">string</span> <span onmouseout="hideTip(event, 'fs7', 10)" onmouseover="showTip(event, 'fs7', 10)" class="rt">list</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs5', 11)" onmouseover="showTip(event, 'fs5', 11)" class="rt">string</span>
 
 <span class="k">let</span> <span onmouseout="hideTip(event, 'fs8', 12)" onmouseover="showTip(event, 'fs8', 12)" class="fn">getUser</span> <span onmouseout="hideTip(event, 'fs9', 13)" onmouseover="showTip(event, 'fs9', 13)" class="fn">email</span> <span class="o">=</span>
     <span onmouseout="hideTip(event, 'fs10', 14)" onmouseover="showTip(event, 'fs10', 14)" class="uc">Reader</span><span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs11', 15)" onmouseover="showTip(event, 'fs11', 15)" class="fn">env</span> <span class="pn">:</span> <span class="pn">#</span><span onmouseout="hideTip(event, 'fs4', 16)" onmouseover="showTip(event, 'fs4', 16)" class="if">IUserRepository</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs11', 17)" onmouseover="showTip(event, 'fs11', 17)" class="fn">env</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs12', 18)" onmouseover="showTip(event, 'fs12', 18)" class="id">GetUser</span> <span onmouseout="hideTip(event, 'fs9', 19)" onmouseover="showTip(event, 'fs9', 19)" class="fn">email</span><span class="pn">)</span>
@@ -245,7 +245,7 @@ type Reader&lt;&#39;r,&#39;t&gt; =
   static member Delay: body: (unit -&gt; Reader&lt;&#39;R,&#39;T&gt;) -&gt; Reader&lt;&#39;R,&#39;T&gt;
   static member Extract: Reader&lt;&#39;Monoid,&#39;T&gt; -&gt; &#39;T (requires member Zero)
   static member Return: x: &#39;T -&gt; Reader&lt;&#39;R,&#39;T&gt;
-  static member TryFinally: Reader&lt;&#39;a2,&#39;a3&gt; * f: (unit -&gt; unit) -&gt; Reader&lt;&#39;a2,&#39;a3&gt;
+  static member TryFinally: Reader&lt;&#39;a,&#39;b&gt; * f: (unit -&gt; unit) -&gt; Reader&lt;&#39;a,&#39;b&gt;
   ...<br /><em>&lt;summary&gt; Computation type: Computations which read values from a shared environment.
  &lt;para /&gt;   Binding strategy: Monad values are functions from the environment to a value. The bound function is applied to the bound value, and both have access to the shared environment.
  &lt;para /&gt;   Useful for: Maintaining variable bindings, or other shared environment.&lt;/summary&gt;</em></div>
@@ -296,19 +296,19 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs35">Environment.variables: Map&lt;string,string&gt;</div>
 <div class="fsdocs-tip" id="fs36">val lookupVar: name: string -&gt; env: Environment -&gt; string option<br /><em>&#160;lookup a variable from the environment</em></div>
 <div class="fsdocs-tip" id="fs37">val name: string</div>
 <div class="fsdocs-tip" id="fs38">val env: Environment</div>
-<div class="fsdocs-tip" id="fs39">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs39">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -377,9 +377,9 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
   interface IComparable&lt;string&gt;
   interface IConvertible
   interface IEquatable&lt;string&gt;
+  interface IParsable&lt;string&gt;
+  interface ISpanParsable&lt;string&gt;
   new: value: nativeptr&lt;char&gt; -&gt; unit + 8 overloads
-  member Clone: unit -&gt; obj
-  member CompareTo: value: obj -&gt; int + 1 overload
   ...<br /><em>&lt;summary&gt;Represents text as a sequence of UTF-16 code units.&lt;/summary&gt;</em><br /><br />--------------------<br />String(value: nativeptr&lt;char&gt;) : String<br />String(value: char array) : String<br />String(value: ReadOnlySpan&lt;char&gt;) : String<br />String(value: nativeptr&lt;sbyte&gt;) : String<br />String(c: char, count: int) : String<br />String(value: nativeptr&lt;char&gt;, startIndex: int, length: int) : String<br />String(value: char array, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int, enc: Text.Encoding) : String</div>
 <div class="fsdocs-tip" id="fs67">String.Concat&lt;&#39;T&gt;(values: Collections.Generic.IEnumerable&lt;&#39;T&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat([&lt;ParamArray&gt;] values: string array) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat([&lt;ParamArray&gt;] args: obj array) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(arg0: obj) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(values: Collections.Generic.IEnumerable&lt;string&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: string, str1: string) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: ReadOnlySpan&lt;char&gt;, str1: ReadOnlySpan&lt;char&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(arg0: obj, arg1: obj) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: string, str1: string, str2: string) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />String.Concat(str0: ReadOnlySpan&lt;char&gt;, str1: ReadOnlySpan&lt;char&gt;, str2: ReadOnlySpan&lt;char&gt;) : string<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
 <div class="fsdocs-tip" id="fs68">val d: Template</div>

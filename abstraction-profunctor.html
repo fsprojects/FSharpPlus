@@ -92,18 +92,18 @@
 <ul>
 <li><code>dimap f g x</code></li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Dimap</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">U</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">g</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">V</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Dimap</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">U</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">g</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">V</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span> <span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
 </code></pre>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
 <li><code>lmap f x</code></li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Contramap</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">U</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Contramap</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">U</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">,</span> <span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span>
 </code></pre>
 <ul>
 <li><code>rmap g x</code></li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Map</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">V</span><span class="k">-&gt;</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">Map</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span><span class="id">&#39;</span><span class="id">V</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">V</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">W</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Profunctor</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">&#39;</span><span class="id">W</span><span class="pn">&gt;</span>
 </code></pre>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="id">dimap</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">id</span> <span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="id">id</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs2', 4)" onmouseover="showTip(event, 'fs2', 4)" class="id">id</span>
@@ -160,14 +160,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs2">val id: x: &#39;T -&gt; &#39;T</div>
 <div class="fsdocs-tip" id="fs3">namespace System</div>
 <div class="fsdocs-tip" id="fs4">namespace FSharpPlus</div>
@@ -223,14 +223,14 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
 type Kleisli&lt;&#39;t,&#39;monad&lt;&#39;u&gt;&gt; =
   | Kleisli of (&#39;t -&gt; &#39;monad&lt;&#39;u&gt;)
   static member (+++) : Kleisli&lt;&#39;T,&#39;u&gt; * Kleisli&lt;&#39;v,&#39;w&gt; -&gt; Kleisli&lt;Choice&lt;&#39;v,&#39;T&gt;,&#39;z&gt; (requires member (&gt;&gt;=) and member Return and member (&gt;&gt;=))
-  static member (&lt;&lt;&lt;) : Kleisli&lt;&#39;a2,&#39;a3&gt; * Kleisli&lt;&#39;a5,&#39;a4&gt; -&gt; Kleisli&lt;&#39;a5,&#39;a3&gt; (requires member (&gt;&gt;=))
-  static member ``&lt;|&gt;`` : Kleisli&lt;&#39;a2,&#39;a3&gt; * Kleisli&lt;&#39;a2,&#39;a3&gt; * _mthd: Append -&gt; Kleisli&lt;&#39;a2,&#39;a3&gt; (requires member ``&lt;|&gt;``)
-  static member Arr: f: (&#39;a2 -&gt; &#39;a3) -&gt; Kleisli&lt;&#39;a2,&#39;a4&gt; (requires member Return)
+  static member (&lt;&lt;&lt;)&lt;&#39;a,&#39;b,&#39;c,&#39;d (requires member (&gt;&gt;=))&gt; : Kleisli&lt;&#39;a,&#39;b&gt; * Kleisli&lt;&#39;d,&#39;c&gt; -&gt; Kleisli&lt;&#39;d,&#39;b&gt; (requires member (&gt;&gt;=))
+  static member ``&lt;|&gt;`` : Kleisli&lt;&#39;a,&#39;b&gt; * Kleisli&lt;&#39;a,&#39;b&gt; * _mthd: Append -&gt; Kleisli&lt;&#39;a,&#39;b&gt; (requires member ``&lt;|&gt;``)
+  static member Arr: f: (&#39;a -&gt; &#39;b) -&gt; Kleisli&lt;&#39;a,&#39;c&gt; (requires member Return)
   static member Contramap: Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * k: (&#39;A -&gt; &#39;B) -&gt; Kleisli&lt;&#39;A,&#39;Monad&lt;&#39;C&gt;&gt;
   static member Dimap: Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * ab: (&#39;A -&gt; &#39;B) * cd: (&#39;C -&gt; &#39;D) -&gt; Kleisli&lt;&#39;A,&#39;Monad&lt;&#39;D&gt;&gt; (requires member Map)
-  static member Empty: _output: Kleisli&lt;&#39;T,&#39;Monad&lt;&#39;U&gt;&gt; * _mthd: Empty -&gt; Kleisli&lt;&#39;a4,&#39;a5&gt; (requires member Empty)
-  static member First: Kleisli&lt;&#39;a2,&#39;a3&gt; -&gt; Kleisli&lt;(&#39;a2 * &#39;a6),&#39;a4&gt; (requires member (&gt;&gt;=) and member Return)
-  static member Left: Kleisli&lt;&#39;a2,&#39;a3&gt; -&gt; &#39;a4 (requires member ``+++`` and member Arr)
+  static member Empty: _output: Kleisli&lt;&#39;T,&#39;Monad&lt;&#39;U&gt;&gt; * _mthd: Empty -&gt; Kleisli&lt;&#39;a,&#39;b&gt; (requires member Empty)
+  static member First: Kleisli&lt;&#39;a,&#39;b&gt; -&gt; Kleisli&lt;(&#39;a * &#39;e),&#39;c&gt; (requires member (&gt;&gt;=) and member Return)
+  static member Left: Kleisli&lt;&#39;a,&#39;b&gt; -&gt; &#39;c (requires member ``+++`` and member Arr)
   static member Map: Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * cd: (&#39;C -&gt; &#39;D) -&gt; Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;D&gt;&gt; (requires member Map)
   ...<br /><em>&lt;summary&gt;
  Kleisli arrows of a monad. Represents a function &#39;T -&amp;gt; &#39;Monad&amp;lt;&#39;U&amp;gt;

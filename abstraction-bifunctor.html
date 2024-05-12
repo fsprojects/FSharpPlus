@@ -151,14 +151,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs3">val rInt10Str10: int * string</div>
 <div class="fsdocs-tip" id="fs4">val bimap: f: (&#39;T -&gt; &#39;U) -&gt; g: (&#39;V -&gt; &#39;W) -&gt; source: &#39;Bifunctor&lt;&#39;T,&#39;V&gt; -&gt; &#39;Bifunctor&lt;&#39;U,&#39;W&gt; (requires member Bimap)<br /><em>&lt;summary&gt;

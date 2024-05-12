@@ -94,14 +94,14 @@
 <li><code>(&gt;&gt;=) x f</code></li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Return</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
-<span class="k">static</span> <span class="k">member</span> <span class="pn">(</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span><span class="pn">)</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span><span class="k">-&gt;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
+<span class="k">static</span> <span class="k">member</span> <span class="pn">(</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span><span class="pn">)</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
 </code></pre>
 <p>Note: <code>return</code> can't be used outside computation expressions, use <code>result</code> instead.</p>
 <h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
 <ul>
 <li><code>join</code></li>
 </ul>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Join</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Join</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">Monad</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
 </code></pre>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">return</span> <span class="id">a</span> <span class="pn">&gt;</span><span class="pn">&gt;</span><span class="o">=</span> <span class="id">k</span> <span class="o">=</span> <span class="id">k</span> <span class="id">a</span>
@@ -425,11 +425,11 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   interface IReadOnlyCollection&lt;&#39;t&gt;
   interface IEnumerable
   interface IEnumerable&lt;&#39;t&gt;
-  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
+  static member (+) : NonEmptyList&lt;&#39;a&gt; * x: NonEmptyList&lt;&#39;a&gt; -&gt; NonEmptyList&lt;&#39;a&gt;
   static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
-  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member Choice: source: NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ``&lt;|&gt;``)
+  static member (&lt;.&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
+  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a&gt; * g: (NonEmptyList&lt;&#39;a&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a&gt; * f: (&#39;a -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
   ...<br /><em>&lt;summary&gt;
  A type-safe list that contains at least one element.
 &lt;/summary&gt;</em></div>
@@ -467,9 +467,9 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   interface IComparable&lt;string&gt;
   interface IConvertible
   interface IEquatable&lt;string&gt;
+  interface IParsable&lt;string&gt;
+  interface ISpanParsable&lt;string&gt;
   new: value: nativeptr&lt;char&gt; -&gt; unit + 8 overloads
-  member Clone: unit -&gt; obj
-  member CompareTo: value: obj -&gt; int + 1 overload
   ...<br /><em>&lt;summary&gt;Represents text as a sequence of UTF-16 code units.&lt;/summary&gt;</em><br /><br />--------------------<br />String(value: nativeptr&lt;char&gt;) : String<br />String(value: char array) : String<br />String(value: ReadOnlySpan&lt;char&gt;) : String<br />String(value: nativeptr&lt;sbyte&gt;) : String<br />String(c: char, count: int) : String<br />String(value: nativeptr&lt;char&gt;, startIndex: int, length: int) : String<br />String(value: char array, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int, enc: Text.Encoding) : String</div>
 <div class="fsdocs-tip" id="fs23">val length: str: string -&gt; int</div>
 <div class="fsdocs-tip" id="fs24">val exists: predicate: (char -&gt; bool) -&gt; str: string -&gt; bool</div>
@@ -498,16 +498,16 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
 type ResultT&lt;&#39;monad&lt;Result&lt;&#39;t,&#39;e&gt;&gt;&gt; =
   | ResultT of &#39;monad&lt;Result&lt;&#39;t,&#39;e&gt;&gt;
-  static member (+) : ResultT&lt;&#39;a1&gt; * ResultT&lt;&#39;a5&gt; -&gt; ResultT&lt;&#39;MonadPlus&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Return and member ``+`` and member ``+``)
+  static member (+) : ResultT&lt;&#39;a&gt; * ResultT&lt;&#39;d&gt; -&gt; ResultT&lt;&#39;MonadPlus&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Return and member ``+`` and member ``+``)
   static member (&lt;*&gt;) : f: ResultT&lt;&#39;Monad&lt;Result&lt;(&#39;T -&gt; &#39;U),&#39;E&gt;&gt;&gt; * x: ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt; (requires member Map and member ``&lt;*&gt;``)
-  static member (&lt;|&gt;) : ResultT&lt;&#39;a1&gt; * ResultT&lt;&#39;a5&gt; -&gt; ResultT&lt;&#39;MonadPlus&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member (&gt;&gt;=) and member ``+``)
+  static member (&lt;|&gt;) : ResultT&lt;&#39;a&gt; * ResultT&lt;&#39;d&gt; -&gt; ResultT&lt;&#39;MonadPlus&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member (&gt;&gt;=) and member ``+``)
   static member (&gt;=&gt;) : f: (&#39;T -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;U, &#39;E&gt;&gt;) * g: (&#39;U -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;V, &#39;E&gt;&gt;) -&gt; (&#39;T -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;V, &#39;E&gt;&gt;) (requires member (&gt;&gt;=) and member Return)
   static member (&gt;&gt;=) : x: ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; * f: (&#39;T -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt;) -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;U,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return)
   static member CallCC: f: ((&#39;T -&gt; ResultT&lt;&#39;MonadCont&lt;&#39;R,Result&lt;&#39;U,&#39;E&gt;&gt;&gt;) -&gt; ResultT&lt;&#39;MonadCont&lt;&#39;R, Result&lt;&#39;T,&#39;E&gt;&gt;&gt;) -&gt; ResultT&lt;&#39;MonadCont&lt;&#39;R, Result&lt;&#39;T,&#39;E&gt;&gt;&gt; (requires member CallCC)
   static member Catch: ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T, &#39;E1&gt;&gt;&gt; * f: (&#39;E1 -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T, &#39;E2&gt;&gt;&gt;) -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T, &#39;E2&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return)
   static member Delay: body: (unit -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T,&#39;E&gt;&gt;&gt;) -&gt; ResultT&lt;&#39;Monad&lt;Result&lt;&#39;T,&#39;E&gt;&gt;&gt; (requires member Delay)
   static member LiftAsync: x: Async&lt;&#39;T&gt; -&gt; ResultT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt; (requires member Return and member (&gt;&gt;=) and member Map and member LiftAsync)
-  static member Listen: m: ResultT&lt;&#39;a1&gt; -&gt; ResultT&lt;&#39;MonadWriter&lt;&#39;Monoid,Result&lt;&#39;T*&#39;Monoid,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member Listen)
+  static member Listen: m: ResultT&lt;&#39;a&gt; -&gt; ResultT&lt;&#39;MonadWriter&lt;&#39;Monoid,Result&lt;&#39;T*&#39;Monoid,&#39;E&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member Listen)
   ...<br /><em>&lt;summary&gt;
  Monad Transformer for Result&amp;lt;&#39;T, &#39;E&amp;gt;
 &lt;/summary&gt;</em></div>
@@ -517,7 +517,7 @@ type ResultT&lt;&#39;monad&lt;Result&lt;&#39;t,&#39;e&gt;&gt;&gt; =
 <div class="fsdocs-tip" id="fs33">val throw: error: &#39;E -&gt; &#39;&#39;MonadError&lt;&#39;E,&#39;T&gt; (requires member Throw)<br /><em>&lt;summary&gt;
  Throws an error value inside the Error monad.
  &lt;/summary&gt;<br />&lt;category index=&quot;18&quot;&gt;Monad Transformers&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs34">val catch: value: &#39;&#39;MonadError&lt;&#39;E1,&#39;T&gt; -&gt; handler: (&#39;E1 -&gt; &#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt;) -&gt; &#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt; (requires member Catch)<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs34">val catch&lt;&#39;&#39;MonadError&lt;&#39;E1,&#39;T&gt;,&#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt;,&#39;E1 (requires member Catch)&gt; : value: &#39;&#39;MonadError&lt;&#39;E1,&#39;T&gt; -&gt; handler: (&#39;E1 -&gt; &#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt;) -&gt; &#39;&#39;MonadError&lt;&#39;E2,&#39;T&gt; (requires member Catch)<br /><em>&lt;summary&gt;
  Executes a handler when the value contained in the Error monad represents an error.
  This is bindError flipped, which makes it useful when used as an operator.
  &lt;/summary&gt;<br />&lt;example&gt;&lt;code&gt;
@@ -608,9 +608,9 @@ type ReaderT&lt;&#39;r,&#39;monad&lt;&#39;t&gt;&gt; =
   static member (&lt;*&gt;) : f: ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T -&gt; &#39;U&gt;&gt; * x: ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt; -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;U&gt;&gt; (requires member ``&lt;*&gt;``)
   static member (&lt;|&gt;) : ReaderT&lt;&#39;R,&#39;MonadPlus&lt;&#39;T&gt;&gt; * ReaderT&lt;&#39;R,&#39;MonadPlus&lt;&#39;T&gt;&gt; -&gt; ReaderT&lt;&#39;R,&#39;MonadPlus&lt;&#39;T&gt;&gt; (requires member ``&lt;|&gt;``)
   static member (&gt;=&gt;) : f: (&#39;T -&gt; Reader&lt;&#39;R,&#39;U&gt;) * g: (&#39;U -&gt; Reader&lt;&#39;R,&#39;V&gt;) -&gt; (&#39;T -&gt; Reader&lt;&#39;R,&#39;V&gt;) + 1 overload
-  static member (&gt;&gt;=) : x: ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt; * f: (&#39;T -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;U&gt;&gt; (requires member (&gt;&gt;=))
+  static member (&gt;&gt;=)&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;,&#39;Monad&lt;&#39;U&gt;,&#39;T (requires member (&gt;&gt;=))&gt; : x: ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt; * f: (&#39;T -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;U&gt;&gt; (requires member (&gt;&gt;=))
   static member CallCC: f: ((&#39;T -&gt; ReaderT&lt;&#39;R,&#39;MonadCont&lt;&#39;C,&#39;U&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;MonadCont&lt;&#39;C,&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;MonadCont&lt;&#39;C,&#39;T&gt;&gt; (requires member CallCC)
-  static member Catch: m: ReaderT&lt;&#39;R,&#39;MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h: (&#39;E1 -&gt; ReaderT&lt;&#39;R,&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt; (requires member Catch)
+  static member Catch&lt;&#39;R,&#39;MonadError&lt;&#39;E1,&#39;T&gt;,&#39;MonadError&lt;&#39;E2,&#39;T&gt;,&#39;E1 (requires member Catch)&gt; : m: ReaderT&lt;&#39;R,&#39;MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h: (&#39;E1 -&gt; ReaderT&lt;&#39;R,&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt; (requires member Catch)
   static member Delay: body: (unit -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt;) -&gt; ReaderT&lt;&#39;R,&#39;Monad&lt;&#39;T&gt;&gt; (requires member Delay)
   ...<br /><em>&lt;summary&gt;
  Monad Transformer for Reader&amp;lt;&#39;R, &#39;T&amp;gt;
@@ -618,7 +618,7 @@ type ReaderT&lt;&#39;r,&#39;monad&lt;&#39;t&gt;&gt; =
 <div class="fsdocs-tip" id="fs67">val now: DateTime</div>
 <div class="fsdocs-tip" id="fs68">Multiple items<br />[&lt;Struct&gt;]
 type DateTime =
-  new: year: int * month: int * day: int -&gt; unit + 14 overloads
+  new: year: int * month: int * day: int -&gt; unit + 16 overloads
   member Add: value: TimeSpan -&gt; DateTime
   member AddDays: value: float -&gt; DateTime
   member AddHours: value: float -&gt; DateTime
@@ -628,7 +628,7 @@ type DateTime =
   member AddMonths: months: int -&gt; DateTime
   member AddSeconds: value: float -&gt; DateTime
   member AddTicks: value: int64 -&gt; DateTime
-  ...<br /><em>&lt;summary&gt;Represents an instant in time, typically expressed as a date and time of day.&lt;/summary&gt;</em><br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+  ...<br /><em>&lt;summary&gt;Represents an instant in time, typically expressed as a date and time of day.&lt;/summary&gt;</em><br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(date: DateOnly, time: TimeOnly) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(date: DateOnly, time: TimeOnly, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
 <div class="fsdocs-tip" id="fs69">val a: &#39;b</div>
 <div class="fsdocs-tip" id="fs70">DateTime.ToString() : string<br />DateTime.ToString(format: string) : string<br />DateTime.ToString(provider: IFormatProvider) : string<br />DateTime.ToString(format: string, provider: IFormatProvider) : string</div>
 <div class="fsdocs-tip" id="fs71">val b: &#39;c</div>
@@ -650,16 +650,16 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
 type OptionT&lt;&#39;monad&lt;option&lt;&#39;t&gt;&gt;&gt; =
   | OptionT of &#39;monad&lt;option&lt;&#39;t&gt;&gt;
-  static member (+) : OptionT&lt;&#39;a1&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Return and member ``+``)
+  static member (+) : OptionT&lt;&#39;a&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Return and member ``+``)
   static member (&lt;*&gt;) : f: OptionT&lt;&#39;Monad&lt;option&lt;(&#39;T -&gt; &#39;U)&gt;&gt; * x: OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;``)
-  static member (&lt;|&gt;) : OptionT&lt;&#39;a1&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member Return)
+  static member (&lt;|&gt;) : OptionT&lt;&#39;a&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member Return)
   static member (&gt;=&gt;) : f: (&#39;T -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt;) * g: (&#39;U -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;V&gt;&gt;) -&gt; (&#39;T -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;V&gt;&gt;) (requires member (&gt;&gt;=) and member Return)
   static member (&gt;&gt;=) : x: OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt; * f: (&#39;T -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt;) -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt; (requires member (&gt;&gt;=) and member Return)
   static member CallCC: f: ((&#39;T -&gt; OptionT&lt;&#39;MonadCont&lt;&#39;R,option&lt;&#39;U&gt;&gt;&gt;) -&gt; OptionT&lt;&#39;MonadCont&lt;&#39;R,option&lt;&#39;T&gt;&gt;&gt;) -&gt; OptionT&lt;&#39;MonadCont&lt;&#39;R,option&lt;&#39;T&gt;&gt;&gt; (requires member CallCC)
-  static member Catch: m: OptionT&lt;&#39;MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h: (&#39;E1 -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt;) -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt; (requires member Catch)
+  static member Catch&lt;&#39;MonadError&lt;&#39;E1,&#39;T&gt;,&#39;MonadError&lt;&#39;E2,&#39;T&gt;,&#39;E1 (requires member Catch)&gt; : m: OptionT&lt;&#39;MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h: (&#39;E1 -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt;) -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt; (requires member Catch)
   static member Delay: body: (unit -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt;&gt;) -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt;&gt; (requires member Delay)
   static member LiftAsync: x: Async&lt;&#39;T&gt; -&gt; OptionT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt; (requires member Return and member (&gt;&gt;=) and member Map and member LiftAsync)
-  static member Listen: m: OptionT&lt;&#39;a1&gt; -&gt; OptionT&lt;&#39;&#39;MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member Listen)
+  static member Listen: m: OptionT&lt;&#39;a&gt; -&gt; OptionT&lt;&#39;&#39;MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member Listen)
   ...<br /><em>&lt;summary&gt;
  Monad Transformer for Option&amp;lt;&#39;T&amp;gt;
 &lt;/summary&gt;</em></div>
@@ -675,11 +675,11 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
   static member CancelDefaultToken: unit -&gt; unit
   static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
-  static member Choice: computations: seq&lt;Async&lt;&#39;T option&gt;&gt; -&gt; Async&lt;&#39;T option&gt;
+  static member Choice: computations: Async&lt;&#39;T option&gt; seq -&gt; Async&lt;&#39;T option&gt;
   static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
   static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
   ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs83">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs83">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -702,6 +702,8 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   }</div>
 <div class="fsdocs-tip" id="fs92">HttpRequest.url: Uri</div>
 <div class="fsdocs-tip" id="fs93">Multiple items<br />type Uri =
+  interface ISpanFormattable
+  interface IFormattable
   interface ISerializable
   new: uriString: string -&gt; unit + 6 overloads
   member Equals: comparand: obj -&gt; bool
@@ -710,8 +712,6 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   member GetLeftPart: part: UriPartial -&gt; string
   member IsBaseOf: uri: Uri -&gt; bool
   member IsWellFormedOriginalString: unit -&gt; bool
-  member MakeRelative: toUri: Uri -&gt; string
-  member MakeRelativeUri: uri: Uri -&gt; Uri
   ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />Uri(uriString: string) : Uri<br />Uri(uriString: string, creationOptions: inref&lt;UriCreationOptions&gt;) : Uri<br />Uri(uriString: string, uriKind: UriKind) : Uri<br />Uri(baseUri: Uri, relativeUri: string) : Uri<br />Uri(baseUri: Uri, relativeUri: Uri) : Uri</div>
 <div class="fsdocs-tip" id="fs94">type HttpContext =
   {

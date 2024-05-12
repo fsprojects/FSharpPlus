@@ -202,22 +202,22 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />[&lt;Struct&gt;]
 type OptionT&lt;&#39;monad&lt;option&lt;&#39;t&gt;&gt;&gt; =
   | OptionT of &#39;monad&lt;option&lt;&#39;t&gt;&gt;
-  static member (+) : OptionT&lt;&#39;a1&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Return and member ``+``)
+  static member (+) : OptionT&lt;&#39;a&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member (&gt;&gt;=) and member Return and member ``+``)
   static member (&lt;*&gt;) : f: OptionT&lt;&#39;Monad&lt;option&lt;(&#39;T -&gt; &#39;U)&gt;&gt; * x: OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;``)
-  static member (&lt;|&gt;) : OptionT&lt;&#39;a1&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member Return)
+  static member (&lt;|&gt;) : OptionT&lt;&#39;a&gt; * OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; -&gt; OptionT&lt;&#39;MonadPlus&lt;option&lt;&#39;T&gt;&gt; (requires member (&gt;&gt;=) and member Return)
   static member (&gt;=&gt;) : f: (&#39;T -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt;) * g: (&#39;U -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;V&gt;&gt;) -&gt; (&#39;T -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;V&gt;&gt;) (requires member (&gt;&gt;=) and member Return)
   static member (&gt;&gt;=) : x: OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt; * f: (&#39;T -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt;) -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;U&gt;&gt; (requires member (&gt;&gt;=) and member Return)
   static member CallCC: f: ((&#39;T -&gt; OptionT&lt;&#39;MonadCont&lt;&#39;R,option&lt;&#39;U&gt;&gt;&gt;) -&gt; OptionT&lt;&#39;MonadCont&lt;&#39;R,option&lt;&#39;T&gt;&gt;&gt;) -&gt; OptionT&lt;&#39;MonadCont&lt;&#39;R,option&lt;&#39;T&gt;&gt;&gt; (requires member CallCC)
-  static member Catch: m: OptionT&lt;&#39;MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h: (&#39;E1 -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt;) -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt; (requires member Catch)
+  static member Catch&lt;&#39;MonadError&lt;&#39;E1,&#39;T&gt;,&#39;MonadError&lt;&#39;E2,&#39;T&gt;,&#39;E1 (requires member Catch)&gt; : m: OptionT&lt;&#39;MonadError&lt;&#39;E1,&#39;T&gt;&gt; * h: (&#39;E1 -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt;) -&gt; OptionT&lt;&#39;MonadError&lt;&#39;E2,&#39;T&gt;&gt; (requires member Catch)
   static member Delay: body: (unit -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt;&gt;) -&gt; OptionT&lt;&#39;Monad&lt;option&lt;&#39;T&gt;&gt;&gt; (requires member Delay)
   static member LiftAsync: x: Async&lt;&#39;T&gt; -&gt; OptionT&lt;&#39;MonadAsync&lt;&#39;T&gt;&gt; (requires member Return and member (&gt;&gt;=) and member Map and member LiftAsync)
-  static member Listen: m: OptionT&lt;&#39;a1&gt; -&gt; OptionT&lt;&#39;&#39;MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member Listen)
+  static member Listen: m: OptionT&lt;&#39;a&gt; -&gt; OptionT&lt;&#39;&#39;MonadWriter&lt;&#39;Monoid, option&lt;&#39;T&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Return and member Listen)
   ...<br /><em>&lt;summary&gt;
  Monad Transformer for Option&amp;lt;&#39;T&amp;gt;
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs4">type &#39;T list = List&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs5">type unit = Unit</div>
-<div class="fsdocs-tip" id="fs6">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs6">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -225,14 +225,16 @@ type OptionT&lt;&#39;monad&lt;option&lt;&#39;t&gt;&gt;&gt; =
  Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs8">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
-<div class="fsdocs-tip" id="fs9">Multiple items<br />val seq: sequence: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs9">Multiple items<br />val seq: sequence: &#39;T seq -&gt; &#39;T seq<br /><br />--------------------<br />type &#39;T seq = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs10">val lazyValue: System.Lazy&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs11">val a: int</div>
 <div class="fsdocs-tip" id="fs12">val b: int</div>
 <div class="fsdocs-tip" id="fs13">val res12: int</div>
 <div class="fsdocs-tip" id="fs14">property System.Lazy.Value: int with get</div>
 <div class="fsdocs-tip" id="fs15">val maybeWithSideFx: int option</div>
-<div class="fsdocs-tip" id="fs16"></div>
+<div class="fsdocs-tip" id="fs16">val monad&#39;&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxStrictBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a strict monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
+&lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs17">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs18">val b: int ref</div>
 <div class="fsdocs-tip" id="fs19">Multiple items<br />val ref: value: &#39;T -&gt; &#39;T ref<br /><br />--------------------<br />type &#39;T ref = Ref&lt;&#39;T&gt;</div>
@@ -256,7 +258,7 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
   static member CancelDefaultToken: unit -&gt; unit
   static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
-  static member Choice: computations: seq&lt;Async&lt;&#39;T option&gt;&gt; -&gt; Async&lt;&#39;T option&gt;
+  static member Choice: computations: Async&lt;&#39;T option&gt; seq -&gt; Async&lt;&#39;T option&gt;
   static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
   static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
   ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>

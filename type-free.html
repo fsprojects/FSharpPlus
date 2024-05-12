@@ -200,14 +200,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs9">val x: CommandLineInstruction&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs10">val f: (&#39;a -&gt; &#39;b)</div>
 <div class="fsdocs-tip" id="fs11">val g: (string -&gt; &#39;a)</div>
@@ -224,7 +224,7 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   static member (&lt;*&gt;) : f: Free&lt;&#39;Functor&lt;&#39;T-&gt;&#39;U&gt;,(&#39;T -&gt; &#39;U)&gt; * x: Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; -&gt; Free&lt;&#39;Functor&lt;&#39;U&gt;,&#39;U&gt; (requires member Map and member Map and member Map and member Map and member Map)
   static member (&gt;&gt;=) : x: Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; * f: (&#39;T -&gt; Free&lt;&#39;Functor&lt;&#39;U&gt;,&#39;U&gt;) -&gt; Free&lt;&#39;Functor&lt;&#39;U&gt;,&#39;U&gt; (requires member Map and member Map and member Map)
   static member Delay: x: (unit -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;) -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt;
-  static member Return: x: &#39;a2 -&gt; Free&lt;&#39;a3,&#39;a2&gt;</div>
+  static member Return: x: &#39;a -&gt; Free&lt;&#39;b,&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs16">val liftF: x: &#39;Functor&lt;&#39;T&gt; -&gt; Free&lt;&#39;Functor&lt;&#39;T&gt;,&#39;T&gt; (requires member Map and member Map)<br /><em>&lt;summary&gt;
  Lift any Functor into a Free structure.
 &lt;/summary&gt;</em></div>
@@ -265,7 +265,7 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
 <div class="fsdocs-tip" id="fs36">val readDate: Free&lt;CommandLineInstruction&lt;DateTimeOffset&gt;,DateTimeOffset&gt;</div>
 <div class="fsdocs-tip" id="fs37">Multiple items<br />[&lt;Struct&gt;]
 type DateTimeOffset =
-  new: dateTime: DateTime -&gt; unit + 7 overloads
+  new: dateTime: DateTime -&gt; unit + 8 overloads
   member Add: timeSpan: TimeSpan -&gt; DateTimeOffset
   member AddDays: days: float -&gt; DateTimeOffset
   member AddHours: hours: float -&gt; DateTimeOffset
@@ -275,7 +275,7 @@ type DateTimeOffset =
   member AddMonths: months: int -&gt; DateTimeOffset
   member AddSeconds: seconds: float -&gt; DateTimeOffset
   member AddTicks: ticks: int64 -&gt; DateTimeOffset
-  ...<br /><em>&lt;summary&gt;Represents a point in time, typically expressed as a date and time of day, relative to Coordinated Universal Time (UTC).&lt;/summary&gt;</em><br /><br />--------------------<br />DateTimeOffset ()<br />DateTimeOffset(dateTime: DateTime) : DateTimeOffset<br />DateTimeOffset(dateTime: DateTime, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(ticks: int64, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, calendar: Globalization.Calendar, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, microsecond: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, microsecond: int, calendar: Globalization.Calendar, offset: TimeSpan) : DateTimeOffset</div>
+  ...<br /><em>&lt;summary&gt;Represents a point in time, typically expressed as a date and time of day, relative to Coordinated Universal Time (UTC).&lt;/summary&gt;</em><br /><br />--------------------<br />DateTimeOffset ()<br />DateTimeOffset(dateTime: DateTime) : DateTimeOffset<br />DateTimeOffset(dateTime: DateTime, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(ticks: int64, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(date: DateOnly, time: TimeOnly, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, calendar: Globalization.Calendar, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, microsecond: int, offset: TimeSpan) : DateTimeOffset<br />DateTimeOffset(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, microsecond: int, calendar: Globalization.Calendar, offset: TimeSpan) : DateTimeOffset</div>
 <div class="fsdocs-tip" id="fs38">DateTimeOffset.TryParse(input: string, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: ReadOnlySpan&lt;char&gt;, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(s: string, provider: IFormatProvider, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(s: ReadOnlySpan&lt;char&gt;, provider: IFormatProvider, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: string, formatProvider: IFormatProvider, styles: Globalization.DateTimeStyles, result: byref&lt;DateTimeOffset&gt;) : bool<br />DateTimeOffset.TryParse(input: ReadOnlySpan&lt;char&gt;, formatProvider: IFormatProvider, styles: Globalization.DateTimeStyles, result: byref&lt;DateTimeOffset&gt;) : bool</div>
 <div class="fsdocs-tip" id="fs39">val dt: DateTimeOffset</div>
 <div class="fsdocs-tip" id="fs40">val readName: Free&lt;CommandLineInstruction&lt;string&gt;,string&gt;</div>

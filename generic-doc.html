@@ -224,11 +224,11 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   interface IReadOnlyCollection&lt;&#39;t&gt;
   interface IEnumerable
   interface IEnumerable&lt;&#39;t&gt;
-  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
+  static member (+) : NonEmptyList&lt;&#39;a&gt; * x: NonEmptyList&lt;&#39;a&gt; -&gt; NonEmptyList&lt;&#39;a&gt;
   static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
-  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member Choice: source: NonEmptyList&lt;&#39;Alt&lt;&#39;T&gt;&gt; -&gt; &#39;Alt&lt;&#39;T&gt; (requires member IsAltLeftZero and member ``&lt;|&gt;``)
+  static member (&lt;.&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
+  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a&gt; * g: (NonEmptyList&lt;&#39;a&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a&gt; * f: (&#39;a -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
   ...<br /><em>&lt;summary&gt;
  A type-safe list that contains at least one element.
 &lt;/summary&gt;</em></div>
@@ -274,14 +274,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs24">val x: Tree&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs25">&#39;a</div>
 <div class="fsdocs-tip" id="fs26">val f: (&#39;a -&gt; &#39;a0)</div>

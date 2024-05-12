@@ -217,8 +217,8 @@ ___</p>
             <div class="fsdocs-tip" id="fs1">module Seq
 
 from Microsoft.FSharp.Collections</div>
-<div class="fsdocs-tip" id="fs2">val sum: source: seq&lt;&#39;T&gt; -&gt; &#39;T (requires member (+) and member Zero)</div>
-<div class="fsdocs-tip" id="fs3">val fold: folder: (&#39;State -&gt; &#39;T -&gt; &#39;State) -&gt; state: &#39;State -&gt; source: seq&lt;&#39;T&gt; -&gt; &#39;State</div>
+<div class="fsdocs-tip" id="fs2">val sum: source: &#39;T seq -&gt; &#39;T (requires member (+) and member Zero)</div>
+<div class="fsdocs-tip" id="fs3">val fold&lt;&#39;T,&#39;State&gt; : folder: (&#39;State -&gt; &#39;T -&gt; &#39;State) -&gt; state: &#39;State -&gt; source: &#39;T seq -&gt; &#39;State</div>
 <div class="fsdocs-tip" id="fs4">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs5">namespace FSharpPlus.Math</div>
 <div class="fsdocs-tip" id="fs6">module Generic
@@ -277,8 +277,8 @@ from FSharpPlus.Math<br /><em>&lt;summary&gt;
 <div class="fsdocs-tip" id="fs38">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />[&lt;Struct&gt;]
 type Mult&lt;&#39;a&gt; =
   | Mult of &#39;a
-  static member (+) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))
-  static member Zero: unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br /><em>&lt;summary&gt;
+  static member (+)&lt;&#39;n,&#39;a (requires member ( * ))&gt; : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a0&gt; (requires member ( * ))
+  static member Zero&lt;&#39;a (requires member One)&gt; : unit -&gt; Mult&lt;&#39;a0&gt; (requires member One)<br /><em>&lt;summary&gt;
  Numeric wrapper for multiplication monoid (*, 1)
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs39">val resTrue: Any</div>

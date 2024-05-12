@@ -127,7 +127,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '21', 21)" onmouseover="showTip(event, '21', 21)">
+              <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
                 <p>
                   <a id="apply">
                     <a href="#apply">
@@ -136,7 +136,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="21">
+              <div class="fsdocs-tip" id="29">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.apply&#32;<span>f&#32;x</span></span></code>
@@ -172,36 +172,141 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.apply``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.apply``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L18-18" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.apply``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.apply``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L18-18" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Applies the wrapped value to the wrapped function when both are Choice1Of2 and returns a wrapped result or the first Choice2Of2.
  This is as if Choice1Of2 respresents a Success value and Choice2Of2 a Failure.
  <param name="f">The function wrapped in a Choice1Of2 or a Choice2Of2.</param>
  <param name="x">The value wrapped in a Choice1Of2 or a Choice2Of2.</param>
  <returns>A Choice1Of2 of the function applied to the value, or the first <c>Choice2Of2</c> if either the function or the value is <c>Choice2Of2</c>.</returns>
 
-              </p>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    f
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span><span>(<span>'T&#32;->&#32;'U</span>)</span>,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    x
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
+                <p>
+                  <a id="apply2With">
+                    <a href="#apply2With">
+                      <code><span>Choice.apply2With&#32;<span>combiner&#32;f&#32;x&#32;y</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="30">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Choice.apply2With&#32;<span>combiner&#32;f&#32;x&#32;y</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        combiner
+                      </b>
+                      :
+                      <code><span>'Error&#32;->&#32;'Error&#32;->&#32;'Error</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;'U&#32;->&#32;'V</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
             </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
             <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  combiner
+                </span>
+                :
+                <code><span>'Error&#32;->&#32;'Error&#32;->&#32;'Error</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
                   f
                 </span>
                 :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span><span>(<span>'T&#32;->&#32;'U</span>)</span>,&#32;'Error</span>&gt;</span></code>
+                <code><span>'T&#32;->&#32;'U&#32;->&#32;'V</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
               <dt class="fsdocs-param">
@@ -212,13 +317,21 @@
                 <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
             </dl>
             <dl class="fsdocs-returns">
               <dt>
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>
@@ -227,7 +340,132 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '22', 22)" onmouseover="showTip(event, '22', 22)">
+              <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+                <p>
+                  <a id="apply3With">
+                    <a href="#apply3With">
+                      <code><span>Choice.apply3With&#32;<span>combiner&#32;f&#32;x&#32;y&#32;z</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="31">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>Choice.apply3With&#32;<span>combiner&#32;f&#32;x&#32;y&#32;z</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        combiner
+                      </b>
+                      :
+                      <code><span>'Error&#32;->&#32;'Error&#32;->&#32;'Error</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T&#32;->&#32;'U&#32;->&#32;'V&#32;->&#32;'W</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        x
+                      </b>
+                      :
+                      <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        y
+                      </b>
+                      :
+                      <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        z
+                      </b>
+                      :
+                      <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'W,&#32;'Error</span>&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <dl class="fsdocs-params">
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  combiner
+                </span>
+                :
+                <code><span>'Error&#32;->&#32;'Error&#32;->&#32;'Error</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  f
+                </span>
+                :
+                <code><span>'T&#32;->&#32;'U&#32;->&#32;'V&#32;->&#32;'W</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  x
+                </span>
+                :
+                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  y
+                </span>
+                :
+                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+              <dt class="fsdocs-param">
+                <span class="fsdocs-param-name">
+                  z
+                </span>
+                :
+                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-param-docs"></dd>
+            </dl>
+            <dl class="fsdocs-returns">
+              <dt>
+                <span class="fsdocs-return-name">
+                  Returns: 
+                </span>
+                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'W,&#32;'Error</span>&gt;</span></code>
+              </dt>
+              <dd class="fsdocs-return-docs"></dd>
+            </dl>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '32', 32)" onmouseover="showTip(event, '32', 32)">
                 <p>
                   <a id="bind">
                     <a href="#bind">
@@ -236,7 +474,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="22">
+              <div class="fsdocs-tip" id="32">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.bind&#32;<span>binder&#32;source</span></span></code>
@@ -277,68 +515,72 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.bind``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.bind``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L62-62" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                If the input value is a Choice2Of2 leaves it unchanged, otherwise maps the value on the Choice1Of2 and flattens the resulting nested Choice.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  binder
-                </span>
-                :
-                <code><span>'T&#32;->&#32;<span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'T2</span>&gt;</span></span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  A function that takes the value of type T and transforms it into a Choice containing (potentially) a value of type U.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The source input value.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  A result of the output type of the binder.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.bind``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.bind``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L62-62" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    If the input value is a Choice2Of2 leaves it unchanged, otherwise maps the value on the Choice1Of2 and flattens the resulting nested Choice.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    binder
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;<span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'T2</span>&gt;</span></span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    A function that takes the value of type T and transforms it into a Choice containing (potentially) a value of type U.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The source input value.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    A result of the output type of the binder.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '23', 23)" onmouseover="showTip(event, '23', 23)">
+              <code onmouseout="hideTip(event, '33', 33)" onmouseover="showTip(event, '33', 33)">
                 <p>
                   <a id="bindChoice2Of2">
                     <a href="#bindChoice2Of2">
@@ -347,7 +589,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="23">
+              <div class="fsdocs-tip" id="33">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.bindChoice2Of2&#32;<span>binder&#32;source</span></span></code>
@@ -388,68 +630,72 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.bindChoice2Of2``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.bindChoice2Of2``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L71-71" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                If the input value is a Choice1Of2 leaves it unchanged, otherwise maps the value on the Choice2Of2 and flattens the resulting nested Choice.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  binder
-                </span>
-                :
-                <code><span>'T2&#32;->&#32;<span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'U2</span>&gt;</span></span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  A function that takes the value of type T and transforms it into a Choice containing (potentially) a value of type U.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The source input value.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'U2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  A result of the output type of the binder.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.bindChoice2Of2``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.bindChoice2Of2``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L71-71" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    If the input value is a Choice1Of2 leaves it unchanged, otherwise maps the value on the Choice2Of2 and flattens the resulting nested Choice.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    binder
+                  </span>
+                  :
+                  <code><span>'T2&#32;->&#32;<span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'U2</span>&gt;</span></span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    A function that takes the value of type T and transforms it into a Choice containing (potentially) a value of type U.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The source input value.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'U2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    A result of the output type of the binder.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '24', 24)" onmouseover="showTip(event, '24', 24)">
+              <code onmouseout="hideTip(event, '34', 34)" onmouseover="showTip(event, '34', 34)">
                 <p>
                   <a id="either">
                     <a href="#either">
@@ -458,7 +704,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="24">
+              <div class="fsdocs-tip" id="34">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.either&#32;<span>fChoice1Of2&#32;fChoice2Of2&#32;source</span></span></code>
@@ -514,80 +760,84 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.either``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.either``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L78-78" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Extracts a value from either side of a Choice.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  fChoice1Of2
-                </span>
-                :
-                <code><span>'a&#32;->&#32;'b</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  Function to be applied to source, if it contains a Choice1Of2 value.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  fChoice2Of2
-                </span>
-                :
-                <code><span>'c&#32;->&#32;'b</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  Function to be applied to source, if it contains a Choice2Of2 value.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'a,&#32;'c</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The source value, containing a Choice1Of2 or a Choice2Of2.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code>'b</code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  The result of applying either functions.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.either``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.either``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L78-78" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Extracts a value from either side of a Choice.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    fChoice1Of2
+                  </span>
+                  :
+                  <code><span>'a&#32;->&#32;'b</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Function to be applied to source, if it contains a Choice1Of2 value.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    fChoice2Of2
+                  </span>
+                  :
+                  <code><span>'c&#32;->&#32;'b</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Function to be applied to source, if it contains a Choice2Of2 value.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'a,&#32;'c</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The source value, containing a Choice1Of2 or a Choice2Of2.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code>'b</code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    The result of applying either functions.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '25', 25)" onmouseover="showTip(event, '25', 25)">
+              <code onmouseout="hideTip(event, '35', 35)" onmouseover="showTip(event, '35', 35)">
                 <p>
                   <a id="flatten">
                     <a href="#flatten">
@@ -596,7 +846,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="25">
+              <div class="fsdocs-tip" id="35">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.flatten&#32;<span>source</span></span></code>
@@ -627,59 +877,63 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.flatten``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.flatten``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L56-56" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Flattens two nested Choice.
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.flatten``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.flatten``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L56-56" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Flattens two nested Choice.
+                  </p>
+                </div>
+              </summary>
+              <p class="fsdocs-remarks">
+                <code>flatten</code> is equivalent to <code>bind id</code>.
               </p>
-            </div>
-            <p class="fsdocs-remarks">
-              <code>flatten</code> is equivalent to <code>bind id</code>.
-            </p>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T1,&#32;'T2</span>&gt;</span>,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The nested Choice.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T1,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  A single Choice1Of2 of the value when it was nested with Choice1Of2s, or the Choice2Of2.
-                </p>
-              </dd>
-            </dl>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T1,&#32;'T2</span>&gt;</span>,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The nested Choice.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T1,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    A single Choice1Of2 of the value when it was nested with Choice1Of2s, or the Choice2Of2.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '26', 26)" onmouseover="showTip(event, '26', 26)">
+              <code onmouseout="hideTip(event, '36', 36)" onmouseover="showTip(event, '36', 36)">
                 <p>
                   <a id="map">
                     <a href="#map">
@@ -688,7 +942,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="26">
+              <div class="fsdocs-tip" id="36">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.map&#32;<span>mapping&#32;source</span></span></code>
@@ -729,68 +983,72 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.map``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.map``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L24-24" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Maps the value on the Choice1Of2 if any.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapping
-                </span>
-                :
-                <code><span>'T&#32;->&#32;'U</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  A function to apply to the Choice1Of2 value.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The source input value.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  A Choice1Of2 of the input value after applying the mapping function, or the original Choice2Of2 value if the input is Choice2Of2.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.map``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.map``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L24-24" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Maps the value on the Choice1Of2 if any.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapping
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;'U</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    A function to apply to the Choice1Of2 value.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The source input value.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    A Choice1Of2 of the input value after applying the mapping function, or the original Choice2Of2 value if the input is Choice2Of2.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '27', 27)" onmouseover="showTip(event, '27', 27)">
+              <code onmouseout="hideTip(event, '37', 37)" onmouseover="showTip(event, '37', 37)">
                 <p>
                   <a id="map2">
                     <a href="#map2">
@@ -799,7 +1057,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="27">
+              <div class="fsdocs-tip" id="37">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.map2&#32;<span>mapping&#32;x&#32;y</span></span></code>
@@ -850,80 +1108,84 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.map2``4```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.map2``4\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L32-32" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Creates a Choice value from a pair of Choice values, using a function to combine the Choice1Of2 values.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapping
-                </span>
-                :
-                <code><span>'T&#32;->&#32;'U&#32;->&#32;'V</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  A function to apply to the Choice1Of2 values.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The first Choice value.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The second Choice value.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  The combined value, or the first Choice2Of2.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.map2``4```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.map2``4\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L32-32" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Creates a Choice value from a pair of Choice values, using a function to combine the Choice1Of2 values.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapping
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;'U&#32;->&#32;'V</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    A function to apply to the Choice1Of2 values.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    x
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The first Choice value.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    y
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The second Choice value.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    The combined value, or the first Choice2Of2.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '28', 28)" onmouseover="showTip(event, '28', 28)">
+              <code onmouseout="hideTip(event, '38', 38)" onmouseover="showTip(event, '38', 38)">
                 <p>
                   <a id="map3">
                     <a href="#map3">
@@ -932,7 +1194,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="28">
+              <div class="fsdocs-tip" id="38">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.map3&#32;<span>mapping&#32;x&#32;y&#32;z</span></span></code>
@@ -993,92 +1255,96 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.map3``5```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.map3``5\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L45-45" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Creates a Choice value from three of Choice values, using a function to combine the Choice1Of2 values.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapping
-                </span>
-                :
-                <code><span>'T&#32;->&#32;'U&#32;->&#32;'V&#32;->&#32;'W</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  A function to apply to the Choice1Of2 values.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The first Choice value.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  y
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The second Choice value.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  z
-                </span>
-                :
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The third Choice value.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'W,&#32;'Error</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  The combined value, or the first Choice2Of2.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.map3``5```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.map3``5\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L45-45" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Creates a Choice value from three of Choice values, using a function to combine the Choice1Of2 values.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapping
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;'U&#32;->&#32;'V&#32;->&#32;'W</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    A function to apply to the Choice1Of2 values.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    x
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The first Choice value.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    y
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The second Choice value.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    z
+                  </span>
+                  :
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'V,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The third Choice value.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'W,&#32;'Error</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    The combined value, or the first Choice2Of2.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '29', 29)" onmouseover="showTip(event, '29', 29)">
+              <code onmouseout="hideTip(event, '39', 39)" onmouseover="showTip(event, '39', 39)">
                 <p>
                   <a id="protect">
                     <a href="#protect">
@@ -1087,7 +1353,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="29">
+              <div class="fsdocs-tip" id="39">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.protect&#32;<span>f&#32;x</span></span></code>
@@ -1123,58 +1389,62 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.protect``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.protect``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L81-81" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.protect``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.protect``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L81-81" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Creates a safe version of the supplied function, which returns a Choice<'U,exn> instead of throwing exceptions.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  f
-                </span>
-                :
-                <code><span>'T&#32;->&#32;'U</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>'T</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;exn</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    f
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;'U</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    x
+                  </span>
+                  :
+                  <code>'T</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'U,&#32;exn</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '30', 30)" onmouseover="showTip(event, '30', 30)">
+              <code onmouseout="hideTip(event, '40', 40)" onmouseover="showTip(event, '40', 40)">
                 <p>
                   <a id="result">
                     <a href="#result">
@@ -1183,7 +1453,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="30">
+              <div class="fsdocs-tip" id="40">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.result&#32;<span>x</span></span></code>
@@ -1211,50 +1481,54 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.result``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.result``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L8-8" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.result``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.result``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L8-8" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Creates a Choice1Of2 with the supplied value.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>'a</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    x
+                  </span>
+                  :
+                  <code>'a</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'a,&#32;'b</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '31', 31)" onmouseover="showTip(event, '31', 31)">
+              <code onmouseout="hideTip(event, '41', 41)" onmouseover="showTip(event, '41', 41)">
                 <p>
                   <a id="throw">
                     <a href="#throw">
@@ -1263,7 +1537,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="31">
+              <div class="fsdocs-tip" id="41">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Choice.throw&#32;<span>x</span></span></code>
@@ -1291,44 +1565,48 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.throw``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.throw``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L11-11" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Choice.throw``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Choice.throw``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Choice.fs#L11-11" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Creates a Choice2Of2 with the supplied value.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code>'a</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'b,&#32;'a</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    x
+                  </span>
+                  :
+                  <code>'a</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'b,&#32;'a</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
       </tbody>

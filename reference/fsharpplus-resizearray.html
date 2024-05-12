@@ -127,19 +127,19 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '459', 459)" onmouseover="showTip(event, '459', 459)">
+              <code onmouseout="hideTip(event, '517', 517)" onmouseover="showTip(event, '517', 517)">
                 <p>
                   <a id="apply">
                     <a href="#apply">
-                      <code><span>ResizeArray.apply&#32;<span>f&#32;x</span></span></code>
+                      <code><span>ResizeArray.apply&#32;<span>f&#32;ra</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="459">
+              <div class="fsdocs-tip" id="517">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ResizeArray.apply&#32;<span>f&#32;x</span></span></code>
+                  <code><span>ResizeArray.apply&#32;<span>f&#32;ra</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -156,7 +156,7 @@
                     <br/>
                     <span>
                       <b>
-                        x
+                        ra
                       </b>
                       :
                       <code><span>ResizeArray&lt;'T&gt;</span></code>
@@ -177,67 +177,70 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.apply``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.apply``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L31-31" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  f
-                </span>
-                :
-                <code><span>ResizeArray&lt;<span>(<span>'T&#32;->&#32;'U</span>)</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The functions.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x
-                </span>
-                :
-                <code><span>ResizeArray&lt;'T&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The values.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>ResizeArray&lt;'U&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  A concatenated list of the resulting ResizeArray after applying each function to each value.
-                </p>
-              </dd>
-            </dl>
-            <h5 class="fsdocs-example-header">
-              Example
-            </h5>
-            <p class="fsdocs-example" id="example">
-              <pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">List</span><span class="pn">.</span><span class="id">apply</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">double</span><span class="pn">;</span> <span class="id">triple</span><span class="pn">]</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">]</span><span class="pn">;;</span>  
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.apply``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.apply``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L35-35" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    f
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;<span>(<span>'T&#32;->&#32;'U</span>)</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The functions.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ra
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The values.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;'U&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    A concatenated list of the resulting ResizeArray after applying each function to each value.
+                  </p>
+                </dd>
+              </dl>
+              <h5 class="fsdocs-example-header">
+                Example
+              </h5>
+              <p class="fsdocs-example" id="example">
+                <pre class="fssnip highlighted"><code lang="fsharp"> <span class="pn">&gt;</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">List</span><span class="pn">.</span><span class="id">apply</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">double</span><span class="pn">;</span> <span class="id">triple</span><span class="pn">]</span> <span class="pn">[</span><span class="n">1</span><span class="pn">;</span> <span class="n">2</span><span class="pn">;</span> <span class="n">3</span><span class="pn">]</span><span class="pn">;;</span>  
  <span class="k">val</span> <span class="id">it</span> <span class="pn">:</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">int</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">list</span> <span class="o">=</span> <span class="pn">[</span><span class="n">2</span><span class="pn">;</span> <span class="n">4</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">3</span><span class="pn">;</span> <span class="n">6</span><span class="pn">;</span> <span class="n">9</span><span class="pn">]</span>
 </code></pre>
 <div class="fsdocs-tip" id="fs1">Multiple items<br />module List
@@ -262,13 +265,137 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
 <div class="fsdocs-tip" id="fs4">type &#39;T list = List&lt;&#39;T&gt;</div>
 
 
-            </p>
+              </p>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '460', 460)" onmouseover="showTip(event, '460', 460)">
+              <code onmouseout="hideTip(event, '518', 518)" onmouseover="showTip(event, '518', 518)">
+                <p>
+                  <a id="findLastSliceIndex">
+                    <a href="#findLastSliceIndex">
+                      <code><span>ResizeArray.findLastSliceIndex&#32;<span>slice&#32;source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="518">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>ResizeArray.findLastSliceIndex&#32;<span>slice&#32;source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        slice
+                      </b>
+                      :
+                      <code><span>'a[]</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span>'a[]</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code>int</code>
+                  </span>
+                  
+ The index of the slice.
+ 
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.findLastSliceIndex``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.findLastSliceIndex``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L131-131" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns the index of the last occurrence of the specified slice in the source.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    slice
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code>int</code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    
+ The index of the slice.
+ 
+                  </p>
+                </dd>
+              </dl>
+              <table class="fsdocs-exception-list">
+                <tr>
+                  <td>
+                    <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
+                      ArgumentException
+                    </a>
+                  </td>
+                  <td>
+                    
+ Thrown when the slice was not found in the sequence.
+ 
+                  </td>
+                </tr>
+              </table>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '519', 519)" onmouseover="showTip(event, '519', 519)">
                 <p>
                   <a id="findSliceIndex">
                     <a href="#findSliceIndex">
@@ -277,7 +404,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="460">
+              <div class="fsdocs-tip" id="519">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.findSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -316,78 +443,82 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.findSliceIndex``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.findSliceIndex``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L69-69" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.findSliceIndex``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.findSliceIndex``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L98-98" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Returns the index of the first occurrence of the specified slice in the source.
  
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  slice
-                </span>
-                :
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code>int</code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    slice
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code>int</code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    
  The index of the slice.
  
-                </p>
-              </dd>
-            </dl>
-            <table class="fsdocs-exception-list">
-              <tr>
-                <td>
-                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
-                    ArgumentException
-                  </a>
-                </td>
-                <td>
-                  
+                  </p>
+                </dd>
+              </dl>
+              <table class="fsdocs-exception-list">
+                <tr>
+                  <td>
+                    <a href="https://learn.microsoft.com/dotnet/api/system.argumentexception">
+                      ArgumentException
+                    </a>
+                  </td>
+                  <td>
+                    
  Thrown when the slice was not found in the sequence.
  
-                </td>
-              </tr>
-            </table>
+                  </td>
+                </tr>
+              </table>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '461', 461)" onmouseover="showTip(event, '461', 461)">
+              <code onmouseout="hideTip(event, '520', 520)" onmouseover="showTip(event, '520', 520)">
                 <p>
                   <a id="intercalate">
                     <a href="#intercalate">
@@ -396,7 +527,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="461">
+              <div class="fsdocs-tip" id="520">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.intercalate&#32;<span>separator&#32;source</span></span></code>
@@ -417,7 +548,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                         source
                       </b>
                       :
-                      <code><span>seq&lt;<span>'a[]</span>&gt;</span></code>
+                      <code><span><span>'a[]</span>&#32;seq</span></code>
                     </span>
                     <br/>
                   </ul>
@@ -432,58 +563,62 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.intercalate``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.intercalate``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L47-47" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.intercalate``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.intercalate``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L62-62" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Concatenates all elements, using the specified separator between each element.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  separator
-                </span>
-                :
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>seq&lt;<span>'a[]</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    separator
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span><span>'a[]</span>&#32;seq</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '462', 462)" onmouseover="showTip(event, '462', 462)">
+              <code onmouseout="hideTip(event, '521', 521)" onmouseover="showTip(event, '521', 521)">
                 <p>
                   <a id="intersperse">
                     <a href="#intersperse">
@@ -492,7 +627,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="462">
+              <div class="fsdocs-tip" id="521">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.intersperse&#32;<span>element&#32;source</span></span></code>
@@ -528,70 +663,74 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.intersperse``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.intersperse``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L50-50" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.intersperse``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.intersperse``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L69-69" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Inserts a separator element between each element in the source ResizeArray.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  element
-                </span>
-                :
-                <code>'T</code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>'T[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>'T[]</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    element
+                  </span>
+                  :
+                  <code>'T</code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'T[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>'T[]</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '463', 463)" onmouseover="showTip(event, '463', 463)">
+              <code onmouseout="hideTip(event, '522', 522)" onmouseover="showTip(event, '522', 522)">
                 <p>
                   <a id="lift2">
                     <a href="#lift2">
-                      <code><span>ResizeArray.lift2&#32;<span>mapping&#32;x1&#32;x2</span></span></code>
+                      <code><span>ResizeArray.lift2&#32;<span>mapping&#32;ra1&#32;ra2</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="463">
+              <div class="fsdocs-tip" id="522">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ResizeArray.lift2&#32;<span>mapping&#32;x1&#32;x2</span></span></code>
+                  <code><span>ResizeArray.lift2&#32;<span>mapping&#32;ra1&#32;ra2</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -601,12 +740,12 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                         mapping
                       </b>
                       :
-                      <code><span>'T&#32;->&#32;'U&#32;->&#32;'c</span></code>
+                      <code><span>'T&#32;->&#32;'U&#32;->&#32;'a</span></code>
                     </span>
                     <br/>
                     <span>
                       <b>
-                        x1
+                        ra1
                       </b>
                       :
                       <code><span>ResizeArray&lt;'T&gt;</span></code>
@@ -614,7 +753,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                     <br/>
                     <span>
                       <b>
-                        x2
+                        ra2
                       </b>
                       :
                       <code><span>ResizeArray&lt;'U&gt;</span></code>
@@ -624,7 +763,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   <br/>
                   <span>
                     Returns: 
-                    <code><span>ResizeArray&lt;'c&gt;</span></code>
+                    <code><span>ResizeArray&lt;'a&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -632,78 +771,82 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.lift2``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.lift2``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L34-34" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.lift2``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.lift2``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L41-41" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Combines all values from the first ResizeArray with the second, using the supplied mapping function.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapping
-                </span>
-                :
-                <code><span>'T&#32;->&#32;'U&#32;->&#32;'c</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x1
-                </span>
-                :
-                <code><span>ResizeArray&lt;'T&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x2
-                </span>
-                :
-                <code><span>ResizeArray&lt;'U&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>ResizeArray&lt;'c&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapping
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;'U&#32;->&#32;'a</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ra1
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ra2
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'U&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;'a&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '464', 464)" onmouseover="showTip(event, '464', 464)">
+              <code onmouseout="hideTip(event, '523', 523)" onmouseover="showTip(event, '523', 523)">
                 <p>
                   <a id="lift3">
                     <a href="#lift3">
-                      <code><span>ResizeArray.lift3&#32;<span>mapping&#32;x1&#32;x2&#32;x3</span></span></code>
+                      <code><span>ResizeArray.lift3&#32;<span>mapping&#32;ra1&#32;ra2&#32;ra3</span></span></code>
                     </a>
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="464">
+              <div class="fsdocs-tip" id="523">
                 <div class="member-tooltip">
                   Full Usage: 
-                  <code><span>ResizeArray.lift3&#32;<span>mapping&#32;x1&#32;x2&#32;x3</span></span></code>
+                  <code><span>ResizeArray.lift3&#32;<span>mapping&#32;ra1&#32;ra2&#32;ra3</span></span></code>
                   <br/>
                   <br/>
                   Parameters: 
@@ -713,14 +856,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                         mapping
                       </b>
                       :
-                      <code><span>'U&#32;->&#32;'V&#32;->&#32;'T&#32;->&#32;'d</span></code>
+                      <code><span>'U&#32;->&#32;'V&#32;->&#32;'T&#32;->&#32;'a</span></code>
                        - 
                       Mapping function taking three element combination as input.
                     </span>
                     <br/>
                     <span>
                       <b>
-                        x1
+                        ra1
                       </b>
                       :
                       <code><span>ResizeArray&lt;'T&gt;</span></code>
@@ -730,7 +873,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                     <br/>
                     <span>
                       <b>
-                        x2
+                        ra2
                       </b>
                       :
                       <code><span>ResizeArray&lt;'U&gt;</span></code>
@@ -740,7 +883,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                     <br/>
                     <span>
                       <b>
-                        x3
+                        ra3
                       </b>
                       :
                       <code><span>ResizeArray&lt;'V&gt;</span></code>
@@ -752,7 +895,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   <br/>
                   <span>
                     Returns: 
-                    <code><span>ResizeArray&lt;'d&gt;</span></code>
+                    <code><span>ResizeArray&lt;'a&gt;</span></code>
                   </span>
                   ResizeArray with values returned from mapping function.
                   <br/>
@@ -761,92 +904,96 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.lift3``4```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.lift3``4\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L43-43" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Combines values from three ResizeArrays and calls a mapping function on this combination.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapping
-                </span>
-                :
-                <code><span>'U&#32;->&#32;'V&#32;->&#32;'T&#32;->&#32;'d</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  Mapping function taking three element combination as input.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x1
-                </span>
-                :
-                <code><span>ResizeArray&lt;'T&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  First ResizeArray.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x2
-                </span>
-                :
-                <code><span>ResizeArray&lt;'U&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  Second ResizeArray.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  x3
-                </span>
-                :
-                <code><span>ResizeArray&lt;'V&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  Third ResizeArray.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>ResizeArray&lt;'d&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  ResizeArray with values returned from mapping function.
-                </p>
-              </dd>
-            </dl>
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.lift3``4```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.lift3``4\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L54-54" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Combines values from three ResizeArrays and calls a mapping function on this combination.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapping
+                  </span>
+                  :
+                  <code><span>'U&#32;->&#32;'V&#32;->&#32;'T&#32;->&#32;'a</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Mapping function taking three element combination as input.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ra1
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    First ResizeArray.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ra2
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'U&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Second ResizeArray.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    ra3
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'V&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Third ResizeArray.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;'a&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    ResizeArray with values returned from mapping function.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '465', 465)" onmouseover="showTip(event, '465', 465)">
+              <code onmouseout="hideTip(event, '524', 524)" onmouseover="showTip(event, '524', 524)">
                 <p>
                   <a id="map">
                     <a href="#map">
@@ -855,7 +1002,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="465">
+              <div class="fsdocs-tip" id="524">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.map&#32;<span>mapping&#32;source</span></span></code>
@@ -896,81 +1043,85 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.map``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.map``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L18-18" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Builds a new ResizeArray whose elements are the results of applying the given function
- to each of the elements of the ResizeArray.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapping
-                </span>
-                :
-                <code><span>'T&#32;->&#32;'U</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  A function to transform items from the input ResizeArray.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>ResizeArray&lt;'T&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  The input ResizeArray.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>ResizeArray&lt;'U&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  The result ResizeArray.
-                </p>
-              </dd>
-            </dl>
-            <table class="fsdocs-exception-list">
-              <tr>
-                <td>
-                  <a href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">
-                    ArgumentNullException
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.map``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.map``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L19-19" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
                   </a>
-                </td>
-                <td>
-                  Thrown when the input ResizeArray is null.
-                </td>
-              </tr>
-            </table>
+                  <p class="fsdocs-summary">
+                    Builds a new ResizeArray whose elements are the results of applying the given function
+ to each of the elements of the ResizeArray.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapping
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;'U</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    A function to transform items from the input ResizeArray.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    The input ResizeArray.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;'U&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    The result ResizeArray.
+                  </p>
+                </dd>
+              </dl>
+              <table class="fsdocs-exception-list">
+                <tr>
+                  <td>
+                    <a href="https://learn.microsoft.com/dotnet/api/system.argumentnullexception">
+                      ArgumentNullException
+                    </a>
+                  </td>
+                  <td>
+                    Thrown when the input ResizeArray is null.
+                  </td>
+                </tr>
+              </table>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '466', 466)" onmouseover="showTip(event, '466', 466)">
+              <code onmouseout="hideTip(event, '525', 525)" onmouseover="showTip(event, '525', 525)">
                 <p>
                   <a id="map2Shortest">
                     <a href="#map2Shortest">
@@ -979,7 +1130,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="466">
+              <div class="fsdocs-tip" id="525">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.map2Shortest&#32;<span>f&#32;a1&#32;a2</span></span></code>
@@ -1023,65 +1174,200 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.map2Shortest``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.map2Shortest``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L103-103" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                Safely build a new ResizeArray whose elements are the results of applying the given function
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.map2Shortest``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.map2Shortest``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L167-167" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Safely build a new ResizeArray whose elements are the results of applying the given function
  to each of the elements of the two ResizeArrays pairwise.
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  f
-                </span>
-                :
-                <code><span>'a&#32;->&#32;'b&#32;->&#32;'c</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  a1
-                </span>
-                :
-                <code><span>ResizeArray&lt;'a&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  a2
-                </span>
-                :
-                <code><span>ResizeArray&lt;'b&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>ResizeArray&lt;'c&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    f
+                  </span>
+                  :
+                  <code><span>'a&#32;->&#32;'b&#32;->&#32;'c</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a1
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'a&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a2
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'b&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;'c&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '467', 467)" onmouseover="showTip(event, '467', 467)">
+              <code onmouseout="hideTip(event, '526', 526)" onmouseover="showTip(event, '526', 526)">
+                <p>
+                  <a id="map3Shortest">
+                    <a href="#map3Shortest">
+                      <code><span>ResizeArray.map3Shortest&#32;<span>f&#32;a1&#32;a2&#32;a3</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="526">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>ResizeArray.map3Shortest&#32;<span>f&#32;a1&#32;a2&#32;a3</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        f
+                      </b>
+                      :
+                      <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'T3&#32;->&#32;'a</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        a1
+                      </b>
+                      :
+                      <code><span>ResizeArray&lt;'T1&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        a2
+                      </b>
+                      :
+                      <code><span>ResizeArray&lt;'T2&gt;</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        a3
+                      </b>
+                      :
+                      <code><span>ResizeArray&lt;'T3&gt;</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>ResizeArray&lt;'a&gt;</span></code>
+                  </span>
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.map3Shortest``4```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.map3Shortest``4\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L180-180" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    Safely build a new ResizeArray whose elements are the results of applying the given function
+ to each of the elements of the three ResizeArrays pairwise.
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    f
+                  </span>
+                  :
+                  <code><span>'T1&#32;->&#32;'T2&#32;->&#32;'T3&#32;->&#32;'a</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a1
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T1&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a2
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T2&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a3
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T3&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;'a&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '527', 527)" onmouseover="showTip(event, '527', 527)">
                 <p>
                   <a id="partitionMap">
                     <a href="#partitionMap">
@@ -1090,7 +1376,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="467">
+              <div class="fsdocs-tip" id="527">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.partitionMap&#32;<span>mapper&#32;source</span></span></code>
@@ -1129,65 +1415,69 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.partitionMap``3```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.partitionMap``3\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L95-95" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.partitionMap``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.partitionMap``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L157-157" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Creates two arrays by applying the mapper function to each element in the array
  and classifying the transformed values depending on whether they were wrapped with Choice1Of2 or Choice2Of2.
  
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  mapper
-                </span>
-                :
-                <code><span>'T&#32;->&#32;<span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T1,&#32;'T2</span>&gt;</span></span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>'T&#32;array</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><span>'T1[]</span>&#32;*&#32;<span>'T2[]</span></span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    mapper
+                  </span>
+                  :
+                  <code><span>'T&#32;->&#32;<span><a href="https://fsharp.github.io/fsharp-core-docs/reference/fsharp-core-fsharpchoice-2">Choice</a>&lt;<span>'T1,&#32;'T2</span>&gt;</span></span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'T&#32;array</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><span>'T1[]</span>&#32;*&#32;<span>'T2[]</span></span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    
  A tuple with both resulting arrays.
  
-                </p>
-              </dd>
-            </dl>
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '468', 468)" onmouseover="showTip(event, '468', 468)">
+              <code onmouseout="hideTip(event, '528', 528)" onmouseover="showTip(event, '528', 528)">
                 <p>
                   <a id="replace">
                     <a href="#replace">
@@ -1196,7 +1486,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="468">
+              <div class="fsdocs-tip" id="528">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.replace&#32;<span>oldValue&#32;newValue&#32;source</span></span></code>
@@ -1240,66 +1530,70 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.replace``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.replace``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L56-56" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.replace``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.replace``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L82-82" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Replaces a subsequence of the source array with the given replacement array.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  oldValue
-                </span>
-                :
-                <code><span>'T[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  newValue
-                </span>
-                :
-                <code><span>'T[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>'T[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>'T[]</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    oldValue
+                  </span>
+                  :
+                  <code><span>'T[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    newValue
+                  </span>
+                  :
+                  <code><span>'T[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'T[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>'T[]</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '469', 469)" onmouseover="showTip(event, '469', 469)">
+              <code onmouseout="hideTip(event, '529', 529)" onmouseover="showTip(event, '529', 529)">
                 <p>
                   <a id="split">
                     <a href="#split">
@@ -1308,7 +1602,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="469">
+              <div class="fsdocs-tip" id="529">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.split&#32;<span>separators&#32;source</span></span></code>
@@ -1321,7 +1615,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                         separators
                       </b>
                       :
-                      <code><span>seq&lt;<span>'a[]</span>&gt;</span></code>
+                      <code><span><span>'a[]</span>&#32;seq</span></code>
                     </span>
                     <br/>
                     <span>
@@ -1336,7 +1630,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   <br/>
                   <span>
                     Returns: 
-                    <code><span>seq&lt;<span>'a[]</span>&gt;</span></code>
+                    <code><span><span>'a[]</span>&#32;seq</span></code>
                   </span>
                   <br/>
                 </div>
@@ -1344,58 +1638,172 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.split``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.split``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L53-53" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.split``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.split``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L76-76" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Creates a sequence of arrays by splitting the source array on any of the given separators.
 
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  separators
-                </span>
-                :
-                <code><span>seq&lt;<span>'a[]</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>seq&lt;<span>'a[]</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    separators
+                  </span>
+                  :
+                  <code><span><span>'a[]</span>&#32;seq</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span><span>'a[]</span>&#32;seq</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs"></dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '470', 470)" onmouseover="showTip(event, '470', 470)">
+              <code onmouseout="hideTip(event, '530', 530)" onmouseover="showTip(event, '530', 530)">
+                <p>
+                  <a id="tryFindLastSliceIndex">
+                    <a href="#tryFindLastSliceIndex">
+                      <code><span>ResizeArray.tryFindLastSliceIndex&#32;<span>slice&#32;source</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="530">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>ResizeArray.tryFindLastSliceIndex&#32;<span>slice&#32;source</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        slice
+                      </b>
+                      :
+                      <code><span>'a[]</span></code>
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        source
+                      </b>
+                      :
+                      <code><span>'a[]</span></code>
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>int&#32;option</span></code>
+                  </span>
+                  
+ The index of the slice or <code>None</code>.
+ 
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.tryFindLastSliceIndex``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.tryFindLastSliceIndex``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L145-145" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Returns the index of the last occurrence of the specified slice in the source.
+ Returns <code>None</code> if not found.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    slice
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>int&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    
+ The index of the slice or <code>None</code>.
+ 
+                  </p>
+                </dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '531', 531)" onmouseover="showTip(event, '531', 531)">
                 <p>
                   <a id="tryFindSliceIndex">
                     <a href="#tryFindSliceIndex">
@@ -1404,7 +1812,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="470">
+              <div class="fsdocs-tip" id="531">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.tryFindSliceIndex&#32;<span>slice&#32;source</span></span></code>
@@ -1443,65 +1851,208 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.tryFindSliceIndex``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.tryFindSliceIndex``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L83-83" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.tryFindSliceIndex``1```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.tryFindSliceIndex``1\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L115-115" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Returns the index of the first occurrence of the specified slice in the source.
  Returns <code>None</code> if not found.
  
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  slice
-                </span>
-                :
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span>'a[]</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>int&#32;option</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    slice
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    source
+                  </span>
+                  :
+                  <code><span>'a[]</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs"></dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>int&#32;option</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    
  The index of the slice or <code>None</code>.
  
-                </p>
-              </dd>
-            </dl>
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '471', 471)" onmouseover="showTip(event, '471', 471)">
+              <code onmouseout="hideTip(event, '532', 532)" onmouseover="showTip(event, '532', 532)">
+                <p>
+                  <a id="zip3Shortest">
+                    <a href="#zip3Shortest">
+                      <code><span>ResizeArray.zip3Shortest&#32;<span>a1&#32;a2&#32;a3</span></span></code>
+                    </a>
+                  </a>
+                </p>
+              </code>
+              <div class="fsdocs-tip" id="532">
+                <div class="member-tooltip">
+                  Full Usage: 
+                  <code><span>ResizeArray.zip3Shortest&#32;<span>a1&#32;a2&#32;a3</span></span></code>
+                  <br/>
+                  <br/>
+                  Parameters: 
+                  <ul>
+                    <span>
+                      <b>
+                        a1
+                      </b>
+                      :
+                      <code><span>ResizeArray&lt;'T1&gt;</span></code>
+                       - 
+                      First input ResizeArray.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        a2
+                      </b>
+                      :
+                      <code><span>ResizeArray&lt;'T2&gt;</span></code>
+                       - 
+                      Second input ResizeArray.
+                    </span>
+                    <br/>
+                    <span>
+                      <b>
+                        a3
+                      </b>
+                      :
+                      <code><span>ResizeArray&lt;'T3&gt;</span></code>
+                       - 
+                      Third input ResizeArray.
+                    </span>
+                    <br/>
+                  </ul>
+                  <br/>
+                  <span>
+                    Returns: 
+                    <code><span>ResizeArray&lt;<span>'T1&#32;*&#32;'T2&#32;*&#32;'T3</span>&gt;</span></code>
+                  </span>
+                  ResizeArray with corresponding pairs of input ResizeArrays.
+                  <br/>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="fsdocs-member-xmldoc">
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.zip3Shortest``3```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.zip3Shortest``3\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L210-210" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
+ Zip safely three ResizeArrays. If one ResizeArray is shorter, excess elements are discarded from the right end of the longer ResizeArray.
+ 
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a1
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T1&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    First input ResizeArray.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a2
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T2&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Second input ResizeArray.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a3
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T3&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Third input ResizeArray.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;<span>'T1&#32;*&#32;'T2&#32;*&#32;'T3</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    ResizeArray with corresponding pairs of input ResizeArrays.
+                  </p>
+                </dd>
+              </dl>
+            </details>
+          </td>
+        </tr>
+        <tr>
+          <td class="fsdocs-member-usage">
+            <div>
+              <code onmouseout="hideTip(event, '533', 533)" onmouseover="showTip(event, '533', 533)">
                 <p>
                   <a id="zipShortest">
                     <a href="#zipShortest">
@@ -1510,7 +2061,7 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="471">
+              <div class="fsdocs-tip" id="533">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>ResizeArray.zipShortest&#32;<span>a1&#32;a2</span></span></code>
@@ -1551,64 +2102,68 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.zipShortest``2```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.zipShortest``2\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L116-116" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
+            <details>
+              <summary>
+                <div class="fsdocs-summary">
+                  <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.ResizeArray.zipShortest``2```')">
+                    <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
+                  </div>
+                  <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.ResizeArray.zipShortest``2\'/>')">
+                    <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
+                  </div>
+                  <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/ResizeArray.fs#L193-193" class="fsdocs-source-link" title="Source on GitHub">
+                    <img src="/FSharpPlus/content/img/github.png" class="normal"/>
+                    <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
+                  </a>
+                  <p class="fsdocs-summary">
+                    
  Zip safely two ResizeArrays. If one ResizeArray is shorter, excess elements are discarded from the right end of the longer ResizeArray. 
  
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  a1
-                </span>
-                :
-                <code><span>ResizeArray&lt;'T1&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  First input ResizeArray.
-                </p>
-              </dd>
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  a2
-                </span>
-                :
-                <code><span>ResizeArray&lt;'T2&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs">
-                <p>
-                  Second input ResizeArray.
-                </p>
-              </dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span>ResizeArray&lt;<span>'T1&#32;*&#32;'T2</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs">
-                <p>
-                  ResizeArray with corresponding pairs of input ResizeArrays.
-                </p>
-              </dd>
-            </dl>
+                  </p>
+                </div>
+              </summary>
+              <dl class="fsdocs-params">
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a1
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T1&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    First input ResizeArray.
+                  </p>
+                </dd>
+                <dt class="fsdocs-param">
+                  <span class="fsdocs-param-name">
+                    a2
+                  </span>
+                  :
+                  <code><span>ResizeArray&lt;'T2&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-param-docs">
+                  <p>
+                    Second input ResizeArray.
+                  </p>
+                </dd>
+              </dl>
+              <dl class="fsdocs-returns">
+                <dt>
+                  <span class="fsdocs-return-name">
+                    Returns: 
+                  </span>
+                  <code><span>ResizeArray&lt;<span>'T1&#32;*&#32;'T2</span>&gt;</span></code>
+                </dt>
+                <dd class="fsdocs-return-docs">
+                  <p>
+                    ResizeArray with corresponding pairs of input ResizeArrays.
+                  </p>
+                </dd>
+              </dl>
+            </details>
           </td>
         </tr>
       </tbody>

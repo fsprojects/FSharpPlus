@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>TO-DO Add some docs here !
+    <title>SeqT&lt;Monad&lt;bool&gt;, 'T&gt;
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="gusty; wallymathieu">
@@ -85,14 +85,386 @@
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
-            <h1><a name="TO-DO-Add-some-docs-here" class="anchor" href="#TO-DO-Add-some-docs-here">TO-DO Add some docs here !</a></h1>
-<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll&quot;</span>
+            <h1><a name="SeqT-lt-Monad-lt-bool-gt-T-gt" class="anchor" href="#SeqT-lt-Monad-lt-bool-gt-T-gt">SeqT&lt;Monad&lt;bool&gt;, 'T&gt;</a></h1>
+<p>This is the the Monad Transformer for <code>seq&lt;'T&gt;</code> so it adds sequencing to existing monads by composing them with <code>seq&lt;'T&gt;</code>.</p>
+<p>Any monad can be composed, but a very typical usage is when combined with <code>Async</code> or <code>Task</code>, which gives rise to what's called async sequences.</p>
+<p>Therefore the <a href="https://github.com/fsprojects/FSharp.Control.AsyncSeq">AsyncSeq</a> library can be considered a specialization of this monad in Async.</p>
+<p>The original post from AsyncSeq can be found <a href="http://tomasp.net/blog/async-sequences.aspx">here</a> and we can run those examples with <code>SeqT</code> by adapting the code.</p>
+<p>In order to do so we need to be aware of the design differences of both implementations.</p>
+<style>
+body #fsdocs-content table, th, td { border: 1px solid black;border-collapse: collapse; }
+body #fsdocs-content table code { word-break: normal; }
+</style>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><p><strong>AsyncSeq</strong></p></th>
+<th align="left"><p><strong>SeqT</strong></p></th>
+<th align="center"><p><strong>Notes</strong></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><p><code>AsyncSeq&lt;'T&gt;</code></p></td>
+<td align="left"><p><code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code></p></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>asyncSeq { .. }</code></p></td>
+<td align="left"><p><code>monad.plus { .. }</code></p></td>
+<td align="center"><p>At some point it needs to be inferred as <code>SeqT&lt;Async&lt;bool&gt;, 'T&gt;</code>, or it can be specified with type parameters: <code>monad&lt;SeqT&lt;Async&lt;bool&gt;, 'T&gt;&gt;.plus</code></p></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>let! x = y</code></p></td>
+<td align="left"><p><code>let! x = SeqT.lift y</code></p></td>
+<td align="center"><p>No auto lifting. Lifting should be explicit.</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>do! x</code></p></td>
+<td align="left"><p><code>do! SeqT.lift x</code></p></td>
+<td align="center"><p>''</p></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>for x in s</code></p></td>
+<td align="left"><p><code>let! x = s</code></p></td>
+<td align="center"><p>When <code>s: SeqT</code> otherwise <code>for</code> is still ok with regular sequences.</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>AsyncSeq.[function]</code></p></td>
+<td align="left"><p><code>SeqT.[function]</code></p></td>
+<td align="center"><p>See differences in functions below.</p></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>AsyncSeq.[function]Async</code></p></td>
+<td align="left"><p><code>SeqT.[function]M</code></p></td>
+<td align="center"><p>''</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>AsyncSeq.skip</code></p></td>
+<td align="left"><p><code>SeqT.drop</code></p></td>
+<td align="center"><p><code>.skip</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>AsyncSeq.take</code></p></td>
+<td align="left"><p><code>SeqT.truncate</code></p></td>
+<td align="center"><p><code>.take</code> is available but consistently with F# collections, it throws when the sequence doesn't have enough elements.</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>AsyncSeq.toBlockingSequence</code></p></td>
+<td align="left"><p><code>SeqT.run &gt;&gt; Async.RunSynchronously</code></p></td>
+<td align="center"><p>Not really the same but semantically equivalent.</p></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>AsyncSeq.toListAsync</code></p></td>
+<td align="left"><p><code>SeqT.runAsList</code></p></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>AsyncSeq.toArrayAsync</code></p></td>
+<td align="left"><p><code>SeqT.runAsArray</code></p></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>AsyncSeq.zipWith</code></p></td>
+<td align="left"><p><code>SeqT.map2</code></p></td>
+<td align="center"><p>Aligned with F# collections.</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>AsyncSeq.zipWithAsync</code></p></td>
+<td align="left"><p><code>SeqT.map2M</code></p></td>
+<td align="center"><p>''</p></td>
+</tr>
+<tr class="odd">
+<td align="left"><p><code>AsyncSeq.ofObservable</code></p></td>
+<td align="left"><p><code>Observable.toAsyncSeq</code></p></td>
+<td align="center"><p><code>.toTaskSeq</code> is also available.</p></td>
+</tr>
+<tr class="even">
+<td align="left"><p><code>AsyncSeq.toObservable</code></p></td>
+<td align="left"><p><code>Observable.ofAsyncSeq</code></p></td>
+<td align="center"><p><code>.ofTaskSeq</code> is also available.</p></td>
+</tr>
+</tbody>
+</table>
 
-<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">FSharpPlus</span>
+<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;nuget: FSharpPlus,1.3.0-CI02744&quot;</span> <span class="c">// still as pre-release</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 12)" onmouseover="showTip(event, 'fs1', 12)" class="id">System</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="id">Net</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 16)" onmouseover="showTip(event, 'fs9', 16)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="id">Data</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="id">urls</span> <span class="o">=</span>
+  <span class="pn">[</span> <span class="s">&quot;http://bing.com&quot;</span><span class="pn">;</span> <span class="s">&quot;http://yahoo.com&quot;</span><span class="pn">;</span>
+    <span class="s">&quot;http://google.com&quot;</span><span class="pn">;</span> <span class="s">&quot;http://msn.com&quot;</span><span class="pn">;</span> <span class="pn">]</span>
+
+<span class="c">// Asynchronous sequence that returns URLs and lengths</span>
+<span class="c">// of the downloaded HTML. Web pages from a given list</span>
+<span class="c">// are downloaded asynchronously in sequence.</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 19)" onmouseover="showTip(event, 'fs12', 19)" class="id">pages</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="vt">SeqT</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">,</span> <span class="id">_</span><span class="pn">&gt;</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="id">monad</span><span class="pn">.</span><span class="id">plus</span> <span class="pn">{</span>
+    <span class="k">use</span> <span onmouseout="hideTip(event, 'fs15', 22)" onmouseover="showTip(event, 'fs15', 22)" class="d">wc</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs3', 23)" onmouseover="showTip(event, 'fs3', 23)" class="d">WebClient</span> <span class="pn">(</span><span class="pn">)</span>
+    <span class="k">for</span> <span onmouseout="hideTip(event, 'fs16', 24)" onmouseover="showTip(event, 'fs16', 24)" class="fn">url</span> <span class="k">in</span> <span onmouseout="hideTip(event, 'fs11', 25)" onmouseover="showTip(event, 'fs11', 25)" class="id">urls</span> <span class="k">do</span>
+        <span class="k">try</span>
+            <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs17', 26)" onmouseover="showTip(event, 'fs17', 26)" class="fn">html</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 27)" onmouseover="showTip(event, 'fs15', 27)" class="d">wc</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="id">AsyncDownloadString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs19', 29)" onmouseover="showTip(event, 'fs19', 29)" class="fn">Uri</span> <span onmouseout="hideTip(event, 'fs16', 30)" onmouseover="showTip(event, 'fs16', 30)" class="fn">url</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 31)" onmouseover="showTip(event, 'fs13', 31)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 32)" onmouseover="showTip(event, 'fs20', 32)" class="id">lift</span>
+            <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs16', 33)" onmouseover="showTip(event, 'fs16', 33)" class="fn">url</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs17', 34)" onmouseover="showTip(event, 'fs17', 34)" class="fn">html</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs21', 35)" onmouseover="showTip(event, 'fs21', 35)" class="id">Length</span>
+        <span class="k">with</span> <span class="id">_</span> <span class="k">-&gt;</span>
+            <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs16', 36)" onmouseover="showTip(event, 'fs16', 36)" class="fn">url</span><span class="pn">,</span> <span class="o">-</span><span class="n">1</span> <span class="pn">}</span>
+
+
+<span class="c">// Print URL of pages that are smaller than 100k</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs22', 37)" onmouseover="showTip(event, 'fs22', 37)" class="id">printPages</span> <span class="o">=</span>
+    <span onmouseout="hideTip(event, 'fs12', 38)" onmouseover="showTip(event, 'fs12', 38)" class="id">pages</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 39)" onmouseover="showTip(event, 'fs13', 39)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 40)" onmouseover="showTip(event, 'fs23', 40)" class="id">filter</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span class="id">_</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs24', 41)" onmouseover="showTip(event, 'fs24', 41)" class="fn">len</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs24', 42)" onmouseover="showTip(event, 'fs24', 42)" class="fn">len</span> <span class="o">&lt;</span> <span class="n">100000</span><span class="pn">)</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 43)" onmouseover="showTip(event, 'fs13', 43)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 44)" onmouseover="showTip(event, 'fs25', 44)" class="id">map</span> <span onmouseout="hideTip(event, 'fs26', 45)" onmouseover="showTip(event, 'fs26', 45)" class="fn">fst</span>
+    <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 46)" onmouseover="showTip(event, 'fs13', 46)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs27', 47)" onmouseover="showTip(event, 'fs27', 47)" class="id">iter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 48)" onmouseover="showTip(event, 'fs28', 48)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span>
+ 
+<span onmouseout="hideTip(event, 'fs22', 49)" onmouseover="showTip(event, 'fs22', 49)" class="id">printPages</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs29', 50)" onmouseover="showTip(event, 'fs29', 50)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs30', 51)" onmouseover="showTip(event, 'fs30', 51)" class="id">Start</span>
+</code></pre>
+<p>These samples above and below come from the <a href="http://tomasp.net/blog/async-sequences.aspx">original AsyncSeq post</a> and they can be easily switched to task sequeces (taskSeq), simply add <code>|&gt; Async.StartAsTask</code> between <code>wc.AsyncDownloadString (Uri url)</code> and <code>|&gt; SeqT.lift</code> then run eveything but the <code>printPages |&gt; Async.Start</code>.</p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="c">// A simple webcrawler</span>
+
+<span class="pp">#r</span> <span class="s">&quot;nuget: FSharpPlus,1.3.0-CI02744&quot;</span>
+<span class="pp">#r</span> <span class="s">&quot;nuget: HtmlAgilityPack&quot;</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 52)" onmouseover="showTip(event, 'fs1', 52)" class="id">System</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 53)" onmouseover="showTip(event, 'fs1', 53)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 54)" onmouseover="showTip(event, 'fs2', 54)" class="id">Net</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 55)" onmouseover="showTip(event, 'fs1', 55)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs31', 56)" onmouseover="showTip(event, 'fs31', 56)" class="id">Text</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs32', 57)" onmouseover="showTip(event, 'fs32', 57)" class="id">RegularExpressions</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs33', 58)" onmouseover="showTip(event, 'fs33', 58)" class="id">HtmlAgilityPack</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs34', 59)" onmouseover="showTip(event, 'fs34', 59)" class="id">FSharp</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs35', 60)" onmouseover="showTip(event, 'fs35', 60)" class="id">Control</span>
+
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 61)" onmouseover="showTip(event, 'fs9', 61)" class="id">FSharpPlus</span>
+<span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 62)" onmouseover="showTip(event, 'fs9', 62)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 63)" onmouseover="showTip(event, 'fs10', 63)" class="id">Data</span>
+
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Helper functions for downloading documents, extracting links etc.</span>
+
+<span class="c">/// Asynchronously download the document and parse the HTML</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs36', 64)" onmouseover="showTip(event, 'fs36', 64)" class="fn">downloadDocument</span> <span onmouseout="hideTip(event, 'fs16', 65)" onmouseover="showTip(event, 'fs16', 65)" class="fn">url</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 66)" onmouseover="showTip(event, 'fs7', 66)" class="k">async</span> <span class="pn">{</span>
+  <span class="k">try</span> <span class="k">let</span> <span onmouseout="hideTip(event, 'fs15', 67)" onmouseover="showTip(event, 'fs15', 67)" class="d">wc</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs3', 68)" onmouseover="showTip(event, 'fs3', 68)" class="d">WebClient</span> <span class="pn">(</span><span class="pn">)</span>
+      <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs17', 69)" onmouseover="showTip(event, 'fs17', 69)" class="fn">html</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs15', 70)" onmouseover="showTip(event, 'fs15', 70)" class="d">wc</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs37', 71)" onmouseover="showTip(event, 'fs37', 71)" class="id">AsyncDownloadString</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs19', 72)" onmouseover="showTip(event, 'fs19', 72)" class="fn">Uri</span> <span onmouseout="hideTip(event, 'fs16', 73)" onmouseover="showTip(event, 'fs16', 73)" class="fn">url</span><span class="pn">)</span>
+      <span class="k">let</span> <span onmouseout="hideTip(event, 'fs38', 74)" onmouseover="showTip(event, 'fs38', 74)" class="fn">doc</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs39', 75)" onmouseover="showTip(event, 'fs39', 75)" class="rt">HtmlDocument</span> <span class="pn">(</span><span class="pn">)</span>
+      <span onmouseout="hideTip(event, 'fs38', 76)" onmouseover="showTip(event, 'fs38', 76)" class="fn">doc</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs40', 77)" onmouseover="showTip(event, 'fs40', 77)" class="id">LoadHtml</span> <span onmouseout="hideTip(event, 'fs17', 78)" onmouseover="showTip(event, 'fs17', 78)" class="fn">html</span>
+      <span class="k">return</span> <span onmouseout="hideTip(event, 'fs41', 79)" onmouseover="showTip(event, 'fs41', 79)" class="uc">Some</span> <span onmouseout="hideTip(event, 'fs38', 80)" onmouseover="showTip(event, 'fs38', 80)" class="fn">doc</span> 
+  <span class="k">with</span> <span class="id">_</span> <span class="k">-&gt;</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs42', 81)" onmouseover="showTip(event, 'fs42', 81)" class="uc">None</span> <span class="pn">}</span>
+
+<span class="c">/// Extract all links from the document that start with &quot;http://&quot;</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs43', 82)" onmouseover="showTip(event, 'fs43', 82)" class="fn">extractLinks</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs38', 83)" onmouseover="showTip(event, 'fs38', 83)" class="fn">doc</span><span class="pn">:</span><span onmouseout="hideTip(event, 'fs39', 84)" onmouseover="showTip(event, 'fs39', 84)" class="rt">HtmlDocument</span><span class="pn">)</span> <span class="o">=</span> 
+  <span class="k">try</span>
+    <span class="pn">[</span> <span class="k">for</span> <span onmouseout="hideTip(event, 'fs44', 85)" onmouseover="showTip(event, 'fs44', 85)" class="fn">a</span> <span class="k">in</span> <span onmouseout="hideTip(event, 'fs38', 86)" onmouseover="showTip(event, 'fs38', 86)" class="fn">doc</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs45', 87)" onmouseover="showTip(event, 'fs45', 87)" class="prop">DocumentNode</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs46', 88)" onmouseover="showTip(event, 'fs46', 88)" class="id">SelectNodes</span> <span class="pn">(</span><span class="s">&quot;//a&quot;</span><span class="pn">)</span> <span class="k">do</span>
+        <span class="k">if</span> <span onmouseout="hideTip(event, 'fs44', 89)" onmouseover="showTip(event, 'fs44', 89)" class="fn">a</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs47', 90)" onmouseover="showTip(event, 'fs47', 90)" class="prop">Attributes</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs48', 91)" onmouseover="showTip(event, 'fs48', 91)" class="id">Contains</span> <span class="s">&quot;href&quot;</span> <span class="k">then</span>
+          <span class="k">let</span> <span onmouseout="hideTip(event, 'fs49', 92)" onmouseover="showTip(event, 'fs49', 92)" class="fn">href</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs44', 93)" onmouseover="showTip(event, 'fs44', 93)" class="fn">a</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs47', 94)" onmouseover="showTip(event, 'fs47', 94)" class="id">Attributes</span><span class="pn">.</span><span class="pn">[</span><span class="s">&quot;href&quot;</span><span class="pn">]</span><span class="pn">.</span><span class="id">Value</span>
+          <span class="k">if</span> <span onmouseout="hideTip(event, 'fs49', 95)" onmouseover="showTip(event, 'fs49', 95)" class="fn">href</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs50', 96)" onmouseover="showTip(event, 'fs50', 96)" class="id">StartsWith</span> <span class="s">&quot;https://&quot;</span> <span class="k">then</span>
+            <span class="k">let</span> <span onmouseout="hideTip(event, 'fs51', 97)" onmouseover="showTip(event, 'fs51', 97)" class="fn">endl</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs49', 98)" onmouseover="showTip(event, 'fs49', 98)" class="fn">href</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs52', 99)" onmouseover="showTip(event, 'fs52', 99)" class="id">IndexOf</span> <span class="s">&#39;?&#39;</span>
+            <span class="k">yield</span> <span class="k">if</span> <span onmouseout="hideTip(event, 'fs51', 100)" onmouseover="showTip(event, 'fs51', 100)" class="fn">endl</span> <span class="o">&gt;</span> <span class="n">0</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs49', 101)" onmouseover="showTip(event, 'fs49', 101)" class="fn">href</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs53', 102)" onmouseover="showTip(event, 'fs53', 102)" class="id">Substring</span><span class="pn">(</span><span class="n">0</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs51', 103)" onmouseover="showTip(event, 'fs51', 103)" class="fn">endl</span><span class="pn">)</span> <span class="k">else</span> <span onmouseout="hideTip(event, 'fs49', 104)" onmouseover="showTip(event, 'fs49', 104)" class="fn">href</span> <span class="pn">]</span>
+  <span class="k">with</span> <span class="id">_</span> <span class="k">-&gt;</span> <span class="pn">[</span><span class="pn">]</span>
+
+<span class="c">/// Extract the &lt;title&gt; of the web page</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs54', 105)" onmouseover="showTip(event, 'fs54', 105)" class="fn">getTitle</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs38', 106)" onmouseover="showTip(event, 'fs38', 106)" class="fn">doc</span><span class="pn">:</span> <span onmouseout="hideTip(event, 'fs39', 107)" onmouseover="showTip(event, 'fs39', 107)" class="rt">HtmlDocument</span><span class="pn">)</span> <span class="o">=</span>
+  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs55', 108)" onmouseover="showTip(event, 'fs55', 108)" class="fn">title</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs38', 109)" onmouseover="showTip(event, 'fs38', 109)" class="fn">doc</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs45', 110)" onmouseover="showTip(event, 'fs45', 110)" class="prop">DocumentNode</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs56', 111)" onmouseover="showTip(event, 'fs56', 111)" class="id">SelectSingleNode</span> <span class="s">&quot;//title&quot;</span>
+  <span class="k">if</span> <span onmouseout="hideTip(event, 'fs55', 112)" onmouseover="showTip(event, 'fs55', 112)" class="fn">title</span> <span class="o">&lt;&gt;</span> <span class="k">null</span> <span class="k">then</span> <span onmouseout="hideTip(event, 'fs55', 113)" onmouseover="showTip(event, 'fs55', 113)" class="fn">title</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs57', 114)" onmouseover="showTip(event, 'fs57', 114)" class="prop">InnerText</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs58', 115)" onmouseover="showTip(event, 'fs58', 115)" class="id">Trim</span> <span class="pn">(</span><span class="pn">)</span> <span class="k">else</span> <span class="s">&quot;Untitled&quot;</span>
+
+<span class="c">// ----------------------------------------------------------------------------</span>
+<span class="c">// Basic crawling - crawl web pages and follow just one link from every page</span>
+
+<span class="c">/// Crawl the internet starting from the specified page</span>
+<span class="c">/// From each page follow the first not-yet-visited page</span>
+<span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs59', 116)" onmouseover="showTip(event, 'fs59', 116)" class="fn">randomCrawl</span> <span onmouseout="hideTip(event, 'fs16', 117)" onmouseover="showTip(event, 'fs16', 117)" class="fn">url</span> <span class="o">=</span> 
+  <span class="k">let</span> <span onmouseout="hideTip(event, 'fs60', 118)" onmouseover="showTip(event, 'fs60', 118)" class="fn">visited</span> <span class="o">=</span> <span class="k">new</span> <span onmouseout="hideTip(event, 'fs1', 119)" onmouseover="showTip(event, 'fs1', 119)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs61', 120)" onmouseover="showTip(event, 'fs61', 120)" class="id">Collections</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs62', 121)" onmouseover="showTip(event, 'fs62', 121)" class="id">Generic</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs63', 122)" onmouseover="showTip(event, 'fs63', 122)" class="id">HashSet</span><span class="pn">&lt;</span><span class="id">_</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="pn">)</span>
+
+  <span class="c">// Visits page and then recursively visits all referenced pages</span>
+  <span class="k">let</span> <span class="k">rec</span> <span onmouseout="hideTip(event, 'fs64', 123)" onmouseover="showTip(event, 'fs64', 123)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs16', 124)" onmouseover="showTip(event, 'fs16', 124)" class="fn">url</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 125)" onmouseover="showTip(event, 'fs14', 125)" class="id">monad</span><span class="pn">.</span><span class="id">plus</span> <span class="pn">{</span>
+    <span class="k">if</span> <span onmouseout="hideTip(event, 'fs60', 126)" onmouseover="showTip(event, 'fs60', 126)" class="fn">visited</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs65', 127)" onmouseover="showTip(event, 'fs65', 127)" class="id">Add</span><span class="pn">(</span><span onmouseout="hideTip(event, 'fs16', 128)" onmouseover="showTip(event, 'fs16', 128)" class="fn">url</span><span class="pn">)</span> <span class="k">then</span>
+      <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs66', 129)" onmouseover="showTip(event, 'fs66', 129)" class="fn">doc</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs36', 130)" onmouseover="showTip(event, 'fs36', 130)" class="fn">downloadDocument</span> <span onmouseout="hideTip(event, 'fs16', 131)" onmouseover="showTip(event, 'fs16', 131)" class="fn">url</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 132)" onmouseover="showTip(event, 'fs13', 132)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs20', 133)" onmouseover="showTip(event, 'fs20', 133)" class="id">lift</span>
+      <span class="k">match</span> <span onmouseout="hideTip(event, 'fs66', 134)" onmouseover="showTip(event, 'fs66', 134)" class="fn">doc</span> <span class="k">with</span> 
+      <span class="pn">|</span> <span onmouseout="hideTip(event, 'fs41', 135)" onmouseover="showTip(event, 'fs41', 135)" class="uc">Some</span> <span onmouseout="hideTip(event, 'fs38', 136)" onmouseover="showTip(event, 'fs38', 136)" class="fn">doc</span> <span class="k">-&gt;</span>
+          <span class="c">// Yield url and title as the next element</span>
+          <span class="k">yield</span> <span onmouseout="hideTip(event, 'fs16', 137)" onmouseover="showTip(event, 'fs16', 137)" class="fn">url</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs54', 138)" onmouseover="showTip(event, 'fs54', 138)" class="fn">getTitle</span> <span onmouseout="hideTip(event, 'fs38', 139)" onmouseover="showTip(event, 'fs38', 139)" class="fn">doc</span>
+          <span class="c">// For every link, yield all referenced pages too</span>
+          <span class="k">for</span> <span onmouseout="hideTip(event, 'fs67', 140)" onmouseover="showTip(event, 'fs67', 140)" class="fn">link</span> <span class="k">in</span> <span onmouseout="hideTip(event, 'fs43', 141)" onmouseover="showTip(event, 'fs43', 141)" class="fn">extractLinks</span> <span onmouseout="hideTip(event, 'fs38', 142)" onmouseover="showTip(event, 'fs38', 142)" class="fn">doc</span> <span class="k">do</span>
+            <span class="k">yield!</span> <span onmouseout="hideTip(event, 'fs64', 143)" onmouseover="showTip(event, 'fs64', 143)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs67', 144)" onmouseover="showTip(event, 'fs67', 144)" class="fn">link</span> 
+      <span class="pn">|</span> <span class="id">_</span> <span class="k">-&gt;</span> <span class="pn">(</span><span class="pn">)</span> <span class="pn">}</span>
+  <span onmouseout="hideTip(event, 'fs64', 145)" onmouseover="showTip(event, 'fs64', 145)" class="fn">loop</span> <span onmouseout="hideTip(event, 'fs16', 146)" onmouseover="showTip(event, 'fs16', 146)" class="fn">url</span>
+
+<span class="c">// Use SeqT combinators to print the titles of the first 10</span>
+<span class="c">// web sites that are from other domains than en.wikipedia.org</span>
+<span onmouseout="hideTip(event, 'fs59', 147)" onmouseover="showTip(event, 'fs59', 147)" class="fn">randomCrawl</span> <span class="s">&quot;https://en.wikipedia.org/wiki/Main_Page&quot;</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 148)" onmouseover="showTip(event, 'fs13', 148)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs23', 149)" onmouseover="showTip(event, 'fs23', 149)" class="id">filter</span> <span class="pn">(</span><span class="k">fun</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs16', 150)" onmouseover="showTip(event, 'fs16', 150)" class="fn">url</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs68', 151)" onmouseover="showTip(event, 'fs68', 151)" class="fn">title</span><span class="pn">)</span> <span class="k">-&gt;</span> <span onmouseout="hideTip(event, 'fs16', 152)" onmouseover="showTip(event, 'fs16', 152)" class="fn">url</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs69', 153)" onmouseover="showTip(event, 'fs69', 153)" class="id">Contains</span> <span class="s">&quot;en.wikipedia.org&quot;</span> <span class="o">|&gt;</span> <span class="fn">not</span><span class="pn">)</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 154)" onmouseover="showTip(event, 'fs13', 154)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs25', 155)" onmouseover="showTip(event, 'fs25', 155)" class="id">map</span> <span onmouseout="hideTip(event, 'fs70', 156)" onmouseover="showTip(event, 'fs70', 156)" class="fn">snd</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 157)" onmouseover="showTip(event, 'fs13', 157)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs71', 158)" onmouseover="showTip(event, 'fs71', 158)" class="id">take</span> <span class="n">10</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 159)" onmouseover="showTip(event, 'fs13', 159)" class="m">SeqT</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs27', 160)" onmouseover="showTip(event, 'fs27', 160)" class="id">iter</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs28', 161)" onmouseover="showTip(event, 'fs28', 161)" class="fn">printfn</span> <span class="s">&quot;</span><span class="pf">%s</span><span class="s">&quot;</span><span class="pn">)</span>
+<span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs29', 162)" onmouseover="showTip(event, 'fs29', 162)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs30', 163)" onmouseover="showTip(event, 'fs30', 163)" class="id">Start</span>
 </code></pre>
 
-            <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
+            <div class="fsdocs-tip" id="fs1">namespace System</div>
+<div class="fsdocs-tip" id="fs2">namespace System.Net</div>
+<div class="fsdocs-tip" id="fs3">type WebClient =
+  inherit Component
+  new: unit -&gt; unit
+  member CancelAsync: unit -&gt; unit
+  member DownloadData: address: string -&gt; byte array + 1 overload
+  member DownloadDataAsync: address: Uri -&gt; unit + 1 overload
+  member DownloadDataTaskAsync: address: string -&gt; Task&lt;byte array&gt; + 1 overload
+  member DownloadFile: address: string * fileName: string -&gt; unit + 1 overload
+  member DownloadFileAsync: address: Uri * fileName: string -&gt; unit + 1 overload
+  member DownloadFileTaskAsync: address: string * fileName: string -&gt; Task + 1 overload
+  member DownloadString: address: string -&gt; string + 1 overload
+  ...<br /><em>&lt;summary&gt;Provides common methods for sending data to and receiving data from a resource identified by a URI.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs4">val wc: System.Net.WebClient</div>
+<div class="fsdocs-tip" id="fs5">val uri: System.Uri</div>
+<div class="fsdocs-tip" id="fs6">Multiple items<br />type Uri =
+  interface ISpanFormattable
+  interface IFormattable
+  interface ISerializable
+  new: uriString: string -&gt; unit + 6 overloads
+  member Equals: comparand: obj -&gt; bool
+  member GetComponents: components: UriComponents * format: UriFormat -&gt; string
+  member GetHashCode: unit -&gt; int
+  member GetLeftPart: part: UriPartial -&gt; string
+  member IsBaseOf: uri: Uri -&gt; bool
+  member IsWellFormedOriginalString: unit -&gt; bool
+  ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />System.Uri(uriString: string) : System.Uri<br />System.Uri(uriString: string, creationOptions: inref&lt;System.UriCreationOptions&gt;) : System.Uri<br />System.Uri(uriString: string, uriKind: System.UriKind) : System.Uri<br />System.Uri(baseUri: System.Uri, relativeUri: string) : System.Uri<br />System.Uri(baseUri: System.Uri, relativeUri: System.Uri) : System.Uri</div>
+<div class="fsdocs-tip" id="fs7">val async: AsyncBuilder</div>
+<div class="fsdocs-tip" id="fs8">System.Net.WebClient.DownloadString(address: System.Uri) : string<br />System.Net.WebClient.DownloadString(address: string) : string</div>
+<div class="fsdocs-tip" id="fs9">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs10">namespace FSharpPlus.Data</div>
+<div class="fsdocs-tip" id="fs11">val urls: string list</div>
+<div class="fsdocs-tip" id="fs12">val pages: SeqT&lt;Async&lt;bool&gt;,(string * int)&gt;</div>
+<div class="fsdocs-tip" id="fs13">Multiple items<br />static member SeqTOperations.SeqT: source: &#39;Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Return)<br /><br />--------------------<br />active recognizer SeqT: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; &#39;Monad&lt;&#39;T seq&gt;<br /><br />--------------------<br />module SeqT
+
+from FSharpPlus.Data.SeqT_V2<br /><br />--------------------<br />[&lt;Struct&gt;]
+type SeqT&lt;&#39;monad&lt;bool&gt;,&#39;t&gt; =
+  | SeqT of IEnumerableM&lt;&#39;monad&lt;bool&gt;,&#39;t&gt;
+  interface IEnumerableM&lt;&#39;monad&lt;bool&gt;,&#39;t&gt;
+  static member ( *&gt; ) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return and member Delay)
+  static member (&lt;!&gt;) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * f: (&#39;T -&gt; &#39;U) -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member Delay and member (&gt;&gt;=) and member Return)
+  static member ( &lt;* ) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return and member Delay)
+  static member (&lt;*&gt;) : f: SeqT&lt;&#39;Monad&lt;bool&gt;,(&#39;T -&gt; &#39;U)&gt; * x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return)
+  static member (&lt;|&gt;) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member Delay and member Return and member (&gt;&gt;=))
+  static member (&gt;&gt;=) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * f: (&#39;T -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt;) -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return)</div>
+<div class="fsdocs-tip" id="fs14">val monad&lt;&#39;monad&lt;&#39;t&gt;&gt; : MonadFxBuilder&lt;&#39;monad&lt;&#39;t&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (lazy) monadic computation expression with side-effects (see http://fsprojects.github.io/FSharpPlus/computation-expressions.html for more information)
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">val wc: WebClient</div>
+<div class="fsdocs-tip" id="fs16">val url: string</div>
+<div class="fsdocs-tip" id="fs17">val html: string</div>
+<div class="fsdocs-tip" id="fs18">member WebClient.AsyncDownloadString: address: Uri -&gt; Async&lt;string&gt;<br />member WebClient.AsyncDownloadString: uri: Uri -&gt; Async&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs19">Multiple items<br />type Uri =
+  interface ISpanFormattable
+  interface IFormattable
+  interface ISerializable
+  new: uriString: string -&gt; unit + 6 overloads
+  member Equals: comparand: obj -&gt; bool
+  member GetComponents: components: UriComponents * format: UriFormat -&gt; string
+  member GetHashCode: unit -&gt; int
+  member GetLeftPart: part: UriPartial -&gt; string
+  member IsBaseOf: uri: Uri -&gt; bool
+  member IsWellFormedOriginalString: unit -&gt; bool
+  ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />Uri(uriString: string) : Uri<br />Uri(uriString: string, creationOptions: inref&lt;UriCreationOptions&gt;) : Uri<br />Uri(uriString: string, uriKind: UriKind) : Uri<br />Uri(baseUri: Uri, relativeUri: string) : Uri<br />Uri(baseUri: Uri, relativeUri: Uri) : Uri</div>
+<div class="fsdocs-tip" id="fs20">Multiple items<br />val lift: source: &#39;Monad&lt;&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Map and member Return)<br /><em>&lt;summary&gt;
+ Lifts the source into the SeqT.
+&lt;/summary&gt;</em><br /><br />--------------------<br />val lift: x: &#39;Monad&lt;&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;seq&lt;&#39;T&gt;&gt;&gt; (requires member (&gt;&gt;=) and member Map and member Return)<br /><em>&lt;summary&gt;
+ Embed a Monad&amp;lt;&#39;T&amp;gt; into a SeqT&amp;lt;&#39;Monad&amp;lt;seq&amp;lt;&#39;T&amp;gt;&amp;gt;&amp;gt;
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs21">property String.Length: int with get</div>
+<div class="fsdocs-tip" id="fs22">val printPages: Async&lt;unit&gt;</div>
+<div class="fsdocs-tip" id="fs23">val filter: f: (&#39;T -&gt; bool) -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member Delay and member (&gt;&gt;=) and member Return)</div>
+<div class="fsdocs-tip" id="fs24">val len: int</div>
+<div class="fsdocs-tip" id="fs25">Multiple items<br />val map: f: (&#39;T -&gt; &#39;U) -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member Delay and member (&gt;&gt;=) and member Return)<br /><br />--------------------<br />val map: f: (&#39;T -&gt; &#39;U) -&gt; SeqT&lt;&#39;Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;&#39;Monad&lt;seq&lt;&#39;U&gt;&gt; (requires member Map)</div>
+<div class="fsdocs-tip" id="fs26">val fst: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T1</div>
+<div class="fsdocs-tip" id="fs27">val iter: f: (&#39;T -&gt; unit) -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; &#39;Monad&lt;unit&gt; (requires member (&gt;&gt;=) and member Delay and member Using and member Return and member (&gt;&gt;=))</div>
+<div class="fsdocs-tip" id="fs28">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs29">Multiple items<br />module Async
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Async
+&lt;/summary&gt;</em><br /><br />--------------------<br />type Async =
+  static member AsBeginEnd: computation: (&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)
+  static member AwaitEvent: event: IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)
+  static member AwaitIAsyncResult: iar: IAsyncResult * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member AwaitTask: task: Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt; + 1 overload
+  static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member CancelDefaultToken: unit -&gt; unit
+  static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
+  static member Choice: computations: Async&lt;&#39;T option&gt; seq -&gt; Async&lt;&#39;T option&gt;
+  static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
+  static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
+  ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs30">static member Async.Start: computation: Async&lt;unit&gt; * ?cancellationToken: Threading.CancellationToken -&gt; unit</div>
+<div class="fsdocs-tip" id="fs31">namespace System.Text</div>
+<div class="fsdocs-tip" id="fs32">namespace System.Text.RegularExpressions</div>
+<div class="fsdocs-tip" id="fs33">namespace HtmlAgilityPack</div>
+<div class="fsdocs-tip" id="fs34">namespace Microsoft.FSharp</div>
+<div class="fsdocs-tip" id="fs35">namespace Microsoft.FSharp.Control</div>
+<div class="fsdocs-tip" id="fs36">val downloadDocument: url: string -&gt; Async&lt;HtmlDocument option&gt;<br /><em>&#160;Asynchronously download the document and parse the HTML</em></div>
+<div class="fsdocs-tip" id="fs37">member WebClient.AsyncDownloadString: uri: Uri -&gt; Async&lt;string&gt;<br />member WebClient.AsyncDownloadString: address: Uri -&gt; Async&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs38">val doc: HtmlDocument</div>
+<div class="fsdocs-tip" id="fs39">Multiple items<br />type HtmlDocument =
+  interface IXPathNavigable
+  new: unit -&gt; unit
+  member CreateAttribute: name: string -&gt; HtmlAttribute + 1 overload
+  member CreateComment: unit -&gt; HtmlCommentNode + 1 overload
+  member CreateElement: name: string -&gt; HtmlNode
+  member CreateNavigator: unit -&gt; XPathNavigator
+  member CreateTextNode: unit -&gt; HtmlTextNode + 1 overload
+  member DetectEncoding: stream: Stream -&gt; Encoding + 3 overloads
+  member DetectEncodingAndLoad: path: string -&gt; unit + 1 overload
+  member DetectEncodingHtml: html: string -&gt; Encoding
+  ...<br /><em>&lt;summary&gt;
+            Represents a complete HTML document.
+            &lt;/summary&gt;</em><br /><br />--------------------<br />HtmlDocument() : HtmlDocument</div>
+<div class="fsdocs-tip" id="fs40">HtmlDocument.LoadHtml(html: string) : unit</div>
+<div class="fsdocs-tip" id="fs41">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs42">union case Option.None: Option&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs43">val extractLinks: doc: HtmlDocument -&gt; string list<br /><em>&#160;Extract all links from the document that start with &quot;http://&quot;</em></div>
+<div class="fsdocs-tip" id="fs44">val a: HtmlNode</div>
+<div class="fsdocs-tip" id="fs45">property HtmlDocument.DocumentNode: HtmlNode with get<br /><em>&lt;summary&gt;
+            Gets the root node of the document.
+            &lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs46">HtmlNode.SelectNodes(xpath: Xml.XPath.XPathExpression) : HtmlNodeCollection<br />HtmlNode.SelectNodes(xpath: string) : HtmlNodeCollection</div>
+<div class="fsdocs-tip" id="fs47">property HtmlNode.Attributes: HtmlAttributeCollection with get, set<br /><em>&lt;summary&gt;
+            Gets the collection of HTML attributes for this node. May not be null.
+            &lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs48">HtmlAttributeCollection.Contains(name: string) : bool<br />HtmlAttributeCollection.Contains(item: HtmlAttribute) : bool</div>
+<div class="fsdocs-tip" id="fs49">val href: string</div>
+<div class="fsdocs-tip" id="fs50">String.StartsWith(value: string) : bool<br />String.StartsWith(value: char) : bool<br />String.StartsWith(value: string, comparisonType: StringComparison) : bool<br />String.StartsWith(value: string, ignoreCase: bool, culture: Globalization.CultureInfo) : bool</div>
+<div class="fsdocs-tip" id="fs51">val endl: int</div>
+<div class="fsdocs-tip" id="fs52">String.IndexOf(value: string) : int<br />String.IndexOf(value: char) : int<br />String.IndexOf(value: string, comparisonType: StringComparison) : int<br />String.IndexOf(value: string, startIndex: int) : int<br />String.IndexOf(value: char, comparisonType: StringComparison) : int<br />String.IndexOf(value: char, startIndex: int) : int<br />String.IndexOf(value: string, startIndex: int, comparisonType: StringComparison) : int<br />String.IndexOf(value: string, startIndex: int, count: int) : int<br />String.IndexOf(value: char, startIndex: int, count: int) : int<br />String.IndexOf(value: string, startIndex: int, count: int, comparisonType: StringComparison) : int</div>
+<div class="fsdocs-tip" id="fs53">String.Substring(startIndex: int) : string<br />String.Substring(startIndex: int, length: int) : string</div>
+<div class="fsdocs-tip" id="fs54">val getTitle: doc: HtmlDocument -&gt; string<br /><em>&#160;Extract the &lt;title&gt; of the web page</em></div>
+<div class="fsdocs-tip" id="fs55">val title: HtmlNode</div>
+<div class="fsdocs-tip" id="fs56">HtmlNode.SelectSingleNode(xpath: Xml.XPath.XPathExpression) : HtmlNode<br />HtmlNode.SelectSingleNode(xpath: string) : HtmlNode</div>
+<div class="fsdocs-tip" id="fs57">property HtmlNode.InnerText: string with get<br /><em>&lt;summary&gt;
+            Gets the text between the start and end tags of the object.
+            &lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs58">String.Trim() : string<br />String.Trim([&lt;ParamArray&gt;] trimChars: char array) : string<br />String.Trim(trimChar: char) : string</div>
+<div class="fsdocs-tip" id="fs59">val randomCrawl: url: string -&gt; SeqT&lt;Async&lt;bool&gt;,(string * string)&gt;<br /><em>&#160;Crawl the internet starting from the specified page<br />&#160;From each page follow the first not-yet-visited page</em></div>
+<div class="fsdocs-tip" id="fs60">val visited: Collections.Generic.HashSet&lt;string&gt;</div>
+<div class="fsdocs-tip" id="fs61">namespace System.Collections</div>
+<div class="fsdocs-tip" id="fs62">namespace System.Collections.Generic</div>
+<div class="fsdocs-tip" id="fs63">Multiple items<br />type HashSet&lt;&#39;T&gt; =
+  interface ICollection&lt;&#39;T&gt;
+  interface IEnumerable&lt;&#39;T&gt;
+  interface IEnumerable
+  interface IReadOnlyCollection&lt;&#39;T&gt;
+  interface ISet&lt;&#39;T&gt;
+  interface IReadOnlySet&lt;&#39;T&gt;
+  interface IDeserializationCallback
+  interface ISerializable
+  new: unit -&gt; unit + 5 overloads
+  member Add: item: &#39;T -&gt; bool
+  ...<br /><em>&lt;summary&gt;Represents a set of values.&lt;/summary&gt;<br />&lt;typeparam name=&quot;T&quot;&gt;The type of elements in the hash set.&lt;/typeparam&gt;</em><br /><br />--------------------<br />Collections.Generic.HashSet() : Collections.Generic.HashSet&lt;&#39;T&gt;<br />Collections.Generic.HashSet(collection: Collections.Generic.IEnumerable&lt;&#39;T&gt;) : Collections.Generic.HashSet&lt;&#39;T&gt;<br />Collections.Generic.HashSet(comparer: Collections.Generic.IEqualityComparer&lt;&#39;T&gt;) : Collections.Generic.HashSet&lt;&#39;T&gt;<br />Collections.Generic.HashSet(capacity: int) : Collections.Generic.HashSet&lt;&#39;T&gt;<br />Collections.Generic.HashSet(collection: Collections.Generic.IEnumerable&lt;&#39;T&gt;, comparer: Collections.Generic.IEqualityComparer&lt;&#39;T&gt;) : Collections.Generic.HashSet&lt;&#39;T&gt;<br />Collections.Generic.HashSet(capacity: int, comparer: Collections.Generic.IEqualityComparer&lt;&#39;T&gt;) : Collections.Generic.HashSet&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs64">val loop: url: string -&gt; SeqT&lt;Async&lt;bool&gt;,(string * string)&gt;</div>
+<div class="fsdocs-tip" id="fs65">Collections.Generic.HashSet.Add(item: string) : bool</div>
+<div class="fsdocs-tip" id="fs66">val doc: HtmlDocument option</div>
+<div class="fsdocs-tip" id="fs67">val link: string</div>
+<div class="fsdocs-tip" id="fs68">val title: string</div>
+<div class="fsdocs-tip" id="fs69">String.Contains(value: string) : bool<br />String.Contains(value: char) : bool<br />String.Contains(value: string, comparisonType: StringComparison) : bool<br />String.Contains(value: char, comparisonType: StringComparison) : bool</div>
+<div class="fsdocs-tip" id="fs70">val snd: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T2</div>
+<div class="fsdocs-tip" id="fs71">val take: count: int -&gt; source: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Return)<br /><em>&lt;summary&gt;Returns the first N elements of the sequence.&lt;/summary&gt;<br />&lt;remarks&gt;Throws &lt;c&gt;InvalidOperationException&lt;/c&gt;
+ if the count exceeds the number of elements in the sequence. &lt;c&gt;SeqT.truncate&lt;/c&gt;
+ returns as many items as the sequence contains instead of throwing an exception.&lt;/remarks&gt;<br />&lt;param name=&quot;count&quot;&gt;The number of items to take.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The input sequence.&lt;/param&gt;<br />&lt;returns&gt;The result sequence.&lt;/returns&gt;<br />&lt;exception cref=&quot;T:System.ArgumentNullException&quot;&gt;Thrown when count is negative.&lt;/exception&gt;<br />&lt;exception cref=&quot;T:System.InvalidOperationException&quot;&gt;Thrown when count exceeds the number of elements.
+ in the sequence.&lt;/exception&gt;</em></div>
 
         </div>
 

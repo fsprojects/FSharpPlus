@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <title>Observable (FSharpPlus)</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="author" content="Gusty">
+    <meta name="author" content="gusty; wallymathieu">
 
     <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
@@ -57,15 +57,15 @@
 
                 <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
                 <li class="nav-header" style="padding-top: 10px">Documentation</li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//tutorial.html">Tutorial</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//extensions.html">Extensions</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//generic-doc.html">Functions &amp; Operators</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//types.html">Data Types</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//abstractions.html">Abstractions</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//computation-expressions.html">Computation Expressions</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//lens.html">Lens</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//parsing.html">Parsing</a></li>
-                <li class="nav-item"><a class="nav-link" href="/FSharpPlus//numerics.html">Numerics</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/numerics.html">Numerics</a></li>
 
                 <li class="nav-header">
   API Reference
@@ -110,59 +110,6 @@
   </div>
   <div>
     <h3>
-      Types
-    </h3>
-    <table class="table outer-list fsdocs-entity-list">
-      <thead>
-        <tr>
-          <td>
-            Type
-          </td>
-          <td>
-            Description
-          </td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td class="fsdocs-entity-name">
-            <p>
-              <a name="ObservableUpdate<'T>">
-                <a href="/FSharpPlus/reference/fsharpplus-observable-observableupdate-1.html">
-                  ObservableUpdate<'T>
-                </a>
-              </a>
-            </p>
-          </td>
-          <td class="fsdocs-entity-xmldoc">
-            <div>
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('``cref:T:FSharpPlus.Observable.ObservableUpdate`1``')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'T:FSharpPlus.Observable.ObservableUpdate`1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Observable.fs#L17-17" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Union type that represents different messages that can be sent to the
- IObserver interface. The IObserver type is equivalent to a type that has
- just OnNext method that gets 'ObservableUpdate' as an argument.
-
-              </p>
-            </div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div>
-    <h3>
       Functions and values
     </h3>
     <table class="table outer-list fsdocs-member-list">
@@ -180,89 +127,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '231', 231)" onmouseover="showTip(event, '231', 231)">
-                <p>
-                  <a id="asUpdates">
-                    <a href="#asUpdates">
-                      <code><span>Observable.asUpdates&#32;<span>source</span></span></code>
-                    </a>
-                  </a>
-                </p>
-              </code>
-              <div class="fsdocs-tip" id="231">
-                <div class="member-tooltip">
-                  Full Usage: 
-                  <code><span>Observable.asUpdates&#32;<span>source</span></span></code>
-                  <br/>
-                  <br/>
-                  Parameters: 
-                  <ul>
-                    <span>
-                      <b>
-                        source
-                      </b>
-                      :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
-                    </span>
-                    <br/>
-                  </ul>
-                  <br/>
-                  <span>
-                    Returns: 
-                    <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-observable-observableupdate-1.html">ObservableUpdate</a>&lt;'T&gt;</span>&gt;</span></code>
-                  </span>
-                  <br/>
-                </div>
-              </div>
-            </div>
-          </td>
-          <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Observable.asUpdates``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Observable.asUpdates``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Observable.fs#L26-26" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
- Turns observable into an observable that only calls OnNext method of the
- observer, but gives it a discriminated union that represents different
- kinds of events (error, next, completed)
-
-              </p>
-            </div>
-            <dl class="fsdocs-params">
-              <dt class="fsdocs-param">
-                <span class="fsdocs-param-name">
-                  source
-                </span>
-                :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-param-docs"></dd>
-            </dl>
-            <dl class="fsdocs-returns">
-              <dt>
-                <span class="fsdocs-return-name">
-                  Returns: 
-                </span>
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;<span><a href="/FSharpPlus/reference/fsharpplus-observable-observableupdate-1.html">ObservableUpdate</a>&lt;'T&gt;</span>&gt;</span></code>
-              </dt>
-              <dd class="fsdocs-return-docs"></dd>
-            </dl>
-          </td>
-        </tr>
-        <tr>
-          <td class="fsdocs-member-usage">
-            <div>
-              <code onmouseout="hideTip(event, '232', 232)" onmouseover="showTip(event, '232', 232)">
+              <code onmouseout="hideTip(event, '282', 282)" onmouseover="showTip(event, '282', 282)">
                 <p>
                   <a id="toAsyncSeq">
                     <a href="#toAsyncSeq">
@@ -271,7 +136,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="232">
+              <div class="fsdocs-tip" id="282">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Observable.toAsyncSeq&#32;<span>source</span></span></code>
@@ -284,7 +149,7 @@
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
@@ -299,30 +164,13 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Observable.toAsyncSeq``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Observable.toAsyncSeq``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Observable.fs#L38-38" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
-              </p>
-            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -340,7 +188,7 @@
         <tr>
           <td class="fsdocs-member-usage">
             <div>
-              <code onmouseout="hideTip(event, '233', 233)" onmouseover="showTip(event, '233', 233)">
+              <code onmouseout="hideTip(event, '283', 283)" onmouseover="showTip(event, '283', 283)">
                 <p>
                   <a id="toTaskSeq">
                     <a href="#toTaskSeq">
@@ -349,7 +197,7 @@
                   </a>
                 </p>
               </code>
-              <div class="fsdocs-tip" id="233">
+              <div class="fsdocs-tip" id="283">
                 <div class="member-tooltip">
                   Full Usage: 
                   <code><span>Observable.toTaskSeq&#32;<span>source</span></span></code>
@@ -362,14 +210,14 @@
                         source
                       </b>
                       :
-                      <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
+                      <code><span><a href="https://learn.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
                     </span>
                     <br/>
                   </ul>
                   <br/>
                   <span>
                     Returns: 
-                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-seqt-2.html">SeqT</a>&lt;<span><span><a href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;bool&gt;</span>,&#32;'T</span>&gt;</span></code>
+                    <code><span><a href="/FSharpPlus/reference/fsharpplus-data-seqt-2.html">SeqT</a>&lt;<span><span><a href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;bool&gt;</span>,&#32;'T</span>&gt;</span></code>
                   </span>
                   <br/>
                 </div>
@@ -377,30 +225,13 @@
             </div>
           </td>
           <td class="fsdocs-member-xmldoc">
-            <div class="fsdocs-summary">
-              <div class="fsdocs-source-link" title="Copy signature (Markdown)" onclick="Clipboard_CopyTo('```cref:M:FSharpPlus.Observable.toTaskSeq``1```')">
-                <img src="/FSharpPlus/content/img/copy-md.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-md-hover.png" class="hover"/>
-              </div>
-              <div class="fsdocs-source-link" title="Copy signature (XML)" onclick="Clipboard_CopyTo('<see cref=\'M:FSharpPlus.Observable.toTaskSeq``1\'/>')">
-                <img src="/FSharpPlus/content/img/copy-xml.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/copy-xml-hover.png" class="hover"/>
-              </div>
-              <a href="https://github.com/fsprojects/FSharpPlus/tree/master/src/FSharpPlus/Extensions/Observable.fs#L59-59" class="fsdocs-source-link" title="Source on GitHub">
-                <img src="/FSharpPlus/content/img/github.png" class="normal"/>
-                <img src="/FSharpPlus/content/img/github-hover.png" class="hover"/>
-              </a>
-              <p class="fsdocs-summary">
-                
-              </p>
-            </div>
             <dl class="fsdocs-params">
               <dt class="fsdocs-param">
                 <span class="fsdocs-param-name">
                   source
                 </span>
                 :
-                <code><span><a href="https://docs.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
+                <code><span><a href="https://learn.microsoft.com/dotnet/api/system.iobservable-1">IObservable</a>&lt;'T&gt;</span></code>
               </dt>
               <dd class="fsdocs-param-docs"></dd>
             </dl>
@@ -409,7 +240,7 @@
                 <span class="fsdocs-return-name">
                   Returns: 
                 </span>
-                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-seqt-2.html">SeqT</a>&lt;<span><span><a href="https://docs.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;bool&gt;</span>,&#32;'T</span>&gt;</span></code>
+                <code><span><a href="/FSharpPlus/reference/fsharpplus-data-seqt-2.html">SeqT</a>&lt;<span><span><a href="https://learn.microsoft.com/dotnet/api/system.threading.tasks.task-1">Task</a>&lt;bool&gt;</span>,&#32;'T</span>&gt;</span></code>
               </dt>
               <dd class="fsdocs-return-docs"></dd>
             </dl>

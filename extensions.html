@@ -239,6 +239,7 @@ usually when converting to Option:</p>
 <li>truncate, drop</li>
 <li>findIndex, tryFindIndex</li>
 <li>findSliceIndex, tryFindSliceIndex</li>
+<li>findLastSliceIndex, tryFindLastSliceIndex</li>
 <li>toArray, ofArray, toList, ofList, toSeq, ofSeq, toCodePoints, ofCodePoints</li>
 <li>getBytes</li>
 </ul>
@@ -252,6 +253,7 @@ usually when converting to Option:</p>
 <li>intercalate, intersperse,</li>
 <li>split, replace,</li>
 <li>findSliceIndex, trySliceIndex,</li>
+<li>findLastSliceIndex, tryLastSliceIndex,</li>
 <li>partitionMap</li>
 </ul>
 </li>
@@ -272,6 +274,7 @@ usually when converting to Option:</p>
 <li>split, replace,</li>
 <li>toIReadOnlyList,</li>
 <li>findSliceIndex, tryFindSliceIndex,</li>
+<li>findLastSliceIndex, tryLastSliceIndex,</li>
 <li>partitionMap</li>
 <li>setAt, removeAt</li>
 </ul>
@@ -317,6 +320,7 @@ MapEnumerators
 <li>replicate</li>
 <li>toIReadOnlyList</li>
 <li>findSliceIndex, tryFindSliceIndex</li>
+<li>findLastSliceIndex, tryLastSliceIndex,</li>
 </ul>
 </li>
 <li>
@@ -522,11 +526,11 @@ from Microsoft.FSharp.Core</div>
  Inserts a separator char between each char in the source string.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs20">val c: int list</div>
-<div class="fsdocs-tip" id="fs21">val intercalate: separator: &#39;T list -&gt; source: seq&lt;&#39;T list&gt; -&gt; &#39;T list<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs21">val intercalate: separator: &#39;T list -&gt; source: &#39;T list seq -&gt; &#39;T list<br /><em>&lt;summary&gt;
  Concatenates all elements, using the specified separator between each element.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs22">val d: string</div>
-<div class="fsdocs-tip" id="fs23">val intercalate: separator: string -&gt; source: seq&lt;string&gt; -&gt; string<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs23">val intercalate: separator: string -&gt; source: string seq -&gt; string<br /><em>&lt;summary&gt;
  Concatenates all elements, using the specified separator between each element.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs24">val isEven: x: int -&gt; bool</div>

@@ -258,14 +258,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs2">val id: x: &#39;T -&gt; &#39;T</div>
 <div class="fsdocs-tip" id="fs3">namespace FSharpPlus</div>
 <div class="fsdocs-tip" id="fs4">namespace FSharpPlus.Math</div>
@@ -325,20 +325,20 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />module Seq
 
 from Microsoft.FSharp.Collections</div>
-<div class="fsdocs-tip" id="fs35">val toList: source: seq&lt;&#39;T&gt; -&gt; &#39;T list</div>
+<div class="fsdocs-tip" id="fs35">val toList: source: &#39;T seq -&gt; &#39;T list</div>
 <div class="fsdocs-tip" id="fs36">val quot7: Quotations.Expr&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs37">&#39;a</div>
 <div class="fsdocs-tip" id="fs38">Multiple items<br />union case Tree.Tree: &#39;a * Tree&lt;&#39;a&gt; * Tree&lt;&#39;a&gt; -&gt; Tree&lt;&#39;a&gt;<br /><br />--------------------<br />type Tree&lt;&#39;a&gt; =
   | Tree of &#39;a * Tree&lt;&#39;a&gt; * Tree&lt;&#39;a&gt;
   | Leaf of &#39;a
-  static member Map: x: Tree&lt;&#39;a0&gt; * f: (&#39;a0 -&gt; &#39;b) -&gt; Tree&lt;&#39;b&gt;
-  static member map: f: (&#39;a -&gt; &#39;a0) -&gt; t: Tree&lt;&#39;a&gt; -&gt; Tree&lt;&#39;a0&gt;</div>
+  static member Map&lt;&#39;a,&#39;b&gt; : x: Tree&lt;&#39;a0&gt; * f: (&#39;a0 -&gt; &#39;b) -&gt; Tree&lt;&#39;b&gt;
+  static member map&lt;&#39;a&gt; : f: (&#39;a -&gt; &#39;a0) -&gt; t: Tree&lt;&#39;a&gt; -&gt; Tree&lt;&#39;a0&gt;</div>
 <div class="fsdocs-tip" id="fs39">union case Tree.Leaf: &#39;a -&gt; Tree&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs40">val f: (&#39;a -&gt; &#39;a0)</div>
 <div class="fsdocs-tip" id="fs41">val t: Tree&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs42">val t1: Tree&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs43">val t2: Tree&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs44">static member Tree.map: f: (&#39;a -&gt; &#39;a0) -&gt; t: Tree&lt;&#39;a&gt; -&gt; Tree&lt;&#39;a0&gt;</div>
+<div class="fsdocs-tip" id="fs44">static member Tree.map&lt;&#39;a&gt; : f: (&#39;a -&gt; &#39;a0) -&gt; t: Tree&lt;&#39;a&gt; -&gt; Tree&lt;&#39;a0&gt;</div>
 <div class="fsdocs-tip" id="fs45">Multiple items<br />module Map
 
 from FSharpPlus<br /><em>&lt;summary&gt;
@@ -349,41 +349,41 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs46">val x: Tree&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs47">val f: (&#39;a -&gt; &#39;b)</div>
 <div class="fsdocs-tip" id="fs48">val myTree: Tree&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs49">val mappedTree: Tree&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs50">&#39;s</div>
-<div class="fsdocs-tip" id="fs51">Multiple items<br />union case ZipList.ZipList: seq&lt;&#39;s&gt; -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />type ZipList&lt;&#39;s&gt; =
-  | ZipList of seq&lt;&#39;s&gt;
+<div class="fsdocs-tip" id="fs51">Multiple items<br />union case ZipList.ZipList: &#39;s seq -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />type ZipList&lt;&#39;s&gt; =
+  | ZipList of &#39;s seq
   static member (&lt;*&gt;) : ZipList&lt;(&#39;a -&gt; &#39;b)&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;b&gt;
   static member Return: x: &#39;a -&gt; ZipList&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs52">Multiple items<br />val seq: sequence: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs53">val initInfinite: initializer: (int -&gt; &#39;T) -&gt; seq&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs52">Multiple items<br />val seq: sequence: &#39;T seq -&gt; &#39;T seq<br /><br />--------------------<br />type &#39;T seq = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs53">val initInfinite: initializer: (int -&gt; &#39;T) -&gt; &#39;T seq</div>
 <div class="fsdocs-tip" id="fs54">val konst: k: &#39;T -&gt; &#39;Ignored -&gt; &#39;T<br /><em>&lt;summary&gt; Creates a constant function.&lt;/summary&gt;<br />&lt;param name=&quot;k&quot;&gt;The constant value.&lt;/param&gt;<br />&lt;returns&gt;The constant value function.&lt;/returns&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em></div>
-<div class="fsdocs-tip" id="fs55">val f: seq&lt;(&#39;a -&gt; &#39;b)&gt;</div>
+<div class="fsdocs-tip" id="fs55">val f: (&#39;a -&gt; &#39;b) seq</div>
 <div class="fsdocs-tip" id="fs56">&#39;b</div>
-<div class="fsdocs-tip" id="fs57">val x: seq&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs58">val zip: source1: seq&lt;&#39;T1&gt; -&gt; source2: seq&lt;&#39;T2&gt; -&gt; seq&lt;&#39;T1 * &#39;T2&gt;</div>
-<div class="fsdocs-tip" id="fs59">val map: mapping: (&#39;T -&gt; &#39;U) -&gt; source: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;</div>
+<div class="fsdocs-tip" id="fs57">val x: &#39;a seq</div>
+<div class="fsdocs-tip" id="fs58">val zip: source1: &#39;T1 seq -&gt; source2: &#39;T2 seq -&gt; (&#39;T1 * &#39;T2) seq</div>
+<div class="fsdocs-tip" id="fs59">val map: mapping: (&#39;T -&gt; &#39;U) -&gt; source: &#39;T seq -&gt; &#39;U seq</div>
 <div class="fsdocs-tip" id="fs60">val mappedZipList: ZipList&lt;string&gt;</div>
-<div class="fsdocs-tip" id="fs61">Multiple items<br />union case MyList.MyList: seq&lt;&#39;s&gt; -&gt; MyList&lt;&#39;s&gt;<br /><br />--------------------<br />type MyList&lt;&#39;s&gt; =
-  | MyList of seq&lt;&#39;s&gt;
+<div class="fsdocs-tip" id="fs61">Multiple items<br />union case MyList.MyList: &#39;s seq -&gt; MyList&lt;&#39;s&gt;<br /><br />--------------------<br />type MyList&lt;&#39;s&gt; =
+  | MyList of &#39;s seq
   static member (&gt;&gt;=) : MyList&lt;&#39;T&gt; * f: (&#39;T -&gt; MyList&lt;&#39;a&gt;) -&gt; MyList&lt;&#39;a&gt;
-  static member Return: x: #seq&lt;&#39;a0&gt; -&gt; MyList&lt;&#39;a0&gt;</div>
-<div class="fsdocs-tip" id="fs62">val x: #seq&lt;&#39;a0&gt;</div>
-<div class="fsdocs-tip" id="fs63">val x: seq&lt;&#39;T&gt;</div>
+  static member Return: x: #(&#39;a0 seq) -&gt; MyList&lt;&#39;a0&gt;</div>
+<div class="fsdocs-tip" id="fs62">val x: #(&#39;a0 seq)</div>
+<div class="fsdocs-tip" id="fs63">val x: &#39;T seq</div>
 <div class="fsdocs-tip" id="fs64">&#39;T</div>
 <div class="fsdocs-tip" id="fs65">val f: (&#39;T -&gt; MyList&lt;&#39;a&gt;)</div>
-<div class="fsdocs-tip" id="fs66">val collect: mapping: (&#39;T -&gt; #seq&lt;&#39;U&gt;) -&gt; source: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;</div>
+<div class="fsdocs-tip" id="fs66">val collect: mapping: (&#39;T -&gt; #(&#39;U seq)) -&gt; source: &#39;T seq -&gt; &#39;U seq</div>
 <div class="fsdocs-tip" id="fs67">val mappedMyList: MyList&lt;char&gt;</div>
 
         </div>

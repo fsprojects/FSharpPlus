@@ -123,24 +123,24 @@ DList is an implementation of <a href="http://dl.acm.org/citation.cfm?id=8475">J
 <div class="fsdocs-tip" id="fs4">Multiple items<br />module DList
 
 from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&gt; =
-  interface IEnumerable
   interface IReadOnlyList&lt;&#39;T&gt;
-  interface IReadOnlyCollection&lt;&#39;T&gt;
-  interface IEnumerable&lt;&#39;T&gt;
+  interface IEquatable&lt;DList&lt;&#39;T&gt;&gt;
   new: length: int * data: DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;
   member Add: x: &#39;T -&gt; DList&lt;&#39;T&gt;
   member Cons: hd: &#39;T -&gt; DList&lt;&#39;T&gt;
   override Equals: other: obj -&gt; bool
   override GetHashCode: unit -&gt; int
   member toSeq: unit -&gt; IEnumerator&lt;&#39;T&gt;
+  static member (+) : x: DList&lt;&#39;a&gt; * y: DList&lt;&#39;a&gt; -&gt; DList&lt;&#39;a&gt;
+  static member (&lt;*&gt;) : f: DList&lt;(&#39;a -&gt; &#39;b)&gt; * x: DList&lt;&#39;a&gt; -&gt; DList&lt;&#39;b&gt;
   ...<br /><em>&lt;summary&gt;
  DList is an ordered linear structure implementing the List signature (head, tail, cons), 
  end-insertion (add), and O(1) append. Ordering is by insertion history.
  DList is an implementation of [John Hughes&#39; append list](http://dl.acm.org/citation.cfm?id=8475).
 &lt;/summary&gt;</em><br /><br />--------------------<br />new: length: int * data: DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs5">Multiple items<br />val ofSeq: s: seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
- O(n). Returns a DList of the seq.
-&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.ofSeq: s: seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs5">Multiple items<br />val ofSeq: s: &#39;T seq -&gt; DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
+ Returns a DList of the seq.
+&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.ofSeq: s: &#39;T seq -&gt; DList&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs6">val listEmpty: DList&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs7">val empty&lt;&#39;T&gt; : DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
  O(1). Returns DList of no elements.
@@ -152,7 +152,7 @@ from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&g
 <div class="fsdocs-tip" id="fs10">val list3: DList&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs11">Multiple items<br />val append: left: DList&lt;&#39;T&gt; -&gt; right: DList&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
  O(1). Returns a new DList of two lists.
-&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.append: left: DListData&lt;&#39;a1&gt; * right: DListData&lt;&#39;a1&gt; -&gt; DListData&lt;&#39;a1&gt;</div>
+&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.append: left: DListData&lt;&#39;a&gt; * right: DListData&lt;&#39;a&gt; -&gt; DListData&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs12">val singleton: x: &#39;a -&gt; DList&lt;&#39;a&gt;<br /><em>&lt;summary&gt;
  O(1). Returns DList of one elements.
 &lt;/summary&gt;</em></div>
@@ -174,7 +174,7 @@ from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&g
 <div class="fsdocs-tip" id="fs22">val headOf3: int</div>
 <div class="fsdocs-tip" id="fs23">Multiple items<br />val head: l: DList&lt;&#39;T&gt; -&gt; &#39;T<br /><em>&lt;summary&gt;
  O(log n). Returns the first element.
-&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.head: data: DListData&lt;&#39;a1&gt; -&gt; &#39;a1</div>
+&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.head: data: DListData&lt;&#39;a&gt; -&gt; &#39;a</div>
 <div class="fsdocs-tip" id="fs24">val headOf3&#39;: int</div>
 <div class="fsdocs-tip" id="fs25">val head: source: &#39;Foldable&lt;&#39;T&gt; -&gt; &#39;T (requires member Head)<br /><em>&lt;summary&gt;Gets the first element of the foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input flodable.&lt;/param&gt;<br />&lt;exception cref=&quot;System.ArgumentException&quot;&gt;Thrown when the foldable is empty.&lt;/exception&gt;<br />&lt;returns&gt;The first element of the foldable.&lt;/returns&gt;</em></div>
 

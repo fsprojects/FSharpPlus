@@ -312,7 +312,7 @@ It contains examples using F#+ and an explanation from scratch.
  Converts to a value from its string representation. Returns None if the convertion doesn&#39;t succeed.
  &lt;/summary&gt;<br />&lt;category index=&quot;21&quot;&gt;Converter&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs11">val resSome22: int option</div>
-<div class="fsdocs-tip" id="fs12">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs12">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -333,7 +333,7 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 <div class="fsdocs-tip" id="fs21">namespace Microsoft.FSharp.Quotations</div>
 <div class="fsdocs-tip" id="fs22">Multiple items<br />type Expr =
   override Equals: obj: obj -&gt; bool
-  member GetFreeVars: unit -&gt; seq&lt;Var&gt;
+  member GetFreeVars: unit -&gt; Var seq
   member Substitute: substitution: (Var -&gt; Expr option) -&gt; Expr
   member ToString: full: bool -&gt; string
   static member AddressOf: target: Expr -&gt; Expr
@@ -375,24 +375,24 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 <div class="fsdocs-tip" id="fs41">Multiple items<br />union case Ii.Ii: Ii<br /><br />--------------------<br />type Ii = | Ii</div>
 <div class="fsdocs-tip" id="fs42">val res3n4&#39;: int list</div>
 <div class="fsdocs-tip" id="fs43">val res18n24: ZipList&lt;int&gt;</div>
-<div class="fsdocs-tip" id="fs44">Multiple items<br />union case ZipList.ZipList: seq&lt;&#39;s&gt; -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />module ZipList
+<div class="fsdocs-tip" id="fs44">Multiple items<br />union case ZipList.ZipList: &#39;s seq -&gt; ZipList&lt;&#39;s&gt;<br /><br />--------------------<br />module ZipList
 
 from FSharpPlus.Data<br /><em>&lt;summary&gt;
  Basic operations on ZipList
 &lt;/summary&gt;</em><br /><br />--------------------<br />type ZipList&lt;&#39;s&gt; =
-  | ZipList of seq&lt;&#39;s&gt;
+  | ZipList of &#39;s seq
   member Item: n: int -&gt; &#39;s
   static member (+) : x: ZipList&lt;&#39;a&gt; * y: ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt; (requires member ``+``)
   static member (&lt;*&gt;) : ZipList&lt;(&#39;a -&gt; &#39;b)&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;b&gt;
-  static member (&lt;|&gt;) : ZipList&lt;&#39;a1&gt; * ZipList&lt;&#39;a1&gt; -&gt; ZipList&lt;&#39;a1&gt;
+  static member (&lt;|&gt;) : ZipList&lt;&#39;a&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt;
   static member Return: x: &#39;a -&gt; ZipList&lt;&#39;a&gt;
-  static member ToSeq: ZipList&lt;&#39;a1&gt; -&gt; seq&lt;&#39;a1&gt;
-  static member Traverse: ZipList&lt;&#39;T&gt; * f: (&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;ZipList&lt;&#39;U&gt;&gt; (requires member ``&lt;*&gt;`` and member IsLeftZero and member Map and member Return and member Map and member Traverse and member Map)
-  static member get_Empty: unit -&gt; ZipList&lt;&#39;a1&gt;
+  static member ToSeq: ZipList&lt;&#39;a&gt; -&gt; &#39;a seq
+  static member Traverse: ZipList&lt;&#39;T&gt; * f: (&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;ZipList&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member IsLeftZero and member Map and member Map and member Traverse and member Return and member Map)
+  static member get_Empty: unit -&gt; ZipList&lt;&#39;a&gt;
   static member Zero: unit -&gt; ZipList&lt;&#39;a&gt; (requires member Zero)<br /><em>&lt;summary&gt;
  A sequence with an Applicative functor based on zipping.
 &lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs45">Multiple items<br />val seq: sequence: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs45">Multiple items<br />val seq: sequence: &#39;T seq -&gt; &#39;T seq<br /><br />--------------------<br />type &#39;T seq = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs46">val tryDiv: x: int -&gt; y: int -&gt; int option</div>
 <div class="fsdocs-tip" id="fs47">val x: int</div>
 <div class="fsdocs-tip" id="fs48">val y: int</div>
@@ -428,7 +428,7 @@ from FSharpPlus.Math<br /><em>&lt;summary&gt;Math Operators ready to use over Ap
 <div class="fsdocs-tip" id="fs74">val s: string</div>
 <div class="fsdocs-tip" id="fs75">val person4: Person option</div>
 <div class="fsdocs-tip" id="fs76">val applicative&lt;&#39;Applicative&lt;&#39;T&gt;&gt; : ApplicativeBuilder&lt;&#39;Applicative&lt;&#39;T&gt;&gt;<br /><em>&lt;summary&gt;
- Creates an applicative computation expression.
+ Creates a (sequential) applicative computation expression.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs77">val name: string</div>
 <div class="fsdocs-tip" id="fs78">val age: int</div>
@@ -443,13 +443,14 @@ type Compose&lt;&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;&gt; =
   static member ( *&gt; ) : x: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt; * y: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; -&gt; &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;``)
   static member (&lt;!&gt;) : f: (&#39;T -&gt; &#39;U) * x: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt;&gt; (requires member Map and member Map)
   static member ( &lt;* ) : x: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; * y: &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt; -&gt; &#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt; (requires member ``&lt;*&gt;`` and member Map)
-  static member (&lt;*&gt;) : Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T-&gt;&#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member ``&lt;*&gt;``)
+  static member (&lt;*&gt;) : Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T -&gt; &#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member ``&lt;*&gt;``)
+  static member (&lt;.&gt;) : Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T -&gt; &#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;.&gt;`` and member ``&lt;.&gt;``)
   static member (&lt;|&gt;) : Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; -&gt; Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member ``&lt;|&gt;``)
   static member Lift2: f: (&#39;T -&gt; &#39;U -&gt; &#39;V) * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;V&gt;&gt; (requires member Lift2 and member Lift2)
   static member Lift3: f: (&#39;T -&gt; &#39;U -&gt; &#39;V -&gt; &#39;W) * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;V&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;W&gt;&gt; (requires member Lift3 and member Lift3)
   static member Map: Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;T&gt;&gt;&gt; * f: (&#39;T -&gt; &#39;U) -&gt; Compose&lt;&#39;FunctorF&lt;&#39;FunctorG&lt;&#39;U&gt;&gt;&gt; (requires member Map and member Map)
-  static member Return: x: &#39;T -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member Return and member Return)
-  static member get_Empty: unit -&gt; Compose&lt;&#39;AlternativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; (requires member Empty)<br /><em>&lt;summary&gt;
+  static member Map2: f: (&#39;T -&gt; &#39;U -&gt; &#39;V) * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;T&gt;&gt; * Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;U&gt;&gt; -&gt; Compose&lt;&#39;ApplicativeF&lt;&#39;ApplicativeG&lt;&#39;V&gt;&gt; (requires member Map2 and member Map2)
+  ...<br /><em>&lt;summary&gt;
  Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs81">val getNameAsync: s: string list -&gt; Async&lt;string option&gt;</div>
@@ -458,12 +459,12 @@ type Compose&lt;&#39;functorF&lt;&#39;functorG&lt;&#39;t&gt;&gt;&gt; =
 <div class="fsdocs-tip" id="fs84">val person5: Compose&lt;Async&lt;Person option&gt;&gt;</div>
 <div class="fsdocs-tip" id="fs85">val person6: Async&lt;Person option&gt;</div>
 <div class="fsdocs-tip" id="fs86">val applicative2&lt;&#39;Applicative1&lt;Applicative2&lt;&#39;T&gt;&gt;&gt; : ApplicativeBuilder2&lt;&#39;Applicative1&lt;Applicative2&lt;&#39;T&gt;&gt;&gt;<br /><em>&lt;summary&gt;
- Creates an applicative computation expression which compose effects of two Applicatives.
+ Creates a (sequential) applicative computation expression which compose effects of two Applicatives.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs87">val printfn: format: Printf.TextWriterFormat&lt;&#39;T&gt; -&gt; &#39;T</div>
 <div class="fsdocs-tip" id="fs88">&#39;s</div>
-<div class="fsdocs-tip" id="fs89">Multiple items<br />union case MyList.MyList: seq&lt;&#39;s&gt; -&gt; MyList&lt;&#39;s&gt;<br /><br />--------------------<br />type MyList&lt;&#39;s&gt; =
-  | MyList of seq&lt;&#39;s&gt;
+<div class="fsdocs-tip" id="fs89">Multiple items<br />union case MyList.MyList: &#39;s seq -&gt; MyList&lt;&#39;s&gt;<br /><br />--------------------<br />type MyList&lt;&#39;s&gt; =
+  | MyList of &#39;s seq
   static member (&gt;&gt;=) : MyList&lt;&#39;T&gt; * f: (&#39;T -&gt; MyList&lt;&#39;a&gt;) -&gt; MyList&lt;&#39;a&gt;
   static member Return: x: &#39;a -&gt; MyList&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs90">val x: &#39;a</div>
@@ -481,12 +482,12 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />module Seq
 
 from Microsoft.FSharp.Collections</div>
-<div class="fsdocs-tip" id="fs93">val singleton: value: &#39;T -&gt; seq&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs94">val x: seq&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs93">val singleton: value: &#39;T -&gt; &#39;T seq</div>
+<div class="fsdocs-tip" id="fs94">val x: &#39;T seq</div>
 <div class="fsdocs-tip" id="fs95">&#39;T</div>
 <div class="fsdocs-tip" id="fs96">val f: (&#39;T -&gt; MyList&lt;&#39;a&gt;)</div>
-<div class="fsdocs-tip" id="fs97">val collect: mapping: (&#39;T -&gt; #seq&lt;&#39;U&gt;) -&gt; source: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;</div>
-<div class="fsdocs-tip" id="fs98">val x: seq&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs97">val collect: mapping: (&#39;T -&gt; #(&#39;U seq)) -&gt; source: &#39;T seq -&gt; &#39;U seq</div>
+<div class="fsdocs-tip" id="fs98">val x: &#39;a seq</div>
 <div class="fsdocs-tip" id="fs99">val mappedMyList: MyList&lt;int&gt;</div>
 
         </div>

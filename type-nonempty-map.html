@@ -127,7 +127,7 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;
   member ContainsKey: key: &#39;Key -&gt; bool
   member TryFind: key: &#39;Key -&gt; &#39;Value option
-  member TryGetValue: key: &#39;Key * value: byref&lt;&#39;Value&gt; -&gt; bool
+  member TryGetValue: key: &#39;Key * [&lt;Out&gt;] value: byref&lt;&#39;Value&gt; -&gt; bool
   static member Create: (&#39;Key * &#39;Value) * [&lt;ParamArray&gt;] rest: (&#39;Key * &#39;Value) array -&gt; NonEmptyMap&lt;&#39;Key,&#39;Value&gt;
   ...<br /><em>&lt;summary&gt;
  A type-safe map that contains at least one element.

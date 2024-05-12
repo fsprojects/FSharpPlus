@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara&family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hind+Vadodara&family=Roboto+Mono:wght@400;500;600&display=swap');
 /*--------------------------------------------------------------------------
   Formatting for page & standard document content
 /*--------------------------------------------------------------------------*/
@@ -225,6 +225,10 @@ blockquote {
   Formatting xmldoc sections in fsdocs-content
 /*--------------------------------------------------------------------------*/
 
+.fsdocs-summary {
+    display: inline;
+}
+
 .fsdocs-xmldoc, .fsdocs-entity-xmldoc, .fsdocs-member-xmldoc {
     font-size: 1.0rem;
     line-height: 1.375rem;
@@ -246,6 +250,10 @@ blockquote {
 .fsdocs-xmldoc h3 {
     font-size: 1.1rem;
     margin: 10px 0px 0px 0px;
+}
+
+.fsdocs-member-xmldoc details[open] summary + * {
+    margin-top: 1rem;
 }
 
 /* #fsdocs-nav .searchbox {

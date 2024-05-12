@@ -511,14 +511,14 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type Map&
   interface IReadOnlyDictionary&lt;&#39;Key,&#39;Value&gt;
   interface IReadOnlyCollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IEnumerable
+  interface IStructuralEquatable
   interface IComparable
   interface IEnumerable&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface ICollection&lt;KeyValuePair&lt;&#39;Key,&#39;Value&gt;&gt;
   interface IDictionary&lt;&#39;Key,&#39;Value&gt;
-  new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;
+  new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;
   member Add: key: &#39;Key * value: &#39;Value -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  member Change: key: &#39;Key * f: (&#39;Value option -&gt; &#39;Value option) -&gt; Map&lt;&#39;Key,&#39;Value&gt;
-  ...<br /><br />--------------------<br />new: elements: seq&lt;&#39;Key * &#39;Value&gt; -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
+  ...<br /><br />--------------------<br />new: elements: (&#39;Key * &#39;Value) seq -&gt; Map&lt;&#39;Key,&#39;Value&gt;</div>
 <div class="fsdocs-tip" id="fs21">val x: &#39;a</div>
 <div class="fsdocs-tip" id="fs22">val f: (&#39;a -&gt; &#39;b)</div>
 <div class="fsdocs-tip" id="fs23">val r04: Id&lt;string&gt;</div>
@@ -539,7 +539,7 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
   static member CancelDefaultToken: unit -&gt; unit
   static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
-  static member Choice: computations: seq&lt;Async&lt;&#39;T option&gt;&gt; -&gt; Async&lt;&#39;T option&gt;
+  static member Choice: computations: Async&lt;&#39;T option&gt; seq -&gt; Async&lt;&#39;T option&gt;
   static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
   static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
   ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>
@@ -737,13 +737,13 @@ type Int32 =
   member GetHashCode: unit -&gt; int
   member GetTypeCode: unit -&gt; TypeCode
   member ToString: unit -&gt; string + 3 overloads
-  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool + 1 overload
   static member Abs: value: int -&gt; int
   static member Clamp: value: int * min: int * max: int -&gt; int
   static member CopySign: value: int * sign: int -&gt; int
   static member CreateChecked&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; int
   ...<br /><em>&lt;summary&gt;Represents a 32-bit signed integer.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs136">System.Int32.Parse(s: string) : int<br />System.Int32.Parse(s: string, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int</div>
+<div class="fsdocs-tip" id="fs136">System.Int32.Parse(s: string) : int<br />System.Int32.Parse(s: string, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(utf8Text: System.ReadOnlySpan&lt;byte&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int<br />System.Int32.Parse(utf8Text: System.ReadOnlySpan&lt;byte&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int</div>
 <div class="fsdocs-tip" id="fs137">val r24: Async&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs138">val pure&#39;: x: &#39;a -&gt; &#39;a list</div>
 <div class="fsdocs-tip" id="fs139">val f: (&#39;a -&gt; &#39;b) list</div>
@@ -758,7 +758,7 @@ from Applicative-functors</div>
 <div class="fsdocs-tip" id="fs146">val r26: string list</div>
 <div class="fsdocs-tip" id="fs147">val r27: int list</div>
 <div class="fsdocs-tip" id="fs148">val r28: int list</div>
-<div class="fsdocs-tip" id="fs149">val pure&#39;: x: &#39;a -&gt; seq&lt;&#39;a&gt;</div>
+<div class="fsdocs-tip" id="fs149">val pure&#39;: x: &#39;a -&gt; &#39;a seq</div>
 <div class="fsdocs-tip" id="fs150">Multiple items<br />module Seq
 
 from FSharpPlus.Operators<br /><br />--------------------<br />module Seq
@@ -768,17 +768,17 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />module Seq
 
 from Microsoft.FSharp.Collections</div>
-<div class="fsdocs-tip" id="fs151">val initInfinite: initializer: (int -&gt; &#39;T) -&gt; seq&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs152">val f: seq&lt;(&#39;a -&gt; &#39;b)&gt;</div>
-<div class="fsdocs-tip" id="fs153">val x: seq&lt;&#39;a&gt;</div>
-<div class="fsdocs-tip" id="fs154">val zip: source1: seq&lt;&#39;T1&gt; -&gt; source2: seq&lt;&#39;T2&gt; -&gt; seq&lt;&#39;T1 * &#39;T2&gt;</div>
-<div class="fsdocs-tip" id="fs155">val map: mapping: (&#39;T -&gt; &#39;U) -&gt; source: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;U&gt;</div>
+<div class="fsdocs-tip" id="fs151">val initInfinite: initializer: (int -&gt; &#39;T) -&gt; &#39;T seq</div>
+<div class="fsdocs-tip" id="fs152">val f: (&#39;a -&gt; &#39;b) seq</div>
+<div class="fsdocs-tip" id="fs153">val x: &#39;a seq</div>
+<div class="fsdocs-tip" id="fs154">val zip: source1: &#39;T1 seq -&gt; source2: &#39;T2 seq -&gt; (&#39;T1 * &#39;T2) seq</div>
+<div class="fsdocs-tip" id="fs155">val map: mapping: (&#39;T -&gt; &#39;U) -&gt; source: &#39;T seq -&gt; &#39;U seq</div>
 <div class="fsdocs-tip" id="fs156">module SeqAsApplicative
 
 from Applicative-functors</div>
 <div class="fsdocs-tip" id="fs157">val r29: string list</div>
-<div class="fsdocs-tip" id="fs158">Multiple items<br />val seq: sequence: seq&lt;&#39;T&gt; -&gt; seq&lt;&#39;T&gt;<br /><br />--------------------<br />type seq&lt;&#39;T&gt; = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs159">val toList: source: seq&lt;&#39;T&gt; -&gt; &#39;T list</div>
+<div class="fsdocs-tip" id="fs158">Multiple items<br />val seq: sequence: &#39;T seq -&gt; &#39;T seq<br /><br />--------------------<br />type &#39;T seq = System.Collections.Generic.IEnumerable&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs159">val toList: source: &#39;T seq -&gt; &#39;T list</div>
 <div class="fsdocs-tip" id="fs160">val r29&#39;: string list</div>
 <div class="fsdocs-tip" id="fs161">val r30: int list</div>
 <div class="fsdocs-tip" id="fs162">val f: Map&lt;&#39;k,(&#39;a -&gt; &#39;b)&gt; (requires comparison)</div>

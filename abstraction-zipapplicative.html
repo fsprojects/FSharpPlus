@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>ZipApplicative
+</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="author" content="gusty; wallymathieu">
+
+    <link rel="stylesheet" id="theme_link" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/4.3.1/materia/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-MML-AM_CHTML"></script> -->
+
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/navbar-fixed-left.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-default.css" />
+    <link type="text/css" rel="stylesheet" href="/FSharpPlus/content/fsdocs-custom.css" />
+    <script type="text/javascript" src="/FSharpPlus/content/fsdocs-tips.js"></script>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+    <!-- END SEARCH BOX: this adds support for the search box -->
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-md navbar-light bg-secondary fixed-left" id="fsdocs-menu">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <a href="https://github.com/fsprojects/FSharpPlus/"><img id="fsdocs-logo" src="/FSharpPlus/img/logo.png" /></a>
+            <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+            <div id="header">
+                <div class="searchbox" id="fsdocs-searchbox">
+                    <label for="search-by">
+                        <i class="fas fa-search"></i>
+                    </label>
+                    <input data-search-input="" id="search-by" type="search" placeholder="Search..." />
+                    <span data-search-clear="">
+                        <i class="fas fa-times"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- END SEARCH BOX: this adds support for the search box -->
+            <ul class="navbar-nav">
+                <li class="nav-header">Links</li>
+                <li class="nav-item" id="fsdocs-license-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md">License (Apache 2.0)</a></li>
+                <li class="nav-item" id="fsdocs-release-notes-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/blob/master/RELEASE_NOTES.md">Release Notes</a></li>
+                <li class="nav-item" id="fsdocs-repository-link"><a class="nav-link" href="https://github.com/fsprojects/FSharpPlus/">Source Repository</a></li>
+
+                <!-- Do not use 'fsdocs-list-of-documents' which currently cannot be ordered, and dumps all files in docsrc/ -->
+                <li class="nav-header" style="padding-top: 10px">Documentation</li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/tutorial.html">Tutorial</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/extensions.html">Extensions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/generic-doc.html">Functions &amp; Operators</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/types.html">Data Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/abstractions.html">Abstractions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/computation-expressions.html">Computation Expressions</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/lens.html">Lens</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/parsing.html">Parsing</a></li>
+                <li class="nav-item"><a class="nav-link" href="/FSharpPlus/numerics.html">Numerics</a></li>
+
+                <li class="nav-header">
+  API Reference
+</li>             
+<li class="nav-item">
+  <a class="nav-link" href="/FSharpPlus/reference/index.html">
+    All Namespaces
+  </a>
+</li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="masthead">
+            <h3 class="muted"><a href="https://github.com/fsprojects/FSharpPlus/">FSharpPlus</a></h3>
+        </div>
+        <hr />
+        <div class="container" id="fsdocs-content">
+            <h1><a name="ZipApplicative" class="anchor" href="#ZipApplicative">ZipApplicative</a></h1>
+<p>A functor with application, providing operations to embed pure expressions (<code>pur</code>), run computations pointwise and/or paralell and combine their results (<code>&lt;.&gt;</code>).
+___</p>
+<h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
+<ul>
+<li><code>pur x</code> &nbsp; . &nbsp; <code>result x</code></li>
+<li><code>(&lt;.&gt;) f x</code></li>
+</ul>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Pure</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
+<span class="k">static</span> <span class="k">member</span> <span class="pn">(</span><span class="o">&lt;.&gt;</span><span class="pn">)</span> <span class="pn">(</span><span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">U</span><span class="pn">&gt;</span>
+</code></pre>
+<h2><a name="Other-operations" class="anchor" href="#Other-operations">Other operations</a></h2>
+<ul>
+<li><code>zip</code></li>
+</ul>
+<p>static member Zip (x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T1 * 'T2></p>
+<ul>
+<li><code>map2</code></li>
+</ul>
+<p>static member Map2 (f: 'T1 -&gt; 'T2 -&gt; 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T></p>
+<ul>
+<li><code>map3</code></li>
+</ul>
+<p>static member Map3 (f: 'T1 -&gt; 'T2 -&gt; 'T3 -&gt; 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>, x3: 'ZipApplicative<'T3>) : 'ZipApplicative<'T></p>
+<h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="id">pur</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">id</span> <span class="o">&lt;.&gt;</span> <span class="id">v</span> <span class="o">=</span> <span class="id">v</span>
+<span class="id">pur</span> <span class="pn">(</span><span class="o">&lt;&lt;</span><span class="pn">)</span> <span class="o">&lt;.&gt;</span> <span class="id">u</span> <span class="o">&lt;.&gt;</span> <span class="id">v</span> <span class="o">&lt;.&gt;</span> <span class="id">w</span> <span class="o">=</span> <span class="id">u</span> <span class="o">&lt;.&gt;</span> <span class="pn">(</span><span class="id">v</span> <span class="o">&lt;.&gt;</span> <span class="id">w</span><span class="pn">)</span>
+<span class="id">pur</span> <span class="id">f</span> <span class="o">&lt;*&gt;</span> <span class="id">pur</span> <span class="id">x</span> <span class="o">=</span> <span class="id">pur</span> <span class="pn">(</span><span class="id">f</span> <span class="id">x</span><span class="pn">)</span>
+<span class="id">u</span> <span class="o">&lt;*&gt;</span> <span class="id">pur</span> <span class="id">y</span> <span class="o">=</span> <span class="id">pur</span> <span class="pn">(</span><span class="pn">(</span><span class="o">|&gt;</span><span class="pn">)</span> <span class="id">y</span><span class="pn">)</span> <span class="o">&lt;.&gt;</span> <span class="id">u</span>
+</code></pre>
+<h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
+<ul>
+<li><p><a href="abstraction-functor.html">Functor</a>: A zipApplicative is a functor whose <code>map</code> operation can be splitted in <code>pur</code> and <code>(&lt;.&gt;)</code> operations,</p></li>
+<li><p><a href="abstraction-applicative.html">ZipApplicative</a> : ZipApplicatives are applicatives which usually don't form a <a href="abstraction-monad.html">Monad</a>.</p></li>
+</ul>
+<h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
+<p>From F#</p>
+<ul>
+<li><code>seq&lt;'T&gt;</code></li>
+<li><code>list&lt;'T&gt;</code></li>
+<li><code>option&lt;'T&gt;</code>   *</li>
+<li><code>voption&lt;'T&gt;</code>  *</li>
+<li><code>Lazy&lt;'T&gt;</code>     *</li>
+<li><code>Async&lt;'T&gt;</code></li>
+<li><code>Result&lt;'T, 'U&gt;</code></li>
+<li><code>Choice&lt;'T, 'U&gt;</code></li>
+<li><code>KeyValuePair&lt;'Key, 'T&gt;</code>  *</li>
+<li><code>'Monoid * 'T</code>            *</li>
+<li><code>ValueTuple&lt;'Monoid, 'T&gt;</code> *</li>
+<li><code>Task&lt;'T&gt;</code></li>
+<li><code>ValueTask&lt;'T&gt;</code></li>
+<li><code>'R -&gt; 'T</code>        *</li>
+<li><code>Expr&lt;'T&gt;</code>        *</li>
+</ul>
+<p>From F#+</p>
+<ul>
+<li><p>[<code>NonEmptySeq&lt;'T&gt;</code>]</p></li>
+<li><p><a href="type-nonempty.html"><code>NonEmptyList&lt;'T&gt;</code></a></p></li>
+<li>
+<p><a href="type-compose.html"><code>Compose&lt;'ZipApplicative1&lt;'ZipApplicative2&lt;'T&gt;&gt;&gt;</code></a></p>
+<p>(*) The operation is the same as that for the normal applicative</p>
+</li>
+</ul>
+<p>Only for <*> operation:
+-  <code>array&lt;'T&gt;</code>
+-  <code>ResizeArray&lt;'T&gt;</code>
+-  <code>Map&lt;'Key, 'T&gt;</code>
+-  <code>Dictionary&lt;'Key, 'T&gt;</code>
+-  <code>IDictionary&lt;'Key, 'T&gt;</code>
+-  <code>IReadOnlyDictionary&lt;'Key, 'T&gt;</code></p>
+<p><a href="https://github.com/fsprojects/FSharpPlus/issues/new">Suggest another</a> concrete implementation</p>
+<h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
+<table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
+</code></pre></td></tr></table>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
+
+
+<span class="c">// pointwise operations</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">arr1</span> <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">|]</span> <span class="o">&lt;*&gt;</span> <span class="pn">[|</span><span class="n">10</span><span class="pn">;</span><span class="n">20</span><span class="pn">;</span><span class="n">30</span><span class="pn">|]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">arr2</span> <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">|]</span> <span class="o">&lt;.&gt;</span> <span class="pn">[|</span><span class="n">10</span><span class="pn">;</span><span class="n">20</span><span class="pn">;</span><span class="n">30</span><span class="pn">|]</span>
+
+<span class="c">// val arr1: int array = [|11; 21; 31; 12; 22; 32; 13; 23; 33|]</span>
+<span class="c">// val arr2: int array = [|11; 22; 33|]</span>
+
+
+<span class="c">// Validations</span>
+
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="id">validated</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="id">applicative2&#39;</span> <span class="pn">{</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs9', 9)" onmouseover="showTip(event, 'fs9', 9)" class="uc">Ok</span> <span class="n">1</span> <span class="pn">}</span>
+    <span class="k">and!</span> <span onmouseout="hideTip(event, 'fs10', 10)" onmouseover="showTip(event, 'fs10', 10)" class="fn">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="uc">Ok</span> <span class="n">2</span> <span class="pn">}</span>
+    <span class="k">and!</span> <span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="fn">z</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="uc">Error</span> <span class="pn">[</span><span class="s">&quot;Error&quot;</span><span class="pn">]</span> <span class="pn">}</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs7', 16)" onmouseover="showTip(event, 'fs7', 16)" class="fn">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="fn">y</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="fn">z</span>
+<span class="pn">}</span>
+
+<span onmouseout="hideTip(event, 'fs5', 19)" onmouseover="showTip(event, 'fs5', 19)" class="id">validated</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="id">RunSynchronously</span>
+<span class="c">// val it: Result&lt;int,string list&gt; = Error [&quot;Error&quot;]</span>
+</code></pre>
+
+            <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs3">val arr1: int array</div>
+<div class="fsdocs-tip" id="fs4">val arr2: int array</div>
+<div class="fsdocs-tip" id="fs5">val validated: Async&lt;Result&lt;int,string list&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs6">val applicative2&#39;&lt;&#39;ZipApplicative1&lt;ZipApplicative2&lt;&#39;T&gt;&gt;&gt; : ZipApplicativeBuilder2&lt;&#39;ZipApplicative1&lt;ZipApplicative2&lt;&#39;T&gt;&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs7">val x: int</div>
+<div class="fsdocs-tip" id="fs8">val async: AsyncBuilder</div>
+<div class="fsdocs-tip" id="fs9">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs10">val y: int</div>
+<div class="fsdocs-tip" id="fs11">val z: int</div>
+<div class="fsdocs-tip" id="fs12">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs13">Multiple items<br />module Async
+
+from FSharpPlus<br /><em>&lt;summary&gt;
+ Additional operations on Async
+&lt;/summary&gt;</em><br /><br />--------------------<br />type Async =
+  static member AsBeginEnd: computation: (&#39;Arg -&gt; Async&lt;&#39;T&gt;) -&gt; (&#39;Arg * AsyncCallback * obj -&gt; IAsyncResult) * (IAsyncResult -&gt; &#39;T) * (IAsyncResult -&gt; unit)
+  static member AwaitEvent: event: IEvent&lt;&#39;Del,&#39;T&gt; * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; (requires delegate and &#39;Del :&gt; Delegate)
+  static member AwaitIAsyncResult: iar: IAsyncResult * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member AwaitTask: task: Task&lt;&#39;T&gt; -&gt; Async&lt;&#39;T&gt; + 1 overload
+  static member AwaitWaitHandle: waitHandle: WaitHandle * ?millisecondsTimeout: int -&gt; Async&lt;bool&gt;
+  static member CancelDefaultToken: unit -&gt; unit
+  static member Catch: computation: Async&lt;&#39;T&gt; -&gt; Async&lt;Choice&lt;&#39;T,exn&gt;&gt;
+  static member Choice: computations: Async&lt;&#39;T option&gt; seq -&gt; Async&lt;&#39;T option&gt;
+  static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
+  static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
+  ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs14">static member Async.RunSynchronously: computation: Async&lt;&#39;T&gt; * ?timeout: int * ?cancellationToken: System.Threading.CancellationToken -&gt; &#39;T</div>
+
+        </div>
+
+        <!-- BEGIN SEARCH BOX: this adds support for the search box -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.css" />
+        <script type="text/javascript">var fsdocs_search_baseurl = '/FSharpPlus/'</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/lunr.js/2.3.8/lunr.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/JavaScript-autoComplete/1.0.4/auto-complete.min.js"></script>
+        <script type="text/javascript" src="/FSharpPlus/content/fsdocs-search.js"></script>
+        <!-- END SEARCH BOX: this adds support for the search box -->
+    </div>
+</body>
+
+</html>

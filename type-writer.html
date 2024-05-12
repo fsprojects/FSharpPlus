@@ -178,24 +178,24 @@ type Writer&lt;&#39;monoid,&#39;t&gt; =
 <div class="fsdocs-tip" id="fs20">Multiple items<br />module DList
 
 from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&gt; =
-  interface IEnumerable
   interface IReadOnlyList&lt;&#39;T&gt;
-  interface IReadOnlyCollection&lt;&#39;T&gt;
-  interface IEnumerable&lt;&#39;T&gt;
+  interface IEquatable&lt;DList&lt;&#39;T&gt;&gt;
   new: length: int * data: DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;
   member Add: x: &#39;T -&gt; DList&lt;&#39;T&gt;
   member Cons: hd: &#39;T -&gt; DList&lt;&#39;T&gt;
   override Equals: other: obj -&gt; bool
   override GetHashCode: unit -&gt; int
   member toSeq: unit -&gt; IEnumerator&lt;&#39;T&gt;
+  static member (+) : x: DList&lt;&#39;a&gt; * y: DList&lt;&#39;a&gt; -&gt; DList&lt;&#39;a&gt;
+  static member (&lt;*&gt;) : f: DList&lt;(&#39;a -&gt; &#39;b)&gt; * x: DList&lt;&#39;a&gt; -&gt; DList&lt;&#39;b&gt;
   ...<br /><em>&lt;summary&gt;
  DList is an ordered linear structure implementing the List signature (head, tail, cons), 
  end-insertion (add), and O(1) append. Ordering is by insertion history.
  DList is an implementation of [John Hughes&#39; append list](http://dl.acm.org/citation.cfm?id=8475).
 &lt;/summary&gt;</em><br /><br />--------------------<br />new: length: int * data: DListData&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs21">Multiple items<br />val ofSeq: s: seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
- O(n). Returns a DList of the seq.
-&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.ofSeq: s: seq&lt;&#39;T&gt; -&gt; DList&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs21">Multiple items<br />val ofSeq: s: &#39;T seq -&gt; DList&lt;&#39;T&gt;<br /><em>&lt;summary&gt;
+ Returns a DList of the seq.
+&lt;/summary&gt;</em><br /><br />--------------------<br />static member DList.ofSeq: s: &#39;T seq -&gt; DList&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs22">val calc&#39;: Writer&lt;DList&lt;LogEntry&gt;,int&gt;</div>
 <div class="fsdocs-tip" id="fs23">val logs2: DList&lt;LogEntry&gt;</div>
 <div class="fsdocs-tip" id="fs24">val y&#39;: int</div>
