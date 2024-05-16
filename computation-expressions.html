@@ -87,8 +87,9 @@
         <div class="container" id="fsdocs-content">
             <h1><a name="Computations-Expressions" class="anchor" href="#Computations-Expressions">Computations Expressions</a></h1>
 <p>This library allows to use some common computation expressions without writing any boiler plate code.</p>
-<p>For applicatives there is single computation expression: <code>applicative { .. }</code>. Additionally <code>applicative2 { .. }</code> and <code>applicative3 { .. }</code> exists for composed (aka layered) applicatives.</p>
-<p>For monadic code there is a single computation expression: <code>monad { .. }</code> but it comes in 4 flavours:</p>
+<p>For <a href="abstraction-applicative.html">Applicatives</a> there is single computation expression: <code>applicative { .. }</code>. Additionally <code>applicative2 { .. }</code> and <code>applicative3 { .. }</code> exists for composed (aka layered) applicatives.</p>
+<p>For <a href="abstraction-zipapplicative.html">ZipApplicatives</a> there is a counterpart set of computation expressions: <code>applicative' { .. }</code>, <code>applicative2' { .. }</code> and <code>applicative3' { .. }</code>.</p>
+<p>For <a href="abstraction-monad.html">monadic</a> code there is a single computation expression: <code>monad { .. }</code> but it comes in 4 flavours:</p>
 <ul>
 <li>
 <p>Delayed or strict</p>

@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>ZipApplicative
+    <title>Zip Applicative (aka Non-sequential Applicative)
 </title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="author" content="gusty; wallymathieu">
@@ -85,7 +85,7 @@
         </div>
         <hr />
         <div class="container" id="fsdocs-content">
-            <h1><a name="ZipApplicative" class="anchor" href="#ZipApplicative">ZipApplicative</a></h1>
+            <h1><a name="Zip-Applicative-aka-Non-sequential-Applicative" class="anchor" href="#Zip-Applicative-aka-Non-sequential-Applicative">Zip Applicative (aka Non-sequential Applicative)</a></h1>
 <p>A functor with application, providing operations to embed pure expressions (<code>pur</code>), run computations pointwise and/or paralell and combine their results (<code>&lt;.&gt;</code>).
 ___</p>
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
@@ -102,6 +102,10 @@ ___</p>
 </ul>
 <p>static member Zip (x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T1 * 'T2></p>
 <ul>
+<li><code>unzip</code></li>
+</ul>
+<p>static member Unzip (x: 'ZipApplicative<'T1 * 'T2>) : 'ZipApplicative<'T1> * 'ZipApplicative<'T2></p>
+<ul>
 <li><code>map2</code></li>
 </ul>
 <p>static member Map2 (f: 'T1 -&gt; 'T2 -&gt; 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T></p>
@@ -110,15 +114,21 @@ ___</p>
 </ul>
 <p>static member Map3 (f: 'T1 -&gt; 'T2 -&gt; 'T3 -&gt; 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>, x3: 'ZipApplicative<'T3>) : 'ZipApplicative<'T></p>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
+<p>Since ZipApplicatives are Applicatives they obey the same applicative rules:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="id">pur</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">id</span> <span class="o">&lt;.&gt;</span> <span class="id">v</span> <span class="o">=</span> <span class="id">v</span>
 <span class="id">pur</span> <span class="pn">(</span><span class="o">&lt;&lt;</span><span class="pn">)</span> <span class="o">&lt;.&gt;</span> <span class="id">u</span> <span class="o">&lt;.&gt;</span> <span class="id">v</span> <span class="o">&lt;.&gt;</span> <span class="id">w</span> <span class="o">=</span> <span class="id">u</span> <span class="o">&lt;.&gt;</span> <span class="pn">(</span><span class="id">v</span> <span class="o">&lt;.&gt;</span> <span class="id">w</span><span class="pn">)</span>
 <span class="id">pur</span> <span class="id">f</span> <span class="o">&lt;*&gt;</span> <span class="id">pur</span> <span class="id">x</span> <span class="o">=</span> <span class="id">pur</span> <span class="pn">(</span><span class="id">f</span> <span class="id">x</span><span class="pn">)</span>
 <span class="id">u</span> <span class="o">&lt;*&gt;</span> <span class="id">pur</span> <span class="id">y</span> <span class="o">=</span> <span class="id">pur</span> <span class="pn">(</span><span class="pn">(</span><span class="o">|&gt;</span><span class="pn">)</span> <span class="id">y</span><span class="pn">)</span> <span class="o">&lt;.&gt;</span> <span class="id">u</span>
 </code></pre>
+<p>But they have some additional rules:</p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="id">zip</span> <span class="id">x</span> <span class="id">y</span> <span class="o">=</span> <span class="id">tuple2</span> <span class="o">&lt;!&gt;</span> <span class="id">x</span> <span class="o">&lt;.&gt;</span> <span class="id">y</span>
+<span class="id">unzip</span> <span class="o">=</span> <span class="id">map</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">fst</span> <span class="o">&amp;&amp;&amp;</span> <span class="id">map</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">snd</span>
+<span onmouseout="hideTip(event, 'fs1', 4)" onmouseover="showTip(event, 'fs1', 4)" class="id">id</span> <span class="o">=</span> <span class="id">unzip</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="pn">(</span><span class="o">&lt;||</span><span class="pn">)</span> <span class="id">zip</span> <span class="o">=</span> <span class="pn">(</span><span class="o">&lt;||</span><span class="pn">)</span> <span class="id">zip</span> <span class="pn">&gt;</span><span class="pn">&gt;</span> <span class="id">unzip</span>
+</code></pre>
 <h2><a name="Related-Abstractions" class="anchor" href="#Related-Abstractions">Related Abstractions</a></h2>
 <ul>
 <li><p><a href="abstraction-functor.html">Functor</a>: A zipApplicative is a functor whose <code>map</code> operation can be splitted in <code>pur</code> and <code>(&lt;.&gt;)</code> operations,</p></li>
-<li><p><a href="abstraction-applicative.html">ZipApplicative</a> : ZipApplicatives are applicatives which usually don't form a <a href="abstraction-monad.html">Monad</a>.</p></li>
+<li><p><a href="abstraction-applicative.html">Applicative</a> : ZipApplicatives are applicatives which usually don't form a <a href="abstraction-monad.html">Monad</a>, therefore the Applicative instance normally is not the same.</p></li>
 </ul>
 <h2><a name="Concrete-implementations" class="anchor" href="#Concrete-implementations">Concrete implementations</a></h2>
 <p>From F#</p>
@@ -145,7 +155,7 @@ ___</p>
 <li><p><a href="type-nonempty.html"><code>NonEmptyList&lt;'T&gt;</code></a></p></li>
 <li>
 <p><a href="type-compose.html"><code>Compose&lt;'ZipApplicative1&lt;'ZipApplicative2&lt;'T&gt;&gt;&gt;</code></a></p>
-<p>(*) The operation is the same as that for the normal applicative</p>
+<p>(*) The operations are the same as those for the normal applicative</p>
 </li>
 </ul>
 <p>Only for <*> operation:
@@ -159,13 +169,16 @@ ___</p>
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <table class="pre"><tr><td class="snippet"><pre class="fssnip"><code lang="f#">#r @"nuget: FSharpPlus"
 </code></pre></td></tr></table>
-<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs2', 2)" onmouseover="showTip(event, 'fs2', 2)" class="id">FSharpPlus</span>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="id">FSharpPlus</span>
+
+<span class="k">let</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">x</span><span class="pn">,</span> <span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="id">y</span><span class="pn">)</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 8)" onmouseover="showTip(event, 'fs7', 8)" class="fn">zip</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 9)" onmouseover="showTip(event, 'fs8', 9)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span class="n">1</span> <span class="pn">}</span><span class="pn">)</span> <span class="pn">(</span><span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span class="s">&#39;2&#39;</span> <span class="pn">}</span><span class="pn">)</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="id">RunSynchronously</span>
+<span class="c">// val y: char = &#39;2&#39;</span>
 
 
-<span class="c">// pointwise operations</span>
+<span class="c">// crossproduct vs pointwise operations</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 3)" onmouseover="showTip(event, 'fs3', 3)" class="id">arr1</span> <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">|]</span> <span class="o">&lt;*&gt;</span> <span class="pn">[|</span><span class="n">10</span><span class="pn">;</span><span class="n">20</span><span class="pn">;</span><span class="n">30</span><span class="pn">|]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs4', 4)" onmouseover="showTip(event, 'fs4', 4)" class="id">arr2</span> <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">|]</span> <span class="o">&lt;.&gt;</span> <span class="pn">[|</span><span class="n">10</span><span class="pn">;</span><span class="n">20</span><span class="pn">;</span><span class="n">30</span><span class="pn">|]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="id">arr1</span> <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">|]</span> <span class="o">&lt;*&gt;</span> <span class="pn">[|</span><span class="n">10</span><span class="pn">;</span><span class="n">20</span><span class="pn">;</span><span class="n">30</span><span class="pn">|]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs12', 14)" onmouseover="showTip(event, 'fs12', 14)" class="id">arr2</span> <span class="o">=</span> <span class="pn">(</span><span class="o">+</span><span class="pn">)</span> <span class="o">&lt;!&gt;</span> <span class="pn">[|</span><span class="n">1</span><span class="pn">;</span><span class="n">2</span><span class="pn">;</span><span class="n">3</span><span class="pn">|]</span> <span class="o">&lt;.&gt;</span> <span class="pn">[|</span><span class="n">10</span><span class="pn">;</span><span class="n">20</span><span class="pn">;</span><span class="n">30</span><span class="pn">|]</span>
 
 <span class="c">// val arr1: int array = [|11; 21; 31; 12; 22; 32; 13; 23; 33|]</span>
 <span class="c">// val arr2: int array = [|11; 22; 33|]</span>
@@ -173,32 +186,30 @@ ___</p>
 
 <span class="c">// Validations</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs5', 5)" onmouseover="showTip(event, 'fs5', 5)" class="id">validated</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs6', 6)" onmouseover="showTip(event, 'fs6', 6)" class="id">applicative2&#39;</span> <span class="pn">{</span>
-    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs7', 7)" onmouseover="showTip(event, 'fs7', 7)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 8)" onmouseover="showTip(event, 'fs8', 8)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs9', 9)" onmouseover="showTip(event, 'fs9', 9)" class="uc">Ok</span> <span class="n">1</span> <span class="pn">}</span>
-    <span class="k">and!</span> <span onmouseout="hideTip(event, 'fs10', 10)" onmouseover="showTip(event, 'fs10', 10)" class="fn">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs9', 12)" onmouseover="showTip(event, 'fs9', 12)" class="uc">Ok</span> <span class="n">2</span> <span class="pn">}</span>
-    <span class="k">and!</span> <span onmouseout="hideTip(event, 'fs11', 13)" onmouseover="showTip(event, 'fs11', 13)" class="fn">z</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 14)" onmouseover="showTip(event, 'fs8', 14)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs12', 15)" onmouseover="showTip(event, 'fs12', 15)" class="uc">Error</span> <span class="pn">[</span><span class="s">&quot;Error&quot;</span><span class="pn">]</span> <span class="pn">}</span>
-    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs7', 16)" onmouseover="showTip(event, 'fs7', 16)" class="fn">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs10', 17)" onmouseover="showTip(event, 'fs10', 17)" class="fn">y</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs11', 18)" onmouseover="showTip(event, 'fs11', 18)" class="fn">z</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs13', 15)" onmouseover="showTip(event, 'fs13', 15)" class="id">validated</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs14', 16)" onmouseover="showTip(event, 'fs14', 16)" class="id">applicative2&#39;</span> <span class="pn">{</span>
+    <span class="k">let!</span> <span onmouseout="hideTip(event, 'fs5', 17)" onmouseover="showTip(event, 'fs5', 17)" class="fn">x</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 18)" onmouseover="showTip(event, 'fs8', 18)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs15', 19)" onmouseover="showTip(event, 'fs15', 19)" class="uc">Ok</span> <span class="n">1</span> <span class="pn">}</span>
+    <span class="k">and!</span> <span onmouseout="hideTip(event, 'fs16', 20)" onmouseover="showTip(event, 'fs16', 20)" class="fn">y</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 21)" onmouseover="showTip(event, 'fs8', 21)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs17', 22)" onmouseover="showTip(event, 'fs17', 22)" class="uc">Error</span> <span class="pn">[</span><span class="s">&quot;Error1&quot;</span><span class="pn">]</span> <span class="pn">}</span>
+    <span class="k">and!</span> <span onmouseout="hideTip(event, 'fs18', 23)" onmouseover="showTip(event, 'fs18', 23)" class="fn">z</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 24)" onmouseover="showTip(event, 'fs8', 24)" class="k">async</span> <span class="pn">{</span> <span class="k">return</span> <span onmouseout="hideTip(event, 'fs17', 25)" onmouseover="showTip(event, 'fs17', 25)" class="uc">Error</span> <span class="pn">[</span><span class="s">&quot;Error2&quot;</span><span class="pn">]</span> <span class="pn">}</span>
+    <span class="k">return</span> <span onmouseout="hideTip(event, 'fs5', 26)" onmouseover="showTip(event, 'fs5', 26)" class="fn">x</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs16', 27)" onmouseover="showTip(event, 'fs16', 27)" class="fn">y</span> <span class="o">+</span> <span onmouseout="hideTip(event, 'fs18', 28)" onmouseover="showTip(event, 'fs18', 28)" class="fn">z</span>
 <span class="pn">}</span>
 
-<span onmouseout="hideTip(event, 'fs5', 19)" onmouseover="showTip(event, 'fs5', 19)" class="id">validated</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs13', 20)" onmouseover="showTip(event, 'fs13', 20)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs14', 21)" onmouseover="showTip(event, 'fs14', 21)" class="id">RunSynchronously</span>
-<span class="c">// val it: Result&lt;int,string list&gt; = Error [&quot;Error&quot;]</span>
+<span onmouseout="hideTip(event, 'fs13', 29)" onmouseover="showTip(event, 'fs13', 29)" class="id">validated</span> <span class="o">|&gt;</span> <span onmouseout="hideTip(event, 'fs9', 30)" onmouseover="showTip(event, 'fs9', 30)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs10', 31)" onmouseover="showTip(event, 'fs10', 31)" class="id">RunSynchronously</span>
+<span class="c">// val it: Result&lt;int,string list&gt; = Error [&quot;Error1&quot;; &quot;Error2&quot;]</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">val id: x: &#39;T -&gt; &#39;T</div>
-<div class="fsdocs-tip" id="fs2">namespace FSharpPlus</div>
-<div class="fsdocs-tip" id="fs3">val arr1: int array</div>
-<div class="fsdocs-tip" id="fs4">val arr2: int array</div>
-<div class="fsdocs-tip" id="fs5">val validated: Async&lt;Result&lt;int,string list&gt;&gt;</div>
-<div class="fsdocs-tip" id="fs6">val applicative2&#39;&lt;&#39;ZipApplicative1&lt;ZipApplicative2&lt;&#39;T&gt;&gt;&gt; : ZipApplicativeBuilder2&lt;&#39;ZipApplicative1&lt;ZipApplicative2&lt;&#39;T&gt;&gt;&gt;<br /><em>&lt;summary&gt;
- Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
-&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs7">val x: int</div>
+<div class="fsdocs-tip" id="fs2">val fst: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T1</div>
+<div class="fsdocs-tip" id="fs3">val snd: tuple: (&#39;T1 * &#39;T2) -&gt; &#39;T2</div>
+<div class="fsdocs-tip" id="fs4">namespace FSharpPlus</div>
+<div class="fsdocs-tip" id="fs5">val x: int</div>
+<div class="fsdocs-tip" id="fs6">val y: char</div>
+<div class="fsdocs-tip" id="fs7">val zip: source1: &#39;ZipFunctor&lt;&#39;T1&gt; -&gt; source2: &#39;ZipFunctor&lt;&#39;T2&gt; -&gt; &#39;ZipFunctor&lt;&#39;T1 * &#39;T2&gt; (requires member Zip)<br /><em>&lt;summary&gt;
+ Zips (tuple) two functors.
+ &lt;/summary&gt;<br />&lt;remarks&gt;
+ For collections, if one collection is shorter, excess elements are discarded from the right end of the longer collection. 
+ &lt;/remarks&gt;<br />&lt;category index=&quot;1&quot;&gt;Functor&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs8">val async: AsyncBuilder</div>
-<div class="fsdocs-tip" id="fs9">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
-<div class="fsdocs-tip" id="fs10">val y: int</div>
-<div class="fsdocs-tip" id="fs11">val z: int</div>
-<div class="fsdocs-tip" id="fs12">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
-<div class="fsdocs-tip" id="fs13">Multiple items<br />module Async
+<div class="fsdocs-tip" id="fs9">Multiple items<br />module Async
 
 from FSharpPlus<br /><em>&lt;summary&gt;
  Additional operations on Async
@@ -214,7 +225,17 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
   static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
   ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs14">static member Async.RunSynchronously: computation: Async&lt;&#39;T&gt; * ?timeout: int * ?cancellationToken: System.Threading.CancellationToken -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs10">static member Async.RunSynchronously: computation: Async&lt;&#39;T&gt; * ?timeout: int * ?cancellationToken: System.Threading.CancellationToken -&gt; &#39;T</div>
+<div class="fsdocs-tip" id="fs11">val arr1: int array</div>
+<div class="fsdocs-tip" id="fs12">val arr2: int array</div>
+<div class="fsdocs-tip" id="fs13">val validated: Async&lt;Result&lt;int,string list&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs14">val applicative2&#39;&lt;&#39;ZipApplicative1&lt;ZipApplicative2&lt;&#39;T&gt;&gt;&gt; : ZipApplicativeBuilder2&lt;&#39;ZipApplicative1&lt;ZipApplicative2&lt;&#39;T&gt;&gt;&gt;<br /><em>&lt;summary&gt;
+ Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
+&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs15">union case Result.Ok: ResultValue: &#39;T -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs16">val y: int</div>
+<div class="fsdocs-tip" id="fs17">union case Result.Error: ErrorValue: &#39;TError -&gt; Result&lt;&#39;T,&#39;TError&gt;</div>
+<div class="fsdocs-tip" id="fs18">val z: int</div>
 
         </div>
 
