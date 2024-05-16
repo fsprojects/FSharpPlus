@@ -6,8 +6,10 @@
 (**
 Applicative
 ===========
+
 A functor with application, providing operations to embed pure expressions (``return``), and sequence computations and combine their results (``<*>``).
 ___
+
 Minimal complete definition
 ---------------------------
  * ``return x`` &nbsp; / &nbsp; ``result x``

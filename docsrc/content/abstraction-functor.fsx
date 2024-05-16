@@ -6,8 +6,10 @@
 (**
 Functor
 =======
+
 The Functor abstraction is used for types that can be mapped over.
 ___
+
 Minimal complete definition
 ---------------------------
  * ``map f x`` &nbsp; / &nbsp; ``(|>>) x f`` &nbsp; / &nbsp; ``(<<|) f x`` &nbsp; / &nbsp; ``(<!>) f x``

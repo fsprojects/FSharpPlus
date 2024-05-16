@@ -7,7 +7,9 @@
 Monoid
 ======
 Types with an associative binary operation that has an identity.
+
 ___
+
 Minimal complete definition
 ---------------------------
  * `zero``
