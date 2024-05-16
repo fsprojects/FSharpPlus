@@ -32,11 +32,6 @@ let res113 = foldi (fun s i t -> t * s - i) 2 [|3;4;5|]
 let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Tuple 10)
 
 
-// ZipFunctor
-
-let (x, y) = zip (async { return 1 }) (async { return '2' }) |> Async.RunSynchronously
-
-
 // Collection
 
 let a = skip 3 [1..10]

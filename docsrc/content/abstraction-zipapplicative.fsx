@@ -4,13 +4,13 @@
 #r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
-ZipApplicative
-==============
+Zip Applicative (aka Non-sequential Applicative)
+================================================
 A functor with application, providing operations to embed pure expressions (``pur``), run computations pointwise and/or paralell and combine their results (``<.>``).
 ___
 Minimal complete definition
 ---------------------------
- * ``pur x`` &nbsp; . &nbsp; ``result x``
+ * ``pur x`` &nbsp;
  * ``(<.>) f x``
 *)
 (**
@@ -26,20 +26,26 @@ Other operations
 * ``zip``
 *)
 (**
-   static member Zip (x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T1 * 'T2>
+    static member Zip (x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T1 * 'T2>
+*)
+(**
+* ``unzip``
+*)
+(**
+    static member Unzip (x: 'ZipApplicative<'T1 * 'T2>) : 'ZipApplicative<'T1> * 'ZipApplicative<'T2>
 *)
 (**
 * ``map2``
 *)
 (**
-   static member Map2 (f: 'T1 -> 'T2 -> 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T>
+    static member Map2 (f: 'T1 -> 'T2 -> 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T>
 *)
 
 (**
 * ``map3``
 *)
 (**
-   static member Map3 (f: 'T1 -> 'T2 -> 'T3 -> 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>, x3: 'ZipApplicative<'T3>) : 'ZipApplicative<'T>
+    static member Map3 (f: 'T1 -> 'T2 -> 'T3 -> 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>, x3: 'ZipApplicative<'T3>) : 'ZipApplicative<'T>
 *)
 
 (**
@@ -47,19 +53,32 @@ Other operations
 
 Rules
 -----
+
 *)
 (**
+
+Since ZipApplicatives are Applicatives they obey the same applicative rules:
+
     pur id <.> v = v
     pur (<<) <.> u <.> v <.> w = u <.> (v <.> w)
     pur f <*> pur x = pur (f x)
     u <*> pur y = pur ((|>) y) <.> u
 *)
 (**
+
+But they have some additional rules:
+
+    zip x y = tuple2 <!> x <.> y
+    unzip = map fst &&& map snd
+    id = unzip >> (<||) zip = (<||) zip >> unzip
+*)
+
+(**
 Related Abstractions
 --------------------
  - [Functor](abstraction-functor.html): A zipApplicative is a functor whose ``map`` operation can be splitted in ``pur`` and ``(<.>)`` operations,
  
- - [ZipApplicative](abstraction-applicative.html) : ZipApplicatives are applicatives which usually don't form a [Monad](abstraction-monad.html).
+ - [Applicative](abstraction-applicative.html) : ZipApplicatives are applicatives which usually don't form a [Monad](abstraction-monad.html), therefore the Applicative instance normally is not the same.
 
 Concrete implementations
 ------------------------
@@ -88,7 +107,7 @@ From F#+
  -  [``NonEmptyList<'T>``](type-nonempty.html)
  -  [``Compose<'ZipApplicative1<'ZipApplicative2<'T>>>``](type-compose.html)
 
- (*) The operation is the same as that for the normal applicative
+ (*) The operations are the same as those for the normal applicative
  
 
 Only for <*> operation:
@@ -115,8 +134,11 @@ Examples
 
 open FSharpPlus
 
+let (x, y) = zip (async { return 1 }) (async { return '2' }) |> Async.RunSynchronously
+// val y: char = '2'
 
-// pointwise operations
+
+// crossproduct vs pointwise operations
 
 let arr1 = (+) <!> [|1;2;3|] <*> [|10;20;30|]
 let arr2 = (+) <!> [|1;2;3|] <.> [|10;20;30|]
@@ -129,10 +151,10 @@ let arr2 = (+) <!> [|1;2;3|] <.> [|10;20;30|]
 
 let validated = applicative2' {
     let! x = async { return Ok 1 }
-    and! y = async { return Ok 2 }
-    and! z = async { return Error ["Error"] }
+    and! y = async { return Error ["Error1"] }
+    and! z = async { return Error ["Error2"] }
     return x + y + z
 }
 
 validated |> Async.RunSynchronously
-// val it: Result<int,string list> = Error ["Error"]
+// val it: Result<int,string list> = Error ["Error1"; "Error2"]
