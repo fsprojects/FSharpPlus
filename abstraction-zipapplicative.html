@@ -86,11 +86,11 @@
         <hr />
         <div class="container" id="fsdocs-content">
             <h1><a name="Zip-Applicative-aka-Non-sequential-Applicative" class="anchor" href="#Zip-Applicative-aka-Non-sequential-Applicative">Zip Applicative (aka Non-sequential Applicative)</a></h1>
-<p>A functor with application, providing operations to embed pure expressions (<code>pur</code>), run computations pointwise and/or paralell and combine their results (<code>&lt;.&gt;</code>).
-___</p>
+<p>A functor with application, providing operations to embed pure expressions (<code>pur</code>), run computations pointwise and/or paralell and combine their results (<code>&lt;.&gt;</code>).</p>
+<hr />
 <h2><a name="Minimal-complete-definition" class="anchor" href="#Minimal-complete-definition">Minimal complete definition</a></h2>
 <ul>
-<li><code>pur x</code> &nbsp; . &nbsp; <code>result x</code></li>
+<li><code>pur x</code> &nbsp;</li>
 <li><code>(&lt;.&gt;) f x</code></li>
 </ul>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Pure</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
@@ -100,19 +100,23 @@ ___</p>
 <ul>
 <li><code>zip</code></li>
 </ul>
-<p>static member Zip (x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T1 * 'T2></p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Zip</span> <span class="pn">(</span><span class="id">x1</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T1</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">x2</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T2</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T1</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">T2</span><span class="pn">&gt;</span>
+</code></pre>
 <ul>
 <li><code>unzip</code></li>
 </ul>
-<p>static member Unzip (x: 'ZipApplicative<'T1 * 'T2>) : 'ZipApplicative<'T1> * 'ZipApplicative<'T2></p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Unzip</span> <span class="pn">(</span><span class="id">x</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T1</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">T2</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T1</span><span class="pn">&gt;</span> <span class="pn">*</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T2</span><span class="pn">&gt;</span>
+</code></pre>
 <ul>
 <li><code>map2</code></li>
 </ul>
-<p>static member Map2 (f: 'T1 -&gt; 'T2 -&gt; 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>) : 'ZipApplicative<'T></p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Map2</span> <span class="pn">(</span><span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T1</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T2</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">x1</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T1</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">x2</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T2</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
+</code></pre>
 <ul>
 <li><code>map3</code></li>
 </ul>
-<p>static member Map3 (f: 'T1 -&gt; 'T2 -&gt; 'T3 -&gt; 'T, x1: 'ZipApplicative<'T1>, x2: 'ZipApplicative<'T2>, x3: 'ZipApplicative<'T3>) : 'ZipApplicative<'T></p>
+<pre class="fssnip highlighted"><code lang="fsharp"><span class="k">static</span> <span class="k">member</span> <span class="id">Map3</span> <span class="pn">(</span><span class="id">f</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">T1</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T2</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T3</span> <span class="k">-&gt;</span> <span class="id">&#39;</span><span class="id">T</span><span class="pn">,</span> <span class="id">x1</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T1</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">x2</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T2</span><span class="pn">&gt;</span><span class="pn">,</span> <span class="id">x3</span><span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T3</span><span class="pn">&gt;</span><span class="pn">)</span> <span class="pn">:</span> <span class="id">&#39;</span><span class="id">ZipApplicative</span><span class="pn">&lt;</span><span class="id">&#39;</span><span class="id">T</span><span class="pn">&gt;</span>
+</code></pre>
 <h2><a name="Rules" class="anchor" href="#Rules">Rules</a></h2>
 <p>Since ZipApplicatives are Applicatives they obey the same applicative rules:</p>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="id">pur</span> <span onmouseout="hideTip(event, 'fs1', 1)" onmouseover="showTip(event, 'fs1', 1)" class="id">id</span> <span class="o">&lt;.&gt;</span> <span class="id">v</span> <span class="o">=</span> <span class="id">v</span>
