@@ -6,8 +6,10 @@
 (**
 Alternative
 ===========
+
 Applicative Functors which also have a monoid structure.
 ___
+
 Minimal complete definition
 ---------------------------
  * ``return x`` &nbsp; / &nbsp; ``result x``

@@ -7,7 +7,9 @@
 Zip Applicative (aka Non-sequential Applicative)
 ================================================
 A functor with application, providing operations to embed pure expressions (``pur``), run computations pointwise and/or paralell and combine their results (``<.>``).
+
 ___
+
 Minimal complete definition
 ---------------------------
  * ``pur x`` &nbsp;
