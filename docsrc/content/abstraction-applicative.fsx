@@ -26,9 +26,11 @@ Other operations
 
 * ``lift2``
 *)
+
 (**
-   static member Lift2 (f: 'T1 -> 'T2 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
+    static member Lift2 (f: 'T1 -> 'T2 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
 *)
+
 (**
 
 
@@ -62,44 +64,44 @@ From F#
  -  ``IObservable<'T>``
  -  ``Lazy<'T>``
  -  ``Async<'T>``
- -  ``Result<'T,'U>`` 
- -  ``Choice<'T,'U>``
- -  ``KeyValuePair<'Key,'T>``
+ -  ``Result<'T, 'U>`` 
+ -  ``Choice<'T, 'U>``
+ -  ``KeyValuePair<'Key, 'T>``
  -  ``'Monoid * 'T``
  -  ``ValueTuple<'Monoid, 'T>``
  -  ``Task<'T>``
  -  ``ValueTask<'T>``
- -  ``'R->'T``
+ -  ``'R -> 'T``
  -  ``Expr<'T>``
  -  ``ResizeArray<'T>``
  
 From F#+
 
  -  [``Identity<'T>``](type-identity.html)
- -  [``Cont<'R,'T>``](type-cont.html)
- -  [``ContT<'R,'T>``](type-contt.html)
- -  [``Reader<'R,'T>``](type-reader.html)
- -  [``ReaderT<'R,'Monad<'T>>``](type-readert.html)
- -  [``Writer<'Monoid,'T>``](type-writer.html)
+ -  [``Cont<'R, 'T>``](type-cont.html)
+ -  [``ContT<'R, 'T>``](type-contt.html)
+ -  [``Reader<'R, 'T>``](type-reader.html)
+ -  [``ReaderT<'R, 'Monad<'T>>``](type-readert.html)
+ -  [``Writer<'Monoid, 'T>``](type-writer.html)
  -  [``WriterT<'Monad<'T * 'Monoid>>``](type-writert.html)
- -  [``State<'S,'T * 'S>``](type-state.html)
- -  [``StateT<'S,'Monad<'T * 'S>>``](type-statet.html)
+ -  [``State<'S, 'T * 'S>``](type-state.html)
+ -  [``StateT<'S, 'Monad<'T * 'S>>``](type-statet.html)
  -  [``OptionT<'Monad<option<'T>>``](type-optiont.html)
  -  [``ValueOptionT<'Monad<voption<'T>>``](type-valueoptiont.html)
  -  [``SeqT<'Monad<seq<'T>>``](type-seqt.html)
  -  [``ListT<'Monad<list<'T>>``](type-listt.html)
- -  [``ResultT<'Monad<Result<'T,'TError>>``](type-resultt.html)
- -  [``ChoiceT<'Monad<Choice<'T,'TError>>``](type-choicet.html)
- -  [``Free<'Functor<'T>,'T>``](type-free.html)
+ -  [``ResultT<'Monad<Result<'T, 'TError>>``](type-resultt.html)
+ -  [``ChoiceT<'Monad<Choice<'T, 'TError>>``](type-choicet.html)
+ -  [``Free<'Functor<'T>, 'T>``](type-free.html)
  -  [``NonEmptyList<'T>``](type-nonempty.html)
- -  [``Validation<'Error,'T>``](type-validation.html)
+ -  [``Validation<'Error, 'T>``](type-validation.html)
  -  [``ZipList<'T>``](type-ziplist.html)
  -  [``ParallelArray<'T>``](type-parallelarray.html)
- -  [``Const<'C,'T>``](type-const.html)
+ -  [``Const<'C, 'T>``](type-const.html)
  -  [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html)
  -  [``DList<'T>``](type-dlist.html)
- -  [``Vector<'T,'Dimension>``](type-vector.html)
- -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
+ -  [``Vector<'T, 'Dimension>``](type-vector.html)
+ -  [``Matrix<'T, 'Rows, 'Columns>``](type-matrix.html)
  
 Restricted:
  -  ``string``

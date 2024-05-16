@@ -48,6 +48,14 @@ abstract class Alternative [[http://fsprojects.github.io/FSharpPlus/abstraction-
   + mfilter p x
 }
 
+abstract class ZipApplicative [[http://fsprojects.github.io/FSharpPlus/abstraction-zipapplicative.html]] {
+  + pur x
+  + (<.>) f x
+  ==
+  + map f x
+  + map2 f x y
+}
+
 abstract class Monad [[http://fsprojects.github.io/FSharpPlus/abstraction-monad.html]] {
   + return x
   + (>>=) x f
@@ -117,6 +125,7 @@ Functor  --|> Bifunctor
 Functor  --|> Applicative
 Applicative  --|> Monad
 Applicative  --|> Alternative
+ZipApplicative  --|> Alternative
 Monoid ..|> Monad
 Monoid ..|> Foldable
 Monoid ..|> Bifoldable
@@ -124,6 +133,7 @@ Functor --|> Comonad
 Functor --|> Traversable
 Foldable --|> Traversable
 Bifoldable --|> Bitraversable
+Applicative ..|> ZipApplicative
 Applicative ..|> Bitraversable
 Applicative ..|> Traversable
 Monoid ..|> Alternative
