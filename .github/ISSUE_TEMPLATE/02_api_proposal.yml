@@ -1,0 +1,66 @@
+name: 💡 API Suggestion
+description: Propose a change to the public API surface
+title: "[API Proposal]: "
+labels: [api-suggestion]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        We welcome API proposals! We have a process to evaluate the value and shape of new API. This template will help us gather the information we need to start the review process.
+  - type: textarea
+    id: background
+    attributes:
+      label: Background and motivation
+      description: Please describe the purpose and value of the new API here.
+      placeholder: Purpose
+    validations:
+      required: true
+  - type: textarea
+    id: api-proposal
+    attributes:
+      label: API Proposal
+      description: |
+        Please provide the specific public API signature diff that you are proposing.
+      placeholder: API declaration (no function bodies)
+    validations:
+      required: true
+  - type: textarea
+    id: api-usage
+    attributes:
+      label: API Usage
+      description: |
+        Please provide code examples that highlight how the proposed API additions are meant to be consumed. This will help suggest whether the API has the right shape to be functional, performant and usable.
+      placeholder: API usage
+    validations:
+      required: true
+  - type: textarea
+    id: alternative-designs
+    attributes:
+      label: Alternative Designs
+      description: |
+        Please provide alternative designs. This might not be APIs; for example instead of providing new APIs an option might be to change the behavior of an existing API.
+      placeholder: Alternative designs
+    validations:
+      required: false
+  - type: textarea
+    id: risks
+    attributes:
+      label: Risks
+      description: |
+        Please mention any risks that to your knowledge the API proposal might entail, such as breaking changes, performance regressions, etc.
+      placeholder: Risks
+    validations:
+      required: false
+  - type: dropdown
+    id: pull-request
+    attributes:
+      label: Are you willing to help with a proof-of-concept (as PR in that or a separate repo) first and as pull-request later on?
+      description: |
+        This is mainly to help demonstrate your suggestion. 
+        Make sure you have read the sections about [contributing changes](https://github.com/fsprojects/FSharpPlus/blob/master/DEVELOPER_GUIDE.md) and [design guidelines](https://github.com/fsprojects/FSharpPlus/blob/master/DESIGN_GUIDELINES.md).
+        Beware we might not accept the PR as is, but it will help us understand your suggestion better.
+      options:
+        - "No"
+        - "Yes, please assign this issue to me."
+    validations:
+      required: true
