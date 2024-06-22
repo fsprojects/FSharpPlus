@@ -11,7 +11,7 @@ module Gen = // FSharpx.Collections extension of Gen
     let listString n  = Gen.listOfLength n Arb.generate<string>
     let length1thru12 = Gen.choose (1, 12)
     let length2thru12 = Gen.choose (2, 12)
-let fsCheck s x = Check.Quick (s, x)
+let fsCheck s x = Check.One({Config.QuickThrowOnFailure with Name = s}, x)
 
 
 // tests from FSharpx.Collections DList
@@ -325,25 +325,24 @@ module DList =
 module NonEmptyList =
     let nonEmptyList = NonEmptyList.create 1 []
 
-    let enNonEmptyListThruList l q =
-        let rec loop (q': 'a NonEmptyList) (l': 'a list) =
-            match l' with
-            | hd :: [] -> NonEmptyList.cons hd q'
-            | hd :: tl -> loop (NonEmptyList.cons hd q') tl
-            | [] -> q'
-        loop q l
-
     let NonEmptyListIntOfSeqGen =
         gen {   let! n = Gen.length1thru12
                 let! x = Gen.listInt n
                 return ( (NonEmptyList.ofList x), x) }
 
+    let TwoNonEmptyListIntOfSeqGen =
+        gen {   let! n1 = Gen.length1thru12
+                let! x1 = Gen.listInt n1
+                let! n2 = Gen.length1thru12
+                let! x2 = Gen.listInt n2
+                return ((NonEmptyList.ofList x1, NonEmptyList.ofList x2), (x1, x2)) }
+        
     let NonEmptyListStringGen =
         gen {   let! n = Gen.length1thru12
                 let! n2 = Gen.length2thru12
                 let! x =  Gen.listString n
                 let! y =  Gen.listString n2
-                return ( (NonEmptyList.ofList x |> enNonEmptyListThruList y), (x @ y) ) }
+                return ( (NonEmptyList.ofList x ++ NonEmptyList.ofList y), (x @ y) ) }
 
     [<Test>]
     let ``cons works`` () =
@@ -352,6 +351,11 @@ module NonEmptyList =
     [<Test>]
     let ``zip `` () =
         nonEmptyList |> NonEmptyList.zip nonEmptyList |> NonEmptyList.toList |> shoulSeqEqual [(1,1)]
+    
+    [<Test>]
+    let zipShortest () =
+        let nonEmptyList' = nonEmptyList |> NonEmptyList.cons 2
+        nonEmptyList |> NonEmptyList.zipShortest nonEmptyList' |> NonEmptyList.toList |> shoulSeqEqual [(2,1)]
 
     [<Test>]
     let ``get head from NonEmptyList`` () =
@@ -359,7 +363,8 @@ module NonEmptyList =
 
     [<Test>]
     let ``get tail from NonEmptyList`` () =
-        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun ((q : NonEmptyList<int>), l) -> q.Tail.Head = (List.item 1 l) ))
+        let atLeastOfLengthTwo (_,l) = List.length l >= 2
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen |> Arb.filter atLeastOfLengthTwo) (fun ((q : NonEmptyList<int>), l) -> (NonEmptyList.tail q |> NonEmptyList.toList) = (List.tail l) ))
 
     [<Test>]
     let ``get length of NonEmptyList`` () =
@@ -380,3 +385,18 @@ module NonEmptyList =
     [<Test>]
     let ``map on non empty list should equal map on list`` () =
         fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.map string |> NonEmptyList.toList) = (l |> List.map string)))
+
+    [<Test>]
+    let ``map2Shortest on non empty list should equal map2Shortest on list`` () =
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen TwoNonEmptyListIntOfSeqGen) (fun ((nel1, nel2), (l1, l2)) ->
+            (NonEmptyList.map2Shortest (+) nel1 nel2 |> NonEmptyList.toList) = (List.map2Shortest (+) l1 l2)))
+        
+    [<Test>]
+    let ``mapi on non empty list should equal mapi on list`` () =
+        let mapOp a b = sprintf "%d-%d" a b
+        fsCheck "list of int" (Prop.forAll (Arb.fromGen NonEmptyListIntOfSeqGen) (fun (q : NonEmptyList<int>, l) -> (q |> NonEmptyList.mapi mapOp |> NonEmptyList.toList) = (l |> List.mapi mapOp)))
+
+module MultiMap =
+    [<Test>]
+    let ``monoid works`` () =
+        MultiMap.ofList [1, 'a'; 3, 'b'] ++ MultiMap.ofList [1, 'c'; 5, 'd'; 6, 'e'] |> shoulSeqEqual (MultiMap.ofList [1, 'a'; 1, 'c'; 3, 'b'; 5, 'd'; 6, 'e'])

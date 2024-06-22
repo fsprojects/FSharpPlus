@@ -1,8 +1,8 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
 
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 (**
 Bifunctor
 =======
@@ -67,14 +67,16 @@ Concrete implementations of Bifunctor<'T1,'T2>
 From .Net/F#
  
  -  ``'T1 * 'T2``
- -  ``Result<'T2,'T1>``
- -  ``Choice<'T2,'T1>``
- -  ``KeyValuePair<'T1,'T2>``
+ -  ``struct ('T1 * 'T2)``
+ -  ``Result<'T2, 'T1>``
+ -  ``Choice<'T2, 'T1>``
+ -  ``KeyValuePair<'T1, 'T2>``
 
  
 From F#+
 
- -  ``Const<'T1,'T2>``
+ -  [``Const<'C, 'T>``](type-const.html)
+ -  [``Validation<'Error, 'T>``](type-validation.html)
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
@@ -83,8 +85,11 @@ Examples
 *)
 
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 

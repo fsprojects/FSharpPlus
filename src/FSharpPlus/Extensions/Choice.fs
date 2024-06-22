@@ -19,16 +19,35 @@ module Choice =
 
     /// <summary>Maps the value on the Choice1Of2 if any.</summary>
     /// <param name="mapping">A function to apply to the Choice1Of2 value.</param>
-    /// <param name="value">The source input value.</param>
+    /// <param name="source">The source input value.</param>
     /// <returns>A Choice1Of2 of the input value after applying the mapping function, or the original Choice2Of2 value if the input is Choice2Of2.</returns>
     let map (mapping: 'T->'U) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 (mapping v) | Choice2Of2 e -> Choice2Of2 e
 
     /// <summary>Creates a Choice value from a pair of Choice values, using a function to combine the Choice1Of2 values.</summary>
+    /// <param name="mapping">A function to apply to the Choice1Of2 values.</param>
     /// <param name="x">The first Choice value.</param>
     /// <param name="y">The second Choice value.</param>
     ///
     /// <returns>The combined value, or the first Choice2Of2.</returns>
-    let map2 f (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) : Choice<'V,'Error> = match x, y with Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (f a b) | Choice2Of2 e, _ | _, Choice2Of2 e -> Choice2Of2 e
+    let map2 mapping (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) : Choice<'V,'Error> =
+        match x, y with
+        | Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (mapping a b) 
+        | Choice2Of2 e, _ 
+        | _, Choice2Of2 e -> Choice2Of2 e
+
+    /// <summary>Creates a Choice value from three of Choice values, using a function to combine the Choice1Of2 values.</summary>
+    /// <param name="mapping">A function to apply to the Choice1Of2 values.</param>
+    /// <param name="x">The first Choice value.</param>
+    /// <param name="y">The second Choice value.</param>
+    /// <param name="z">The third Choice value.</param>
+    ///
+    /// <returns>The combined value, or the first Choice2Of2.</returns>
+    let map3 mapping (x: Choice<'T,'Error>) (y: Choice<'U,'Error>) (z: Choice<'V, 'Error>) : Choice<'W,'Error> =
+        match x, y, z with
+        | Choice1Of2 a, Choice1Of2 b, Choice1Of2 c -> Choice1Of2 (mapping a b c)
+        | Choice2Of2 e, _           , _
+        | _           , Choice2Of2 e, _
+        | _           , _           , Choice2Of2 e -> Choice2Of2 e
 
     /// <summary>Flattens two nested Choice.</summary>
     /// <param name="source">The nested Choice.</param>
@@ -51,7 +70,7 @@ module Choice =
     /// <returns>A result of the output type of the binder.</returns>
     let bindChoice2Of2 (binder: 'T2->Choice<'T,'U2>) (source: Choice<'T,'T2>) = match source with Choice1Of2 v -> Choice1Of2 v | Choice2Of2 e -> binder e
 
-    /// <summary> Extracts a value from either side of a Choice.</summary>
+    /// <summary>Extracts a value from either side of a Choice.</summary>
     /// <param name="fChoice1Of2">Function to be applied to source, if it contains a Choice1Of2 value.</param>
     /// <param name="fChoice2Of2">Function to be applied to source, if it contains a Choice2Of2 value.</param>
     /// <param name="source">The source value, containing a Choice1Of2 or a Choice2Of2.</param>
@@ -63,3 +82,16 @@ module Choice =
         try
             Choice1Of2 (f x)
         with e -> Choice2Of2 e
+
+    let apply2With combiner f (x: Choice<'T, 'Error>) (y: Choice<'U, 'Error>) : Choice<'V, 'Error> =
+        match x, y with
+        | Choice1Of2 a, Choice1Of2 b -> Choice1Of2 (f a b)
+        | Choice2Of2 e, Choice1Of2 _ | Choice1Of2 _, Choice2Of2 e -> Choice2Of2 e
+        | Choice2Of2 e1, Choice2Of2 e2 -> Choice2Of2 (combiner e1 e2)
+
+    let apply3With combiner f (x: Choice<'T, 'Error>) (y: Choice<'U, 'Error>) (z: Choice<'V, 'Error>) : Choice<'W, 'Error> =
+        match x, y, z with
+        | Choice1Of2 a, Choice1Of2 b, Choice1Of2 c -> Choice1Of2 (f a b c)
+        | Choice2Of2 e, Choice1Of2 _, Choice1Of2 _ | Choice1Of2 _, Choice2Of2 e, Choice1Of2 _ | Choice1Of2 _, Choice1Of2 _, Choice2Of2 e -> Choice2Of2 e
+        | Choice1Of2 _, Choice2Of2 e1, Choice2Of2 e2 | Choice2Of2 e1, Choice1Of2 _, Choice2Of2 e2 | Choice2Of2 e1, Choice2Of2 e2, Choice1Of2 _ -> Choice2Of2 (combiner e1 e2)
+        | Choice2Of2 e1, Choice2Of2 e2, Choice2Of2 e3 -> Choice2Of2 (combiner (combiner e1 e2) e3)

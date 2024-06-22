@@ -5,21 +5,37 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;net452</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
     <IsPackable>false</IsPackable>
+    <Configurations>Debug;Release;Fable;Test</Configurations>
+    <Platforms>AnyCPU</Platforms>
+    <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
+    <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <TargetFrameworks>net7.0;net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Helpers.fs" />
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
+    <Compile Include="Applicatives.fs" />
+    <Compile Include="Splits.fs" />
+    <Compile Include="Monoid.fs" />
+    <Compile Include="Parsing.fs" />
+    <Compile Include="Traversals.fs" />
+    <Compile Include="Indexables.fs" />
+    <Compile Include="Collections.fs" />
     <Compile Include="Validations.fs" />
+    <Compile Include="Task.fs" />
+    <Compile Include="ValueTask.fs" />
+    <Compile Include="Asyncs.fs" />
     <Compile Include="Free.fs" />
+    <Compile Include="SeqT.fs" />
     <Compile Include="ComputationExpressions.fs" />
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="BifoldableTests.fs" />
-    <Content Include="App.config" Condition=" '$(TargetFramework)' == 'net452'" />
+    <Compile Include="TypeLevel.fs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82a7f48d-3b50-4b1e-b82e-3ada8210c358}" />
@@ -28,14 +44,18 @@
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\CSharpLib\CSharpLib.csproj" />
+    <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj" />
+    <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\Providers\FSharpPlus.Providers.fsproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.Runtime" Version="4.3.1" />
-    <PackageReference Update="FSharp.Core" Version="4.6.2" />
+    <PackageReference Update="FSharp.Core" Version="6.0.6" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
-    <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="FsCheck" Version="2.14" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="FsCheck" Version="2.16.5" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
+    <PackageReference Include="FsCheck.NUnit" Version="2.16.5" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
   </ItemGroup>
 </Project>

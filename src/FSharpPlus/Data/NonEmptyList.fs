@@ -13,6 +13,7 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface System.Collections.IEnumerable with member x.GetEnumerator () = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator () :> System.Collections.IEnumerator
     interface IReadOnlyCollection<'t>        with member s.Count = 1 + List.length s.Tail
     interface IReadOnlyList<'t>              with member s.Item with get index = s.Item index
+    interface NonEmptySeq<'t>                with member s.First = s.Head
 
     [<System.Obsolete("Use Head instead.")>]
     member this.head = let {Head = a; Tail = _} = this in a
@@ -31,6 +32,9 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
         | Some a, Some b -> let {Head = _; Tail = xs} = this in {Head = xs.[a-1]; Tail = xs.[a..b-1]}
     member this.Length = 1 + List.length this.Tail
 
+
+/// A type alias for NonEmptyList<'t>
+type nelist<'t> = NonEmptyList<'t>
 
 /// Basic operations on NonEmptyList
 [<RequireQualifiedAccess>]
@@ -77,6 +81,23 @@ module NonEmptyList =
     /// <summary>Build a new non empty list whose elements are the results of applying the given function
     /// to each of the elements of the non empty list.</summary>
     let map f  {Head = x; Tail = xs} = {Head = f x; Tail = List.map f xs}
+    
+    /// <summary>Safely build a new non empty list whose elements are the results of applying the given function
+    /// to each of the elements of the two non empty list pairwise.</summary>
+    /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
+    let map2Shortest f l1 l2 = { Head = f l1.Head l2.Head; Tail = List.map2Shortest f l1.Tail l2.Tail }
+
+    /// <summary>Safely build a new non empty list whose elements are the results of applying the given function
+    /// to each of the elements of the three non empty list pointwise.</summary>
+    /// <remark>If one list is shorter, excess elements are discarded from the right end of the longer list.</remark>
+    let map3Shortest f l1 l2 l3 = { Head = f l1.Head l2.Head l3.Head; Tail = List.map3Shortest f l1.Tail l2.Tail l3.Tail }
+    
+    /// <summary>Build a new non empty list whose elements are the results of applying the given function with index
+    /// to each of the elements of the non empty list.</summary>
+    let mapi f { Head = x; Tail = xs } =
+        let mapperI = (fun i item -> f (i + 1) item)
+        { Head = f 0 x
+          Tail = List.mapi mapperI xs }
 
     /// <summary>Splits a list of pairs into two lists.</summary>
     /// <param name="list">The input list.</param>
@@ -88,6 +109,17 @@ module NonEmptyList =
     /// <param name="list2">The second input list.</param>
     /// <returns>A single list containing pairs of matching elements from the input lists.</returns>
     let zip (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = {Head = (list1.Head, list2.Head); Tail = List.zip list1.Tail list2.Tail}
+    
+    /// <summary>
+    /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
+    /// </summary>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
+    /// <returns>List with corresponding pairs of input lists.</returns>
+    let zipShortest (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) =
+        { Head = (list1.Head, list2.Head); Tail = List.zipShortest list1.Tail list2.Tail }
+    
+    
     /// Returns a new NonEmptyList with the element added to the beginning.
     let cons e {Head = x; Tail = xs} = {Head = e ; Tail = x::xs}
     /// Returns the first element of a new non empty list. You can also use property nel.Head.
@@ -102,10 +134,32 @@ module NonEmptyList =
         | []   -> {Head = s; Tail = []}
         | h::t -> cons s (tails {Head = h; Tail = t})
 
-#if !FABLE_COMPILER
-    let inline traverse (f: 'T->'``Functor<'U>``) (s: NonEmptyList<'T>) =
-        let lst = traverse f (toList s) : '``Functor<'List<'U>>``
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+
+    /// <summary>
+    /// Maps each element of the list to an action, evaluates these actions from left to right and collect the results.
+    /// </summary>
+    let inline traverse (f: 'T -> '``Functor<'U>``) (source: NonEmptyList<'T>) =
+        let lst = traverse f (toList source) : '``Functor<'List<'U>>``
         (create << List.head |> fun f x -> f x (List.tail x)) <!> lst : '``Functor<NonEmptyList<'U>>``
+
+    /// <summary>
+    /// Evaluates each action in the list from left to right and collect the results.
+    /// </summary>
+    let inline sequence (source: NonEmptyList<'``Functor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` = traverse id source
+
+    /// <summary>
+    /// Maps each element of the list to an action, evaluates these actions from left to right, pointwise, and/or in parallel then collect results.
+    /// </summary>
+    let inline gather (f: 'T -> '``ZipFunctor<'U>``) (source: NonEmptyList<'T>) =
+        Transpose.ForInfiniteSequences (Seq.map f source, IsZipLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
+
+    /// <summary>
+    /// Evaluates each action in the list from left to right, pointwise, and/or in parallel then collect results.
+    /// </summary>
+    let inline transpose (source: NonEmptyList<'``ZipFunctor<'T>``>)  : '``Functor<NonEmptyList<'T>>`` =
+        Transpose.ForInfiniteSequences (source, IsZipLeftZero.Invoke, ofList, fun _ -> invalidOp "Unreacheable code.")
+
 #endif
 
     /// <summary>Returns the average of the elements in the list.</summary>
@@ -118,6 +172,13 @@ module NonEmptyList =
     /// <param name="list">The input list.</param>
     /// <returns>The resulting average.</returns>
     let inline averageBy (projection: 'T -> ^U) list = List.averageBy projection (list.Head :: list.Tail)
+
+    /// <summary>Returns a list that contains no duplicate entries according to the generic hash and equality comparisons
+    /// on the keys returned by the given key-generating function.
+    /// If an element occurs multiple times in the list then the later occurrences are discarded.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>The resulting list without duplicates.</returns>
+    let distinct (list: NonEmptyList<'T>) = list |> Seq.distinct |> ofSeq
 
     /// <summary>Applies a function to each element of the list, threading an accumulator argument
     /// through the computation. Apply the function to the first two elements of the list.
@@ -163,7 +224,7 @@ module NonEmptyList =
     /// Equivalent to [start..stop] on regular lists.
     let inline range (start: 'T) stop = create start (List.drop 1 [start..stop])
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// Reduces using alternative operator `<|>`.
     let inline choice (list: NonEmptyList<'``Alt<'T>``>) = reduce (<|>) list : '``Alt<'T>``
 #endif
@@ -174,16 +235,24 @@ module NonEmptyList =
         | []    -> None
         | x::xs -> Some (create x xs)
 
+    let ofNonEmptySeq (s: NonEmptySeq<_>) =
+      create s.First (Seq.tail s |> List.ofSeq)
+
+    let toNonEmptySeq (list: NonEmptyList<_>) = list :> NonEmptySeq<_>
+
 type NonEmptyList<'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Map (x: NonEmptyList<'a>, f: 'a->'b) = NonEmptyList.map f x
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member MapIndexed (x: NonEmptyList<_>, f) = NonEmptyList.mapi f x
+    
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Unzip s = NonEmptyList.unzip s
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Zip (x, y) = NonEmptyList.zip x y
-
+    static member Zip (x, y) = NonEmptyList.zipShortest x y
+    
     static member (>>=) ({Head = x; Tail = xs}, f: _->NonEmptyList<'b>) =
         let {Head = y; Tail = ys} = f x
         let ys' = List.collect (NonEmptyList.toList << f) xs
@@ -194,11 +263,21 @@ type NonEmptyList<'t> with
         let r = NonEmptyList.toList f </List.apply/> NonEmptyList.toList x
         {Head = r.Head; Tail = r.Tail}
 
+    static member Pure (x: 'a) = { Head = x; Tail = List.cycle [x] }
+    static member (<.>)  (f: NonEmptyList<'T->'U>, x: NonEmptyList<'T>) = NonEmptyList.map2Shortest (<|) f x
+
     static member Lift2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.ofList (List.lift2 f (NonEmptyList.toList x) (NonEmptyList.toList y))
+    static member Lift3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.ofList (List.lift3 f (NonEmptyList.toList x) (NonEmptyList.toList y) (NonEmptyList.toList z))
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Map2 (f: 'T -> 'U -> 'V, x, y) = NonEmptyList.map2Shortest f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Map3 (f: 'T -> 'U -> 'V -> 'W, x, y, z) = NonEmptyList.map3Shortest f x y z
 
     static member Extract   {Head = h; Tail = _} = h : 't
 
-    #if !FABLE_COMPILER
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     static member Duplicate (s: NonEmptyList<'a>, [<Optional>]_impl: Duplicate) = NonEmptyList.tails s
     #endif
 
@@ -207,9 +286,11 @@ type NonEmptyList<'t> with
 
     static member (+) ({Head = h; Tail = t},  x) = {Head = h; Tail = t @ NonEmptyList.toList x}
 
+    static member Fold     ({Head = x; Tail = xs}, f, z) = List.fold     f z (x::xs)
     static member FoldBack ({Head = x; Tail = xs}, f, z) = List.foldBack f (x::xs) z
+    static member Sum (source: seq<NonEmptyList<'T>>) = source |> Seq.map NonEmptyList.toList |> List.concat |> NonEmptyList.ofList
 
-    #if !FABLE_COMPILER
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member ToList (s: NonEmptyList<'a>, [<Optional>]_impl: ToList) = NonEmptyList.toList s    
 
@@ -217,7 +298,16 @@ type NonEmptyList<'t> with
     static member ToSeq (s: NonEmptyList<'a>, [<Optional>]_impl: ToSeq ) = NonEmptyList.toList s |> List.toSeq
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Traverse (s: NonEmptyList<'T>, f: 'T->'``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
+    static member inline Traverse (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.traverse f s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Sequence (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.sequence s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Gather (s: NonEmptyList<'T>, f: 'T -> '``Functor<'U>``) : '``Functor<NonEmptyList<'U>>`` = NonEmptyList.gather f s
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Transpose (s: NonEmptyList<'``Functor<'T>``>) : '``Functor<NonEmptyList<'T>>`` = NonEmptyList.transpose s
 
     static member Replace (source: NonEmptyList<'T>, oldValue: NonEmptyList<'T>, newValue: NonEmptyList<'T>, _impl: Replace ) =
         let lst = source |> NonEmptyList.toSeq |> Seq.replace oldValue newValue |> Seq.toList
@@ -239,8 +329,19 @@ type NonEmptyList<'t> with
 module NonEmptyListBuilder =
     type NelBuilder () =
         [<CompilerMessage("A NonEmptyList doesn't support the Zero operation.", 708, IsError = true)>]
-        member __.Zero () = raise Internals.Errors.exnUnreachable
-        member __.Combine (a: NonEmptyList<'T>, b) = a + b
-        member __.Yield x = NonEmptyList.singleton x
-        member __.Delay expr = expr () : NonEmptyList<'T>
+        member _.Zero () = raise Internals.Errors.exnUnreachable
+        member _.Combine (a: 'T, { Head = b; Tail = c }) = { Head = a; Tail = b::c }
+        member _.Yield x = x
+        member _.Delay expr = expr ()
+        member _.Run (x: NonEmptyList<_>) = x
+        
+    [<System.Obsolete("Use nelist instead.")>]
     let nel = NelBuilder ()
+    
+    let nelist = NelBuilder ()
+
+[<AutoOpen>]
+module NonEmptyListBuilderExtensions =
+    type NelBuilder with
+        member _.Combine (a: 'T, b: 'T) = { Head = a; Tail = [b] }
+        member _.Run x = { Head = x; Tail = [] }

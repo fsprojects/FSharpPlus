@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📚 Documentation
+    url: https://fsprojects.github.io/FSharpPlus/
+    about: Read our documentation.
+  - name: 💬 Ask on Stack Overflow
+    url: https://stackoverflow.com/questions/tagged/f%23%2b
+    about: The best place for asking general purpose questions.

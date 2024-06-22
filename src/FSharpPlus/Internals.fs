@@ -1,5 +1,19 @@
 namespace FSharpPlus.Internals
 
+#if TEST_TRACE
+module Traces =
+    let private effects = ResizeArray<string> []
+    let reset () = effects.Clear ()
+    let add x = effects.Add (x)
+    let get () = effects |> Seq.toList
+#endif
+
+/// <namespacedoc>
+/// <summary>
+/// Internal to the library - please ignore
+/// </summary>
+/// </namespacedoc>
+ 
 type Default6 = class end
 type Default5 = class inherit Default6 end
 type Default4 = class inherit Default5 end
@@ -10,12 +24,19 @@ type Default1 = class inherit Default2 end
 #nowarn "0042" // retype
 
 module internal Prelude =
+    open System
+    
     let inline flip f x y = f y x
     let inline const' k _ = k
     let inline tupleToOption x = match x with true, value -> Some value | _ -> None
-    let inline retype (x: 'T) : 'U = (# "" x: 'U #)
     let inline opaqueId x = Unchecked.defaultof<_>; x
-
+    
+    let inline retype (x: 'T) : 'U =
+    #if !FABLE_COMPILER
+        (# "" x: 'U #)
+    #else
+        unbox<'U> x
+    #endif
 
 [<RequireQualifiedAccess>]
 module internal Implicit = let inline Invoke (x: ^t) = ((^R or ^t) : (static member op_Implicit : ^t -> ^R) x) : ^R
@@ -27,6 +48,10 @@ module Errors =
     let exnNoSqrt         = new System.Exception "No square root defined for this value in this domain."
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
+
+    let inline raiseIfNull paramName paramValue =
+        if isNull paramValue then
+            nullArg paramName
 
 module Decimal =
     let inline trySqrt x =
@@ -51,7 +76,11 @@ module BigInteger =
             let rec loop previous =
                 let current = (previous + x / previous) >>> 1
                 if abs (previous - current) < 2I then current else loop current
+            #if !FABLE_COMPILER
             let guess = 10I ** (((int (BigInteger.Log10 (x + 1I))) + 1) >>> 1)
+            #else
+            let guess = 10I ** (((int ((x + 1I))) + 1) >>> 1)
+            #endif
             let r = loop guess
             let r2 = r * r
             match compare r2 x with
@@ -68,7 +97,7 @@ module Constraints =
 
 type Id<'t> (v: 't) =
    let value = v
-   member __.getValue = value
+   member _.getValue = value
 
 [<RequireQualifiedAccess>]
 module Id =
@@ -78,14 +107,20 @@ module Id =
 
 type Id0 (v: string) =
    let value = v
-   member __.getValue = value
+   member _.getValue = value
 
 type Either<'t,'u> =
     | Left of 't
     | Right of 'u
 
 type DmStruct = struct end
+type DmStruct1<'T1> = struct end
 
+type KeyValuePair2<'TKey, 'TValue> = struct
+    val Key : 'TKey
+    val Value : 'TValue
+    new (key, value) = { Key = key; Value = value }
+end
 
 [<Sealed>]
 type Set2<'T when 'T: comparison >() = class end
@@ -160,6 +195,18 @@ type BitConverter =
         let mutable value = value
         BitConverter.GetBytes ((&&value |> NativePtr.toNativeInt |> NativePtr.ofNativeInt |> NativePtr.read : int64), isLittleEndian)
 
+    /// Converts a Guid into an array of bytes with length
+    /// eight.
+    static member GetBytes (value: Guid, isLittleEndian) =
+        let bytes = value.ToByteArray ()
+        if isLittleEndian then bytes
+        else
+            let p1 = Array.rev bytes.[0 .. 3]
+            let p2 = Array.rev bytes.[4 .. 5]
+            let p3 = Array.rev bytes.[6 .. 7]
+            let p4 =           bytes.[8 .. 15]
+            Array.concat [p1; p2; p3; p4]
+
     /// Converts an array of bytes into a char.
     static member ToChar (value: byte [], startIndex: int, isLittleEndian: bool) =
         char <| BitConverter.ToInt16 (value, startIndex, isLittleEndian)
@@ -206,6 +253,19 @@ type BitConverter =
             let i2 = (int64 (NativePtr.get pbyte 4) <<< 24) |||  (int64 (NativePtr.get pbyte 5) <<< 16) ||| (int64 (NativePtr.get pbyte 6) <<< 8) ||| (int64 (NativePtr.get pbyte 7))
             i2 ||| (i1 <<< 32)
 
+    static member ToGuid (value: byte[], startIndex: int, isLittleEndian: bool) =
+        if isNull value then nullArg "value"
+        if startIndex >= value.Length      then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_Index")
+        if startIndex >  value.Length - 16 then raise <| new ArgumentException "Arg_ArrayPlusOffTooSmall"
+        if isLittleEndian then
+            if startIndex = 0 then Guid value
+            else Guid value.[startIndex .. startIndex + 15]
+        else
+            let p1 = Array.rev value.[startIndex + 0 .. startIndex + 3]
+            let p2 = Array.rev value.[startIndex + 4 .. startIndex + 5]
+            let p3 = Array.rev value.[startIndex + 6 .. startIndex + 7]
+            let p4 =           value.[startIndex + 8 .. startIndex + 15]
+            Guid (Array.concat [p1; p2; p3; p4])
 
     /// Converts an array of bytes into an ushort.
     ///
@@ -267,12 +327,12 @@ type BitConverter =
         if isNull value then nullArg "value"
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 // findSliceIndex
 module FindSliceIndex =
-    open System.Linq
     open System.Collections.Generic
-
+    #if !FABLE_COMPILER
+    open System.Linq
     let seqImpl (slice: seq<_>) (source: seq<_>) =
         let cache = Queue<_>()
         // we assume the slice is finite (otherwise it cannot be searched)
@@ -290,6 +350,44 @@ module FindSliceIndex =
                 else go (index + 1)
             else -1
         go 0
+    let sequenceEqual (a: _ seq) (b: _ seq) = a.SequenceEqual b
+    #else
+    let internal sequenceEqual (a: _ seq) (b: _ seq) :bool = Seq.compareWith Operators.compare a b = 0
+    module internal Q=
+        type queue<'a> = | Queue of 'a list * 'a list
+
+        let empty = Queue([], [])
+
+        let enqueue q e = match q with | Queue(fs, bs) -> Queue(e :: fs, bs)
+
+        let dequeue =
+            function
+            | Queue([], []) as q -> None, q
+            | Queue(fs, b :: bs) -> Some b, Queue(fs, bs)
+            | Queue(fs, []) ->
+                let bs = List.rev fs
+                Some bs.Head, Queue([], bs.Tail)
+        let toSeq =
+            function
+            | Queue([], []) -> Seq.empty
+            | Queue(fs, bs) -> bs @ List.rev fs |> List.toSeq
+        let length =
+            function
+            | Queue([], []) -> 0
+            | Queue(fs, bs) -> List.length bs + List.length fs
+    open System.Collections
+    type Queue<'T> () =
+        let mutable q : Q.queue<'T> = Q.empty
+        interface IEnumerable<'T> with
+            member _.GetEnumerator () = let s = Q.toSeq q in s.GetEnumerator()
+        interface IEnumerable with
+            member _.GetEnumerator () = let s = Q.toSeq q in s.GetEnumerator() :> IEnumerator
+        member _.Enqueue (v) = q <- Q.enqueue q v
+        member _.Dequeue () =
+            let (dequeued, next) = Q.dequeue q in q <- next
+            match dequeued with | Some v -> v | None -> failwith "Empty queue!"
+        member _.Count = Q.length q
+    #endif
 
     let listImpl (slice: _ list) (source: _ list) =
         let cache = Queue<_>()
@@ -300,7 +398,7 @@ module FindSliceIndex =
             | h :: t ->
                 cache.Enqueue h
                 if cache.Count = sliceLength then
-                    if cache.SequenceEqual slice then index - sliceLength + 1
+                    if sequenceEqual cache slice then index - sliceLength + 1
                     else
                         cache.Dequeue() |> ignore
                         go (index + 1) t
@@ -315,11 +413,107 @@ module FindSliceIndex =
                 let h = source.[index]
                 cache.Enqueue h
                 if cache.Count = slice.Length then
-                    if cache.SequenceEqual slice then index - slice.Length + 1
+                    if sequenceEqual cache slice then index - slice.Length + 1
                     else
                         cache.Dequeue() |> ignore
                         go (index + 1)
                 else go (index + 1)
             else -1
         go 0
+
+module FindLastSliceIndex =
+    open System.Collections.Generic
+    #if !FABLE_COMPILER
+    open System.Linq
+    let seqImpl (slice: seq<_>) (source: seq<_>) =
+        let cache = Queue<_>()
+        // we assume the slice is finite (otherwise it cannot be searched)
+        let slice = slice |> Seq.toArray
+        use sourceEnumerator = source.GetEnumerator()
+        // we also assume the source is finite
+        let rec go last index =
+            if sourceEnumerator.MoveNext() then
+                cache.Enqueue sourceEnumerator.Current
+                if cache.Count = slice.Length then
+                    let last = if cache.SequenceEqual slice then index - slice.Length + 1 else last
+                    cache.Dequeue() |> ignore
+                    go last (index + 1)
+                else go last (index + 1)
+            else last
+        go -1 0
+    let sequenceEqual (a: _ seq) (b: _ seq) = a.SequenceEqual b
+    #else
+    let internal sequenceEqual (a: _ seq) (b: _ seq) :bool = Seq.compareWith Operators.compare a b = 0
+    module internal Q =
+        type queue<'a> = | Queue of 'a list * 'a list
+
+        let empty = Queue([], [])
+
+        let enqueue q e = match q with | Queue(fs, bs) -> Queue(e :: fs, bs)
+
+        let dequeue =
+            function
+            | Queue([], []) as q -> None, q
+            | Queue(fs, b :: bs) -> Some b, Queue(fs, bs)
+            | Queue(fs, []) ->
+                let bs = List.rev fs
+                Some bs.Head, Queue([], bs.Tail)
+        let toSeq =
+            function
+            | Queue([], []) -> Seq.empty
+            | Queue(fs, bs) -> bs @ List.rev fs |> List.toSeq
+        let length =
+            function
+            | Queue([], []) -> 0
+            | Queue(fs, bs) -> List.length bs + List.length fs
+    open System.Collections
+    type Queue<'T> () =
+        let mutable q : Q.queue<'T> = Q.empty
+        interface IEnumerable<'T> with
+            member _.GetEnumerator () = let s = Q.toSeq q in s.GetEnumerator()
+        interface IEnumerable with
+            member _.GetEnumerator () = let s = Q.toSeq q in s.GetEnumerator() :> IEnumerator
+        member _.Enqueue (v) = q <- Q.enqueue q v
+        member _.Dequeue () =
+            let (dequeued, next) = Q.dequeue q in q <- next
+            match dequeued with | Some v -> v | None -> invalidOp "Empty queue!"
+        member _.Count = Q.length q
+    #endif
+
+    let listImpl (slice: _ list) (source: _ list) =
+        let cache = Queue<_>()
+        // List.length is O(n)
+        let sliceLength = slice.Length
+        let rec go last index source =
+            match source with
+            | h :: t ->
+                cache.Enqueue h
+                if cache.Count = sliceLength then
+                    let last = if sequenceEqual cache slice then index - sliceLength + 1 else last
+                    cache.Dequeue() |> ignore
+                    go last (index + 1) t
+                else go last (index + 1) t
+            | [] -> last
+        go -1 0 source
+
+    let arrayImpl (slice: _ []) (source: _ []) =
+        let revSlice = slice |> Array.rev
+        let cache = Queue<_>()
+        let rec go index =
+            if index >= 0 then
+                let h = source.[index]
+                cache.Enqueue h
+                if cache.Count = slice.Length then
+                    if sequenceEqual cache revSlice then index
+                    else
+                        cache.Dequeue() |> ignore
+                        go (index - 1)
+                else go (index - 1)
+            else -1
+        go (source.Length - 1)
+#endif
+
+#if FABLE_COMPILER
+exception AggregateException of Exception seq
+
 #endif

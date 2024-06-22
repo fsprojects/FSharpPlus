@@ -5,7 +5,7 @@ namespace FSharpPlus.Data
 open System.ComponentModel
 open FSharpPlus
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 open FSharpPlus.Lens
 #endif
 
@@ -27,6 +27,7 @@ type Validation<'error, 't> =
   | Success of 't
 
 module Validation =
+    open FSharp.Core.CompilerServices
 
     let map (f: 'T->'U) (source: Validation<'Error,'T>) =
         match source with
@@ -48,6 +49,17 @@ module Validation =
         | Success _ , Failure e2 -> Failure e2
         | Success f , Success a  -> Success (f a)
 
+    let inline zip x y : Validation<'Error, 'T *'U> =
+        match (x: Validation<'Error, 'T>), (y: Validation<'Error, 'U>) with
+        #if !FABLE_COMPILER
+        | Failure e1, Failure e2 -> Failure (plus e1 e2)
+        #else
+        | Failure e1, Failure e2 -> Failure (e1 + e2)
+        #endif
+        | Failure e1, Success _  -> Failure e1
+        | Success _ , Failure e2 -> Failure e2
+        | Success x , Success y  -> Success (x, y)
+
     let inline map2 f x y : Validation<'Error,'V> =
         match (x: Validation<'Error,'T>), (y: Validation<'Error,'U>) with
         #if !FABLE_COMPILER
@@ -59,27 +71,57 @@ module Validation =
         | Success _ , Failure e2 -> Failure e2
         | Success x , Success y  -> Success (f x y)
 
-    let inline foldBack (folder: 'T->'State->'State) (source: Validation<'Error,'T>) (state: 'State) =
+    let inline map3 f x y z : Validation<'Error,'W> =
+        match (x: Validation<'Error,'T>), (y: Validation<'Error,'U>), (z: Validation<'Error,'V>) with
+        | Success x , Success y, Success z -> Success (f x y z)
+
+        #if !FABLE_COMPILER
+        | Failure e1, Failure e2, Failure e3 -> Failure (e1 ++ e2 ++ e3)
+        #else
+        | Failure e1, Failure e2, Failure e3 -> Failure (e1 + e2 + e3)
+        #endif
+
+        | Failure e, Success _, Success _
+        | Success _, Failure e, Success _
+        | Success _, Success _, Failure e
+            -> Failure e
+
+        | Success _ , Failure e1, Failure e2
+        | Failure e1, Success _ , Failure e2
+        | Failure e1, Failure e2, Success _            
+            #if !FABLE_COMPILER
+            -> Failure (plus e1 e2)
+            #else
+            -> Failure (e1 + e2)
+            #endif
+
+    let inline foldBack (folder: 'T -> 'State -> 'State) (source: Validation<'Error, 'T>) (state: 'State) =
         match source with
         | Success a -> folder a state
         | Failure _ -> state
 
-    #if !FABLE_COMPILER
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     /// Traverse the Success case with the supplied function.
-    let inline traverse (f: 'T->'``Functor<'U>``) (source: Validation<'Error,'T>) : '``Functor<Validation<'Error,'U>>`` =
+    let inline traverse (f: 'T -> '``Functor<'U>``) (source: Validation<'Error, 'T>) : '``Functor<Validation<'Error, 'U>>`` =
         match source with
         | Success a -> Validation<'Error,'U>.Success <!> f a
         | Failure e -> result (Validation<'Error,'U>.Failure e)
 
     /// Traverse the Success case.
-    let inline sequence (source: Validation<'Error,'``Functor<'T>``>) : '``Functor<Validation<'Error,'T>>`` = traverse id source
+    let inline sequence (source: Validation<'Error, '``Functor<'T>``>) : '``Functor<Validation<'Error, 'T>>`` = traverse id source
 
     #endif
 
-    let bimap (f: 'T1->'U1) (g: 'T2->'U2) = function
-        | Failure e -> Failure (f e)
-        | Success a -> Success (g a)
+    /// <summary>Maps both success and failure of a Validation.</summary>
+    /// <param name="failureMapper">Function to be applied to source, if it contains a Failure value.</param>
+    /// <param name="successMapper">Function to be applied to source, if it contains a Success value.</param>
+    /// <param name="source">The source value, containing a Success or a Failure.</param>
+    /// <returns>The result of applying the corresponding mapping function.</returns>
+    let bimap (failureMapper: 'TError -> 'UError) (successMapper: 'T -> 'U) source =
+        match source with
+        | Failure e -> Failure (failureMapper e)
+        | Success a -> Success (successMapper a)
 
     let bifoldBack f g (source: Validation<'Error,'T>) (state: 'State) : 'State =
         match source with
@@ -93,7 +135,7 @@ module Validation =
         | Failure e -> f e x
 
     /// Like traverse but taking an additional function to traverse the Failure part as well.
-    let inline bitraverse (f: 'Error1->'``Functor<'Error2>``) (g: 'T1->'``Functor<'T2>``) (source: Validation<'Error1,'T1>) : '``Functor<Validation<'Error2,'T2>>`` =
+    let inline bitraverse (f: 'TError -> '``Functor<'UError>``) (g: 'T -> '``Functor<'U>``) (source: Validation<'TError, 'T>) : '``Functor<Validation<'UError, 'U>>`` =
         match source with
         | Success a -> Validation<'Error2,'T2>.Success <!> g a
         | Failure e -> Validation<'Error2,'T2>.Failure <!> f e
@@ -155,21 +197,33 @@ module Validation =
     /// Creates a Validation<'Error,'T> from a Choice<'T,'Error>.
     let ofChoice (x: Choice<'T,'Error>) = match x with Choice1Of2 a -> Success a | Choice2Of2 e -> Failure e
 
+    /// <summary>Converts an option to a Validation.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The option value.</param>
+    /// <returns>The resulting Validation value.</returns>
+    let ofOptionWith (errorValue: 'Error) (source: 'T option) = match source with Some x -> Success x | None -> Failure errorValue
+
+    /// <summary>Converts a voption to a Validation.</summary>
+    /// <param name="errorValue">The error value to be used in case of None.</param>
+    /// <param name="source">The voption value.</param>
+    /// <returns>The resulting Validation value.</returns>
+    let ofValueOptionWith (errorValue: 'Error) (source: 'T voption) = match source with ValueSome x -> Success x | ValueNone -> Failure errorValue
+    
     /// <summary> Extracts a value from either side of a Validation.</summary>
-    /// <param name="fSuccess">Function to be applied to source, if it contains a Success value.</param>
-    /// <param name="fFailure">Function to be applied to source, if it contains a Failure value.</param>
+    /// <param name="successMapper">Function to be applied to source, if it contains a Success value.</param>
+    /// <param name="failureMapper">Function to be applied to source, if it contains a Failure value.</param>
     /// <param name="source">The source value, containing a Success or a Failure.</param>
     /// <returns>The result of applying either functions.</returns>
-    let either (fSuccess: 'T->'U) (fFailure: 'Error->'U) source = match source with Success v -> fSuccess v | Failure e -> fFailure e
+    let either (failureMapper: 'TError -> 'U) (successMapper: 'T -> 'U) source = match source with Success v -> successMapper v | Failure e -> failureMapper e
 
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
-    #if !FABLE_COMPILER
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
-    let validationNel (x: Result<_,_>) : (Validation<NonEmptyList<'e>,'a>) = (liftResult result) x
+    let validationNel (x: Result<'T, 'TError>) : (Validation<NonEmptyList<'TError>, 'T>) = (liftResult result) x
     #endif
 
     [<System.Obsolete("This function will not be supported in future versions.")>]
@@ -177,49 +231,110 @@ module Validation =
         | Failure x -> Failure x
         | Success a -> validate e p a
 
-    /// Creates a safe version of the supplied function, which returns a Validation<exn,'U> instead of throwing exceptions.
-    let protect (f: 'T->'U) x =
+    /// Creates a safe version of the supplied function, which returns a Validation<exn, 'U> instead of throwing exceptions.
+    let protect (unsafeFunction: 'T -> 'U) x =
         try
-            Success (f x)
+            Success (unsafeFunction x)
         with e -> Failure e
 
     #if !FABLE_COMPILER
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
-    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x    
-    
+    let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x
+    #endif
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     let inline isoValidationResult x = x |> iso toResult ofResult
+    #endif
+    
+    /// <summary>
+    /// Creates two lists by classifying the values depending on whether they were wrapped with Success or Failure.
+    /// </summary>
+    /// <returns>
+    /// A tuple with both resulting lists, Success are in the first list.
+    /// </returns>
+    let partition (source: list<Validation<'TErrors, 'T>>) =
+    #if FABLE_COMPILER
+        let rec loop ((acc1, acc2) as acc) = function
+            | [] -> acc
+            | x::xs ->
+                match x with
+                | Success x -> loop (x::acc1, acc2) xs
+                | Failure x -> loop (acc1, x::acc2) xs
+        loop ([], []) (List.rev source)
+    #else
+        let mutable coll1 = new ListCollector<'T> ()
+        let mutable coll2 = new ListCollector<'TErrors> ()
+        List.iter (function Success e -> coll1.Add e | Failure e -> coll2.Add e) source
+        coll1.Close (), coll2.Close ()
     #endif
 
 
-type Validation<'err,'a> with
+type Validation<'error, 't> with
 
     // as Applicative
     static member Return x = Success x
-    static member inline (<*>)  (f: Validation<_,'T->'U>, x: Validation<_,'T>) : Validation<_,_> = Validation.apply f x
-    static member inline Lift2  (f, x: Validation<_,'T>, y: Validation<_,'U>) : Validation<_,'V> = Validation.map2 f x y
+    static member inline (<*>)  (f: Validation<'Error, 'T -> 'U>, x: Validation<_, 'T>) : Validation<_, _> = Validation.apply f x
 
-    #if !FABLE_COMPILER
+    /// <summary>
+    /// Sequences two Validations left-to-right, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( *>) (x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'U> = ((fun (_: 'T) (k: 'U) -> k) </Validation.map/>  x : Validation<'Error, 'U->'U>) </Validation.apply/> y
+    
+    /// <summary>
+    /// Sequences two Validations left-to-right, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<*  ) (x: Validation<'Error, 'U>, y: Validation<'Error, 'T>): Validation<'Error, 'U> = ((fun (k: 'U) (_: 'T) -> k ) </Validation.map/> x : Validation<'Error, 'T->'U>) </Validation.apply/> y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift2 (f, x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'V> = Validation.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Lift3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
+
+    // as ZipApplicative (same behavior)
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Zip (x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'T * 'U> = Validation.zip x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Pure x = Success x
+
+    static member inline (<.>)  (f: Validation<'Error, 'T -> 'U>, x: Validation<_, 'T>) : Validation<_, _> = Validation.apply f x
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map2 (f, x: Validation<'Error, 'T>, y: Validation<'Error, 'U>) : Validation<'Error, 'V> = Validation.map2 f x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member inline Map3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
+
     // as Alternative (inherits from Applicative)
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     static member inline get_Empty () = Failure (getEmpty ())
-    static member inline (<|>) (x: Validation<_,_>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
+    static member inline (<|>) (x: Validation<'Error, 'T>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
     #endif
 
     // as Functor
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Map (x: Validation<_,_>, f) = Validation.map f x
+    static member Map (x: Validation<'Error, _>, f: 'T -> 'U) = Validation.map f x
+    
+    /// <summary>Lifts a function into a Validator. Same as map.
+    /// To be used in Applicative Style expressions, combined with &lt;*&gt;
+    /// </summary>
+    /// <category index="1">Functor</category>
+    static member (<!>) (f: 'T -> 'U, x: Validation<'Error, _>) = Validation.map f x
 
     // as Bifunctor
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member Bimap (x: Validation<'T,'V>, f: 'T->'U, g: 'V->'W) : Validation<'U,'W> = Validation.bimap f g x
+    static member Bimap (x: Validation<'T, 'V>, f: 'T -> 'U, g: 'V -> 'W) : Validation<'U, 'W> = Validation.bimap f g x
 
-    #if !FABLE_COMPILER
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Traverse (t: Validation<'err,'a>, f: 'a->'b) : 'c = Validation.traverse f t
+    static member inline Traverse (t: Validation<'Error, 'T>, f: 'T -> '``Functor<'U>``) : '``Functor<Validation<'Error, 'U>>`` = Validation.traverse f t
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    static member inline Sequence (t: Validation<'err,'a>) : 'c = Validation.sequence t
+    static member inline Sequence (t: Validation<'Error, '``Functor<'T>``>) : '``Functor<Validation<'Error, 'T>>`` = Validation.sequence t
 
     #endif
 
@@ -245,3 +360,12 @@ type Validation<'err,'a> with
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member inline Bisequence (t: Validation<'err,'a>) = Validation.bisequence t
+    
+    
+    /// Creates a list with either all Success values or the Failure ones.
+    static member SequenceBiApply (t: list<Validation<'Error,'T>>) : Validation<list<'Error>,list<'T>> =
+        Validation.partition t |> fun (x, y) -> if List.isEmpty y then Success x else Failure y
+
+    /// Creates an array with either all Success values or the Failure ones.
+    static member SequenceBiApply (t: Validation<'Error,'T> []) : Validation<'Error [],'T []> =
+        Array.partitionMap Validation.toChoice t |> fun (x, y) -> if Array.isEmpty y then Success x else Failure y

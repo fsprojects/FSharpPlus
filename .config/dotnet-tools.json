@@ -2,22 +2,16 @@
   "version": 1,
   "isRoot": true,
   "tools": {
-    "fake-cli": {
-      "version": "5.19",
+    "fable": {
+      "version": "4.5.0",
       "commands": [
-        "fake"
+        "fable"
       ]
     },
-    "paket": {
-      "version": "6.0.0-alpha014",
+    "fsdocs-tool": {
+      "version": "19.1.1",
       "commands": [
-        "paket"
-      ]
-    },
-    "FSharp.Formatting.CommandTool":{
-      "version": "4.0.0-alpha03",
-      "commands": [
-        "fsformatting"
+        "fsdocs"
       ]
     }
   }

@@ -1,8 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
-
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 (**
 State<'S,'T>
 ============
@@ -18,9 +17,11 @@ Examples
 --------
 *)
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
-
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 open FSharpPlus
 open FSharpPlus.Data
 (**
@@ -46,3 +47,4 @@ let rec playGame =
 let startState = (false, 0)
 let moves = toList "abcaaacbbcabbab"
 State.eval (playGame moves) startState
+let (score, finalState) = State.run (playGame moves) startState

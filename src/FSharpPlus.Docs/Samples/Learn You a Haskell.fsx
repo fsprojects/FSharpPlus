@@ -1,5 +1,5 @@
 #if INTERACTIVE
-#r @"../../FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 #else
 module Samples.Learn_You_a_Haskell
 #endif
@@ -563,7 +563,7 @@ let loadedCoin = Prob [(Heads, 0.1); (Tails, 0.9)]                              
 // Prob [(false, 0.025); (false, 0.225); (false, 0.025); (false, 0.225);
 //       (false, 0.025); (false, 0.225); (false, 0.025); (true, 0.225)]
 let flipThree : Prob<bool> =
-    monad {
+    monad' {
         let! a = coin
         let! b = coin
         let! c = loadedCoin

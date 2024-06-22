@@ -1,7 +1,5 @@
 # FSharpPlus
 
-[![Build Status](https://api.travis-ci.org/fsprojects/FSharpPlus.svg?branch=master)](https://travis-ci.org/fsprojects/FSharpPlus)
-[![Build Status](https://ci.appveyor.com/api/projects/status/25ukpc0lamyf7pdx/branch/master?svg=true)](https://ci.appveyor.com/project/wallymathieu/fsharpplus/branch/master)
 [![Download](https://img.shields.io/nuget/dt/FSharpPlus.svg)](https://www.nuget.org/packages/FSharpPlus)
 [![NuGet](https://img.shields.io/nuget/v/FSharpPlus.svg)](https://www.nuget.org/packages/FSharpPlus)
 [![NuGet Preview](https://img.shields.io/nuget/vpre/FSharpPlus.svg?label=pre)](https://www.nuget.org/packages/FSharpPlus/absoluteLatest)
@@ -33,8 +31,7 @@ Please do join us to chat on:
 
 - Gitter
   [![Join the chat at https://gitter.im/fsprojects/FSharpPlus](https://badges.gitter.im/fsprojects/FSharpPlus.svg)](https://gitter.im/fsprojects/FSharpPlus?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-- [#FSharpPlus on Functional programming Slack](https://app.slack.com/client/T0432GV8P/CTT70ER47)
-  If you need to request an invitation head to https://fpchat-invite.herokuapp.com/ to get one.
+- You can get invited into the [functional programming Slack](https://app.slack.com/client/T0432GV8P/CTT70ER47) and then join [#FSharpPlus](https://functionalprogramming.slack.com/join/shared_invite/zt-svowkzcg-6xzAuVrUtINX7swWuhjHUw#/shared-invite/email)
 
 ...or you can [ask a question on stack overflow](https://stackoverflow.com/questions/ask?tags=f%23%2b)
 with tag `F#+`

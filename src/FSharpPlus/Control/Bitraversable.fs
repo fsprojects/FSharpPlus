@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus.Control
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 // open System.Runtime.InteropServices
 open FSharpPlus.Internals
@@ -13,6 +13,7 @@ type Bitraverse =
     static member inline Bitraverse (x: Choice<'T1,'Error1>, f: 'Error1->'``Functor<'Error2>``, g: 'T1->'``Functor<'T2>``, _impl: Bitraverse) : '``Functor<Choice<'Error2,'T2>>`` = match x with Choice1Of2 a -> Map.Invoke Choice<'Error2,'T2>.Choice1Of2 (g a) | Choice2Of2 e -> Map.Invoke Choice<'Error2,'T2>.Choice2Of2 (f e)
 
     static member inline Bitraverse ((x: 'T1, y: 'U1), f: 'T1->'``Functor<'T2>``, g: 'U1->'``Functor<'U2>``, _impl: Bitraverse) : '``Functor<'T2 * 'U2>`` = Lift2.Invoke (fun a b -> (a, b)) (f x) (g y)
+    static member inline Bitraverse (struct (x: 'T1, y: 'U1), f: 'T1->'``Functor<'T2>``, g: 'U1->'``Functor<'U2>``, _impl: Bitraverse) : '``Functor<struct ('T2 * 'U2)>`` = Lift2.Invoke (fun (a: 'T) (b: 'U) -> struct (a, b)) (f x) (g y)
 
     static member inline Invoke (f: 'T1->'``Functor<'T2>``) (g: 'U1->'``Functor<'U2>``) (source: '``Bitraversable<'T1,'U1>``) : '``Functor<'Bitraversable<'T2,'U2>>`` =
         let inline call (a: ^a, b: ^b, _: 'r) = ((^a or ^b or ^r) : (static member Bitraverse : _*_*_*_ -> _) b,f,g,a)
@@ -30,6 +31,7 @@ type Bisequence =
     static member inline Bisequence (x: Choice<'``Functor<'Error>``, '``Functor<'T>``>, _impl: Bisequence) : '``Functor<Choice<'Error,'T>>`` = match x with Choice1Of2 a -> Map.Invoke Choice<'Error,'T>.Choice1Of2 a | Choice2Of2 e -> Map.Invoke Choice<'Error,'T>.Choice2Of2 e
 
     static member inline Bisequence ((x: '``Functor<'T>``, y: '``Functor<'U>``), _impl: Bisequence) : '``Functor<'T2 * 'U>`` = Lift2.Invoke (fun a b -> (a, b)) x y
+    static member inline Bisequence (struct (x: '``Functor<'T>``, y: '``Functor<'U>``), _impl: Bisequence) : '``Functor<struct ('T2 * 'U)>`` = Lift2.Invoke (fun a b -> struct (a, b)) x y
 
     static member inline Invoke (source: '``Bitraversable<'Functor<'T>,'Functor<'U>>``) : '``Functor<'Bitraversable<'T,'U>>`` =
         let inline call (a: ^a, b: ^b, _: 'r) = ((^a or ^b or ^r) : (static member Bisequence : _*_ -> _) b, a)

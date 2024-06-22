@@ -6,6 +6,7 @@ open System
 open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Tests.Helpers
+open NUnit.Framework
 
 module Free =
     
@@ -274,3 +275,86 @@ module TestCoproduct =
         <*> readDate
         <*> readName
         <*> readEmail
+
+module Fold =
+    type FooId = FooId of string
+
+    type Foo = { Id: FooId; Name: string }
+
+    // An example of an operation in the domain implemented as a Free monad that reads a foo
+    module GetFoo =
+        type Error = NotFound
+
+        type Instruction<'next> =
+            | Read of (FooId * (Foo option -> 'next))
+            static member Map(instruction, f: 'a -> 'b) =
+                match instruction with
+                | Read (id, next) -> Read(id, next >> f)
+
+        type Program<'a> = Free<Instruction<'a>, 'a>
+
+        let read fooId = Read(fooId, id) |> Free.liftF
+
+        type Request = { Id: FooId }
+        type Response = Result<Foo, Error>
+
+        let handle request: Program<Response> =
+            monad {
+                let! foo = read request.Id
+                return foo |> Option.toResultWith NotFound
+            }
+
+    [<Test>]
+    let ``should interpret program with fold`` () =
+        let request: GetFoo.Request = { Id = FooId "1" }
+        let response = 
+            request
+            |> GetFoo.handle 
+            |> Free.fold 
+                (function
+                | GetFoo.Read (fooId, next) -> { Id = fooId; Name = "test" } |> Some |> next |> result) 
+            |> Identity.run
+
+        areStEqual (Ok { Id = FooId "1"; Name = "test" }) response
+
+module Lift3 =
+
+    type Instruction<'next> =
+        | Read of int * (string -> 'next)
+        static member Map(i, f) =
+            match i with
+            | Read (x, next) -> Read(x, next >> f)
+
+    let read x = Read(x, id) |> Free.liftF
+
+    type ApplicativeBuilder<'a>() =
+        inherit MonadFxStrictBuilder<'a>()
+
+        member inline _.BindReturn(x, f) = map f x
+
+    let applicative<'a> = ApplicativeBuilder<'a>()
+
+    [<Test>]
+    let ``should be able to use applicative CE which requires Lift3`` () =
+        let program = 
+            applicative {
+                let! a = read 1
+                and! b = read 2
+                and! c = read 3
+                return a, b, c
+            }
+
+        let result = 
+            program 
+            |> Free.fold 
+                (function 
+                | Read (i, next) -> i |> string |> next |> result) 
+            |> Identity.run
+
+        areStEqual result ("1", "2", "3")
+
+    [<Test>]
+    let hoistFunction () =
+        let x: Free<Result<int, string>, int> = Pure 4
+        let y = Free.hoist Result.toOption x
+        Assert.IsInstanceOf<Option<Free<option<int>, int>>> (Some y)

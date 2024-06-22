@@ -29,6 +29,16 @@ module Option =
         | Some x, Some y -> Some (x, y)
         | _              -> None
 
+    /// <summary>If all 3 value are Some, returns them tupled. Otherwise it returns None.</summary>
+    /// <param name="x">The first value.</param>
+    /// <param name="y">The second value.</param>
+    /// <param name="z">The third value.</param>
+    /// <returns>The resulting option.</returns>
+    let zip3 x y z : option<'T * 'U * 'V> =
+        match x, y, z with
+        | Some x, Some y, Some z -> Some (x, y, z)
+        | _                      -> None
+
     /// <summary>Converts an option to a Result.</summary>
     /// <param name="source">The option value.</param>
     /// <returns>The resulting Result value.</returns>
@@ -51,3 +61,12 @@ module Option =
         try
             Some (f x)
         with _ -> None
+
+    /// <summary>Converts pair of bool and value to Option.</summary>
+    /// <remarks>Useful for handling C# try pattern with `out` parameter. E.g. `Int.TryParse` or `Dictionary.TryGetValue`.</remarks>
+    /// <param name="pair">Pair of bool and value.</param>
+    /// <returns><c>Some</c> if bool is `true`, <c>None</c> otherwise.</returns>
+    let ofPair (pair: (bool * 'T)) =
+        match pair with
+        | (true,  x) -> Some x
+        | (false, _) -> None

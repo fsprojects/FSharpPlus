@@ -1025,7 +1025,7 @@ module ProcessUtils =
 
 type ProcessResult = { ExitCode : int; stdout : string; stderr : string }
 
-let executeProcess (exe, cmdline, workingDir) =
+let executeProcess (exe, cmdline, workingDir, (env:(string*string) list option)) =
     let psi =
         System.Diagnostics.ProcessStartInfo (exe, cmdline,
             UseShellExecute = false,
@@ -1033,6 +1033,11 @@ let executeProcess (exe, cmdline, workingDir) =
             RedirectStandardError = true,
             CreateNoWindow = true,
             WorkingDirectory = defaultArg workingDir "")
+    match env with 
+    | Some pe->
+        for var in pe do
+            psi.EnvironmentVariables.Add (var) 
+    | None -> ()
     let p = System.Diagnostics.Process.Start psi
     let output = new ResizeArray<_> ()
     let error  = new ResizeArray<_> ()
@@ -1052,82 +1057,49 @@ module FSFormatting =
     /// Specifies the fsformatting executable
 
     /// Runs fsformatting.exe with the given command in the given repository directory.
-    let private run command =
-        let result = executeProcess ("dotnet", sprintf "tool run fsformatting %s" command, None)
+    let private run env command =
+        let result = executeProcess ("dotnet", sprintf "tool run fsdocs %s" command, None, Some env)
         if 0 <> result.ExitCode
         then
             failwithf
-                "FSharp.Formatting command %s failed with: %s" 
+                "fsdocs command %s failed with: %s" 
                 command
                 // workaround (fsformatting doesn't output errors to stderr)
                 (if System.String.IsNullOrEmpty result.stderr then result.stdout else result.stderr)
 
-    type LiterateArguments =
-        { Source : string
+    type FsDocsArguments =
+        { SourceRepository : string
+          Input: string
           OutputDirectory : string 
-          Template : string
+          TargetPath : string
           ProjectParameters : (string * string) list
-          LayoutRoots : string list }
-
-    let defaultLiterateArguments =
-        { Source = ""
-          OutputDirectory = ""
-          Template = ""
-          ProjectParameters = []
-          LayoutRoots = [] }
-
-    let createDocs p =
-        let arguments = (p:LiterateArguments->LiterateArguments) defaultLiterateArguments
-        let layoutroots = if arguments.LayoutRoots.IsEmpty then [] else [ "--layoutRoots" ] @ arguments.LayoutRoots
-        let source = arguments.Source
-        let template = arguments.Template
-        let outputDir = arguments.OutputDirectory
-        arguments.ProjectParameters
-            |> Seq.collect (fun (k, v) -> [ k; v ])
-            |> Seq.append 
-                    (["literate"; "--processdirectory" ] @ layoutroots @ [ "--inputdirectory"; source; "--templatefile"; template; 
-                        "--outputDirectory"; outputDir; "--replacements" ])
-            |> Seq.map (fun s -> if s.StartsWith "\"" then s else sprintf "\"%s\"" s)
-            |> String.separated " "
-            |> run //arguments.ToolPath.Value
-        printfn "Successfully generated docs for %s" source
-
-    type MetadataFormatArguments =
-        { Source : string
-          SourceRepository : string
-          OutputDirectory : string 
-          Template : string
-          ProjectParameters : (string * string) list
-          LayoutRoots : string list
-          LibDirs : string list }
+          Projects : string }
 
     let defaultMetadataFormatArguments =
-        { Source = Directory.GetCurrentDirectory()
-          SourceRepository = ""
-          OutputDirectory = ""
-          Template = ""
-          ProjectParameters = []
-          LayoutRoots = []
-          LibDirs = [] }
+        { SourceRepository = ""
+          OutputDirectory = "docs/"
+          Projects = ""
+          TargetPath = ""
+          Input = "docsrc/content/"
+          ProjectParameters = [] }
 
-    let createDocsForDlls (p:MetadataFormatArguments->MetadataFormatArguments) dllFiles =
-        if Seq.isEmpty dllFiles then failwith "Failure: No dll files to process"
+    let buildDocs (p:FsDocsArguments->FsDocsArguments) =
         let arguments = p defaultMetadataFormatArguments
-        let outputDir = arguments.OutputDirectory
         let projectParameters = arguments.ProjectParameters
-        let sourceRepo = arguments.SourceRepository
-        let libdirs = if arguments.LibDirs.IsEmpty then [] else [ "--libDirs" ] @ arguments.LibDirs
-        let layoutroots = if arguments.LayoutRoots.IsEmpty then [] else [ "--layoutRoots" ] @ arguments.LayoutRoots
+        let env = ["TargetPath",arguments.TargetPath]
         projectParameters
             |> Seq.collect (fun (k, v) -> [ k; v ])
-            |> Seq.append 
-                    ([ "metadataformat"; "--generate"; "--outdir"; outputDir] @ layoutroots @ libdirs @ [ "--sourceRepo"; sourceRepo;
-                       "--sourceFolder"; arguments.Source; "--parameters" ])
+            |> Seq.append
+                    ([  "build"; 
+                        "--input"; arguments.Input
+                        "--output"; arguments.OutputDirectory
+                        "--sourcerepo"; arguments.SourceRepository
+                        "--projects"; arguments.Projects
+                        "--parameters" ])
             |> Seq.map (fun s -> if s.StartsWith "\"" then s else sprintf "\"%s\"" s)
             |> String.separated " "
-            |> fun prefix -> sprintf "%s --dllfiles %s" prefix (String.separated " " (dllFiles |> Seq.map (sprintf "\"%s\"")))
-            |> run // arguments.ToolPath.Value
-        printfn "Successfully generated docs for DLLs: %s" (String.separated ", " dllFiles)
+            |> run env
+        printfn "Successfully generated docs for : %s" arguments.Projects
 
 
 
@@ -1147,17 +1119,17 @@ module Git =
 
     /// Runs git.exe with the given command in the given repository directory.
     let runGitCommand repositoryDir command =
-        let processResult = executeProcess (gitPath, command, Some repositoryDir)
+        let processResult = executeProcess (gitPath, command, Some repositoryDir, None)
         processResult.ExitCode = 0, [processResult.stdout], processResult.stderr
 
     /// Runs the given git command, waits for its completion and returns whether it succeeded.
     let directRunGitCommand repositoryDir command =
-        let result = executeProcess (gitPath, command, Some repositoryDir)
+        let result = executeProcess (gitPath, command, Some repositoryDir, None)
         result.ExitCode = 0
 
     /// Runs the given git command, waits for its completion and fails when it didn't succeeded.
     let directRunGitCommandAndFail repositoryDir command =
-        let result = executeProcess (gitPath, command, Some repositoryDir)
+        let result = executeProcess (gitPath, command, Some repositoryDir, None)
         result.ExitCode = 0
         |> fun ok -> if not ok then failwithf "Command failed. \n%A\n%A\n" result.stdout result.stderr
 
@@ -1206,7 +1178,17 @@ module Git =
             sprintf "clone -b %s --single-branch %s %s" branchName repoUrl toPath
             |> runSimpleGitCommand workingDir
             |> Trace.trace
-
+    module Config = 
+        /// Get remote origin url
+        /// ## Parameters
+        ///
+        ///  - `workingDir` - The working directory.
+        let remoteOriginUrl workingDir =
+            let url = 
+                "config --get remote.origin.url"
+                |> runSimpleGitCommand workingDir
+            url.Trim([|'\n';'\r';'\t';' '|])
+    
 
 
 module DotNet =
@@ -1214,7 +1196,7 @@ module DotNet =
 
     /// Runs dotnet.exe with the given command in the given repository directory.
     let runDotnetCommand repositoryDir command =
-        let processResult = executeProcess ("dotnet", command, Some repositoryDir)
+        let processResult = executeProcess ("dotnet", command, Some repositoryDir, None)
         processResult.ExitCode = 0, [processResult.stdout], processResult.stderr
 
     /// Runs the dotnet command and returns the first line of the result.

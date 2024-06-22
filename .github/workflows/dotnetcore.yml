@@ -1,11 +1,16 @@
 name: .NET Core
 
+env:
+  # Stop wasting time caching packages
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
+  # Disable sending usage data to Microsoft
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
-
 jobs:
   build:
 
@@ -14,17 +19,82 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
+      uses: actions/setup-dotnet@v3
       with:
-        dotnet-version: 2.2.108
+        dotnet-version: |
+          8.0.x
+          7.0.x
+    - name: Restore
+      run: git submodule update --init --recursive
     - name: Build with dotnet
       run: dotnet build build.proj --configuration Release
+    - name: Set Timezone
+      uses: szenius/set-timezone@v1.2
+      with:
+        timezoneWindows: "Nepal Standard Time"
     - name: Test with dotnet
       run: dotnet test build.proj -v n
-    - name: Use Node.js
-      uses: actions/setup-node@v1
+
+  package:
+    runs-on: windows-latest
+    permissions:
+      packages: write
+      contents: read
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
       with:
-        node-version: '12.x'
-    - run: npm install -g fable-splitter fable-compiler
-    - run: cd src/FSharpPlus; npx fable-splitter --allFiles
-    - run: cd tests/FSharpPlusFable.Tests; npm install; npm run buildFSharpPlus; npm run test
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Extract branch name
+      shell: bash
+      run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+      id: extract_branch
+    - name: Setup Version Suffix
+      shell: pwsh
+      run: |
+          $buildId = $env:GITHUB_RUN_NUMBER.PadLeft(5, '0');
+          $versionSuffixPR = "PR${{ github.event.pull_request.number }}-$buildId";
+          $branchName = "${{ steps.extract_branch.outputs.branch }}".Replace("_","").Replace("/","-");
+          $versionSuffixBRANCH = "$($branchName)-CI$($buildId)"
+          $env:VersionSuffix = if ("${{ github.event.pull_request.number }}") { $versionSuffixPR } else { $versionSuffixBRANCH } 
+          Write-Output "##[set-output name=version_suffix]$($env:VersionSuffix)"
+      id: version_suffix
+    - name: Package 
+      run: dotnet pack build.proj --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: nupkg
+        path: ./bin/nupkg/*.nupkg
+    - name: Push to GitHub Feed
+      continue-on-error: true
+      shell: bash
+      run: |
+          for f in ./bin/nupkg/*.nupkg
+          do
+            echo $f
+            dotnet nuget push $f -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+          done
+
+  docs:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+          5.0.x
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Build All Docs
+      run: dotnet msbuild -target:AllDocs build.proj

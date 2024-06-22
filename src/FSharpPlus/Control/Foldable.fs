@@ -4,7 +4,7 @@
 // Warn FS0077 -> Member constraints with the name 'get_Item' are given special status by the F# compiler as certain .NET types are implicitly augmented with this member. This may result in runtime failures if you attempt to invoke the member constraint from your own code.
 // Those .NET types are string and array. String is explicitely handled here and array through the seq overload.
 
-#if !FABLE_COMPILER
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 open FSharpPlus.Control
 
@@ -34,6 +34,7 @@ open System.Runtime.InteropServices
 open System.Text
 open System.Collections.Generic
 open FSharpPlus
+open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -230,7 +231,8 @@ type Head =
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = Seq.head (ToSeq.Invoke x) : 'T
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Head : 'T) x)
     static member        Head (x: 'T option        , [<Optional>]_impl: Head    ) = x.Value
-    static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]    
+    static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]
+    static member        Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First
     static member        Head (x: Id<'T>           , [<Optional>]_impl: Head    ) = x.getValue
     static member        Head (x: ResizeArray<'T>  , [<Optional>]_impl: Head    ) = x.[0]
     static member        Head (x: string           , [<Optional>]_impl: Head    ) = x.[0]
@@ -241,22 +243,37 @@ type Head =
         let inline call (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<Head>, source) : 'T
 
-
 type TryHead =
     inherit Default1
-    static member inline TryHead (x               , [<Optional>]_impl: Default1) = let x = ToSeq.Invoke x in if Seq.isEmpty x then None else Some (Seq.head x) : 'T option  
-    static member        TryHead (x: 't list      , [<Optional>]_impl: TryHead ) = match x with [] -> None | _ -> Some (List.head x)
-    static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = if Array.length x = 0 then None else Some x.[0]
+    static member inline TryHead (x               , [<Optional>]_impl: Default1) = Seq.tryHead <| ToSeq.Invoke x
+    static member        TryHead (x: 't list      , [<Optional>]_impl: TryHead ) = List.tryHead x
+    static member        TryHead (x: 't []        , [<Optional>]_impl: TryHead ) = Array.tryHead x
+    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
     static member        TryHead (x: Id<'T>       , [<Optional>]_impl: TryHead ) = Some x.getValue
-    static member        TryHead (x: string       , [<Optional>]_impl: TryHead ) = if String.length x = 0 then None else Some x.[0]   
+    static member        TryHead (x: string       , [<Optional>]_impl: TryHead ) = String.tryHead x 
     static member        TryHead (x: StringBuilder, [<Optional>]_impl: TryHead ) = if x.Length = 0 then None else Some (x.ToString().[0])
-    static member        TryHead (x: 't seq       , [<Optional>]_impl: TryHead ) = if Seq.isEmpty x then None else Some (Seq.head x)
+    static member        TryHead (x: 't seq       , [<Optional>]_impl: TryHead ) = Seq.tryHead x
 
     static member inline Invoke (source: '``Foldable'<T>``)        =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryHead : _*_ -> _) b, a)
         let inline call (a: 'a, b: 'b) = call_2 (a, b)
         call (Unchecked.defaultof<TryHead>, source) : 'T option
 
+type TryLast =
+    inherit Default1
+    static member inline TryLast (x                 , [<Optional>]_impl: Default1) = Seq.tryLast <| ToSeq.Invoke x
+    static member        TryLast (x: 't list        , [<Optional>]_impl: TryLast)  = List.tryLast x
+    static member        TryLast (x: 't []          , [<Optional>]_impl: TryLast)  = Array.tryLast x
+    static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
+    static member        TryLast (x: Id<'T>         , [<Optional>]_impl: TryLast ) = Some x.getValue
+    static member        TryLast (x: string         , [<Optional>]_impl: TryLast ) = String.tryLast x 
+    static member        TryLast (x: StringBuilder  , [<Optional>]_impl: TryLast ) = if x.Length = 0 then None else Some (x.ToString().[x.Length - 1])
+    static member        TryLast (x: 't seq         , [<Optional>]_impl: TryLast ) = Seq.tryLast x
+
+    static member inline Invoke (source: '``Foldable'<T>``) =
+        let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member TryLast : _*_ -> _) b, a)
+        let inline call (a: 'a, b: 'b) = call_2 (a, b)
+        call (Unchecked.defaultof<TryLast>, source) : 'T option
 
 type Pick =
     inherit Default1
@@ -371,6 +388,7 @@ type Length =
     static member inline Length (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Length : int) x)
     static member        Length (_: Id<'T>           , [<Optional>]_impl: Length  ) = 1
     static member        Length (x: ResizeArray<'T>  , [<Optional>]_impl: Length  ) = x.Count
+    static member        Length (x: 'T list          , [<Optional>]_impl: Length  ) = List.length x
     static member        Length (x: option<'T>       , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
     static member        Length (x: 'T []            , [<Optional>]_impl: Length  ) = Array.length x
 

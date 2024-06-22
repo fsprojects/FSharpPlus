@@ -1,8 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
-
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 (**
 NonEmptyList<'T>
 ================
@@ -13,8 +12,11 @@ Examples
 --------
 *)
 
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Data
@@ -25,7 +27,7 @@ open FSharpPlus.Data
 // you can construct a NonEmptyList by using ofSeq
 let list123' = NonEmptyList.create 1 [ 2; 3 ]
 // or more idiomatically
-let list123 = nel { 1 ; 2; 3 } // will work in F# version 4.7
+let list123 = nelist { 1 ; 2; 3 } // will work in F# version 4.7
 
 let listOne = NonEmptyList.singleton 1
 // cons

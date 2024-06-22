@@ -1,9 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 open FSharpPlus
 
 (**
@@ -22,7 +20,7 @@ Read about the specific operators:
 
  * Docs on [Operators - Common Combinators](operators-common.html)
  * Other docs exist for each [abstraction](abstractions.html)
- * API Doc for [Generic functions and operators](reference/operators.html)
+ * API Doc for [Generic functions and operators](reference/fsharpplus-operators.html)
 
 They're particularly useful in that the specific function called will
 depend on the input arguments and return type. However, this means you

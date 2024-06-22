@@ -1,8 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Extensions
@@ -187,6 +186,7 @@ The String type:
    * truncate, drop
    * findIndex, tryFindIndex
    * findSliceIndex, tryFindSliceIndex
+   * findLastSliceIndex, tryFindLastSliceIndex
    * toArray, ofArray, toList, ofList, toSeq, ofSeq, toCodePoints, ofCodePoints
    * getBytes
 
@@ -196,6 +196,7 @@ Collections / Traversable types:
    * intercalate, intersperse,
    * split, replace,
    * findSliceIndex, trySliceIndex,
+   * findLastSliceIndex, tryLastSliceIndex,
    * partitionMap
  * [IList](reference/fsharpplus-ilist.html)
    * toIReadOnlyList
@@ -208,7 +209,9 @@ Collections / Traversable types:
    * split, replace,
    * toIReadOnlyList,
    * findSliceIndex, tryFindSliceIndex,
+   * findLastSliceIndex, tryLastSliceIndex,
    * partitionMap
+   * setAt, removeAt
  * [Enumerator](reference/fsharpplus-enumerator.html)
    * EmptyEnumerator
       * Empty - create an empty enumerator
@@ -232,6 +235,7 @@ Collections / Traversable types:
     * replicate
     * toIReadOnlyList
     * findSliceIndex, tryFindSliceIndex
+    * findLastSliceIndex, tryLastSliceIndex,
  * [ IReadOnlyCollection ](reference/fsharpplus-ireadonlycollection.html)
      * ofArray, ofList, ofSeq
      * map
@@ -259,13 +263,20 @@ Collections / Traversable types:
    * zip, unzip, 
    * unionWith, union, intersectWith, intersect
 
-Async and Tasks:
-================
+Async, Task and ValueTask:
+==========================
  * [ Task ](reference/fsharpplus-task.html)
-   * map, map2
+   * map, map2, map3
    * apply
    * zip
    * join
+   * ignore
+ * [ ValueTask ](reference/fsharpplus-valueTask.html)
+   * map, map2, map3
+   * apply
+   * zip
+   * join
+   * ignore
  * [ Async ](reference/fsharpplus-async.html)
    * map, map2
    * zip

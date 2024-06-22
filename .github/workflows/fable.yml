@@ -1,0 +1,110 @@
+name: Fable
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+
+jobs:
+  testfable3:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
+    - name: Set target framework to net6 instead of net8
+      uses: Mudlet/xmlstarlet-action@master
+      with:
+        args: edit --inplace --update "/Project/PropertyGroup/TargetFrameworks" --value "netstandard2.0;netstandard2.1;net6.0" ./src/FSharpPlus/FSharpPlus.fsproj
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+    - name: Restore tools
+      run: dotnet tool restore
+    - name: Create global.json
+      working-directory: tests/FSharpPlusFable.Tests
+      run: mv fable3-global.json global.json
+    - name: Install fable
+      run: dotnet tool install --global Fable --version 3.7.22
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+    - name: Install npm dependencies
+      working-directory: tests/FSharpPlusFable.Tests
+      run: npm install
+    - name: Run Fable tests
+      working-directory: tests/FSharpPlusFable.Tests
+      run: fable . --outDir bin --runScript ./bin
+
+  testfable4:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+    - name: Restore tools
+      run: dotnet tool restore
+    - name: Install jq
+      uses: dcarbone/install-jq-action@v1.0.1
+    - name: Install fable
+      run: |
+        version=`cat ./.config/dotnet-tools.json | jq --raw-output '.tools.fable.version'`
+        dotnet tool install --global Fable --version $version
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '18.x'
+    - name: Install npm dependencies
+      working-directory: tests/FSharpPlusFable.Tests
+      run: npm install
+    - name: Run Fable tests
+      working-directory: tests/FSharpPlusFable.Tests
+      run: fable . --outDir bin --runScript ./bin
+
+  testFable3SubsetOnCore:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Restore
+      run: git submodule update --init --recursive
+    - name: Remove global json
+      run: rm global.json
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          8.0.x
+          7.0.x
+          6.0.x
+    - name: Restore tools
+      run: dotnet tool restore
+    # - name: Run tests (Fable2 subset but on .net)
+    #   working-directory: tests/FSharpPlusFable.Tests
+    #   run: dotnet run -c Fable
+    - name: Run tests (Fable3 subset but on .net)
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run -c Fable3
+    - name: Run tests (Full subset for of tests .net)
+      working-directory: tests/FSharpPlusFable.Tests
+      run: dotnet run -c Release

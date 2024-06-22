@@ -1,25 +1,27 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Alternative
 ===========
+
 Applicative Functors which also have a monoid structure.
 ___
+
 Minimal complete definition
 ---------------------------
- * ``return x``/``result x`` 
+ * ``return x`` &nbsp; / &nbsp; ``result x``
  * ``(<*>) f x``
  * ``empty``
- * ``append x y``/``(<|>) x y``
+ * ``append x y`` &nbsp; / &nbsp; ``(<|>) x y``
 *)
 (**
-    static member Return (x:'T) : 'Alternative<'T>
-    static member (<*>) (f:'T->'U, x:Alternative<'T>) : Alternative<'U>
-    static member get_Empty () :'Alternative
-    static member (<|>) (x:'Alternative<'T>, y:'Alternative<'T>) :'Alternative<'T>
+    static member Return (x: 'T) : 'Alternative<'T>
+    static member (<*>) (f: 'T -> 'U, x: 'Alternative<'T>) : 'Alternative<'U>
+    static member get_Empty () : 'Alternative
+    static member (<|>) (x: 'Alternative<'T>, y: 'Alternative<'T>) : 'Alternative<'T>
 *)
 (**
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
@@ -28,10 +30,13 @@ Other operations
  * ``mfilter``
 *)
 (**
-    static member MFilter (x:seq<'Alternative>) :'Alternative
+    static member MFilter (x: seq<'Alternative>) : 'Alternative
 *)
 (**
  * ``choice``
+*)
+(**
+    static member inline Choice (source: 'Foldable<'Alt<'T>>) : 'Alt<'T>
 *)
 (**
 Rules
@@ -56,19 +61,32 @@ Concrete implementations
 From .Net/F#
  
  -  ``list<'T>``
- -  ``option<'T>``
  -  ``array<'T>``
  -  ``seq<'T>``
- 
+ -  ``option<'T>``
+ -  ``voption<'T>``
+ -  ``Result<'T, 'Monoid>``
+ -  ``Choice<'T, 'Monoid>``
+ -  ``'T -> 'Alternative``
+
 From F#+
- 
- -  ``ReaderT<'R, 'MonadPlus<'T>>``
- -  ``WriterT<'MonadPlus<'T * 'Monoid>>``
- -  ``StateT<'S,'MonadPlus<'T * 'S>>``
- -  ``Compose<'F<'G<'T>>>``
- -  ``DList<'T>``
- -  ``ZipList<'T>``
- 
+
+ -  [``ReaderT<'R, 'MonadPlus<'T>>``](type-readert.html)
+ -  [``WriterT<'MonadPlus<'T * 'Monoid>>``](type-writert.html)
+ -  [``StateT<'S,'MonadPlus<'T * 'S>>``](type-statet.html)
+ -  [``OptionT<'MonadPlus<option<'T>>>``](type-optiont.html)
+ -  [``ValueOptionT<'MonadPlus<voption<'T>>>``](type-valueoptiont.html)
+ -  [``ResultT<'MonadPlus<Result<'T,'Monoid>>>``](type-resultt.html)
+ -  [``ChoiceT<'MonadPlus<Choice<'T,'Monoid>>>``](type-choicet.html)
+ -  [``Compose<'AlternativeF<'AlternativeG<'T>>>``](type-compose.html)
+ -  [``DList<'T>``](type-dlist.html)
+ -  [``ZipList<'S>``](type-ziplist.html)
+ -  [``NonEmptySeq<'T>``](type-nonemptyseq.html) ``*``
+ -  [``Validation<'Error, 'T>``](type-validation.html) ``*``
+
+``*`` Only ``<|>`` operation
+
+
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
 Examples
@@ -77,7 +95,11 @@ Examples
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 
@@ -127,7 +149,7 @@ let pythags' = monad.plus {
   let! z = [1..50]
   let! x = [1..z]
   let! y = [x..z]
-  if (x*x + y*y = z*z) then return (x, y, z)}
+  if (x*x + y*y = z*z) then return (x, y, z) else ()}
 
 let allCombinations = sequence [['a'; 'b'; 'c']; ['1'; '2']]
 

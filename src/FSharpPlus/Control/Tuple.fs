@@ -2,6 +2,7 @@
 
 open System
 open FSharpPlus.Internals
+open FSharpPlus.Internals.Prelude
 
 type Item1 = static member inline Invoke value = (^t : (member Item1 : _) value)
 type Item2 = static member inline Invoke value = (^t : (member Item2 : _) value)
@@ -160,9 +161,7 @@ type MapItem5 =
         call (Unchecked.defaultof<MapItem5>, value)
 
 
-#if !FABLE_COMPILER
-
-open FSharpPlus.Internals.Prelude
+#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 type Curry =
     static member inline Invoke f =

@@ -1,21 +1,23 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Applicative
 ===========
+
 A functor with application, providing operations to embed pure expressions (``return``), and sequence computations and combine their results (``<*>``).
 ___
+
 Minimal complete definition
 ---------------------------
- * ``return x``/``result x`` 
+ * ``return x`` &nbsp; / &nbsp; ``result x``
  * ``(<*>) f x``
 *)
 (**
-    static member Return (x:'T) : 'Applicative<'T>
-    static member (<*>) (f: 'Applicative<'T->'U>, x: 'Applicative<'T>) : 'Applicative<'U>
+    static member Return (x: 'T) : 'Applicative<'T>
+    static member (<*>) (f: 'Applicative<'T -> 'U>, x: 'Applicative<'T>) : 'Applicative<'U>
 *)
 (**
 Note: ``return`` can't be used outside computation expressions, use ``result`` instead.
@@ -26,9 +28,11 @@ Other operations
 
 * ``lift2``
 *)
+
 (**
-   static member Lift2 (f: 'T1->'T2->'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
+    static member Lift2 (f: 'T1 -> 'T2 -> 'T, x1: 'Applicative<'T1>, x2: 'Applicative<'T2>) : 'Applicative<'T>
 *)
+
 (**
 
 
@@ -58,41 +62,62 @@ From F#
  -  ``'T [,,]``
  -  ``'T [,,,]``
  -  ``option<'T>`` 
+ -  ``voption<'T>`` 
  -  ``IObservable<'T>``
  -  ``Lazy<'T>``
  -  ``Async<'T>``
- -  ``Result<'T,'U>`` 
- -  ``Choice<'T,'U>``
- -  ``KeyValuePair<'Key,'T>``
+ -  ``Result<'T, 'U>`` 
+ -  ``Choice<'T, 'U>``
+ -  ``KeyValuePair<'Key, 'T>``
  -  ``'Monoid * 'T``
+ -  ``ValueTuple<'Monoid, 'T>``
  -  ``Task<'T>``
- -  ``'R->'T``
+ -  ``ValueTask<'T>``
+ -  ``'R -> 'T``
  -  ``Expr<'T>``
  -  ``ResizeArray<'T>``
  
 From F#+
 
- -  ``Cont<'R,'T>`` 
- -  ``ContT<'R,'T>``
- -  ``Reader<'R,'T>`` 
- -  ``ReaderT<'R,'Monad<'T>>``
- -  ``Writer<'Monoid,'T>``
- -  ``WriterT<'Monad<'T * 'Monoid>>``
- -  ``State<'S,'T * 'S>`` 
- -  ``StateT<'S,'Monad<'T * 'S>>``
- -  ``Free<'Functor<'T>,'T>``
- -  ``NonEmptyList<'T>``
- -  ``ZipList<'T>``
- -  ``ParallelArray<'T>``
- -  ``Const<'C,'T>``
- -  ``Compose<'F<'G<'T>>>``
- -  ``DList<'T>``
+ -  [``Identity<'T>``](type-identity.html)
+ -  [``Cont<'R, 'T>``](type-cont.html)
+ -  [``ContT<'R, 'T>``](type-contt.html)
+ -  [``Reader<'R, 'T>``](type-reader.html)
+ -  [``ReaderT<'R, 'Monad<'T>>``](type-readert.html)
+ -  [``Writer<'Monoid, 'T>``](type-writer.html)
+ -  [``WriterT<'Monad<'T * 'Monoid>>``](type-writert.html)
+ -  [``State<'S, 'T * 'S>``](type-state.html)
+ -  [``StateT<'S, 'Monad<'T * 'S>>``](type-statet.html)
+ -  [``OptionT<'Monad<option<'T>>``](type-optiont.html)
+ -  [``ValueOptionT<'Monad<voption<'T>>``](type-valueoptiont.html)
+ -  [``SeqT<'Monad<seq<'T>>``](type-seqt.html)
+ -  [``ListT<'Monad<list<'T>>``](type-listt.html)
+ -  [``ResultT<'Monad<Result<'T, 'TError>>``](type-resultt.html)
+ -  [``ChoiceT<'Monad<Choice<'T, 'TError>>``](type-choicet.html)
+ -  [``Free<'Functor<'T>, 'T>``](type-free.html)
+ -  [``NonEmptyList<'T>``](type-nonempty.html)
+ -  [``Validation<'Error, 'T>``](type-validation.html)
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``ParallelArray<'T>``](type-parallelarray.html)
+ -  [``Const<'C, 'T>``](type-const.html)
+ -  [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html)
+ -  [``DList<'T>``](type-dlist.html)
+ -  [``Vector<'T, 'Dimension>``](type-vector.html)
+ -  [``Matrix<'T, 'Rows, 'Columns>``](type-matrix.html)
  
 Restricted:
  -  ``string``
  -  ``StringBuilder``
  -  ``Set<'T>``
  -  ``IEnumerator<'T>``
+
+Only for <*> operation:
+ -  ``Map<'Key, 'T>``
+ -  ``Dictionary<'Key, 'T>``
+ -  ``IDictionary<'Key, 'T>``
+ -  ``IReadOnlyDictionary<'Key, 'T>``
+
+
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
 Examples
@@ -100,19 +125,23 @@ Examples
 *)
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Data
 
 // Apply +4 to a list
-let lst5n6  = map ((+) 4) [ 1;2 ]
+let lst5n6  = map ((+) 4) [ 1; 2 ]
 
 // Apply +4 to an array
-let arr5n6  = map ((+) 4) [|1;2|]
+let arr5n6  = map ((+) 4) [|1; 2|]
 
 // I could have written this
-let arr5n6' = (+) <!> [|4|] <*> [|1;2|]
+let arr5n6' = (+) <!> [|4|] <*> [|1; 2|]
 
 // Add two options
 let opt120  = (+) <!> Some 20 <*> tryParse "100"
@@ -127,7 +156,7 @@ let resLazy22 : Lazy<_>   = result 22
 let (quot5 : Microsoft.FSharp.Quotations.Expr<int>) = result 5
 
 // Example
-type Person = { name: string; age: int } with static member create n a = {name = n; age = a}
+type Person = { Name: string; Age: int } with static member create n a = { Name = n; Age = a }
 
 let person1 = Person.create <!> tryHead ["gus"] <*> tryParse "42"
 let person2 = Person.create <!> tryHead ["gus"] <*> tryParse "fourty two"
@@ -145,8 +174,6 @@ let person3' = (tryHead ["gus"], tryHead ["42"] >>= tryParse) ||> lift2 Person.c
 
 
 // Using Idiom brackets from http://www.haskell.org/haskellwiki/Idiom_brackets
-
-open FSharpPlus.Builders
 
 let res3n4   = iI ((+) 2) [1;2] Ii
 let res3n4'  = iI (+) (result 2) [1;2] Ii
@@ -175,21 +202,46 @@ open FSharpPlus.Math.Applicative
 let opt121'  = Some 21 .+. tryParse "100"
 let optTrue  = 30 >. tryParse "29"
 let optFalse = tryParse "30" .< 29
-let m1m2m3 = -.[1;2;3]
+let m1m2m3 = -.[1; 2; 3]
 
 
+// Using applicative computation expression
+
+let getName s = tryHead s
+let getAge  s = tryParse s
+
+let person4 = applicative {
+    let! name = getName ["gus"]
+    and! age  = getAge "42"
+    return { Name = name; Age = age } }
 
 
-// Composing applicatives
+(**
+
+Composing applicatives
+----------------------
+
+Unlike monads, applicatives are always composable.
+
+The date type [``Compose<'Applicative1<'Applicative2<'T>>>``](type-compose.html) can be used to compose any 2 applicatives:
+*)
 
 let res4 = (+) <!> Compose [Some 3] <*> Compose [Some 1]
 
-let getName s = async { return tryHead s }
-let getAge  s = async { return tryParse s }
+let getNameAsync s = async { return tryHead s }
+let getAgeAsync  s = async { return tryParse s }
 
-let person4 = Person.create <!> Compose (getName ["gus"]) <*> Compose (getAge "42")
+let person5 = Person.create <!> Compose (getNameAsync ["gus"]) <*> Compose (getAgeAsync "42")
 
+(**
 
+The computation expressions applicative2 and applicative3 can also be used to compose applicatives:
+*)
+
+let person6 = applicative2 {
+    let! name = printfn "aa"; getNameAsync ["gus"]
+    and! age  = getAgeAsync "42"
+    return { Name = name; Age = age } }
 
 
 
@@ -197,7 +249,17 @@ let person4 = Person.create <!> Compose (getName ["gus"]) <*> Compose (getAge "4
 // A Monad is automatically an Applicative
 
 type MyList<'s> = MyList of 's seq with
-    static member Return (x:'a)     = MyList (Seq.singleton x)
+    static member Return (x: 'a) = MyList (Seq.singleton x)
     static member (>>=)  (MyList x: MyList<'T>, f) = MyList (Seq.collect (f >> (fun (MyList x) -> x)) x)
 
-let mappedMyList : MyList<_> = (MyList [(+) 1;(+) 2;(+) 3]) <*> (MyList [1;2;3])
+let mappedMyList : MyList<_> = (MyList [(+) 1; (+) 2; (+) 3]) <*> (MyList [1; 2; 3])
+
+
+(**
+Recommended reading
+-------------------
+
+ - Highly recommended Matt Thornton's blog [Grokking Applicatives](https://dev.to/choc13/grokking-applicatives-44o1).
+   It contains examples using F#+ and an explanation from scratch.
+
+*)

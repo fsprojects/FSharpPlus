@@ -1,13 +1,15 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 (**
 Monoid
 ======
 Types with an associative binary operation that has an identity.
+
 ___
+
 Minimal complete definition
 ---------------------------
  * `zero``
@@ -60,6 +62,7 @@ From .Net/F#
  -  ``Tuple<'Monoid1* ... *'MonoidN>``
  -  ``'Monoid1* ... *'MonoidN``
  -  ``Task<'T>``
+ -  ``ValueTask<'T>``
  -  ``'T->'Monoid``
  -  ``Async<'T>``
  -  ``Expr<'T>``
@@ -73,8 +76,8 @@ From .Net/F#
  
 From F#+
  
- -  ``ZipList<'S>``
- -  [``Dual<'T>](type-dual.html)
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``Dual<'T>``](type-dual.html)
  -  [``Endo<'T>``](type-endo.html)
  -  [``All``](type-all.html)
  -  [``Any``](type-any.html)
@@ -82,6 +85,9 @@ From F#+
  -  [``First<'T>``](type-first.html)
  -  [``Last<'T>``](type-last.html)
  -  [``DList<'T>``](type-dlist.html)
+ -  [``Vector<'T,'Dimension>``](type-vector.html)
+ -  [``Matrix<'T,'Rows,'Columns>``](type-matrix.html)
+
  
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 
@@ -89,9 +95,11 @@ Examples
 --------
 *)
 
-
-
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+(**
+```f#
+#r @"nuget: FSharpPlus"
+```
+*)
 
 open FSharpPlus
 open FSharpPlus.Math.Generic

@@ -1,7 +1,6 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
 
 (**
 Other abstractions
@@ -17,7 +16,7 @@ Here are some other abstractions, not present in the diagram.
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 open System
 open FSharpPlus
@@ -33,11 +32,6 @@ let res113 = foldi (fun s i t -> t * s - i) 2 [|3;4;5|]
 let resSomeId20 = traversei (fun k t -> Some (10 + t)) (Tuple 10)
 
 
-// ZipFunctor
-
-let (x, y) = zip (async { return 1 }) (async { return '2' }) |> Async.RunSynchronously
-
-
 // Collection
 
 let a = skip 3 [1..10]
@@ -46,10 +40,10 @@ let b = chunkBy fst [1, "a"; 1, "b"; 2, "c"; 1, "d"]
 
 // Reducibles
 
-let c = nel {1; 2; 3}
+let c = nelist {1; 2; 3}
 let d = reduce (+) c
 
-let resultList = nel {Error "1"; Error "2"; Ok 3; Ok 4; Error "5"}
+let resultList = nelist {Error "1"; Error "2"; Ok 3; Ok 4; Error "5"}
 let firstOk = choice resultList
 
 

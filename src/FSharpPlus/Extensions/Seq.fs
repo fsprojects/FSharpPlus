@@ -5,8 +5,7 @@ namespace FSharpPlus
 module Seq =
     open System
 
-    /// <summary>Applies the given function to each element of the sequence and concatenates all the
-    /// results.</summary>
+    /// <summary>Applies the given function to each element of the sequence and concatenates the results.</summary>
     ///
     /// <remarks>Remember sequence is lazy, effects are delayed until it is enumerated.</remarks>
     /// <remarks>This is the same as Seq.collect but the type of the mapping function is not flexible.</remarks>
@@ -20,23 +19,67 @@ module Seq =
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let bind (mapping: 'T->seq<'U>) source = Seq.collect mapping source
 
+    /// <summary>Applies a sequence of functions to a sequence of values and concatenates them.</summary>
+    /// <param name="f">The seq of functions.</param>
+    /// <param name="x">The seq of values.</param>
+    /// <returns>A seq concatenating the results from applying each function to each value.</returns>
+    /// 
+    /// <example>
+    /// <code>
+    /// > Seq.apply [double; triple] [1; 2; 3];;  
+    /// val it : seq&lt;int&gt; = seq [2; 4; 6; 3; ...]
+    /// </code>
+    /// </example>
     let apply f x = bind (fun f -> Seq.map ((<|) f) x) f
 
+    /// Combines all values from the first seq with the second, using the supplied mapping function.
     let lift2 f x1 x2 = Seq.allPairs x1 x2 |> Seq.map (fun (x, y) -> f x y)
+    
 
-    let foldBack f x z = Array.foldBack f (Seq.toArray x) z
+    /// <summary>Combines values from three seq and calls a mapping function on this combination.</summary>
+    /// <param name="f">Mapping function taking three element combination as input.</param>
+    /// <param name="x1">First seq.</param>
+    /// <param name="x2">Second seq.</param>
+    /// <param name="x3">Third seq.</param>
+    ///
+    /// <returns>Seq with values returned from mapping function.</returns>
+    let lift3 f x1 x2 x3 =
+        Seq.allPairs x2 x3
+        |> Seq.allPairs x1
+        |> Seq.map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> Seq.map (fun (x, y, z) -> f x y z)
 
-    /// <summary>Applies a key-generating function to each element of a sequence and yields a sequence of 
-    /// keys tupled with values. Each key contains an array of all adjacent elements that match 
-    /// to this key, therefore keys are not unique but they can't be adjacent
-    /// as each time the key changes, a new group is yield.</summary>
+    /// <summary>Applies a function to each element of the collection, starting from the end, threading an accumulator argument
+    /// through the computation. If the input function is <c>f</c> and the elements are <c>i0...iN</c>
+    /// then computes <c>f i0 (... (f iN s)...)</c></summary>
+    ///
+    /// <param name="folder">The function to update the state given the input elements.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <param name="state">The initial state.</param>
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
+    let foldBack folder source state = Array.foldBack folder (Seq.toArray source) state
+
+    /// <summary>
+    /// Chunks the seq up into groups with the same projected key by applying
+    /// the key-generating projection function to each element and yielding a sequence of 
+    /// keys tupled with values.
+    /// </summary>
+    ///
+    /// <remarks>
+    /// Each key is tupled with an array of all adjacent elements that match 
+    /// to the key, therefore keys are not unique but can't be adjacent
+    /// as each time the key changes a new group is yield.
     /// 
-    /// <remarks>The ordering of the original sequence is respected.</remarks>
+    /// The ordering of the original sequence is respected.
+    /// </remarks>
     ///
     /// <param name="projection">A function that transforms an element of the sequence into a comparable key.</param>
-    /// <param name="source">The input collection.</param>
+    /// <param name="source">The input seq.</param>
     ///
-    /// <returns>The result sequence.</returns>
+    /// <returns>The resulting sequence of keys tupled with an array of matching values</returns>
     let chunkBy (projection: 'T -> 'Key) (source: _ seq) = seq {
         use e = source.GetEnumerator ()
         if e.MoveNext () then
@@ -53,7 +96,8 @@ module Seq =
                     members.Add e.Current
             yield g, members }
 
-    // http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
+    /// Inserts a separator element between each element in the source seq.
+   ///http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
     let intersperse sep list = seq {
         let mutable notFirst = false
         for element in list do
@@ -96,6 +140,7 @@ module Seq =
                 if options = StringSplitOptions.None || buffer.Count > 0 then yield buffer :> seq<_> }
         split StringSplitOptions.None
 
+    /// Replaces a subsequence of the source seq with the given replacement seq.
     let replace (oldValue: seq<'T>) (newValue: seq<'T>) (source: seq<'T>) : seq<'T> = seq {
         let old = oldValue |> Seq.toList
         if old.Length = 0 then
@@ -125,14 +170,26 @@ module Seq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let drop i (source: seq<_>) =
-        let mutable count = i
-        use e = source.GetEnumerator ()
-        while (count > 0 && e.MoveNext ()) do count <- count-1
-        seq { while e.MoveNext () do yield e.Current }
+    let drop count (source: seq<_>) =
+        seq {
+            let mutable i = count
+
+            for x in source do
+                if i > 0 then i <- i - 1 else yield x
+        }
 
     #if !FABLE_COMPILER
-    
+   
+    /// <summary>Creates a sequence by replicating the given initial value.</summary>
+    ///
+    /// <param name="count">The number of elements to replicate.</param>
+    /// <param name="initial">The value to replicate</param>
+    ///
+    /// <returns>The generated sequence.</returns> 
+    /// <remarks>
+    /// Note: this function has since been added to FSharp.Core.
+    /// It will be removed in next major release of FSharpPlus.
+    /// </remarks>
     let replicate count initial = Linq.Enumerable.Repeat (initial, count)
     #endif
 
@@ -141,8 +198,12 @@ module Seq =
 
     #if !FABLE_COMPILER
     
-    let toIReadOnlyList (x: seq<_>) = x |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
-
+    /// <summary>Converts a seq to an IReadOnlyList (from System.Collections.Generic).</summary>
+    /// <param name="source">The seq source</param>
+    /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
+    let toIReadOnlyList (source: seq<_>) = source |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
+    #endif
+    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -158,7 +219,11 @@ module Seq =
     /// The index of the slice.
     /// </returns>
     let findSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
         if index = -1 then
             ArgumentException("The specified slice was not found in the sequence.") |> raise
         else
@@ -177,6 +242,62 @@ module Seq =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
+        if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <remarks>
+    /// It is assumed that both the slice and the source are finite, otherwise it will not return forever.
+    /// Both the slice and the source will always be iterated to the end.
+    /// </remarks>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindLastSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <remarks>
+    /// It is assumed that both the slice and the source are finite, otherwise it will not return forever.
+    /// Both the slice and the source will always be iterated to the end.
+    /// </remarks>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindLastSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
         if index = -1 then None else Some index
     #endif
+    
+    /// <summary>Choose with access to the index</summary>
+    /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
+    /// <param name="source">The input seq.</param>
+    ///
+    /// <returns>Seq with values x for each List value where the function returns Some(x).</returns>
+    let choosei mapping source =
+        Seq.indexed source
+        |> Seq.choose (fun (a, b) -> mapping a b)

@@ -1,14 +1,28 @@
-image: Visual Studio 2019
+image: Visual Studio 2022
+
+before_build:
+  - ps: >-
+      $buildId = $env:APPVEYOR_BUILD_NUMBER.PadLeft(5, '0');
+      $versionSuffixPR = "PR$($env:APPVEYOR_PULL_REQUEST_NUMBER)-$buildId";
+      $branchName = "$env:APPVEYOR_REPO_BRANCH".Replace("_","").Replace("/","-");
+      $versionSuffixBRANCH = if ("$env:APPVEYOR_REPO_BRANCH" -eq "v1.1.0") { "CI$buildId" } else { "$branchName-CI$buildId" };
+      $env:VersionSuffix = if ("$env:APPVEYOR_REPO_TAG" -eq "true") { "" } else { if ("$env:APPVEYOR_PULL_REQUEST_NUMBER") { $versionSuffixPR } else { $versionSuffixBRANCH } };
+
 init:
   - git config --global core.autocrlf input
+install:
+  - ps: Invoke-WebRequest 'https://dot.net/v1/dotnet-install.ps1' -OutFile 'dotnet-install.ps1'
+  - ps: ./dotnet-install.ps1 -Version 8.0.100 -InstallDir "C:\Program Files\dotnet"
+  #- cmd: winget install Microsoft.DotNet.SDK.8
+  - cmd: git submodule update --init --recursive
 build_script:
   - cmd: dotnet restore ./FSharpPlus.sln
-  - cmd: dotnet build -c Release ./FSharpPlus.sln
-  - cmd: dotnet test -c Release tests/FSharpPlus.Tests
-  - cmd: dotnet pack build.proj
-  - ps: ./docsrc/tools/download_nugets.ps1
-  - cmd: dotnet run -c Release --project ./docsrc/tools
+  #- cmd: dotnet build -c Release ./FSharpPlus.sln
+  - cmd: dotnet test -c Test tests/FSharpPlus.Tests
+  - ps: if ($env:VersionSuffix) { dotnet pack build.proj --version-suffix $env:VersionSuffix } else { dotnet pack build.proj }
 test: off
 artifacts:
   - path: bin
     name: bin
+nuget:
+  project_feed: true

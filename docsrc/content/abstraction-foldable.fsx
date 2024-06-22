@@ -1,7 +1,6 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#I "../../bin"
 
 (**
 Foldable
@@ -60,6 +59,7 @@ From .Net/F#
  -  ``list<'T>``
  -  ``'T []``
  -  ``option<'T>`` 
+ -  ``voption<'T>`` 
  -  ``ResizeArray<'T>`` 
  -  ``ReadOnlyCollection<'T>`` 
  -  ``IReadOnlyCollection<'T>``
@@ -68,9 +68,9 @@ From .Net/F#
  
 From F#+
 
- -  ``ZipList<'T>``
- -  ``NonEmptyList<'T>``
- -  ``DList<'T>``
+ -  [``ZipList<'T>``](type-ziplist.html)
+ -  [``NonEmptyList<'S>``](type-nonempty.html)
+ -  [``DList<'T>``](type-dlist.html)
 
 
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
@@ -81,7 +81,7 @@ Examples
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/net45/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
 
 open FSharpPlus
 open FSharpPlus.Data

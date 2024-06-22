@@ -1,17 +1,9 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
-    "buildFSharpPlus": "fable-splitter ../../src/FSharpPlus -o FSharpPlusFable --commonjs --allFiles",
-    "pretest": "fable-splitter -o build --commonjs",
-    "test": "mocha build -t 10000"
+    "test": "fable . --outDir bin --runScript ./bin /d",
+    "test_debug": "node --eval \"require('esm')(module)('./bin/./Tests.js')\" ./bin/./Tests.js ./bin /d"
   },
-  "dependencies": {
-    "@babel/core": "^7.8.7",
-    "fable-compiler": "^2.4.21",
-    "fable-loader": "^2.1.9",
-    "fable-splitter": "^2.1.12",
-    "isomorphic-fetch": "^2.2.1",
-    "minimist": "^1.2.5",
-    "mocha": "^7.1.0"
-  }
+  "name": "tests"
 }
