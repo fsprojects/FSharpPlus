@@ -15,12 +15,6 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface IReadOnlyList<'t>              with member s.Item with get index = s.Item index
     interface NonEmptySeq<'t>                with member s.First = s.Head
 
-    [<System.Obsolete("Use Head instead.")>]
-    member this.head = let {Head = a; Tail = _} = this in a
-
-    [<System.Obsolete("Use Tail instead.")>]
-    member this.tail = let           {Tail = a} = this in a
-
     member this.Item = function 0 -> this.Head | n -> this.Tail.[n-1]
     member this.GetSlice = function
         | None  , None
@@ -334,9 +328,6 @@ module NonEmptyListBuilder =
         member _.Yield x = x
         member _.Delay expr = expr ()
         member _.Run (x: NonEmptyList<_>) = x
-        
-    [<System.Obsolete("Use nelist instead.")>]
-    let nel = NelBuilder ()
     
     let nelist = NelBuilder ()
 

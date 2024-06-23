@@ -16,22 +16,22 @@ module Validation =
   module FunctorP =
     [<Test>]
     let ``map id = id `` () =
-      fsCheck 
-        "map id = id" 
-        (fun (x :Validation<string list, int>) -> 
+      fsCheck
+        "map id = id"
+        (fun (x :Validation<string list, int>) ->
           (Validation.map id) x = id x)
 
     [<Test>]
     let ``map (f << g) = map f << map g `` () =
-      fsCheck 
-        "map (f << g) = map f << map g" 
+      fsCheck
+        "map (f << g) = map f << map g"
         (fun (x :Validation<string list, int>) (f:string->int) (g:int->string) ->
           (Validation.map (f << g)) x = (Validation.map f << Validation.map g) x)
 
   module BifunctorP =
     [<Test>]
     let ``bimap f g = first f << second g`` () =
-      fsCheck 
+      fsCheck
         "bimap f g = first f << second g"
         (fun (x :Validation<string, int>) (f:string->int) (g:int->string) ->
           (bimap f g) x = (first f << second g) x)
@@ -57,7 +57,7 @@ module Validation =
     ///Homomorphism:
     [<Test>]
     let ``result f <*> result x = result (f x)`` () =
-      fsCheck 
+      fsCheck
         "result f <*> result x = result (f x)"
         (fun (x :Validation<string list, int>) (f:Validation<string list, int> -> int) ->
           let y:Validation<string list, int> = result (f x)
@@ -65,9 +65,9 @@ module Validation =
 
     /// Interchange
     /// in haskell: u <*> pure y = pure ($ y) <*> u
-    [<Test>] 
+    [<Test>]
     let ``u <*> result y = result ((|>) y) <*> u`` () =
-      fsCheck 
+      fsCheck
         "u <*> result y = result ((|>) y) <*> u"
         (fun (u:Validation<string list, string->int>) (y:string) ->
           let right_side =result ((|>) y) <*> u
@@ -77,26 +77,26 @@ module Validation =
   module AlternativeP =
     [<Test>]
     let ``empty <|> x = x`` () =
-      fsCheck "empty <|> x = x" 
+      fsCheck "empty <|> x = x"
         (fun (x :Validation<string list, int>) ->
           getEmpty() <|> x = x)
 
     [<Test>]
     let ``x <|> empty = x`` () =
-      fsCheck "x <|> empty = x" 
+      fsCheck "x <|> empty = x"
         (fun (x :Validation<string list, int>) ->
-          x <|> getEmpty() = x)
+          x <|> getEmpty () = x)
 
     [<Test>]
     let ``(x <|> y) <|> z = x <|> (y <|> z)`` () =
-      fsCheck "(x <|> y) <|> z = x <|> (y <|> z)" 
+      fsCheck "(x <|> y) <|> z = x <|> (y <|> z)"
         (fun (x :Validation<string list, int>) (y :Validation<string list, int>) (z :Validation<string list, int>) ->
           ((x <|> y) <|> z) = (x <|> (y <|> z)))
 
     [<Test>]
     let ``f <!> (x <|> y) = (f <!> x) <|> (f <!> y)`` () =
-      fsCheck "f <!> (x <|> y) = (f <!> x) <|> (f <!> y)" 
-        (fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:int->string)->
+      fsCheck "f <!> (x <|> y) = (f <!> x) <|> (f <!> y)"
+        (fun (x :Validation<string list, int>) (y :Validation<string list, int>) (f:int->string) ->
           (f <!> (x <|> y)) = ((f <!> x) <|> (f <!> y)))
 
     //Right Distribution: does not hold
@@ -123,7 +123,7 @@ module Validation =
       (x :Result<string list,string> ) (t :int->string list) (f:string list->int) =
       let t_f = (t << f)
       let right_side = x |> (Result.traverse (t << f))
-      let left_side = x |> (t << Result.traverse f ) 
+      let left_side = x |> (t << Result.traverse f )
       left_side = right_side
   *)
   (*
@@ -165,41 +165,21 @@ module Validation =
 
   [<Test>]
   let testYN () =
-    let subject: Validation<string list,int> = Success plusOne <*> Failure ["f2"] 
+    let subject: Validation<string list,int> = Success plusOne <*> Failure ["f2"]
     let expected = Failure ["f2"]
     areStEqual expected subject
 
   [<Test>]
   let testNN () =
-    let subject: Validation<string list,int> = Failure ["f1"] <*> Failure ["f2"] 
+    let subject: Validation<string list,int> = Failure ["f1"] <*> Failure ["f2"]
     let expected = Failure ["f1";"f2"]
     areStEqual expected subject
   (*
   [<Fact>]
-  let testValidationNel() =
+  let testValidationNel () =
     let subject = validation length (const' 0) $ validationNel (Error ())
     Assert.AreEqual(1, subject)
   *)
-
-  [<Test>]
-  let testEnsureLeftFalse () =
-    let subject = ensure three (konst false) (Failure seven)
-    areStEqual (Failure seven) subject
-
-  [<Test>]
-  let testEnsureLeftTrue () =
-    let subject = ensure three (konst true) (Failure seven)
-    areStEqual (Failure seven) subject
-
-  [<Test>]
-  let testEnsureRightFalse () =
-    let subject = ensure three (konst false) (Success seven)
-    areStEqual (Failure three) subject
-
-  [<Test>]
-  let testEnsureRightTrue () =
-    let subject = ensure three (konst true ) (Success seven)
-    areStEqual (Success seven) subject
 
   [<Test>]
   let testDefaultValueSuccess () =
@@ -218,80 +198,52 @@ module Validation =
   //  :: forall v. (Validate v, Eq (v Int Int), Show (v Int Int)) => Proxy v -> Test
 
 
-  [<Test>]
-  let testValidateTrue () =
-    let subject = validate three (konst true) seven
-    let expected = Success seven
-    areStEqual expected subject
-
-  [<Test>]
-  let testValidateFalse () =
-    let subject = validate three (konst false) seven
-    let expected = Failure three
-    areStEqual expected subject
-
-  module Tests=
+  module Tests =
     //( # ) :: AReview t b -> b -> t
     let seven = 7
     let three = 3
     let plusOne x = x + 1
   
     [<Test>]
-    let testYY() =
+    let testYY () =
       let subject:Validation<string,int> = Success plusOne <*> Success seven
       let expected = Success 8
       areStEqual expected subject
+    
     [<Test>]
-    let testNY() =
+    let testNY () =
       let subject:Validation<string list,int> = Failure ["f1"] <*> Success seven
       let expected = Failure ["f1"]
       areStEqual expected subject
+    
     [<Test>]
-    let testYN() =
-      let subject:Validation<string list,int> = Success plusOne <*> Failure ["f2"] 
+    let testYN () =
+      let subject:Validation<string list,int> = Success plusOne <*> Failure ["f2"]
       let expected = Failure ["f2"]
       areStEqual expected subject
+    
     [<Test>]
-    let testNN() =
-      let subject:Validation<string list,int> = Failure ["f1"] <*> Failure ["f2"] 
+    let testNN () =
+      let subject:Validation<string list,int> = Failure ["f1"] <*> Failure ["f2"]
       let expected = Failure ["f1";"f2"]
       areStEqual expected subject
     (*
     [<Fact>]
-    let testValidationNel() =
+    let testValidationNel () =
       let subject = validation length (const' 0) $ validationNel (Error ())
       Assert.AreEqual(1, subject)
     *)
-    [<Test>]
-    let testEnsureLeftFalse () =
-      let subject = ensure three (konst false) (Failure seven)
-      areStEqual (Failure seven) subject
-
-    [<Test>]
-    let testEnsureLeftTrue () =
-      let subject = ensure three (konst true) (Failure seven)
-      areStEqual (Failure seven) subject
-
-    [<Test>]
-    let testEnsureRightFalse () =
-      let subject = ensure three (konst false) (Success seven)
-      areStEqual (Failure three) subject
-
-    [<Test>]
-    let testEnsureRightTrue () =
-      let subject = ensure three (konst true ) (Success seven)
-      areStEqual (Success seven) subject
 
     [<Test>]
     let testOrElseRight () =
       let v = Success seven
-      let subject = Validation.orElse v three
+      let subject = Validation.defaultValue three v
       areStEqual seven subject
 
     [<Test>]
     let testOrElseLeft () =
       let v = Failure seven
-      let subject = Validation.orElse v three
+      let subject = Validation.defaultValue three v
       areStEqual three subject
 
     //testEnsureLeftFalse, testEnsureLeftTrue, testEnsureRightFalse, testEnsureRightTrue,
@@ -300,24 +252,12 @@ module Validation =
   
   
     [<Test>]
-    let testValidateTrue () =
-      let subject = validate three (konst true) seven
-      let expected = Success seven
-      areStEqual expected subject
-
-    [<Test>]
-    let testValidateFalse () =
-      let subject = validate three (konst false) seven
-      let expected = Failure three
-      areStEqual expected subject
-
-    [<Test>]
-    let testValidateWithExceptions () = 
-      let subject = 
+    let testValidateWithExceptions () =
+      let subject =
           fun a b c d -> a + b + c + d
-          <!> Failure (exn "Failure receiving first parameter") 
-          <*> Success 4 
-          <*> Failure (exn "Failure receiving third parameter") 
+          <!> Failure (exn "Failure receiving first parameter")
+          <*> Success 4
+          <*> Failure (exn "Failure receiving third parameter")
           <*> Failure (exn "Failure receiving last parameter")
       let expected : Validation<exn,int> = Failure ((new AggregateException ([exn "Failure receiving first parameter"; exn "Failure receiving third parameter"; exn "Failure receiving last parameter"])) :> exn)
       let f = function
