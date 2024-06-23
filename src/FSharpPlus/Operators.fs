@@ -206,9 +206,6 @@ module Operators =
     /// <category index="2">Applicative</category>
     let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
-    [<System.Obsolete("Use lift2 instead.")>]
-    let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
-
     /// <summary>
     /// Applies 3 lifted arguments to a non-lifted function. Equivalent to map3 in non list-like types.
     /// </summary>
@@ -226,12 +223,6 @@ module Operators =
     /// </summary>
     /// <category index="2">Applicative</category>
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
-
-    [<System.Obsolete("Use flip (<*>) instead.")>]
-    let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
-    
-    [<System.Obsolete("Use opt instead.")>]
-    let inline optional v = Some <!> v </Append.Invoke/> result None
 
     /// <summary>
     /// Transforms an alternative value (which has the notion of success/failure) to an alternative
@@ -1626,10 +1617,6 @@ module Operators =
     /// <category index="23">Additional Functions</category>
     let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
 
-    
-    [<System.Obsolete("Use Parsed instead.")>]
-    /// <category index="23">Additional Functions</category>
-    let inline (|Parse|_|) str : 'T option = tryParse str
     
     /// <summary>
     /// An active recognizer for a generic value parser.

@@ -7,14 +7,6 @@ module Result =
     open System
     open FSharpPlus.Internals
     
-    /// Creates an Ok with the supplied value.
-    [<Obsolete("Prefer Result.Ok")>]
-    let result value : Result<'T,'Error> = Ok value
-
-    /// Creates an Error With the supplied value.
-    [<Obsolete("Prefer Result.Error")>]
-    let throw value : Result<'T,'Error> = Error value
-
     /// Applies the wrapped value to the wrapped function when both are Ok and returns a wrapped result or the first Error.
     /// <param name="f">The function wrapped in an Ok or an Error.</param>
     /// <param name="x">The value wrapped in an Ok or an Error.</param>
@@ -79,9 +71,8 @@ module Result =
     /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
     let flatten source : Result<'T,'Error> = match source with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
-    // Note: To be fixed in F#+ 2. Arguments should be flipped in order to match the generic catch.
-    [<System.Obsolete("Use Result.bindError instead.")>]
-    let inline catch f = function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
+    /// Like Result.bindError but with flipped arguments.
+    let inline catch x f = x |> function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
 
     /// <summary>If the input value is an Ok leaves it unchanged, otherwise maps the Error value and flattens the resulting nested Result.</summary>
     /// <param name="binder">A function that takes the error and transforms it into a result.</param>

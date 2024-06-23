@@ -30,7 +30,7 @@ Minimal complete definition
 Other operations
 ----------------
 
- * ``gather f x`` | ``transpose x`` (same as traverse and sequence but operating on ZipApplicatives)
+ * ``gather f x`` | ``transpose x`` (same as ``traverse`` and ``sequence`` but operating on [ZipApplicatives](abstraction-zipapplicative.html) )
 *)
 (**
     static member Gather (t: 'Traversable<'T>, f: 'T -> 'ZipApplicative<'U>) : 'ZipApplicative<'Traversable<'U>>
@@ -55,7 +55,7 @@ Related Abstractions
 --------------------
 
  - [Functor](abstraction-functor.html): A traversable is generic on the Traversable type parameter and the (Applicative) Functor inner type parameter.
- - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations. 
+ - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations.
  - [Foldable](abstraction-foldable.html) : All traversables are foldables.
 
 

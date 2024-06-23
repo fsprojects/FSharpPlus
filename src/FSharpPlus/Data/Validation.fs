@@ -128,12 +128,6 @@ module Validation =
         | Success a -> g a state
         | Failure e -> f e state
 
-    [<System.Obsolete("Use Validation.bifoldBack instead.")>]
-    let biFoldBack f g state x =
-        match state with
-        | Success a -> g a x
-        | Failure e -> f e x
-
     /// Like traverse but taking an additional function to traverse the Failure part as well.
     let inline bitraverse (f: 'TError -> '``Functor<'UError>``) (g: 'T -> '``Functor<'U>``) (source: Validation<'TError, 'T>) : '``Functor<Validation<'UError, 'U>>`` =
         match source with
@@ -156,17 +150,11 @@ module Validation =
         | Failure e -> Failure e
         | Success a -> f a
 
-    [<System.Obsolete("Use Validation.defaultValue instead.")>]
-    let orElse v (a: 'a) = match v with | Failure _ -> a | Success x -> x
-    
     /// Extracts the Success value or use the supplied default value when it's a Failure.
     let defaultValue (value: 'T) (source: Validation<'Error,'T>) : 'T = match source with Success v -> v | _ -> value
     
     /// Extracts the Success value or applies the compensation function over the Failure.
     let defaultWith (compensation: 'Error->'T) (source: Validation<'Error,'T>) : 'T = match source with | Success x -> x | Failure e -> compensation e
-
-    [<System.Obsolete("Use Validation.defaultWith instead.")>]
-    let valueOr ea (v: Validation<'e,'a>) = match v with | Failure e -> ea e | Success a -> a
 
     /// Converts a 'Result' to a 'Validation'
     /// when the 'Error' of the 'Result' needs to be lifted into a 'Semigroup'.
@@ -216,20 +204,12 @@ module Validation =
     /// <returns>The result of applying either functions.</returns>
     let either (failureMapper: 'TError -> 'U) (successMapper: 'T -> 'U) source = match source with Success v -> successMapper v | Failure e -> failureMapper e
 
-    [<System.Obsolete("This function will not be supported in future versions.")>]
-    let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
-
     #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
     let validationNel (x: Result<'T, 'TError>) : (Validation<NonEmptyList<'TError>, 'T>) = (liftResult result) x
     #endif
-
-    [<System.Obsolete("This function will not be supported in future versions.")>]
-    let ensure (e: 'e) (p: 'a-> bool) = function
-        | Failure x -> Failure x
-        | Success a -> validate e p a
 
     /// Creates a safe version of the supplied function, which returns a Validation<exn, 'U> instead of throwing exceptions.
     let protect (unsafeFunction: 'T -> 'U) x =
