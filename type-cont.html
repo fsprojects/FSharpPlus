@@ -361,7 +361,7 @@ type Cont&lt;&#39;r,&#39;t&gt; =
   static member Delay: f: (unit -&gt; Cont&lt;&#39;R,&#39;T&gt;) -&gt; Cont&lt;&#39;R,&#39;T&gt;
   static member Lift: m: &#39;Monad&lt;&#39;T&gt; -&gt; ContT&lt;&#39;Monad&lt;&#39;R&gt;,&#39;T&gt; (requires member (&gt;&gt;=))
   static member LiftAsync: x: Async&lt;&#39;T&gt; -&gt; ContT&lt;Async&lt;&#39;R&gt;,&#39;T&gt;
-  static member Local: Cont&lt;&#39;a,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt; * f: (&#39;R1 -&gt; &#39;R2) -&gt; ContT&lt;&#39;b,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt; (requires member Local and member (&gt;&gt;=) and member Local and member Ask)
+  static member Local: Cont&lt;&#39;a2,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt; * f: (&#39;R1 -&gt; &#39;R2) -&gt; ContT&lt;&#39;a3,&#39;MonadReader&lt;R1,&#39;T&gt;,&#39;U&gt; (requires member Local and member (&gt;&gt;=) and member Local and member Ask)
   ...<br /><em>&lt;summary&gt; Computation type: Computations which can be interrupted and resumed.
  &lt;para /&gt;   Binding strategy: Binding a function to a monadic value creates a new continuation which uses the function as the continuation of the monadic computation.
  &lt;para /&gt;   Useful for: Complex control structures, error handling, and creating co-routines.&lt;/summary&gt;</em></div>
@@ -372,7 +372,7 @@ type Cont&lt;&#39;r,&#39;t&gt; =
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs18">val f_k: n: int -&gt; Cont&lt;int,int&gt;</div>
 <div class="fsdocs-tip" id="fs19">val res: int</div>
-<div class="fsdocs-tip" id="fs20">val run: Cont&lt;&#39;R,&#39;T&gt; -&gt; continuation: (&#39;T -&gt; &#39;R) -&gt; &#39;R<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs20">val run: Cont&lt;&#39;R,&#39;T&gt; -&gt; ((&#39;T -&gt; &#39;R) -&gt; &#39;R)<br /><em>&lt;summary&gt;
  The result of running a CPS computation with a given final continuation.
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs21">val id: x: &#39;T -&gt; &#39;T</div>

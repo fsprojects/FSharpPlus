@@ -186,8 +186,8 @@ from FSharpPlus.Data<br /><br />--------------------<br />type DList&lt;&#39;T&g
   override Equals: other: obj -&gt; bool
   override GetHashCode: unit -&gt; int
   member toSeq: unit -&gt; IEnumerator&lt;&#39;T&gt;
-  static member (+) : x: DList&lt;&#39;a&gt; * y: DList&lt;&#39;a&gt; -&gt; DList&lt;&#39;a&gt;
-  static member (&lt;*&gt;) : f: DList&lt;(&#39;a -&gt; &#39;b)&gt; * x: DList&lt;&#39;a&gt; -&gt; DList&lt;&#39;b&gt;
+  static member (+) : x: DList&lt;&#39;a1&gt; * y: DList&lt;&#39;a1&gt; -&gt; DList&lt;&#39;a1&gt;
+  static member (&lt;*&gt;) : f: DList&lt;(&#39;a1 -&gt; &#39;a2)&gt; * x: DList&lt;&#39;a1&gt; -&gt; DList&lt;&#39;a2&gt;
   ...<br /><em>&lt;summary&gt;
  DList is an ordered linear structure implementing the List signature (head, tail, cons), 
  end-insertion (add), and O(1) append. Ordering is by insertion history.

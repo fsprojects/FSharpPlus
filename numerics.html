@@ -367,7 +367,7 @@ type Ratio =
 <div class="fsdocs-tip" id="fs83">val b: &#39;a (requires member FromInt32 and member ( * ) and member Sqrt and member (~-) and member (/) and member ``+`` and member (-))</div>
 <div class="fsdocs-tip" id="fs84">val c: &#39;a (requires member FromInt32 and member ( * ) and member Sqrt and member (~-) and member (/) and member ``+`` and member (-))</div>
 <div class="fsdocs-tip" id="fs85">val root1: &#39;a (requires member FromInt32 and member ( * ) and member Sqrt and member (~-) and member (/) and member ``+`` and member (-))</div>
-<div class="fsdocs-tip" id="fs86">val sqrt: x: &#39;a -&gt; &#39;a (requires member Sqrt)<br /><em>&lt;summary&gt;Square root of a number of any type. Throws an exception if there is no square root.&lt;/summary&gt;<br />&lt;category index=&quot;22&quot;&gt;Numerics&lt;/category&gt;</em></div>
+<div class="fsdocs-tip" id="fs86">val sqrt: x: &#39;b -&gt; &#39;b (requires member Sqrt)<br /><em>&lt;summary&gt;Square root of a number of any type. Throws an exception if there is no square root.&lt;/summary&gt;<br />&lt;category index=&quot;22&quot;&gt;Numerics&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs87">val root2: &#39;a (requires member FromInt32 and member ( * ) and member Sqrt and member (~-) and member (/) and member ``+`` and member (-))</div>
 <div class="fsdocs-tip" id="fs88">val noRes: float * float</div>
 <div class="fsdocs-tip" id="fs89">val res30_15: float * float</div>
@@ -381,12 +381,12 @@ type Complex =
   member Equals: value: Complex -&gt; bool + 1 overload
   member GetHashCode: unit -&gt; int
   member ToString: unit -&gt; string + 3 overloads
-  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool + 1 overload
   static member ( * ) : left: float * right: Complex -&gt; Complex + 2 overloads
   static member (+) : left: float * right: Complex -&gt; Complex + 2 overloads
   static member (-) : left: float * right: Complex -&gt; Complex + 2 overloads
   static member (/) : left: float * right: Complex -&gt; Complex + 2 overloads
   static member (&lt;&gt;) : left: Complex * right: Complex -&gt; bool
+  static member (=) : left: Complex * right: Complex -&gt; bool
   ...<br /><em>&lt;summary&gt;Represents a complex number.&lt;/summary&gt;</em><br /><br />--------------------<br />System.Numerics.Complex ()<br />System.Numerics.Complex(real: float, imaginary: float) : System.Numerics.Complex</div>
 <div class="fsdocs-tip" id="fs95">val res30_15r: Ratio * Ratio</div>
 

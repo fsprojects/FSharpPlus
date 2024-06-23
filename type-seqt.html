@@ -190,6 +190,7 @@ body #fsdocs-content table code { word-break: normal; }
 <h2><a name="Examples" class="anchor" href="#Examples">Examples</a></h2>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="pp">#r</span> <span class="s">&quot;nuget: FSharpPlus,1.3.0-CI02744&quot;</span> <span class="c">// still as pre-release</span>
 
+<span class="pp">#r</span> <span class="s">@&quot;../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll&quot;</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 12)" onmouseover="showTip(event, 'fs1', 12)" class="id">System</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 13)" onmouseover="showTip(event, 'fs1', 13)" class="id">System</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 14)" onmouseover="showTip(event, 'fs2', 14)" class="id">Net</span>
 <span class="k">open</span> <span onmouseout="hideTip(event, 'fs9', 15)" onmouseover="showTip(event, 'fs9', 15)" class="id">FSharpPlus</span>
@@ -313,8 +314,6 @@ body #fsdocs-content table code { word-break: normal; }
 <div class="fsdocs-tip" id="fs4">val wc: System.Net.WebClient</div>
 <div class="fsdocs-tip" id="fs5">val uri: System.Uri</div>
 <div class="fsdocs-tip" id="fs6">Multiple items<br />type Uri =
-  interface ISpanFormattable
-  interface IFormattable
   interface ISerializable
   new: uriString: string -&gt; unit + 6 overloads
   member Equals: comparand: obj -&gt; bool
@@ -323,6 +322,8 @@ body #fsdocs-content table code { word-break: normal; }
   member GetLeftPart: part: UriPartial -&gt; string
   member IsBaseOf: uri: Uri -&gt; bool
   member IsWellFormedOriginalString: unit -&gt; bool
+  member MakeRelative: toUri: Uri -&gt; string
+  member MakeRelativeUri: uri: Uri -&gt; Uri
   ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />System.Uri(uriString: string) : System.Uri<br />System.Uri(uriString: string, creationOptions: inref&lt;System.UriCreationOptions&gt;) : System.Uri<br />System.Uri(uriString: string, uriKind: System.UriKind) : System.Uri<br />System.Uri(baseUri: System.Uri, relativeUri: string) : System.Uri<br />System.Uri(baseUri: System.Uri, relativeUri: System.Uri) : System.Uri</div>
 <div class="fsdocs-tip" id="fs7">val async: AsyncBuilder</div>
 <div class="fsdocs-tip" id="fs8">System.Net.WebClient.DownloadString(address: System.Uri) : string<br />System.Net.WebClient.DownloadString(address: string) : string</div>
@@ -333,9 +334,9 @@ body #fsdocs-content table code { word-break: normal; }
 <div class="fsdocs-tip" id="fs13">Multiple items<br />static member SeqTOperations.SeqT: source: &#39;Monad&lt;seq&lt;&#39;T&gt;&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Return)<br /><br />--------------------<br />active recognizer SeqT: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; &#39;Monad&lt;&#39;T seq&gt;<br /><br />--------------------<br />module SeqT
 
 from FSharpPlus.Data.SeqT_V2<br /><br />--------------------<br />[&lt;Struct&gt;]
-type SeqT&lt;&#39;monad&lt;bool&gt;,&#39;t&gt; =
-  | SeqT of IEnumerableM&lt;&#39;monad&lt;bool&gt;,&#39;t&gt;
-  interface IEnumerableM&lt;&#39;monad&lt;bool&gt;,&#39;t&gt;
+type SeqT&lt;&#39;monad,&#39;t&gt; =
+  | SeqT of IEnumerableM&lt;&#39;monad,&#39;t&gt;
+  interface IEnumerableM&lt;&#39;monad,&#39;t&gt;
   static member ( *&gt; ) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return and member Delay)
   static member (&lt;!&gt;) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; * f: (&#39;T -&gt; &#39;U) -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member Delay and member (&gt;&gt;=) and member Return)
   static member ( &lt;* ) : x: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; * y: SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;U&gt; (requires member (&gt;&gt;=) and member Return and member Delay)
@@ -350,8 +351,6 @@ type SeqT&lt;&#39;monad&lt;bool&gt;,&#39;t&gt; =
 <div class="fsdocs-tip" id="fs17">val html: string</div>
 <div class="fsdocs-tip" id="fs18">member WebClient.AsyncDownloadString: address: Uri -&gt; Async&lt;string&gt;<br />member WebClient.AsyncDownloadString: uri: Uri -&gt; Async&lt;string&gt;</div>
 <div class="fsdocs-tip" id="fs19">Multiple items<br />type Uri =
-  interface ISpanFormattable
-  interface IFormattable
   interface ISerializable
   new: uriString: string -&gt; unit + 6 overloads
   member Equals: comparand: obj -&gt; bool
@@ -360,6 +359,8 @@ type SeqT&lt;&#39;monad&lt;bool&gt;,&#39;t&gt; =
   member GetLeftPart: part: UriPartial -&gt; string
   member IsBaseOf: uri: Uri -&gt; bool
   member IsWellFormedOriginalString: unit -&gt; bool
+  member MakeRelative: toUri: Uri -&gt; string
+  member MakeRelativeUri: uri: Uri -&gt; Uri
   ...<br /><em>&lt;summary&gt;Provides an object representation of a uniform resource identifier (URI) and easy access to the parts of the URI.&lt;/summary&gt;</em><br /><br />--------------------<br />Uri(uriString: string) : Uri<br />Uri(uriString: string, creationOptions: inref&lt;UriCreationOptions&gt;) : Uri<br />Uri(uriString: string, uriKind: UriKind) : Uri<br />Uri(baseUri: Uri, relativeUri: string) : Uri<br />Uri(baseUri: Uri, relativeUri: Uri) : Uri</div>
 <div class="fsdocs-tip" id="fs20">Multiple items<br />val lift: source: &#39;Monad&lt;&#39;T&gt; -&gt; SeqT&lt;&#39;Monad&lt;bool&gt;,&#39;T&gt; (requires member (&gt;&gt;=) and member Map and member Return)<br /><em>&lt;summary&gt;
  Lifts the source into the SeqT.

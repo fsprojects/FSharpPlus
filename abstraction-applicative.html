@@ -313,7 +313,7 @@ It contains examples using F#+ and an explanation from scratch.
  Converts to a value from its string representation. Returns None if the convertion doesn&#39;t succeed.
  &lt;/summary&gt;<br />&lt;category index=&quot;21&quot;&gt;Converter&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs11">val resSome22: int option</div>
-<div class="fsdocs-tip" id="fs12">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs12">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -385,11 +385,11 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   member Item: n: int -&gt; &#39;s
   static member (+) : x: ZipList&lt;&#39;a&gt; * y: ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt; (requires member ``+``)
   static member (&lt;*&gt;) : ZipList&lt;(&#39;a -&gt; &#39;b)&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;b&gt;
-  static member (&lt;|&gt;) : ZipList&lt;&#39;a&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt;
+  static member (&lt;|&gt;) : ZipList&lt;&#39;a1&gt; * ZipList&lt;&#39;a1&gt; -&gt; ZipList&lt;&#39;a1&gt;
   static member Return: x: &#39;a -&gt; ZipList&lt;&#39;a&gt;
-  static member ToSeq: ZipList&lt;&#39;a&gt; -&gt; &#39;a seq
+  static member ToSeq: ZipList&lt;&#39;a1&gt; -&gt; &#39;a1 seq
   static member Traverse: ZipList&lt;&#39;T&gt; * f: (&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;ZipList&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member IsLeftZero and member Map and member Map and member Traverse and member Return and member Map)
-  static member get_Empty: unit -&gt; ZipList&lt;&#39;a&gt;
+  static member get_Empty: unit -&gt; ZipList&lt;&#39;a1&gt;
   static member Zero: unit -&gt; ZipList&lt;&#39;a&gt; (requires member Zero)<br /><em>&lt;summary&gt;
  A sequence with an Applicative functor based on zipping.
 &lt;/summary&gt;</em></div>

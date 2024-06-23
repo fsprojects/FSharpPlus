@@ -128,13 +128,12 @@ type UInt16 =
   member GetHashCode: unit -&gt; int
   member GetTypeCode: unit -&gt; TypeCode
   member ToString: unit -&gt; string + 3 overloads
-  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool + 1 overload
-  static member Clamp: value: uint16 * min: uint16 * max: uint16 -&gt; uint16
-  static member CreateChecked&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; uint16
-  static member CreateSaturating&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; uint16
-  static member CreateTruncating&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; uint16
-  ...<br /><em>&lt;summary&gt;Represents a 16-bit unsigned integer.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs4">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool
+  static member Parse: s: ReadOnlySpan&lt;char&gt; * ?style: NumberStyles * ?provider: IFormatProvider -&gt; uint16 + 4 overloads
+  static member TryParse: s: ReadOnlySpan&lt;char&gt; * style: NumberStyles * provider: IFormatProvider * result: byref&lt;uint16&gt; -&gt; bool + 3 overloads
+  static val MaxValue: uint16
+  static val MinValue: uint16<br /><em>&lt;summary&gt;Represents a 16-bit unsigned integer.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs4">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -143,16 +142,16 @@ type UInt16 =
  &lt;/summary&gt;<br />&lt;category index=&quot;21&quot;&gt;Converter&lt;/category&gt;</em></div>
 <div class="fsdocs-tip" id="fs6">namespace System.Net</div>
 <div class="fsdocs-tip" id="fs7">Multiple items<br />type IPAddress =
-  interface ISpanFormattable
-  interface IFormattable
-  interface ISpanParsable&lt;IPAddress&gt;
-  interface IParsable&lt;IPAddress&gt;
-  interface IUtf8SpanFormattable
   new: address: byte array -&gt; unit + 4 overloads
   member Equals: comparand: obj -&gt; bool
   member GetAddressBytes: unit -&gt; byte array
   member GetHashCode: unit -&gt; int
   member MapToIPv4: unit -&gt; IPAddress
+  member MapToIPv6: unit -&gt; IPAddress
+  member ToString: unit -&gt; string
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; -&gt; bool
+  member TryWriteBytes: destination: Span&lt;byte&gt; * bytesWritten: byref&lt;int&gt; -&gt; bool
+  static member HostToNetworkOrder: host: int16 -&gt; int16 + 2 overloads
   ...<br /><em>&lt;summary&gt;Provides an Internet Protocol (IP) address.&lt;/summary&gt;</em><br /><br />--------------------<br />Net.IPAddress(address: byte array) : Net.IPAddress<br />Net.IPAddress(newAddress: int64) : Net.IPAddress<br />Net.IPAddress(address: ReadOnlySpan&lt;byte&gt;) : Net.IPAddress<br />Net.IPAddress(address: byte array, scopeid: int64) : Net.IPAddress<br />Net.IPAddress(address: ReadOnlySpan&lt;byte&gt;, scopeid: int64) : Net.IPAddress</div>
 <div class="fsdocs-tip" id="fs8">val route1: x: string -&gt; int option</div>
 <div class="fsdocs-tip" id="fs9">val x: string</div>

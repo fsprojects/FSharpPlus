@@ -222,8 +222,8 @@
   static member ToSeq&lt;&#39;a&gt; : x: Tree&lt;&#39;a0&gt; -&gt; &#39;a0 seq</div>
 <div class="fsdocs-tip" id="fs16">type FoldMap =
   inherit Default1
-  static member FoldMap: x: &#39;a option * f: (&#39;a -&gt; &#39;b) * [&lt;Optional&gt;] _impl: FoldMap -&gt; &#39;b (requires member Zero) + 6 overloads
-  static member FromFoldFoldBack: f: (&#39;a -&gt; &#39;b) -&gt; x: &#39;c -&gt; &#39;b (requires member ``+`` and member Zero and member FoldBack)
+  static member FoldMap: x: &#39;a0 option * f: (&#39;a0 -&gt; &#39;a1) * [&lt;Optional&gt;] _impl: FoldMap -&gt; &#39;a1 (requires member Zero) + 6 overloads
+  static member FromFoldFoldBack: f: (&#39;a0 -&gt; &#39;a1) -&gt; x: &#39;a2 -&gt; &#39;a1 (requires member ``+`` and member Zero and member FoldBack)
   static member Invoke: f: (&#39;T -&gt; &#39;Monoid) -&gt; x: &#39;Foldable&#39;&lt;T&gt; -&gt; &#39;Monoid (requires member FoldMap)</div>
 <div class="fsdocs-tip" id="fs17">val t: Tree&lt;&#39;a&gt;</div>
 <div class="fsdocs-tip" id="fs18">val f: (&#39;a -&gt; &#39;b) (requires member ``+`` and member Zero)</div>
@@ -239,11 +239,11 @@
 <div class="fsdocs-tip" id="fs26">type FoldBack =
   inherit Default1
   static member FoldBack: x: &#39;F * f: (&#39;a -&gt; &#39;b -&gt; &#39;b) * z: &#39;b * [&lt;Optional&gt;] _impl: Default2 -&gt; &#39;b (requires member ToList and &#39;F :&gt; ResizeArray&lt;&#39;a&gt;) + 10 overloads
-  static member FromFoldMap: f: (&#39;a -&gt; &#39;t -&gt; &#39;t) -&gt; z: &#39;t -&gt; x: &#39;b -&gt; &#39;t (requires member FoldMap)
+  static member FromFoldMap: f: (&#39;c -&gt; &#39;t -&gt; &#39;t) -&gt; z: &#39;t -&gt; x: &#39;d -&gt; &#39;t (requires member FoldMap)
   static member Invoke: folder: (&#39;T -&gt; &#39;State -&gt; &#39;State) -&gt; state: &#39;State -&gt; foldable: &#39;Foldable&#39;&lt;T&gt; -&gt; &#39;State (requires member FoldBack)</div>
 <div class="fsdocs-tip" id="fs27">val f: (&#39;a -&gt; &#39;b -&gt; &#39;b)</div>
 <div class="fsdocs-tip" id="fs28">val z: &#39;b</div>
-<div class="fsdocs-tip" id="fs29">static member FoldBack.FromFoldMap: f: (&#39;a -&gt; &#39;t -&gt; &#39;t) -&gt; z: &#39;t -&gt; x: &#39;b -&gt; &#39;t (requires member FoldMap)</div>
+<div class="fsdocs-tip" id="fs29">static member FoldBack.FromFoldMap: f: (&#39;c -&gt; &#39;t -&gt; &#39;t) -&gt; z: &#39;t -&gt; x: &#39;d -&gt; &#39;t (requires member FoldMap)</div>
 <div class="fsdocs-tip" id="fs30">type ToSeq =
   inherit Default1
   static member Invoke: source: &#39;Foldable&lt;&#39;T&gt; -&gt; &#39;T seq (requires member ToSeq)
@@ -272,8 +272,8 @@ from Microsoft.FSharp.Collections</div>
 <div class="fsdocs-tip" id="fs39">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />[&lt;Struct&gt;]
 type Mult&lt;&#39;a&gt; =
   | Mult of &#39;a
-  static member (+)&lt;&#39;n,&#39;a (requires member ( * ))&gt; : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a0&gt; (requires member ( * ))
-  static member Zero&lt;&#39;a (requires member One)&gt; : unit -&gt; Mult&lt;&#39;a0&gt; (requires member One)<br /><em>&lt;summary&gt;
+  static member (+) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))
+  static member Zero: unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br /><em>&lt;summary&gt;
  Numeric wrapper for multiplication monoid (*, 1)
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs40">val res21: int</div>

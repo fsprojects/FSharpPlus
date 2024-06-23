@@ -737,13 +737,12 @@ type Int32 =
   member GetHashCode: unit -&gt; int
   member GetTypeCode: unit -&gt; TypeCode
   member ToString: unit -&gt; string + 3 overloads
-  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool + 1 overload
-  static member Abs: value: int -&gt; int
-  static member Clamp: value: int * min: int * max: int -&gt; int
-  static member CopySign: value: int * sign: int -&gt; int
-  static member CreateChecked&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; int
-  ...<br /><em>&lt;summary&gt;Represents a 32-bit signed integer.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs136">System.Int32.Parse(s: string) : int<br />System.Int32.Parse(s: string, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(utf8Text: System.ReadOnlySpan&lt;byte&gt;, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int<br />System.Int32.Parse(utf8Text: System.ReadOnlySpan&lt;byte&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int</div>
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool
+  static member Parse: s: ReadOnlySpan&lt;char&gt; * ?style: NumberStyles * ?provider: IFormatProvider -&gt; int + 4 overloads
+  static member TryParse: s: ReadOnlySpan&lt;char&gt; * style: NumberStyles * provider: IFormatProvider * result: byref&lt;int&gt; -&gt; bool + 3 overloads
+  static val MaxValue: int
+  static val MinValue: int<br /><em>&lt;summary&gt;Represents a 32-bit signed integer.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs136">System.Int32.Parse(s: string) : int<br />System.Int32.Parse(s: string, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles) : int<br />System.Int32.Parse(s: string, style: System.Globalization.NumberStyles, provider: System.IFormatProvider) : int<br />System.Int32.Parse(s: System.ReadOnlySpan&lt;char&gt;, ?style: System.Globalization.NumberStyles, ?provider: System.IFormatProvider) : int</div>
 <div class="fsdocs-tip" id="fs137">val r24: Async&lt;int&gt;</div>
 <div class="fsdocs-tip" id="fs138">val pure&#39;: x: &#39;a -&gt; &#39;a list</div>
 <div class="fsdocs-tip" id="fs139">val f: (&#39;a -&gt; &#39;b) list</div>

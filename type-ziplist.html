@@ -122,11 +122,11 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   member Item: n: int -&gt; &#39;s
   static member (+) : x: ZipList&lt;&#39;a&gt; * y: ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt; (requires member ``+``)
   static member (&lt;*&gt;) : ZipList&lt;(&#39;a -&gt; &#39;b)&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;b&gt;
-  static member (&lt;|&gt;) : ZipList&lt;&#39;a&gt; * ZipList&lt;&#39;a&gt; -&gt; ZipList&lt;&#39;a&gt;
+  static member (&lt;|&gt;) : ZipList&lt;&#39;a1&gt; * ZipList&lt;&#39;a1&gt; -&gt; ZipList&lt;&#39;a1&gt;
   static member Return: x: &#39;a -&gt; ZipList&lt;&#39;a&gt;
-  static member ToSeq: ZipList&lt;&#39;a&gt; -&gt; &#39;a seq
+  static member ToSeq: ZipList&lt;&#39;a1&gt; -&gt; &#39;a1 seq
   static member Traverse: ZipList&lt;&#39;T&gt; * f: (&#39;T -&gt; &#39;Functor&lt;&#39;U&gt;) -&gt; &#39;Functor&lt;ZipList&lt;&#39;U&gt;&gt; (requires member Map and member ``&lt;*&gt;`` and member IsLeftZero and member Map and member Map and member Traverse and member Return and member Map)
-  static member get_Empty: unit -&gt; ZipList&lt;&#39;a&gt;
+  static member get_Empty: unit -&gt; ZipList&lt;&#39;a1&gt;
   static member Zero: unit -&gt; ZipList&lt;&#39;a&gt; (requires member Zero)<br /><em>&lt;summary&gt;
  A sequence with an Applicative functor based on zipping.
 &lt;/summary&gt;</em></div>

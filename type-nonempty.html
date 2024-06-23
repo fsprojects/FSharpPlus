@@ -135,11 +135,11 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
   interface IReadOnlyCollection&lt;&#39;t&gt;
   interface IEnumerable
   interface IEnumerable&lt;&#39;t&gt;
-  static member (+) : NonEmptyList&lt;&#39;a&gt; * x: NonEmptyList&lt;&#39;a&gt; -&gt; NonEmptyList&lt;&#39;a&gt;
+  static member (+) : NonEmptyList&lt;&#39;a1&gt; * x: NonEmptyList&lt;&#39;a1&gt; -&gt; NonEmptyList&lt;&#39;a1&gt;
   static member (&lt;*&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
   static member (&lt;.&gt;) : f: NonEmptyList&lt;(&#39;T -&gt; &#39;U)&gt; * x: NonEmptyList&lt;&#39;T&gt; -&gt; NonEmptyList&lt;&#39;U&gt;
-  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a&gt; * g: (NonEmptyList&lt;&#39;a&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
-  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a&gt; * f: (&#39;a -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (=&gt;&gt;) : s: NonEmptyList&lt;&#39;a1&gt; * g: (NonEmptyList&lt;&#39;a1&gt; -&gt; &#39;b) -&gt; NonEmptyList&lt;&#39;b&gt;
+  static member (&gt;&gt;=) : NonEmptyList&lt;&#39;a1&gt; * f: (&#39;a1 -&gt; NonEmptyList&lt;&#39;b&gt;) -&gt; NonEmptyList&lt;&#39;b&gt;
   ...<br /><em>&lt;summary&gt;
  A type-safe list that contains at least one element.
 &lt;/summary&gt;</em></div>

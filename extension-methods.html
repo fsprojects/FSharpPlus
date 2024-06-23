@@ -92,8 +92,8 @@
 </code></pre></td></tr></table>
 <pre class="fssnip highlighted"><code lang="fsharp"><span class="k">open</span> <span onmouseout="hideTip(event, 'fs1', 2)" onmouseover="showTip(event, 'fs1', 2)" class="id">FSharpPlus</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs2', 3)" onmouseover="showTip(event, 'fs2', 3)" class="m">Extensions</span>
 
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">opt</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="m">Option</span><span class="pn">.</span><span class="id">Sequence</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="uc">Some</span> <span class="n">1</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs5', 7)" onmouseover="showTip(event, 'fs5', 7)" class="uc">Some</span> <span class="n">2</span><span class="pn">]</span>
-<span class="k">let</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="id">asn</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="m">Async</span><span class="pn">.</span><span class="id">Sequence</span> <span class="pn">[|</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="k">async</span> <span class="pn">{</span><span class="k">return</span> <span class="n">1</span><span class="pn">}</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs8', 11)" onmouseover="showTip(event, 'fs8', 11)" class="k">async</span> <span class="pn">{</span><span class="k">return</span> <span class="n">2</span><span class="pn">}</span> <span class="pn">|]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs3', 4)" onmouseover="showTip(event, 'fs3', 4)" class="id">opt</span>  <span class="o">=</span> <span onmouseout="hideTip(event, 'fs4', 5)" onmouseover="showTip(event, 'fs4', 5)" class="m">Option</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs5', 6)" onmouseover="showTip(event, 'fs5', 6)" class="id">Sequential</span> <span class="pn">[</span><span onmouseout="hideTip(event, 'fs6', 7)" onmouseover="showTip(event, 'fs6', 7)" class="uc">Some</span> <span class="n">1</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs6', 8)" onmouseover="showTip(event, 'fs6', 8)" class="uc">Some</span> <span class="n">2</span><span class="pn">]</span>
+<span class="k">let</span> <span onmouseout="hideTip(event, 'fs7', 9)" onmouseover="showTip(event, 'fs7', 9)" class="id">asn</span> <span class="o">=</span> <span onmouseout="hideTip(event, 'fs8', 10)" onmouseover="showTip(event, 'fs8', 10)" class="m">Async</span><span class="pn">.</span><span onmouseout="hideTip(event, 'fs9', 11)" onmouseover="showTip(event, 'fs9', 11)" class="id">Sequential</span> <span class="pn">[|</span> <span onmouseout="hideTip(event, 'fs10', 12)" onmouseover="showTip(event, 'fs10', 12)" class="k">async</span> <span class="pn">{</span><span class="k">return</span> <span class="n">1</span><span class="pn">}</span><span class="pn">;</span> <span onmouseout="hideTip(event, 'fs10', 13)" onmouseover="showTip(event, 'fs10', 13)" class="k">async</span> <span class="pn">{</span><span class="k">return</span> <span class="n">2</span><span class="pn">}</span> <span class="pn">|]</span>
 </code></pre>
 
             <div class="fsdocs-tip" id="fs1">namespace FSharpPlus</div>
@@ -110,9 +110,10 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 &lt;/summary&gt;</em><br /><br />--------------------<br />module Option
 
 from Microsoft.FSharp.Core</div>
-<div class="fsdocs-tip" id="fs5">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs6">val asn: Async&lt;int array&gt;</div>
-<div class="fsdocs-tip" id="fs7">Multiple items<br />module Async
+<div class="fsdocs-tip" id="fs5">static member Option.Sequential: t: &#39;T option seq -&gt; &#39;T seq option</div>
+<div class="fsdocs-tip" id="fs6">union case Option.Some: Value: &#39;T -&gt; Option&lt;&#39;T&gt;</div>
+<div class="fsdocs-tip" id="fs7">val asn: Async&lt;int array&gt;</div>
+<div class="fsdocs-tip" id="fs8">Multiple items<br />module Async
 
 from FSharpPlus<br /><em>&lt;summary&gt;
  Additional operations on Async
@@ -128,7 +129,8 @@ from FSharpPlus<br /><em>&lt;summary&gt;
   static member FromBeginEnd: beginAction: (AsyncCallback * obj -&gt; IAsyncResult) * endAction: (IAsyncResult -&gt; &#39;T) * ?cancelAction: (unit -&gt; unit) -&gt; Async&lt;&#39;T&gt; + 3 overloads
   static member FromContinuations: callback: ((&#39;T -&gt; unit) * (exn -&gt; unit) * (OperationCanceledException -&gt; unit) -&gt; unit) -&gt; Async&lt;&#39;T&gt;
   ...<br /><br />--------------------<br />type Async&lt;&#39;T&gt;</div>
-<div class="fsdocs-tip" id="fs8">val async: AsyncBuilder</div>
+<div class="fsdocs-tip" id="fs9">Multiple items<br />static member Async.Sequential: computations: Async&lt;&#39;T&gt; seq -&gt; Async&lt;&#39;T array&gt;<br /><br />--------------------<br />static member Async.Sequential: t: Async&lt;&#39;T&gt; list -&gt; Async&lt;&#39;T list&gt;<br />static member Async.Sequential: t: Async&lt;&#39;a1&gt; array -&gt; Async&lt;&#39;a1 array&gt;<br />static member Async.Sequential: t: Result&lt;Async&lt;&#39;T&gt;,&#39;Error&gt; -&gt; Async&lt;Result&lt;&#39;T,&#39;Error&gt;&gt;<br />static member Async.Sequential: t: Choice&lt;Async&lt;&#39;T&gt;,&#39;Choice2Of2&gt; -&gt; Async&lt;Choice&lt;&#39;T,&#39;Choice2Of2&gt;&gt;</div>
+<div class="fsdocs-tip" id="fs10">val async: AsyncBuilder</div>
 
         </div>
 

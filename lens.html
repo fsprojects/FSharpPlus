@@ -315,17 +315,17 @@ from FSharpPlus<br /><em>&lt;summary&gt;
 <div class="fsdocs-tip" id="fs7">Person.DateOfBirth: DateTime</div>
 <div class="fsdocs-tip" id="fs8">Multiple items<br />[&lt;Struct&gt;]
 type DateTime =
-  new: year: int * month: int * day: int -&gt; unit + 16 overloads
+  new: year: int * month: int * day: int -&gt; unit + 10 overloads
   member Add: value: TimeSpan -&gt; DateTime
   member AddDays: value: float -&gt; DateTime
   member AddHours: value: float -&gt; DateTime
-  member AddMicroseconds: value: float -&gt; DateTime
   member AddMilliseconds: value: float -&gt; DateTime
   member AddMinutes: value: float -&gt; DateTime
   member AddMonths: months: int -&gt; DateTime
   member AddSeconds: value: float -&gt; DateTime
   member AddTicks: value: int64 -&gt; DateTime
-  ...<br /><em>&lt;summary&gt;Represents an instant in time, typically expressed as a date and time of day.&lt;/summary&gt;</em><br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(date: DateOnly, time: TimeOnly) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(date: DateOnly, time: TimeOnly, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
+  member AddYears: value: int -&gt; DateTime
+  ...<br /><em>&lt;summary&gt;Represents an instant in time, typically expressed as a date and time of day.&lt;/summary&gt;</em><br /><br />--------------------<br />DateTime ()<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(ticks: int64, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, calendar: Globalization.Calendar) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em><br />DateTime(year: int, month: int, day: int, hour: int, minute: int, second: int, millisecond: int, kind: DateTimeKind) : DateTime<br />&#160;&#160;&#160;<em>(+0 other overloads)</em></div>
 <div class="fsdocs-tip" id="fs9">val _name: f: (string -&gt; &#39;a) -&gt; p: Person -&gt; &#39;b (requires member Map)</div>
 <div class="fsdocs-tip" id="fs10">val f: (string -&gt; &#39;a) (requires member Map)</div>
 <div class="fsdocs-tip" id="fs11">val p: Person</div>
@@ -390,12 +390,12 @@ from Microsoft.FSharp.Collections<br /><br />--------------------<br />type List
   member IsEmpty: bool
   member Item: index: int -&gt; &#39;T with get
   ...</div>
-<div class="fsdocs-tip" id="fs37">val _item: i: int -&gt; f: (&#39;a option -&gt; &#39;b) -&gt; t: &#39;a list -&gt; &#39;c (requires member Map)<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs37">val _item: i: int -&gt; f: (&#39;f option -&gt; &#39;g) -&gt; t: &#39;f list -&gt; &#39;h (requires member Map)<br /><em>&lt;summary&gt;
  Given a specific key, produces a Lens from a List&amp;lt;value&amp;gt; to an Option&amp;lt;value&amp;gt;. When setting,
  a Some(value) will insert or replace the value into the list at the given index. Setting a value of
  None will delete the value at the specified index. Works well together with non.
 &lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs38">val _Some: x: (&#39;a -&gt; &#39;b) -&gt; (&#39;a option -&gt; &#39;d) (requires member Map and member Return)<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs38">val _Some: x: (&#39;f -&gt; &#39;g) -&gt; (&#39;f option -&gt; &#39;i) (requires member Map and member Return)<br /><em>&lt;summary&gt;
  Prism providing a Traversal for targeting the &#39;Some&#39; part of an Option&amp;lt;&#39;T&amp;gt;
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs39">val rayuela: Book</div>
@@ -408,12 +408,12 @@ from Lens<br /><br />--------------------<br />type Book =
     Pages: Page list
   }</div>
 <div class="fsdocs-tip" id="fs41">val authorName1: string</div>
-<div class="fsdocs-tip" id="fs42">val view: optic: ((&#39;a -&gt; Data.Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Data.Const&lt;&#39;a,&#39;t&gt;) -&gt; source: &#39;s -&gt; &#39;a<br /><em>&lt;summary&gt;Read from a lens.&lt;/summary&gt;<br />&lt;param name=&quot;optic&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The object.&lt;/param&gt;<br />&lt;returns&gt;The part the lens is targeting.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs42">val view: lens: ((&#39;a -&gt; Data.Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;c -&gt; Data.Const&lt;&#39;d,&#39;e&gt;) -&gt; (&#39;c -&gt; &#39;d)<br /><em>&lt;summary&gt;Read from a lens.&lt;/summary&gt;<br />&lt;param name=&quot;lens&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The object.&lt;/param&gt;<br />&lt;returns&gt;The part the lens is targeting.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs43">val authorName2: string</div>
 <div class="fsdocs-tip" id="fs44">val book1: Book</div>
-<div class="fsdocs-tip" id="fs45">val setl: optic: ((&#39;a -&gt; Data.Identity&lt;&#39;b&gt;) -&gt; &#39;s -&gt; Data.Identity&lt;&#39;t&gt;) -&gt; value: &#39;b -&gt; source: &#39;s -&gt; &#39;t<br /><em>&lt;summary&gt;Write to a lens.&lt;/summary&gt;<br />&lt;param name=&quot;optic&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;value&quot;&gt;The value we want to write in the part targeted by the lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The original object.&lt;/param&gt;<br />&lt;returns&gt;The new object with the value modified.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs45">val setl: lens: ((&#39;a -&gt; Data.Identity&lt;&#39;b&gt;) -&gt; &#39;c -&gt; Data.Identity&lt;&#39;d&gt;) -&gt; v: &#39;b -&gt; (&#39;c -&gt; &#39;d)<br /><em>&lt;summary&gt;Write to a lens.&lt;/summary&gt;<br />&lt;param name=&quot;lens&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;v&quot;&gt;The value we want to write in the part targeted by the lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The original object.&lt;/param&gt;<br />&lt;returns&gt;The new object with the value modified.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs46">val book2: Book</div>
-<div class="fsdocs-tip" id="fs47">val over: optic: ((&#39;a -&gt; Data.Identity&lt;&#39;b&gt;) -&gt; &#39;s -&gt; Data.Identity&lt;&#39;t&gt;) -&gt; updater: (&#39;a -&gt; &#39;b) -&gt; source: &#39;s -&gt; &#39;t<br /><em>&lt;summary&gt;Update a value in a lens.&lt;/summary&gt;<br />&lt;param name=&quot;optic&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;updater&quot;&gt;A function that converts the value we want to write in the part targeted by the lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The original object.&lt;/param&gt;<br />&lt;returns&gt;The new object with the value modified.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs47">val over: lens: ((&#39;a -&gt; Data.Identity&lt;&#39;b&gt;) -&gt; &#39;c -&gt; Data.Identity&lt;&#39;d&gt;) -&gt; f: (&#39;a -&gt; &#39;b) -&gt; (&#39;c -&gt; &#39;d)<br /><em>&lt;summary&gt;Update a value in a lens.&lt;/summary&gt;<br />&lt;param name=&quot;lens&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;f&quot;&gt;A function that converts the value we want to write in the part targeted by the lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The original object.&lt;/param&gt;<br />&lt;returns&gt;The new object with the value modified.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs48">Multiple items<br />type String =
   interface IEnumerable&lt;char&gt;
   interface IEnumerable
@@ -422,9 +422,9 @@ from Lens<br /><br />--------------------<br />type Book =
   interface IComparable&lt;string&gt;
   interface IConvertible
   interface IEquatable&lt;string&gt;
-  interface IParsable&lt;string&gt;
-  interface ISpanParsable&lt;string&gt;
   new: value: nativeptr&lt;char&gt; -&gt; unit + 8 overloads
+  member Clone: unit -&gt; obj
+  member CompareTo: value: obj -&gt; int + 1 overload
   ...<br /><em>&lt;summary&gt;Represents text as a sequence of UTF-16 code units.&lt;/summary&gt;</em><br /><br />--------------------<br />String(value: nativeptr&lt;char&gt;) : String<br />String(value: char array) : String<br />String(value: ReadOnlySpan&lt;char&gt;) : String<br />String(value: nativeptr&lt;sbyte&gt;) : String<br />String(c: char, count: int) : String<br />String(value: nativeptr&lt;char&gt;, startIndex: int, length: int) : String<br />String(value: char array, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int) : String<br />String(value: nativeptr&lt;sbyte&gt;, startIndex: int, length: int, enc: Text.Encoding) : String</div>
 <div class="fsdocs-tip" id="fs49">val toUpper: source: string -&gt; string<br /><em>&lt;summary&gt;
  Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
@@ -476,7 +476,7 @@ type Result&lt;&#39;T,&#39;TError&gt; =
   | Ok of ResultValue: &#39;T
   | Error of ErrorValue: &#39;TError</div>
 <div class="fsdocs-tip" id="fs70">Result.Winner: Player option</div>
-<div class="fsdocs-tip" id="fs71">Multiple items<br />val option: f: (&#39;a -&gt; &#39;b) -&gt; n: &#39;b -&gt; _arg1: &#39;a option -&gt; &#39;b<br /><em>&lt;summary&gt;
+<div class="fsdocs-tip" id="fs71">Multiple items<br />val option: f: (&#39;g -&gt; &#39;h) -&gt; n: &#39;h -&gt; _arg1: &#39;g option -&gt; &#39;h<br /><em>&lt;summary&gt;
  Takes a function, a default value and a option value. If the option value is None, the function returns the default value.
  Otherwise, it applies the function to the value inside Some and returns the result.
  &lt;/summary&gt;<br />&lt;category index=&quot;0&quot;&gt;Common Combinators&lt;/category&gt;</em><br /><br />--------------------<br />type &#39;T option = Option&lt;&#39;T&gt;</div>
@@ -519,7 +519,7 @@ type Result&lt;&#39;T,&#39;TError&gt; =
 <div class="fsdocs-tip" id="fs100">val matchResult0: Match&lt;Result&gt;</div>
 <div class="fsdocs-tip" id="fs101">union case Option.None: Option&lt;&#39;T&gt;</div>
 <div class="fsdocs-tip" id="fs102">val _noWinner: Team option</div>
-<div class="fsdocs-tip" id="fs103">val preview: optic: ((&#39;a -&gt; Data.Const&lt;Data.First&lt;&#39;a&gt;,&#39;b&gt;) -&gt; &#39;s -&gt; Data.Const&lt;Data.First&lt;&#39;a&gt;,&#39;t&gt;) -&gt; source: &#39;s -&gt; &#39;a option<br /><em>&lt;summary&gt;Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).&lt;/summary&gt;<br />&lt;param name=&quot;optic&quot;&gt;The prism.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The object.&lt;/param&gt;<br />&lt;returns&gt;The value (if any) the prism is targeting.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs103">val preview: prism: ((&#39;a -&gt; Data.Const&lt;Data.First&lt;&#39;a&gt;,&#39;b&gt;) -&gt; &#39;c -&gt; Data.Const&lt;Data.First&lt;&#39;d&gt;,&#39;e&gt;) -&gt; (&#39;c -&gt; &#39;d option)<br /><em>&lt;summary&gt;Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).&lt;/summary&gt;<br />&lt;param name=&quot;prism&quot;&gt;The prism.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The object.&lt;/param&gt;<br />&lt;returns&gt;The value (if any) the prism is targeting.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs104">val match3: Match&lt;Player * Player&gt;</div>
 <div class="fsdocs-tip" id="fs105">val match4: Match&lt;Player * Player&gt;</div>
 <div class="fsdocs-tip" id="fs106">val match5: Match&lt;Player * Player&gt;</div>
@@ -538,7 +538,7 @@ type Result&lt;&#39;T,&#39;TError&gt; =
 <div class="fsdocs-tip" id="fs117">val t5: string option</div>
 <div class="fsdocs-tip" id="fs118">namespace FSharpPlus.Data</div>
 <div class="fsdocs-tip" id="fs119">val f1: int * int</div>
-<div class="fsdocs-tip" id="fs120">val over: optic: ((&#39;a -&gt; Identity&lt;&#39;b&gt;) -&gt; &#39;s -&gt; Identity&lt;&#39;t&gt;) -&gt; updater: (&#39;a -&gt; &#39;b) -&gt; source: &#39;s -&gt; &#39;t<br /><em>&lt;summary&gt;Update a value in a lens.&lt;/summary&gt;<br />&lt;param name=&quot;optic&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;updater&quot;&gt;A function that converts the value we want to write in the part targeted by the lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The original object.&lt;/param&gt;<br />&lt;returns&gt;The new object with the value modified.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs120">val over: lens: ((&#39;a -&gt; Identity&lt;&#39;b&gt;) -&gt; &#39;c -&gt; Identity&lt;&#39;d&gt;) -&gt; f: (&#39;a -&gt; &#39;b) -&gt; (&#39;c -&gt; &#39;d)<br /><em>&lt;summary&gt;Update a value in a lens.&lt;/summary&gt;<br />&lt;param name=&quot;lens&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;f&quot;&gt;A function that converts the value we want to write in the part targeted by the lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The original object.&lt;/param&gt;<br />&lt;returns&gt;The new object with the value modified.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs121">val both: f: (&#39;a -&gt; &#39;b) -&gt; a: &#39;a * b: &#39;a -&gt; &#39;f (requires member Map and member (&lt;*&gt;))</div>
 <div class="fsdocs-tip" id="fs122">val length: source: &#39;Foldable&lt;&#39;T&gt; -&gt; int (requires member Length)<br /><em>&lt;summary&gt;Gets the number of elements in the foldable.&lt;/summary&gt;<br />&lt;category index=&quot;11&quot;&gt;Foldable&lt;/category&gt;<br />&lt;param name=&quot;source&quot;&gt;The input foldable.&lt;/param&gt;<br />&lt;returns&gt;The length of the foldable.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs123">val f2: string</div>
@@ -558,8 +558,8 @@ type Result&lt;&#39;T,&#39;TError&gt; =
 <div class="fsdocs-tip" id="fs135">Multiple items<br />union case Mult.Mult: &#39;a -&gt; Mult&lt;&#39;a&gt;<br /><br />--------------------<br />[&lt;Struct&gt;]
 type Mult&lt;&#39;a&gt; =
   | Mult of &#39;a
-  static member (+)&lt;&#39;n,&#39;a (requires member ( * ))&gt; : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a0&gt; (requires member ( * ))
-  static member Zero&lt;&#39;a (requires member One)&gt; : unit -&gt; Mult&lt;&#39;a0&gt; (requires member One)<br /><em>&lt;summary&gt;
+  static member (+) : Mult&lt;&#39;n&gt; * Mult&lt;&#39;n&gt; -&gt; Mult&lt;&#39;a2&gt; (requires member ( * ))
+  static member Zero: unit -&gt; Mult&lt;&#39;a1&gt; (requires member One)<br /><em>&lt;summary&gt;
  Numeric wrapper for multiplication monoid (*, 1)
 &lt;/summary&gt;</em></div>
 <div class="fsdocs-tip" id="fs136">val f10: int</div>
@@ -578,9 +578,9 @@ from Microsoft.FSharp.Core.Operators</div>
 <div class="fsdocs-tip" id="fs147">val defaultof&lt;&#39;T&gt; : &#39;T</div>
 <div class="fsdocs-tip" id="fs148">val isoTupleOption: x: &#39;a -&gt; &#39;b (requires member Dimap and member Map)</div>
 <div class="fsdocs-tip" id="fs149">val x: &#39;a (requires member Dimap and member Map)</div>
-<div class="fsdocs-tip" id="fs150">val iso: func: (&#39;s -&gt; &#39;a) -&gt; inv: (&#39;b -&gt; &#39;t) -&gt; (&#39;a0 -&gt; &#39;b1) (requires member Dimap and member Map)<br /><em>&lt;summary&gt;Build an &#39;Iso&#39; from a pair of inverse functions.&lt;/summary&gt;<br />&lt;param name=&quot;func&quot;&gt;The transform function.&lt;/param&gt;<br />&lt;param name=&quot;inv&quot;&gt;The inverse of the transform function.&lt;/param&gt;<br />&lt;returns&gt;The iso.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs150">val iso: func: (&#39;s -&gt; &#39;a) -&gt; inv: (&#39;b -&gt; &#39;t) -&gt; (&#39;i -&gt; &#39;j) (requires member Dimap and member Map)<br /><em>&lt;summary&gt;Build an &#39;Iso&#39; from a pair of inverse functions.&lt;/summary&gt;<br />&lt;param name=&quot;func&quot;&gt;The transform function.&lt;/param&gt;<br />&lt;param name=&quot;inv&quot;&gt;The inverse of the transform function.&lt;/param&gt;<br />&lt;returns&gt;The iso.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs151">val i1: int option</div>
-<div class="fsdocs-tip" id="fs152">val view: optic: ((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;s -&gt; Const&lt;&#39;a,&#39;t&gt;) -&gt; source: &#39;s -&gt; &#39;a<br /><em>&lt;summary&gt;Read from a lens.&lt;/summary&gt;<br />&lt;param name=&quot;optic&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The object.&lt;/param&gt;<br />&lt;returns&gt;The part the lens is targeting.&lt;/returns&gt;</em></div>
+<div class="fsdocs-tip" id="fs152">val view: lens: ((&#39;a -&gt; Const&lt;&#39;a,&#39;b&gt;) -&gt; &#39;c -&gt; Const&lt;&#39;d,&#39;e&gt;) -&gt; (&#39;c -&gt; &#39;d)<br /><em>&lt;summary&gt;Read from a lens.&lt;/summary&gt;<br />&lt;param name=&quot;lens&quot;&gt;The lens.&lt;/param&gt;<br />&lt;param name=&quot;source&quot;&gt;The object.&lt;/param&gt;<br />&lt;returns&gt;The part the lens is targeting.&lt;/returns&gt;</em></div>
 <div class="fsdocs-tip" id="fs153">[&lt;Struct&gt;]
 type Int32 =
   member CompareTo: value: int -&gt; int + 1 overload
@@ -588,15 +588,14 @@ type Int32 =
   member GetHashCode: unit -&gt; int
   member GetTypeCode: unit -&gt; TypeCode
   member ToString: unit -&gt; string + 3 overloads
-  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool + 1 overload
-  static member Abs: value: int -&gt; int
-  static member Clamp: value: int * min: int * max: int -&gt; int
-  static member CopySign: value: int * sign: int -&gt; int
-  static member CreateChecked&lt;&#39;TOther (requires &#39;TOther :&gt; INumberBase&lt;&#39;TOther&gt;)&gt; : value: &#39;TOther -&gt; int
-  ...<br /><em>&lt;summary&gt;Represents a 32-bit signed integer.&lt;/summary&gt;</em></div>
-<div class="fsdocs-tip" id="fs154">Int32.TryParse(s: string, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: ReadOnlySpan&lt;char&gt;, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(utf8Text: ReadOnlySpan&lt;byte&gt;, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: string, provider: IFormatProvider, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: ReadOnlySpan&lt;char&gt;, provider: IFormatProvider, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(utf8Text: ReadOnlySpan&lt;byte&gt;, provider: IFormatProvider, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: string, style: Globalization.NumberStyles, provider: IFormatProvider, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: ReadOnlySpan&lt;char&gt;, style: Globalization.NumberStyles, provider: IFormatProvider, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(utf8Text: ReadOnlySpan&lt;byte&gt;, style: Globalization.NumberStyles, provider: IFormatProvider, result: byref&lt;int&gt;) : bool</div>
+  member TryFormat: destination: Span&lt;char&gt; * charsWritten: byref&lt;int&gt; * ?format: ReadOnlySpan&lt;char&gt; * ?provider: IFormatProvider -&gt; bool
+  static member Parse: s: ReadOnlySpan&lt;char&gt; * ?style: NumberStyles * ?provider: IFormatProvider -&gt; int + 4 overloads
+  static member TryParse: s: ReadOnlySpan&lt;char&gt; * style: NumberStyles * provider: IFormatProvider * result: byref&lt;int&gt; -&gt; bool + 3 overloads
+  static val MaxValue: int
+  static val MinValue: int<br /><em>&lt;summary&gt;Represents a 32-bit signed integer.&lt;/summary&gt;</em></div>
+<div class="fsdocs-tip" id="fs154">Int32.TryParse(s: string, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: ReadOnlySpan&lt;char&gt;, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: string, style: Globalization.NumberStyles, provider: IFormatProvider, result: byref&lt;int&gt;) : bool<br />Int32.TryParse(s: ReadOnlySpan&lt;char&gt;, style: Globalization.NumberStyles, provider: IFormatProvider, result: byref&lt;int&gt;) : bool</div>
 <div class="fsdocs-tip" id="fs155">val i2: bool * int</div>
-<div class="fsdocs-tip" id="fs156">val from&#39;: l: (Internals.Exchange&lt;&#39;a,&#39;b,&#39;a,Identity&lt;&#39;b&gt;&gt; -&gt; Internals.Exchange&lt;&#39;c,&#39;d,&#39;e,Identity&lt;&#39;f&gt;&gt;) -&gt; (&#39;g -&gt; &#39;h) (requires member Dimap and member Map)</div>
+<div class="fsdocs-tip" id="fs156">val from&#39;: l: (Internals.Exchange&lt;(&#39;a -&gt; &#39;a),(&#39;b -&gt; Identity&lt;&#39;b&gt;)&gt; -&gt; Internals.Exchange&lt;(&#39;c -&gt; &#39;d),(&#39;e -&gt; Identity&lt;&#39;f&gt;)&gt;) -&gt; (&#39;g -&gt; &#39;h) (requires member Dimap and member Map)</div>
 <div class="fsdocs-tip" id="fs157">val i3: int option</div>
 <div class="fsdocs-tip" id="fs158">val fv3: int option</div>
 <div class="fsdocs-tip" id="fs159">val maximumOf: l: ((&#39;a -&gt; Const&lt;Dual&lt;Endo&lt;&#39;a option&gt;&gt;,&#39;b&gt;) -&gt; &#39;c -&gt; Const&lt;Dual&lt;Endo&lt;&#39;d option&gt;&gt;,&#39;e&gt;) -&gt; (&#39;c -&gt; &#39;d option) (requires comparison)<br /><em>&lt;summary&gt;

@@ -223,14 +223,14 @@ from FSharpPlus.Data<br /><em>&lt;summary&gt;
 type Kleisli&lt;&#39;t,&#39;monad&lt;&#39;u&gt;&gt; =
   | Kleisli of (&#39;t -&gt; &#39;monad&lt;&#39;u&gt;)
   static member (+++) : Kleisli&lt;&#39;T,&#39;u&gt; * Kleisli&lt;&#39;v,&#39;w&gt; -&gt; Kleisli&lt;Choice&lt;&#39;v,&#39;T&gt;,&#39;z&gt; (requires member (&gt;&gt;=) and member Return and member (&gt;&gt;=))
-  static member (&lt;&lt;&lt;)&lt;&#39;a,&#39;b,&#39;c,&#39;d (requires member (&gt;&gt;=))&gt; : Kleisli&lt;&#39;a,&#39;b&gt; * Kleisli&lt;&#39;d,&#39;c&gt; -&gt; Kleisli&lt;&#39;d,&#39;b&gt; (requires member (&gt;&gt;=))
-  static member ``&lt;|&gt;`` : Kleisli&lt;&#39;a,&#39;b&gt; * Kleisli&lt;&#39;a,&#39;b&gt; * _mthd: Append -&gt; Kleisli&lt;&#39;a,&#39;b&gt; (requires member ``&lt;|&gt;``)
-  static member Arr: f: (&#39;a -&gt; &#39;b) -&gt; Kleisli&lt;&#39;a,&#39;c&gt; (requires member Return)
+  static member (&lt;&lt;&lt;) : Kleisli&lt;&#39;a2,&#39;a3&gt; * Kleisli&lt;&#39;a5,&#39;a4&gt; -&gt; Kleisli&lt;&#39;a5,&#39;a3&gt; (requires member (&gt;&gt;=))
+  static member ``&lt;|&gt;`` : Kleisli&lt;&#39;a2,&#39;a3&gt; * Kleisli&lt;&#39;a2,&#39;a3&gt; * _mthd: Append -&gt; Kleisli&lt;&#39;a2,&#39;a3&gt; (requires member ``&lt;|&gt;``)
+  static member Arr: f: (&#39;a2 -&gt; &#39;a3) -&gt; Kleisli&lt;&#39;a2,&#39;a4&gt; (requires member Return)
   static member Contramap: Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * k: (&#39;A -&gt; &#39;B) -&gt; Kleisli&lt;&#39;A,&#39;Monad&lt;&#39;C&gt;&gt;
   static member Dimap: Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * ab: (&#39;A -&gt; &#39;B) * cd: (&#39;C -&gt; &#39;D) -&gt; Kleisli&lt;&#39;A,&#39;Monad&lt;&#39;D&gt;&gt; (requires member Map)
-  static member Empty: _output: Kleisli&lt;&#39;T,&#39;Monad&lt;&#39;U&gt;&gt; * _mthd: Empty -&gt; Kleisli&lt;&#39;a,&#39;b&gt; (requires member Empty)
-  static member First: Kleisli&lt;&#39;a,&#39;b&gt; -&gt; Kleisli&lt;(&#39;a * &#39;e),&#39;c&gt; (requires member (&gt;&gt;=) and member Return)
-  static member Left: Kleisli&lt;&#39;a,&#39;b&gt; -&gt; &#39;c (requires member ``+++`` and member Arr)
+  static member Empty: _output: Kleisli&lt;&#39;T,&#39;Monad&lt;&#39;U&gt;&gt; * _mthd: Empty -&gt; Kleisli&lt;&#39;a4,&#39;a5&gt; (requires member Empty)
+  static member First: Kleisli&lt;&#39;a2,&#39;a3&gt; -&gt; Kleisli&lt;(&#39;a2 * &#39;a6),&#39;a4&gt; (requires member (&gt;&gt;=) and member Return)
+  static member Left: Kleisli&lt;&#39;a2,&#39;a3&gt; -&gt; &#39;a4 (requires member ``+++`` and member Arr)
   static member Map: Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;C&gt;&gt; * cd: (&#39;C -&gt; &#39;D) -&gt; Kleisli&lt;&#39;B,&#39;Monad&lt;&#39;D&gt;&gt; (requires member Map)
   ...<br /><em>&lt;summary&gt;
  Kleisli arrows of a monad. Represents a function &#39;T -&amp;gt; &#39;Monad&amp;lt;&#39;U&amp;gt;
