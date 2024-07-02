@@ -449,9 +449,6 @@ module List =
              lst.[0..i-1] @ lst.[i+1..]
          else lst
 
-    [<Obsolete("This function was included in FSharp.Core but throwing. Use deletaAt instead or if you want to throw exceptions use the full path to removeAt in FSharp.Core until this function is removed from this library")>]
-    let removeAt i lst = deleteAt i lst
-
     /// <summary>Updates the value of an item in a list</summary>
     /// <param name="i">The index of the item to update</param>
     /// <param name="x">The new value of the item</param>

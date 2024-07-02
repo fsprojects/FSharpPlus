@@ -60,9 +60,6 @@ module IReadOnlyDictionary =
             dct.Add (k, mapper v)
         dct :> IReadOnlyDictionary<'Key, 'U>
 
-    [<System.Obsolete("Name is a bit ambiguous, use mapValues if the intention is to map only over the values or mapi to map over both keys and values.")>]
-    let map f (x: IReadOnlyDictionary<'Key, 'T>) = mapValues f x // F#+ 2: if following F# core naming, it should point to mapi instead.
-
     /// <summary>Creates a read-only dictionary value from a pair of read-only dictionaries,
     /// using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both read-only dictionaries are dropped.</remarks>

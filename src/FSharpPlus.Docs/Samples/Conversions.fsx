@@ -11,7 +11,7 @@ let ipAddress:System.Net.IPAddress = [192;168;0;1] |>> string |> intersperse "."
 
 let ipAndPort : (System.Net.IPAddress * int) option = 
     match "192.168.0.1:8001".Split ':' with 
-    | [|Parse ip; Parse port|] -> Some (ip, port)
+    | [|Parsed ip; Parsed port|] -> Some (ip, port)
     | _ -> None
 
 let r10:float  = explicit 10

@@ -24,5 +24,5 @@ Here are some examples:
 *)
 open FSharpPlus.Extensions
 
-let opt  = Option.Sequence [Some 1; Some 2]
-let asn = Async.Sequence [| async {return 1}; async {return 2} |]
+let opt  = Option.Sequential [Some 1; Some 2]
+let asn = Async.Sequential [| async {return 1}; async {return 2} |]
