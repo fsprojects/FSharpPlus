@@ -12,7 +12,7 @@ open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 [<Extension; Sealed>]
 type Plus =

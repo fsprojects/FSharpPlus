@@ -14,7 +14,7 @@ open FSharpPlus.Data
 type Apply =
     inherit Default1
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member        ``<*>`` (struct (f: Lazy<'T->'U>     , x: Lazy<'T>           )  , _output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (struct (f: seq<_>           , x: seq<'T>            )  , _output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
@@ -88,7 +88,7 @@ type Apply =
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Apply with
     static member inline ``<*>`` (struct (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``     ) , _output: '``Monad<'U>``      , [<Optional>]_mthd:Default2) : '``Monad<'U>``       = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))

@@ -5,7 +5,7 @@ namespace FSharpPlus.Data
 open System.ComponentModel
 open FSharpPlus
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 open FSharpPlus.Lens
 #endif
 
@@ -100,7 +100,7 @@ module Validation =
         | Success a -> folder a state
         | Failure _ -> state
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     /// Traverse the Success case with the supplied function.
     let inline traverse (f: 'T -> '``Functor<'U>``) (source: Validation<'Error, 'T>) : '``Functor<Validation<'Error, 'U>>`` =
@@ -219,7 +219,7 @@ module Validation =
     [<System.Obsolete("This function will not be supported in future versions.")>]
     let validate (e: 'e) (p: 'a -> bool) (a: 'a) : Validation<'e,'a> = if p a then Success a else Failure e
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     /// validationNel : Result<'a,'e> -> Validation (NonEmptyList<'e>) a
     /// This is 'liftError' specialized to 'NonEmptyList', since
     /// they are a common semigroup to use.
@@ -241,7 +241,7 @@ module Validation =
     let inline _Success x = (prism Success <| either Ok (Error << Failure)) x
     let inline _Failure x = (prism Failure <| either (Error << Failure) Ok) x
     #endif
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     let inline isoValidationResult x = x |> iso toResult ofResult
     #endif
     
@@ -308,7 +308,7 @@ type Validation<'error, 't> with
     static member inline Map3 (f, x: Validation<'Error, 'T>, y: Validation<_, 'U>, z: Validation<_, 'V>) : Validation<_, 'W> = Validation.map3 f x y z
 
     // as Alternative (inherits from Applicative)
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     static member inline get_Empty () = Failure (getEmpty ())
     static member inline (<|>) (x: Validation<'Error, 'T>, y: Validation<_,_>) = Validation.appValidation Control.Append.Invoke x y
     #endif
@@ -327,7 +327,7 @@ type Validation<'error, 't> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Bimap (x: Validation<'T, 'V>, f: 'T -> 'U, g: 'V -> 'W) : Validation<'U, 'W> = Validation.bimap f g x
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     // as Traversable
     [<EditorBrowsable(EditorBrowsableState.Never)>]

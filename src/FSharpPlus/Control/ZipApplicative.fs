@@ -24,7 +24,7 @@ type Pure =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``ZipApplicative<'T>`` : (static member Pure : ^T -> ^``ZipApplicative<'T>``) x)
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member inline Invoke (x: 'T) : '``ZipApplicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Pure : _*_ -> _) output, mthd)
@@ -75,7 +75,7 @@ type Pure =
 type ZipApply =
     inherit Default1
  
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member        ``<.>`` (struct (f: Lazy<'T->'U>        , x: Lazy<'T>             ), [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member        ``<.>`` (struct (f: seq<_>              , x: seq<'T>              ), [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: ZipApply) = Seq.map2 (<|) f x
@@ -124,7 +124,7 @@ type ZipApply =
     static member inline InvokeOnInstance (f: '``ZipApplicative<'T->'U>``) (x: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` =
         ((^``ZipApplicative<'T->'U>`` or ^``ZipApplicative<'T>`` or ^``ZipApplicative<'U>``) : (static member (<.>) : _*_ -> _) (f, x))
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type ZipApply with
     static member inline ``<.>`` (struct (_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct), _output: ^r when ^r : null and ^r: struct, _mthd: Default1) = id

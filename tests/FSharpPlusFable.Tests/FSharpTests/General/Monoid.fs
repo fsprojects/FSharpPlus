@@ -10,7 +10,7 @@ open FSharpPlus.Data
 open System.Threading.Tasks
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type ZipList<'s> = ZipList of 's seq with
     static member Return (x:'a)                               = ZipList (Seq.initInfinite (konst x))
     static member Map   (ZipList x, f: 'a->'b)                = ZipList (Seq.map f x)
@@ -44,7 +44,7 @@ let monoid = testList "Monoid" [
         #if !FABLE_COMPILER
         let (WrappedListB x) = Seq.sum [WrappedListB [10]; WrappedListB [15]]
         #endif
-        #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+        #if !FABLE_COMPILER
         //equalSeq [10;15] x // fails to infer type?
         let (WrappedListC y) = Seq.sum [WrappedListC [10]; WrappedListC [15]]
         equalSeq [10] y
@@ -71,7 +71,7 @@ let monoid = testList "Monoid" [
         equal ["Using optimized Sum"] (SideEffects.get ())
         #endif
 
-        #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+        #if !FABLE_COMPILER
         let _wl = WrappedListB  [2..10]
 
         let _arrayGroup = groupBy ((%)/> 2) [|11;2;3;9;5;6;7;8;9;10|]

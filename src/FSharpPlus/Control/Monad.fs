@@ -62,7 +62,7 @@ type Bind =
 
     static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq.collect f source : NonEmptySeq<'U>
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
     static member inline Invoke (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (_mthd: 'M, input: 'I, _output: 'R, f) = ((^M or ^I or ^R) : (static member (>>=) : _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
@@ -71,7 +71,7 @@ type Bind =
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member (>>=) : _*_ -> _) source, binder)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
 
 type Join =
     inherit Default1
@@ -128,7 +128,7 @@ type Return =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member inline Invoke (x: 'T) : '``Applicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Return : _*_ -> _) output, mthd)

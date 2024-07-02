@@ -3,7 +3,7 @@
 open FSharpPlus
 open FSharpPlus.Internals.Prelude
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 /// <summary> The Const functor, defined as Const&lt;&#39;T, &#39;U&gt; where &#39;U is a phantom type. Useful for: Lens getters Its applicative instance plays a fundamental role in Lens.
 /// <para/>   Useful for: Lens getters.

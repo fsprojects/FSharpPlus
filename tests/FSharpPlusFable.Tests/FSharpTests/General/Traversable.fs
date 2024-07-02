@@ -7,7 +7,7 @@ open FSharpPlus.Data
 open System.Threading.Tasks
 
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type Either<'l,'r> = Left of 'l | Right of 'r with
     static member Return x = Right x
     static member inline get_Empty () = Left empty
@@ -26,7 +26,7 @@ let traverseTest =
 let toOptions x = if x <> 4 then Some x       else None
 let toChoices x = if x <> 4 then Choice1Of2 x else Choice2Of2 "This is a failure"
 let toLists   x = if x <> 4 then [x; x]       else []
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 let toEithers x = if x <> 4 then Right x else Left ["This is a failure"]
 #endif
 
@@ -85,7 +85,7 @@ let traversable = testList "Traversable" [
         ())
     #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testList "traverse_Order" [
         testCase "nelist" (fun () ->
             SideEffects.reset()
@@ -191,7 +191,7 @@ let traversable = testList "Traversable" [
         Assert.AreEqual (Either<string list,NonEmptySeq<int>>.Left ["This is a failure"], e))
     #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testList "traverseFiniteApplicatives" [ // TODO -> implement short-circuit without breaking anything else
 
         #if !FABLE_COMPILER

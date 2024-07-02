@@ -6,7 +6,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <LangVersion Condition=" '$(Configuration)' == 'Fable' OR '$(Configuration)' == 'Fable3' ">6.0</LangVersion>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' ">6.0</LangVersion>
     <IsPackable>false</IsPackable>
     <Configurations>Debug;Release;Fable;Test</Configurations>
     <Platforms>AnyCPU</Platforms>

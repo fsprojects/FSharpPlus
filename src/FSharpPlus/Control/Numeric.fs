@@ -42,7 +42,7 @@ type FromBigInt =
         call Unchecked.defaultof<FromBigInt> x
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type FromInt64 =
     inherit Default1
