@@ -1025,7 +1025,7 @@ module ProcessUtils =
 
 type ProcessResult = { ExitCode : int; stdout : string; stderr : string }
 
-let executeProcess (exe, cmdline, workingDir, (env:(string*string) list option)) =
+let executeProcess (exe:string, cmdline:string, workingDir, (env:(string*string) list option)) =
     let psi =
         System.Diagnostics.ProcessStartInfo (exe, cmdline,
             UseShellExecute = false,

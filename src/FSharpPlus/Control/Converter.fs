@@ -142,7 +142,7 @@ type TryParse =
         let mutable r = Unchecked.defaultof< ^R>
         if (^R: (static member TryParse : _ * _ -> _) (value, &r)) then Some r else None
 
-    #if NET7_0
+    #if NET7_0_OR_GREATER
     /// IParsable<'T>
     static member InvokeOnInterface<'T when 'T :> IParsable<'T>> (value: string) =
         let mutable r = Unchecked.defaultof<'T>
@@ -199,7 +199,7 @@ type Parse with
     
     static member inline Parse (_: ^R                  , _: Default2) : string -> ^R  = Parse.InvokeOnInstance
 
-    #if NET7_0
+    #if NET7_0_OR_GREATER
     static member Parse<'T when 'T :> IParsable<'T>> (_: 'T, _: Default1) = fun (x: string) -> 'T.Parse (x, CultureInfo.InvariantCulture)
     static member inline Parse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
     #else
@@ -217,7 +217,7 @@ type TryParse with
 
     static member inline TryParse (_: 'R, _: Default2) : string -> 'R option = TryParse.InvokeOnInstance
 
-    #if NET7_0
+    #if NET7_0_OR_GREATER
     static member inline TryParse (_: 'R, _: Default1) : string -> 'R option = TryParse.InvokeOnInterface
     static member inline TryParse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
     #else

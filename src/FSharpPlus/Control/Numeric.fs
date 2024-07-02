@@ -193,7 +193,7 @@ type Zero with
         s.SetResult v
         s.Task
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member inline Zero (_: ValueTask<'a>, _: Zero) : ValueTask<'a> =
         let (v: 'a) = Zero.Invoke ()
         ValueTask<'a>(v)
