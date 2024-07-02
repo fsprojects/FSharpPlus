@@ -16,7 +16,7 @@ Here are some other abstractions, not present in the diagram.
 
 
 
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 
 open System
 open FSharpPlus

@@ -122,7 +122,7 @@ let monadTransformers = testList "MonadTransformers" [
         let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
 
         ())
-    #if !NETSTANDARD3_0
+
     testCase "testStateT" (fun () ->
         let lst1: StateT<string,_> = StateT.lift [1;2]
         let lst2: StateT<string,_> = StateT.lift [4;5]
@@ -154,7 +154,6 @@ let monadTransformers = testList "MonadTransformers" [
         equal (Ok 11) x
         let y = (fn |> ResultT.run |> Reader.run) -1
         equal (Error NegativeValue) y)
-    #endif
     #endif
     ]
 

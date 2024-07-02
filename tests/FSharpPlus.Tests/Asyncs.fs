@@ -1,7 +1,5 @@
 ﻿namespace FSharpPlus.Tests
 
-#if !NET462 && !NETSTANDARD2_0
-
 module Async =
 
     open System
@@ -109,4 +107,3 @@ module Async =
             CollectionAssert.AreEquivalent ((Async.AsTaskAndWait t123).Exception.InnerExceptions, (Async.AsTaskAndWait t123').Exception.InnerExceptions, "Async.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent ((Async.AsTaskAndWait t123).Exception.InnerExceptions, (Async.AsTaskAndWait t123'').Exception.InnerExceptions, "Async.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
-#endif

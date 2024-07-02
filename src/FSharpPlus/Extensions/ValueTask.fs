@@ -1,6 +1,6 @@
 namespace FSharpPlus
 
-#if !NETSTANDARD2_0 && !FABLE_COMPILER
+#if !FABLE_COMPILER
 
 /// Additional operations on ValueTask<'T>
 [<RequireQualifiedAccess>]

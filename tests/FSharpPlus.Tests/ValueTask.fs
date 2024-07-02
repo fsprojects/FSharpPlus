@@ -1,7 +1,5 @@
 ﻿namespace FSharpPlus.Tests
 
-#if !NET462 && !NETSTANDARD2_0
-
 module ValueTask =
 
     open System
@@ -199,4 +197,3 @@ module ValueTask =
             let t123'' = sequence [t1; t2; t3]
             CollectionAssert.AreEquivalent (t123.AsTask().Exception.InnerExceptions, t123'.AsTask().Exception.InnerExceptions, "ValueTask.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent (t123.AsTask().Exception.InnerExceptions, t123''.AsTask().Exception.InnerExceptions, "ValueTask.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
-#endif
