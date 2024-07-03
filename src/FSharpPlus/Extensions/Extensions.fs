@@ -70,7 +70,7 @@ module Extensions =
 
     #endif
 
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
 
     type ValueTask<'t> with
 

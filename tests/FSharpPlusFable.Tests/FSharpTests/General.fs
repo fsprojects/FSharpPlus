@@ -122,7 +122,7 @@ let monadTransformers = testList "MonadTransformers" [
         let _ = put initialState : ChoiceT<State<int, Choice<unit,string>>>
 
         ())
-    #if !NETSTANDARD3_0
+
     testCase "testStateT" (fun () ->
         let lst1: StateT<string,_> = StateT.lift [1;2]
         let lst2: StateT<string,_> = StateT.lift [4;5]
@@ -155,10 +155,9 @@ let monadTransformers = testList "MonadTransformers" [
         let y = (fn |> ResultT.run |> Reader.run) -1
         equal (Error NegativeValue) y)
     #endif
-    #endif
     ]
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 module ProfunctorDefaults =
     type Fun<'T,'U> = Fun of ('T -> 'U) with
         static member Dimap ((Fun f): Fun<'B,'C>, g: 'A->'B, h:'C->'D) = Fun (g >> f >> h)
@@ -169,7 +168,7 @@ module ProfunctorDefaults =
     ()
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 module BifunctorDefaults =
     type Tup<'a,'b> = Tup of ('a * 'b) with
         static member Bimap (Tup (a, b), f, g) = Tup (f a, g b)
@@ -180,7 +179,7 @@ module BifunctorDefaults =
     ()
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type StringCodec<'t> = StringCodec of ReaderT<string, Result<'t,string>> * ('t -> Const<string, unit>) with
     static member Invmap (StringCodec (d, e), f: 'T -> 'U, g: 'U -> 'T) = StringCodec (map f d, contramap g e)
 module StringCodec =
@@ -189,7 +188,7 @@ module StringCodec =
 #endif
 
 let invariant = testList "Invariant" [
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
     testCase "testStringToIntDerivedFromFloat" (fun () ->
         let floatCodec = StringCodec (ReaderT (tryParse >> Option.toResultWith "Parse error"), string<float> >> Const)
         let floatParsed  = StringCodec.decode floatCodec "1.8"
@@ -234,7 +233,7 @@ let bitConverter = testList "BitConverter" [
 
 let curry = testList "Curry" [
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
     testCase "curryTest" (fun () ->
     
         #if !FABLE_COMPILER
@@ -270,7 +269,7 @@ let curry = testList "Curry" [
         ())
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
     testCase "uncurryTest" (fun () ->
         let g2  x y   = [x + y]
         let g3  x y z = [x + y + z]

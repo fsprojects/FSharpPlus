@@ -12,7 +12,7 @@ open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 [<Extension; Sealed>]
 type Plus =
@@ -118,7 +118,7 @@ type Plus with
     static member inline ``+`` (x: 'a Task, y: 'a Task, [<Optional>]_mthd: Plus) = Task.lift2 Plus.Invoke x y
 #endif
 
-#if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+#if !FABLE_COMPILER
 type Plus with    
     
     static member inline ``+`` (x: 'a ValueTask, y: 'a ValueTask, [<Optional>]_mthd: Plus) = ValueTask.lift2 Plus.Invoke x y

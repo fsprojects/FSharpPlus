@@ -22,7 +22,7 @@ type Bind =
     static member        (>>=) (source: Task<'T>        , f: 'T -> Task<'U>    ) = Task.bind f source                      : Task<'U>
     static member        (>>=) (source                  , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        (>>=) (source: ValueTask<'T>   , f: 'T -> ValueTask<'U>    ) = ValueTask.bind f source            : ValueTask<'U>
     #endif
 
@@ -62,7 +62,7 @@ type Bind =
 
     static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq.collect f source : NonEmptySeq<'U>
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
     static member inline Invoke (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (_mthd: 'M, input: 'I, _output: 'R, f) = ((^M or ^I or ^R) : (static member (>>=) : _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
@@ -71,7 +71,7 @@ type Bind =
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member (>>=) : _*_ -> _) source, binder)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
 
 type Join =
     inherit Default1
@@ -83,7 +83,7 @@ type Join =
     #if !FABLE_COMPILER  
     static member        Join (x: Task<Task<_>>           , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Join (x: ValueTask<ValueTask<_>> , [<Optional>]_output: ValueTask<'T>   , [<Optional>]_mthd: Join    ) = ValueTask.join x           : ValueTask<'T>
     #endif
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
@@ -128,7 +128,7 @@ type Return =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member inline Invoke (x: 'T) : '``Applicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Return : _*_ -> _) output, mthd)
@@ -144,7 +144,7 @@ type Return =
     #if !FABLE_COMPILER
     static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Return (_: 'T ValueTask   , _: Return  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
     static member        Return (_: 'T DmStruct1   , _: Return  ) = fun (_: 'T) -> Unchecked.defaultof<_>         : 'T DmStruct1
     #endif
@@ -196,7 +196,7 @@ type Delay =
     
     #endif
     
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Delay (_mthd: Delay   , x: unit-> ValueTask<_>                                   , _          ) = x () : ValueTask<'T>
     #endif
 

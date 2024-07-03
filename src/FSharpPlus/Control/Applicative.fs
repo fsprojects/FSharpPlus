@@ -14,7 +14,7 @@ open FSharpPlus.Data
 type Apply =
     inherit Default1
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member        ``<*>`` (struct (f: Lazy<'T->'U>     , x: Lazy<'T>           )  , _output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (struct (f: seq<_>           , x: seq<'T>            )  , _output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
@@ -28,7 +28,7 @@ type Apply =
     #if !FABLE_COMPILER
     static member        ``<*>`` (struct (f: Task<_>          , x: Task<'T>             ), _output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Apply) : ValueTask<'U> = ValueTask.apply f x
     static member        ``<*>`` (struct (_: DmStruct1<_>     , _: DmStruct1<'T>        ), _output: DmStruct1<'U>        , [<Optional>]_mthd: Apply) : DmStruct1<'U> = Unchecked.defaultof<DmStruct1<'U>>
     #endif
@@ -88,7 +88,7 @@ type Apply =
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Apply with
     static member inline ``<*>`` (struct (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``     ) , _output: '``Monad<'U>``      , [<Optional>]_mthd:Default2) : '``Monad<'U>``       = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
@@ -112,7 +112,7 @@ type Lift2 =
     #if !FABLE_COMPILER
     static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.lift2  f x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Lift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Lift2) = ValueTask.lift2  f x y
     #endif
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.lift2  f x y
@@ -161,7 +161,7 @@ type Lift3 =
     #if !FABLE_COMPILER
     static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.lift3  f x y z
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Lift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Lift3) = ValueTask.lift3  f x y z
     #endif
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.lift3  f x y z

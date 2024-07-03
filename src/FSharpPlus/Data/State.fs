@@ -94,7 +94,7 @@ type State<'s,'t> with
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Put x     = State.put x                      : State<'S,unit>
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = State.zip x y
     #endif
@@ -105,7 +105,7 @@ type State<'s,'t> with
     static member Delay (body: unit->State<'S,'T>)  = State (fun s -> State.run (body ()) s) : State<'S,'T>
 
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 open FSharpPlus.Control
 open FSharpPlus.Internals.Prelude

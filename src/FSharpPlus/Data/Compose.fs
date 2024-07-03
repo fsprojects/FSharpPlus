@@ -4,7 +4,7 @@ open FSharpPlus
 open FSharpPlus.Control
 
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 /// Right-to-left composition of functors. The composition of applicative functors is always applicative, but the composition of monads is not always a monad.
 [<Struct>]

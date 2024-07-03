@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER && (NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_0_OR_GREATER || NET5_0_OR_GREATER)
+#if !FABLE_COMPILER
 
 open System
 open System.Threading

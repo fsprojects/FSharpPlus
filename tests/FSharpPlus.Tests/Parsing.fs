@@ -77,12 +77,10 @@ module Parsing =
         Assert.IsTrue((v3.Value.Value = 1))
         let v4 : ProductId option = tryParse "P_X"
         Assert.IsTrue(Option.isNone v4)
-#if NETSTANDARD3_0
         let v5 : ICustomerId option = tryParse "C_1"
         Assert.IsTrue((v5.Value.Value = 1L))
         let v6 : ICustomerId option = tryParse "C_X"
         Assert.IsTrue(Option.isNone v6)
-#endif
 
     [<Test>]
     let scanfParsing () =

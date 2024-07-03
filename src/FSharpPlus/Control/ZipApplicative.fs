@@ -24,7 +24,7 @@ type Pure =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``ZipApplicative<'T>`` : (static member Pure : ^T -> ^``ZipApplicative<'T>``) x)
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member inline Invoke (x: 'T) : '``ZipApplicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Pure : _*_ -> _) output, mthd)
@@ -38,7 +38,7 @@ type Pure =
     #if !FABLE_COMPILER
     static member        Pure (_: 'T Task         , _: Pure) = fun x -> Task.FromResult x                     : 'T Task
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Pure (_: 'T ValueTask    , _: Pure) = fun (x: 'T) -> ValueTask<'T> x                 : 'T ValueTask
     #endif
     static member        Pure (x: option<'a>      , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>)
@@ -75,7 +75,7 @@ type Pure =
 type ZipApply =
     inherit Default1
  
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member        ``<.>`` (struct (f: Lazy<'T->'U>        , x: Lazy<'T>             ), [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member        ``<.>`` (struct (f: seq<_>              , x: seq<'T>              ), [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: ZipApply) = Seq.map2 (<|) f x
@@ -89,7 +89,7 @@ type ZipApply =
     #if !FABLE_COMPILER
     static member        ``<.>`` (struct (f: Task<_>             , x: Task<'T>             ), [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: ZipApply) = Task.map2 (<|) f x
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        ``<.>`` (struct (f: ValueTask<_>        , x: ValueTask<'T>        ), [<Optional>]_output: ValueTask<'U>        , [<Optional>]_mthd: ZipApply) = ValueTask.map2 (<|) f x
     #endif
     static member        ``<.>`` (struct (f: Async<_>            , x: Async<'T>            ), [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: ZipApply) : Async<'U>            = Async.map2 (<|) f x
@@ -124,7 +124,7 @@ type ZipApply =
     static member inline InvokeOnInstance (f: '``ZipApplicative<'T->'U>``) (x: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` =
         ((^``ZipApplicative<'T->'U>`` or ^``ZipApplicative<'T>`` or ^``ZipApplicative<'U>``) : (static member (<.>) : _*_ -> _) (f, x))
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type ZipApply with
     static member inline ``<.>`` (struct (_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct), _output: ^r when ^r : null and ^r: struct, _mthd: Default1) = id
@@ -147,7 +147,7 @@ type Map2 =
     #if !FABLE_COMPILER
     static member        Map2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Map2) = Task.map2 f x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Map2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Map2) = ValueTask.map2 f x y
     #endif
     static member        Map2 (f, (x                     , y                     ), _mthd: Map2) = Async.map2 f x y
@@ -194,7 +194,7 @@ type Map3 =
     #if !FABLE_COMPILER
     static member        Map3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Map3) = Task.map3 f x y z
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Map3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Map3) = ValueTask.map3 f x y z
     #endif
     static member        Map3 (f, (x                     , y                     , z                      ), _mthd: Map3) = Async.map3  f x y z

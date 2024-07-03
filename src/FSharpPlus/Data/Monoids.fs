@@ -2,7 +2,7 @@
 
 open FSharpPlus
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 /// The dual of a monoid, obtained by swapping the arguments of append.
 [<Struct>]
 type Dual<'t> = Dual of 't with
@@ -54,7 +54,7 @@ type Last<'t> = Last of Option<'t> with
     static member run (Last a) = a                                            : 't option
 
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 /// Numeric wrapper for multiplication monoid (*, 1)
 [<Struct>]

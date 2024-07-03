@@ -61,7 +61,7 @@ Target.create "Build" (fun _ ->
             OutputDirectory = output
             ProjectParameters =  ("root", root)::info
             Projects = rootDir @@ "src/FSharpPlus/FSharpPlus.fsproj"
-            TargetPath = rootDir @@ "src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+            TargetPath = rootDir @@ "src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
             SourceRepository = githubLink @@ "tree/master" }
            )
 )
