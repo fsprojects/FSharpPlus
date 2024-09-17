@@ -487,6 +487,22 @@ module Functor =
         let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
         CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
 
+    [<Test>]
+    let iterTests () =
+        let li = [1, 2; 3, 4]
+        let di: Dictionary<int, int> = ofList li
+        let id = dict li
+        let ir = readOnlyDict li
+        let ma = Map.ofList li
+
+        let r = ResizeArray<string> []
+
+        iter (r.Add << string) di
+        iter (r.Add << string) id
+        iter (r.Add << string) ir
+        iter (r.Add << string) ma
+        CollectionAssert.AreEqual (ResizeArray ["2"; "4"; "2"; "4"; "2"; "4"; "2"; "4"], r)
+
 
         
 module Foldable =
