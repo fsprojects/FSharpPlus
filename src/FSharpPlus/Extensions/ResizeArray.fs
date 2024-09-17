@@ -21,6 +21,14 @@ module ResizeArray =
         
         ResizeArray (Seq.map mapping source)
 
+    /// <summary>Applies the given function to each element of the collection.</summary>
+    /// <param name="action">The function to apply to elements from the input ResizeArray.</param>
+    /// <param name="source">The input ResizeArray.</param>
+    let iter (action: 'T -> 'U) (source: ResizeArray<'T>) =
+        raiseIfNull (nameof source) source
+        
+        ResizeArray (Seq.map action source)
+
     /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
     /// <param name="f">The functions.</param>
     /// <param name="ra">The values.</param>

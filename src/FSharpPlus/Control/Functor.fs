@@ -21,8 +21,8 @@ open FSharpPlus.Data
 type Iterate =
     static member Iterate (x: Lazy<'T>   , action) = action x.Value : unit
     static member Iterate (x: seq<'T>    , action) = Seq.iter action x
-    static member Iterate (x: option<'T> , action) = match x with Some x -> action x | _ -> ()
-    static member Iterate (x: voption<'T>, action) = match x with ValueSome x -> action x | _ -> ()
+    static member Iterate (x: option<'T> , action) = Option.iter action x
+    static member Iterate (x: voption<'T>, action) = ValueOption.iter action x
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
@@ -41,12 +41,12 @@ type Iterate =
     #else
     static member Iterate (x: Async<'T>            , action: 'T -> unit) = (x |> Async.map action |> Async.AsTask).Wait ()
     #endif
-    static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
+    static member Iterate (x: Result<'T, 'E>       , action) = Result.iter action x
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
     static member Iterate (KeyValue(_: 'Key, x: 'T), action) = action x : unit
     static member Iterate (x: Map<'Key,'T>         , action) = Map.iter (const' action) x 
-    static member Iterate (x: Dictionary<'Key, 'T> , action) = Seq.iter action x.Values
-    static member Iterate (x: _ ResizeArray        , action) = Seq.iter action x
+    static member Iterate (x: Dictionary<'Key, 'T> , action) = Dictionary.iterValues action x
+    static member Iterate (x: _ ResizeArray        , action) = ResizeArray.iter action x
 
     // Restricted
     static member Iterate (x:string         , action) = String.iter action x
