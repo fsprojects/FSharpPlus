@@ -29,9 +29,9 @@ jobs:
     - name: Package 
       run: dotnet pack build.proj
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: nupkg
+        name: nupkg-${{ matrix.runs-on }}
         path: ./bin/nupkg/*.nupkg
     - name: Push to GitHub Feed
       shell: bash

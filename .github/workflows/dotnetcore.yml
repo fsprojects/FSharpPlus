@@ -68,9 +68,9 @@ jobs:
     - name: Package 
       run: dotnet pack build.proj --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: nupkg
+        name: nupkg-${{ matrix.runs-on }}
         path: ./bin/nupkg/*.nupkg
     - name: Push to GitHub Feed
       continue-on-error: true
