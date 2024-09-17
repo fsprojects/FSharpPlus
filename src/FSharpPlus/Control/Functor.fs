@@ -45,7 +45,9 @@ type Iterate =
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
     static member Iterate (KeyValue(_: 'Key, x: 'T), action) = action x : unit
     static member Iterate (x: Map<'Key,'T>         , action) = Map.iter (const' action) x 
+    static member Iterate (x: IDictionary<'Key, 'T>, action) = Dict.iterValues action x
     static member Iterate (x: Dictionary<'Key, 'T> , action) = Dictionary.iterValues action x
+    static member Iterate (x: IReadOnlyDictionary<'Key, 'T>, action) = IReadOnlyDictionary.iterValues action x
     static member Iterate (x: _ ResizeArray        , action) = ResizeArray.iter action x
 
     // Restricted
