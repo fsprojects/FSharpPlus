@@ -251,9 +251,16 @@ module Vector =
 
   let inline apply (f: Vector<'a -> 'b, 'n>) (v: Vector<'a, 'n>) : Vector<'b, 'n> = map2 id f v
 
+  /// <description>
+  ///   Converts the vector of vectors to a square matrix and returns its diagonal.
+  /// </description>
+  /// <seealso href="https://stackoverflow.com/questions/5802628/monad-instance-of-a-number-parameterised-vector" />
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let join (vv: Vector<Vector<'a, 'n>, 'n>): Vector<'a, 'n> =
     { Items = Array.init (Array.length vv.Items) (fun i -> vv.Items.[i].Items.[i]) }
+
+  let inline bind (f: 'a -> Vector<'b, 'n>) (v: Vector<'a, 'n>) : Vector<'b, 'n> =
+    v |> map f |> join
 
   let inline norm (v: Vector< ^a, ^n >) : ^a =
     v |> toArray |> Array.sumBy (fun x -> x * x) |> sqrt
@@ -333,11 +340,17 @@ module Matrix =
 
   let inline apply (f: Matrix<'a -> 'b, 'm, 'n>) (m: Matrix<'a, 'm, 'n>) : Matrix<'b, 'm, 'n> = map2 id f m
 
+  /// <description>
+  ///   Converts the matrix of matrices to a 3D cube matrix and returns its diagonal.
+  /// </description>
+  /// <seealso href="https://stackoverflow.com/questions/5802628/monad-instance-of-a-number-parameterised-vector" />
   [<MethodImpl(MethodImplOptions.AggressiveInlining)>]
   let join (m: Matrix<Matrix<'a, 'm, 'n>, 'm, 'n>) : Matrix<'a, 'm, 'n> =
     { Items =
         Array2D.init (Array2D.length1 m.Items) (Array2D.length2 m.Items)
           (fun i j -> m.Items.[i, j].Items.[i, j] ) }
+
+  let inline bind (f: 'a -> Matrix<'b, 'm, 'n>) (m: Matrix<'a, 'm, 'n>) : Matrix<'b, 'm, 'n> = m |> map f |> join
 
   let inline rowLength (_: Matrix<'a, 'm, 'n>) : 'm = Singleton<'m>
   let inline colLength (_: Matrix<'a, 'm, 'n>) : 'n = Singleton<'n>
@@ -586,6 +599,7 @@ type Matrix<'Item, 'Row, 'Column> with
   static member inline ( <*> ) (f: Matrix<'x -> 'y, 'm, 'n>, x: Matrix<'x, 'm, 'n>) = Matrix.apply f x
   static member inline ( <.> ) (f: Matrix<'x -> 'y, 'm, 'n>, x: Matrix<'x, 'm, 'n>) = Matrix.apply f x
   static member inline Join (x: Matrix<Matrix<'x, 'm, 'n>, 'm, 'n>) = Matrix.join x
+  static member inline ( >>= ) (x: Matrix<'x, 'm, 'n>, f: 'x -> Matrix<'y, 'm, 'n>) = Matrix.bind f x
   static member inline get_Zero () : Matrix<'a, 'm, 'n> = Matrix.zero
   static member inline ( + ) (m1, m2) = Matrix.map2 (+) m1 m2
   static member inline ( - ) (m1, m2) = Matrix.map2 (-) m1 m2
@@ -621,6 +635,7 @@ type Vector<'Item, 'Length> with
   static member inline ( <*> ) (f: Vector<'x -> 'y, 'n>, x: Vector<'x, 'n>) : Vector<'y, 'n> = Vector.apply f x
   static member inline ( <.> ) (f: Vector<'x -> 'y, 'n>, x: Vector<'x, 'n>) : Vector<'y, 'n> = Vector.apply f x
   static member inline Join (x: Vector<Vector<'x, 'n>, 'n>) : Vector<'x, 'n> = Vector.join x
+  static member inline ( >>= ) (x: Vector<'x, 'n>, f: 'x -> Vector<'y, 'n>) = Vector.bind f x
   
   [<EditorBrowsable(EditorBrowsableState.Never)>]
   static member inline Zip (x, y) = Vector.zip x y
