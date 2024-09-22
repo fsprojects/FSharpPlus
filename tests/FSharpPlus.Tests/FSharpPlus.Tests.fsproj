@@ -35,6 +35,7 @@
     <Compile Include="Lens.fs" />
     <Compile Include="Extensions.fs" />
     <Compile Include="BifoldableTests.fs" />
+    <Compile Include="Matrix.fs" />
     <Compile Include="TypeLevel.fs" />
   </ItemGroup>
   <ItemGroup>
