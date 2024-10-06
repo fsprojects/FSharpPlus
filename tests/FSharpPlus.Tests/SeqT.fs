@@ -64,6 +64,13 @@ module BasicTests =
         let y3 = SeqT.run x3 |> extract |> toList
         CollectionAssert.AreEqual (y3, [("0", 0, 0); ("1", 10, 1); ("2", 20, 2)])
 
+    [<Test>]
+    let picks () =
+        let infinite: SeqT<Async<_>, _> = SeqT.unfold (fun x -> Some (x, x + 1)) 0
+        let five = SeqT.find ((<) 4) infinite |> Async.RunSynchronously
+        Assert.AreEqual (5, five)
+
+
     // Compile tests
     let binds () =
         let res1 = SeqT [|seq [1..4] |] >>= fun x -> SeqT [|seq [x * 2] |]
