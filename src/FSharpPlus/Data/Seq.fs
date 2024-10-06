@@ -797,7 +797,7 @@ module SeqT_V2 =
     let inline iteri<'T, .. > (f: int -> 'T -> unit)      (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) source
     let inline iter<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iterM (f >> result) source
 
-    let inline tryPickM<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U option>`` = innerMonad2<_, '``Monad<unit>``> () {
+    let inline internal tryPickMAndMap<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) (postMap: 'U option -> 'V) : '``Monad<'V>`` = innerMonad2<_, '``Monad<unit>``> () {
         use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
         let! (move: bool) = ie.MoveNext ()
         let mutable b = move
@@ -809,31 +809,48 @@ module SeqT_V2 =
             | None ->
                 let! moven = ie.MoveNext ()
                 b <- moven
-        return res }
+        return postMap res }
+
+    let inline internal tryPickAndMap<'T, 'U, .. > (f: 'T -> 'U option) (source: SeqT<'``Monad<bool>``, 'T>) (postMap: 'U option -> 'V) : '``Monad<'V>`` = innerMonad2<_, '``Monad<unit>``> () {
+        use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+        let! (move: bool) = ie.MoveNext ()
+        let mutable b = move
+        let mutable res = None
+        while b && res.IsNone do
+            let (fv: 'U option) = f ie.Current
+            match fv with
+            | Some _ as r -> res <- r
+            | None ->
+                let! moven = ie.MoveNext ()
+                b <- moven
+        return postMap res }
+
+    let inline tryPickM<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U option>`` =
+        tryPickMAndMap<_, 'U, _, '``Monad<unit>``, _, _, _> f source id
 
     let inline pickM<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U>`` =
-        source |> tryPickM<_, 'U, '``Monad<'U option>``, _, '``Monad<unit>``> f |> Map.Invoke (function Some v -> (v: 'U) | _ -> raise (KeyNotFoundException ()))
+        tryPickMAndMap<_, 'U, '``Monad<'U option>``, '``Monad<unit>``, _, _, _> f source (function Some v -> (v: 'U) | _ -> raise (KeyNotFoundException ()))
 
     let inline tryPick<'T, 'U, .. > (f: 'T -> 'U option) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U option>`` =
-        tryPickM<_, _, _ , _, '``Monad<unit>``> (f >> Return.Invoke) source
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> f source id
 
     let inline pick (f: 'T -> 'U option) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U>`` =
-        (source |> tryPick<_, _, _, '``Monad<unit>``, _> f : '``Monad<'U option>``) |> Map.Invoke (function Some v -> (v: 'U) | _ -> raise (KeyNotFoundException ()))
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> f source (function Some v -> (v: 'U) | _ -> raise (KeyNotFoundException ()))
 
     let inline contains value (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<bool>`` =
-        source |> tryPick<_, _, _, '``Monad<unit>``, '``Monad<unit option>``> (fun v -> if v = value then Some () else None) |> Map.Invoke Option.isSome
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if v = value then Some () else None) source Option.isSome
 
     let inline tryFind<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T option>`` =
-        source |> tryPick<_, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None)
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source id
 
     let inline find f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T>`` =
-        source |> tryFind<_, _, '``Monad<'T option>``, '``Monad<unit>``> f |> Map.Invoke (function Some v -> (v: 'T) | _ -> raise (KeyNotFoundException ()))
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source (function Some v -> (v: 'T) | _ -> raise (KeyNotFoundException ()))
 
     let inline exists f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<bool>`` =
-        source |> tryFind<_, _, '``Monad<'T option>``, '``Monad<unit>``> f |> Map.Invoke Option.isSome
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source Option.isSome
 
     let inline forall f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<bool>`` =
-        source |> tryFind<_, _, '``Monad<'T option>``, '``Monad<unit>``> (f >> not) |> Map.Invoke Option.isNone
+        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then None else Some v) source Option.isNone
 
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
     type TryWithState<'``Monad<bool>``, 'T> =
