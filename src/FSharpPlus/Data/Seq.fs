@@ -214,10 +214,7 @@ module SeqT_V2 =
                     let mutable state   = SeqState.NotStarted source
                     let mutable current = Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = monad' {
                             match state with
                             | SeqState.NotStarted inp ->
@@ -250,10 +247,7 @@ module SeqT_V2 =
                     let mutable state   = SeqState.NotStarted source
                     let mutable current = Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = monad' {
                             match state with
                             | SeqState.NotStarted inp ->
@@ -391,10 +385,7 @@ module SeqT_V2 =
                             match started with
                             | Some _ -> result false
                             | None -> source |> (if opaqueId false then liftM else map) (fun v -> started <- Some v; true)
-                        member _.Current =
-                            match started with
-                            | Some v -> v
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) started
                         member _.Dispose () = () } }
 
     [<RequireQualifiedAccess; EditorBrowsable(EditorBrowsableState.Never)>]
@@ -411,10 +402,7 @@ module SeqT_V2 =
                     let mutable state   = CollectState.NotStarted source
                     let mutable current = Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U>  with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = monad' {
                             match state with
                             | CollectState.NotStarted inp ->
@@ -458,10 +446,7 @@ module SeqT_V2 =
                     let mutable state   = CollectState.NotStarted f
                     let mutable current = Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U>  with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = monad' {
                             match state with
                             | CollectState.NotStarted f ->
@@ -505,10 +490,7 @@ module SeqT_V2 =
                     let mutable state   = CollectState.NotStarted x1
                     let mutable current = Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U>  with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = monad' {
                             match state with
                             | CollectState.NotStarted x1 ->
@@ -560,10 +542,7 @@ module SeqT_V2 =
                     let mutable state   = AppendState.NotStarted1 (source1, source2)
                     let mutable current = Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T>  with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad {
                             match state with 
                             | AppendState.NotStarted1 (inp1, inp2) -> 
@@ -621,10 +600,7 @@ module SeqT_V2 =
                     let mutable state   = MapState.NotStarted source
                     let mutable current = Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad {
                               match state with
                               | MapState.NotStarted inp ->
@@ -661,10 +637,7 @@ module SeqT_V2 =
                     let mutable state   = Map2State.NotStarted (source1, source2)
                     let mutable current = Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad {
                             match state with
                             | Map2State.NotStarted (s1, s2) -> return! (
@@ -697,10 +670,7 @@ module SeqT_V2 =
                     let mutable state   = Map2State.NotStarted (source1, source2)
                     let mutable current = Option<'U>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'U> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad {
                             match state with
                             | Map2State.NotStarted (s1, s2) ->
@@ -750,10 +720,7 @@ module SeqT_V2 =
                     let mutable state   = CollectState.NotStarted source
                     let mutable current = Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T>  with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad {
                               match state with
                               | CollectState.NotStarted inp ->
@@ -799,7 +766,7 @@ module SeqT_V2 =
 
     let inline internal tryPickMAndMap<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) (postMap: 'U option -> 'V) : '``Monad<'V>`` = innerMonad2<_, '``Monad<unit>``> () {
         use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-        let! (move: bool) = ie.MoveNext ()
+        let! move = ie.MoveNext ()
         let mutable b = move
         let mutable res = None
         while b && res.IsNone do
@@ -813,7 +780,7 @@ module SeqT_V2 =
 
     let inline internal tryPickAndMap<'T, 'U, .. > (f: 'T -> 'U option) (source: SeqT<'``Monad<bool>``, 'T>) (postMap: 'U option -> 'V) : '``Monad<'V>`` = innerMonad2<_, '``Monad<unit>``> () {
         use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
-        let! (move: bool) = ie.MoveNext ()
+        let! move = ie.MoveNext ()
         let mutable b = move
         let mutable res = None
         while b && res.IsNone do
@@ -829,13 +796,13 @@ module SeqT_V2 =
         tryPickMAndMap<_, 'U, _, '``Monad<unit>``, _, _, _> f source id
 
     let inline pickM<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U>`` =
-        tryPickMAndMap<_, 'U, '``Monad<'U option>``, '``Monad<unit>``, _, _, _> f source (function Some v -> (v: 'U) | _ -> raise (KeyNotFoundException ()))
+        tryPickMAndMap<_, 'U, '``Monad<'U option>``, '``Monad<unit>``, _, _, _> f source (function Some v -> v | _ -> raise (KeyNotFoundException ()))
 
     let inline tryPick<'T, 'U, .. > (f: 'T -> 'U option) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U option>`` =
         tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> f source id
 
     let inline pick (f: 'T -> 'U option) (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'U>`` =
-        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> f source (function Some v -> (v: 'U) | _ -> raise (KeyNotFoundException ()))
+        tryPickAndMap<_, 'U, _, _, '``Monad<unit>``, _> f source (function Some v -> v | _ -> raise (KeyNotFoundException ()))
 
     let inline contains value (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<bool>`` =
         tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if v = value then Some () else None) source Option.isSome
@@ -844,7 +811,7 @@ module SeqT_V2 =
         tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source id
 
     let inline find f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T>`` =
-        tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source (function Some v -> (v: 'T) | _ -> raise (KeyNotFoundException ()))
+        tryPickAndMap<'T, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source (function Some v -> v | _ -> raise (KeyNotFoundException ()))
 
     let inline exists f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<bool>`` =
         tryPickAndMap<_, _, _, _, '``Monad<unit>``, _> (fun v -> if f v then Some v else None) source Option.isSome
@@ -867,10 +834,7 @@ module SeqT_V2 =
                     let mutable state   = TryWithState.NotStarted source
                     let mutable current = Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad2<_, '``Monad<unit>``> () {
                             match state with
                             | TryWithState.NotStarted inp ->
@@ -939,10 +903,7 @@ module SeqT_V2 =
                     let mutable state   = TryFinallyState.NotStarted source
                     let mutable current = Option<'T>.None
                     { new IEnumeratorM<'``Monad<bool>``, 'T> with
-                        member _.Current =
-                            match current with
-                            | Some c -> c
-                            | None -> invalidOp enumNotStarted
+                        member _.Current = Option.defaultWith (fun () -> invalidOp enumNotStarted) current
                         member x.MoveNext () = innerMonad {
                             match state with
                             | TryFinallyState.NotStarted inp ->
@@ -1003,7 +964,7 @@ module SeqT_V2 =
     ///
     /// <exception cref="T:System.ArgumentNullException">Thrown when count is negative.</exception>
     let inline truncate count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
-        if (count < 0) then invalidArg "count" "must be non-negative"
+        if count < 0 then invalidArg "count" "must be non-negative"
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
@@ -1035,7 +996,7 @@ module SeqT_V2 =
     /// <exception cref="T:System.InvalidOperationException">Thrown when count exceeds the number of elements.
     /// in the sequence.</exception>
     let inline take count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
-        if (count < 0) then invalidArg "count" "must be non-negative"
+        if count < 0 then invalidArg "count" "must be non-negative"
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
@@ -1047,12 +1008,7 @@ module SeqT_V2 =
                             if i > 0 then
                                 i <- i - 1
                                 e.MoveNext () |> monomorphicBind (fun res ->
-                                    if not res then invalidOp (
-                                        sprintf
-                                            "The input sequence has an insufficient number of elements: tried to take %i %s past the end of the sequence. Use SeqT.truncate to get %i or less elements."
-                                            (i + 1)
-                                            (if i = 0 then "element" else "elements")
-                                            count)
+                                    if not res then invalidOp $"The input sequence has an insufficient number of elements: tried to take {i + 1} element{if i = 0 then String.Empty else string 's'} past the end of the sequence. Use SeqT.truncate to get {count} or less elements."
                                     result res)
                             else
                                 x.Dispose ()
@@ -1060,7 +1016,7 @@ module SeqT_V2 =
                         member _.Dispose () = dispose e } }
     
     let inline internal skipImpl throw count (source: SeqT<'``Monad<bool>``, 'T>) : SeqT<'``Monad<bool>``, 'T> =
-        if (count < 0) then invalidArg "count" "must be non-negative"
+        if count < 0 then invalidArg "count" "must be non-negative"
         SeqT
             { new IEnumerableM<'``Monad<bool>``, 'T> with
                 member _.GetEnumerator () =
@@ -1072,23 +1028,14 @@ module SeqT_V2 =
                             if i > 0 then
                                 i <- i - 1
                                 e.MoveNext () |> monomorphicBind (fun res ->
-                                    if res then
-                                        x.MoveNext ()
+                                    if res then x.MoveNext ()
+                                    elif throw then invalidOp $"Tried to skip {i + 1} element{if i = 0 then String.Empty else string 's'} past the end of the seq. Use SeqT.drop to skip {count} or less elements."
                                     else
-                                        if throw then
-                                            invalidOp (
-                                                sprintf
-                                                    "tried to skip %i %s past the end of the seq. Use SeqT.drop to skip %i or less elements."
-                                                    (i + 1)
-                                                    (if i = 0 then "element" else "elements")
-                                                    count)
-                                        else
-                                            x.Dispose ()
-                                            result false)
+                                        x.Dispose ()
+                                        result false)
                             else
                                 e.MoveNext () |> monomorphicBind (fun res ->
-                                    if not res then
-                                        x.Dispose ()
+                                    if not res then x.Dispose ()
                                     result res)
                         member _.Dispose () = dispose e } }
 
