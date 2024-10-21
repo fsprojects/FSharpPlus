@@ -121,30 +121,31 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let cast (source: _ NonEmptySeq) = Seq.cast source |> unsafeOfSeq
+
+    /// <summary>
+    /// Applies a function to each element in a sequence and then returns a sequence of values v where the applied function returned Some(v).
+    /// </summary>
+    /// <param name="chooser">The function to be applied to the list elements.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The resulting sequence comprising the values v where the chooser function returned Some(x).</returns>
+    let inline tryChoose chooser (source: NonEmptySeq<'T>) = source |> Seq.choose chooser
     
     /// <summary>
-    /// Applies a function to each element in a list and then returns a list of values v where the applied function returned Some(v).
+    /// Applies a function to each element in a sequence and then returns a sequence of values v where the applied function returned Some(v).
     /// </summary>
-    /// <param name="chooser">The function to be applied to the list elements.</param>
+    /// <param name="chooser">The function to be applied to the sequence elements.</param>
     /// <param name="source">The input sequence.</param>
-    /// <returns>The resulting list comprising the values v where the chooser function returned Some(x).</returns>
-    let inline choose chooser (source: NonEmptySeq<'T>) = source |> Seq.choose chooser |> unsafeOfSeq
+    /// <returns>The resulting sequence comprising the values v where the chooser function returned Some(x).</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the chooser function returns None for all elements.</exception>
+    let inline choose chooser (source: NonEmptySeq<'T>) = source |> tryChoose chooser |> unsafeOfSeq
 
-    /// <summary>
-    /// Applies a function to each element in a list and then returns a list of values v where the applied function returned Some(v).
-    /// </summary>
-    /// <param name="chooser">The function to be applied to the list elements.</param>
-    /// <param name="source">The input sequence.</param>
-    /// <returns>The resulting list comprising the values v where the chooser function returned Some(x).</returns>
-    let inline tryChoose chooser (source: NonEmptySeq<'T>) = source |> Seq.choose chooser |> List.ofSeq
-
-    /// <summary>Divides the input list into lists (chunks) of size at most chunkSize.
-    /// Returns a new list containing the generated lists (chunks) as its elements.</summary>
+    /// <summary>Divides the input sequence into sequences (chunks) of size at most chunkSize.
+    /// Returns a new sequence containing the generated sequences (chunks) as its elements.</summary>
     /// <param name="chunkSize">The maximum size of each chunk.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The sequence divided into chunks.</returns>
-    let inline chunkBySize chunkSize (source: NonEmptySeq<'T>) = 
-        source |> Seq.chunkBySize chunkSize |> Seq.map unsafeOfSeq
+    let inline chunkBySize chunkSize (source: NonEmptySeq<'T>): NonEmptySeq<NonEmptySeq<'T>> = 
+        source |> Seq.chunkBySize chunkSize |> Seq.map unsafeOfSeq |> unsafeOfSeq
 
     /// <summary>Applies the given function to each element of the sequence and concatenates all the
     /// results.</summary>
@@ -671,16 +672,33 @@ module NonEmptySeq =
     /// <param name="index">The index of the element to remove.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
+    let tryRemoveAt (index: int) (source: NonEmptySeq<'T>) : 'T seq = 
+        Seq.removeAt index source
+
+    /// <summary>Removes the element at the specified index.</summary>
+    /// <param name="index">The index of the element to remove.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The result sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when removing the item results in an empty sequence.</exception>
     let removeAt (index: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        Seq.removeAt index source |> unsafeOfSeq
+        tryRemoveAt index source |> unsafeOfSeq
     
     /// <summary>Removes multiple elements starting at the specified index.</summary>
     /// <param name="index">The index at which to start removing elements.</param>
     /// <param name="count">The number of elements to remove.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
+    let tryRemoveManyAt (index: int) (count: int) (source: NonEmptySeq<'T>) : 'T seq = 
+        Seq.removeManyAt index count source
+    
+    /// <summary>Removes multiple elements starting at the specified index.</summary>
+    /// <param name="index">The index at which to start removing elements.</param>
+    /// <param name="count">The number of elements to remove.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The result sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when removing the items results in an empty sequence.</exception>
     let removeManyAt (index: int) (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        Seq.removeManyAt index count source |> unsafeOfSeq
+        tryRemoveManyAt index count source |> unsafeOfSeq
     
     /// <summary>Creates a sequence that contains one repeated value.</summary>
     /// <param name="count">The number of elements.</param>
@@ -728,15 +746,31 @@ module NonEmptySeq =
     /// <param name="count">The number of elements to skip.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
+    let trySkip (count: int) (source: NonEmptySeq<'T>) : 'T seq = 
+        Seq.skip count source
+
+    /// <summary>Returns a sequence that skips the first N elements of the list.</summary>
+    /// <param name="count">The number of elements to skip.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The result sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let skip (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        Seq.skip count source |> unsafeOfSeq
+        trySkip count source |> unsafeOfSeq
     
     /// <summary>Returns a sequence that skips elements while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
+    let trySkipWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : 'T seq = 
+        Seq.skipWhile predicate source
+    
+    /// <summary>Returns a sequence that skips elements while the predicate is true.</summary>
+    /// <param name="predicate">A function to test each element of the sequence.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The result sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let skipWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        Seq.skipWhile predicate source |> unsafeOfSeq
+        trySkipWhile predicate source |> unsafeOfSeq
 
     /// <summary>Yields a sequence ordered by keys.</summary>
     /// 
@@ -847,21 +881,44 @@ module NonEmptySeq =
     /// <param name="count">The number of elements to take.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
+    let tryTake (count: int) (source: NonEmptySeq<'T>) : 'T seq = 
+        Seq.take count source
+
+    /// <summary>Returns a sequence that contains the first N elements of the sequence.</summary>
+    /// <param name="count">The number of elements to take.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The result sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the count is less than or equal to zero.</exception>
     let take (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        Seq.take count source |> unsafeOfSeq
+        if count <= 0 then
+            raise <| new System.ArgumentException("Count must be greater than 0.")
+        else
+        tryTake count source |> unsafeOfSeq
     
     /// <summary>Returns a sequence that contains the elements of the sequence while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
+    let tryTakeWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : 'T seq = 
+        Seq.takeWhile predicate source
+    
+    /// <summary>Returns a sequence that contains the elements of the sequence while the predicate is true.</summary>
+    /// <param name="predicate">A function to test each element of the sequence.</param>
+    /// <param name="source">The input sequence.</param>
+    /// <returns>The result sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when resulting sequence is empty.</exception>
     let takeWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        Seq.takeWhile predicate source |> unsafeOfSeq
+        tryTakeWhile predicate source |> unsafeOfSeq
     
     /// <summary>Truncates the sequence to the specified length.</summary>
     /// <param name="count">The maximum number of elements to include in the sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The truncated sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the count is less than or equal to zero.</exception>
     let truncate (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
+        if count <= 0 then
+            raise <| new System.ArgumentException("Count must be greater than 0.")
+        else
         Seq.truncate count source |> unsafeOfSeq
     
     /// <summary>Returns the only element of the sequence, or <c>None</c> if the sequence does not contain exactly one element.</summary>

@@ -199,7 +199,6 @@ module NonEmptyList =
     /// <param name="list1">The first input list.</param>
     /// <param name="list2">The second input list.</param>
     /// <returns>The resulting list of pairs.</returns>
-
     let inline allPairs (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) = Seq.allPairs list1 list2 |> ofSeq
 
     /// <summary>Concatenates two lists.</summary>
@@ -218,7 +217,8 @@ module NonEmptyList =
     /// <param name="projection">The function to transform the list elements into the type to be averaged.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The resulting average.</returns>
-    let inline averageBy (projection: 'T -> ^U)  (list: NonEmptyList<'T>) = List.averageBy projection (list.Head :: list.Tail)
+    let inline averageBy (projection: 'T -> ^U)  (list: NonEmptyList<'T>) = 
+        Seq.averageBy projection list
 
     /// <summary>
     /// Applies a function to each element in a list and then returns a list of values v where the applied function returned Some(v).
@@ -226,7 +226,8 @@ module NonEmptyList =
     /// <param name="chooser">The function to be applied to the list elements.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The resulting list comprising the values v where the chooser function returned Some(x).</returns>
-    let inline choose chooser (list: NonEmptyList<'T>) = list |> Seq.choose chooser |> ofSeq
+    let inline tryChoose chooser (list: NonEmptyList<'T>) = 
+        list |> Seq.choose chooser |> List.ofSeq
 
     /// <summary>
     /// Applies a function to each element in a list and then returns a list of values v where the applied function returned Some(v).
@@ -234,22 +235,17 @@ module NonEmptyList =
     /// <param name="chooser">The function to be applied to the list elements.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The resulting list comprising the values v where the chooser function returned Some(x).</returns>
-    let inline tryChoose chooser (list: NonEmptyList<'T>) = list |> Seq.choose chooser |> List.ofSeq
+    /// <exception cref="System.ArgumentException">Thrown when the chooser function returns None for all elements.</exception>
+    let inline choose chooser (list: NonEmptyList<'T>) = 
+        tryChoose chooser list |> ofList
 
     /// <summary>Divides the input list into lists (chunks) of size at most chunkSize.
     /// Returns a new list containing the generated lists (chunks) as its elements.</summary>
     /// <param name="chunkSize">The maximum size of each chunk.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The list divided into chunks.</returns>
-    let inline chunkBySize chunkSize (list: NonEmptyList<'T>) = 
-        list.Head :: list.Tail |> List.chunkBySize chunkSize  |> List.map ofList
-
-    /// <summary>For each element of the list, applies the given function.
-    /// Concatenates all the results and returns the combined list.</summary>
-    /// <param name="mapping">The function to transform each input element into a sublist to be concatenated.</param>
-    /// <param name="list">The input list.</param>
-    /// <returns>The concatenation of the transformed sublists.</returns>
-    let inline collect mapping (list: NonEmptyList<'T>) = list |> Seq.collect mapping |> ofSeq
+    let inline chunkBySize chunkSize (list: NonEmptyList<'T>): NonEmptyList<NonEmptyList<'T>> = 
+        list.Head :: list.Tail |> List.chunkBySize chunkSize  |> List.map ofList |> ofList
 
     /// <summary>For each element of the list, applies the given function.
     /// Concatenates all the results and returns the combined list.</summary>
@@ -257,6 +253,14 @@ module NonEmptyList =
     /// <param name="list">The input list.</param>
     /// <returns>The concatenation of the transformed sublists.</returns>
     let inline tryCollect mapping (list: NonEmptyList<'T>) = list |> Seq.collect mapping |> List.ofSeq
+
+    /// <summary>For each element of the list, applies the given function.
+    /// Concatenates all the results and returns the combined list.</summary>
+    /// <param name="mapping">The function to transform each input element into a sublist to be concatenated.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The concatenation of the transformed sublists.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the mapping function returns an empty list for all element.</exception>
+    let inline collect mapping (list: NonEmptyList<'T>) = list >>= mapping
 
     /// <summary>Returns a new list that contains the elements of each of the lists in order.</summary>
     /// <param name="lists">The input list of lists.</param>
@@ -340,15 +344,16 @@ module NonEmptyList =
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="list">The input list.</param>
     /// <returns>A list containing only the elements that satisfy the predicate.</returns>
-    let inline filter (predicate: 'T -> bool) (list: NonEmptyList<'T>): NonEmptyList<'T> = 
-      list |> toList |> List.filter predicate |> ofList
+    let inline tryFilter (predicate: 'T -> bool) (list: NonEmptyList<'T>): 'T list = 
+      list |> Seq.filter predicate |> List.ofSeq
 
     /// <summary>Returns a new collection containing only the elements of the collection for which the given predicate returns "true."</summary>
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="list">The input list.</param>
     /// <returns>A list containing only the elements that satisfy the predicate.</returns>
-    let inline tryFilter (predicate: 'T -> bool) (list: NonEmptyList<'T>): 'T list = 
-      list |> toList |> List.filter predicate
+    /// <exception cref="System.ArgumentException">Thrown when the predicate evaluates to false for all the elements of the list.</exception>
+    let inline filter (predicate: 'T -> bool) (list: NonEmptyList<'T>): NonEmptyList<'T> = 
+      list |> tryFilter predicate |> ofList
 
     /// <summary>Returns the first element for which the given function returns True. 
     /// Raises <see cref="KeyNotFoundException"/> if no such element exists.</summary>
@@ -596,8 +601,8 @@ module NonEmptyList =
     /// <param name="predicate">A function to test each element of the list.</param>
     /// <param name="list">The input list.</param>
     /// <returns>A tuple containing the two lists.</returns>
-    let partition (predicate: 'T -> bool) (list: NonEmptyList<'T>) : NonEmptyList<'T> * NonEmptyList<'T> = 
-        list |> toList |> List.partition predicate |> fun (a, b) -> (ofList a, ofList b)
+    let partition (predicate: 'T -> bool) (list: NonEmptyList<'T>) : 'T list * 'T list =
+      list |> toList |> List.partition predicate |> fun (a, b) -> (a, b)
 
     /// <summary>Applies a function to each element of the list, returning a list of the results in a random order.</summary>
     /// <param name="permutation">A function to generate a permutation of the list indices.</param>
@@ -639,17 +644,34 @@ module NonEmptyList =
     /// <summary>Removes the element at the specified index.</summary>
     /// <param name="index">The index of the element to remove.</param>
     /// <param name="list">The input list.</param>
-    /// <returns>The result list.</returns>
+    /// <returns>The resulting list.</returns>
+    let tryRemoveAt (index: int) (list: NonEmptyList<'T>) : 'T list = 
+        list |> Seq.removeAt index |> List.ofSeq
+
+    /// <summary>Removes the element at the specified index.</summary>
+    /// <param name="index">The index of the element to remove.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The resulting list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when removing the item results in an empty list.</exception>
     let removeAt (index: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.removeAt index list |> ofSeq
+        tryRemoveAt index list |> ofList
     
     /// <summary>Removes multiple elements starting at the specified index.</summary>
     /// <param name="index">The index at which to start removing elements.</param>
     /// <param name="count">The number of elements to remove.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The result list.</returns>
+    let tryRemoveManyAt (index: int) (count: int) (list: NonEmptyList<'T>) : 'T list = 
+        list |> Seq.removeManyAt index count |> List.ofSeq
+    
+    /// <summary>Removes multiple elements starting at the specified index.</summary>
+    /// <param name="index">The index at which to start removing elements.</param>
+    /// <param name="count">The number of elements to remove.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The result list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when removing the items results in an empty list.</exception>
     let removeManyAt (index: int) (count: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.removeManyAt index count list |> ofSeq
+        tryRemoveManyAt index count list |> ofList
     
     /// <summary>Creates a list that contains one repeated value.</summary>
     /// <param name="count">The number of elements.</param>
@@ -684,15 +706,31 @@ module NonEmptyList =
     /// <param name="count">The number of elements to skip.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The result list.</returns>
+    let trySkip (count: int) (list: NonEmptyList<'T>) : 'T list = 
+        list |> Seq.skip count |> List.ofSeq
+        
+    /// <summary>Returns a list that skips the first N elements of the list.</summary>
+    /// <param name="count">The number of elements to skip.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The result list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let skip (count: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.skip count list |> ofSeq
+        trySkip count list |> ofList
     
     /// <summary>Returns a list that skips elements while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the list.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The result list.</returns>
+    let trySkipWhile (predicate: 'T -> bool) (list: NonEmptyList<'T>) : 'T list = 
+        list |> Seq.skipWhile predicate |> List.ofSeq
+    
+    /// <summary>Returns a list that skips elements while the predicate is true.</summary>
+    /// <param name="predicate">A function to test each element of the list.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The result list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let skipWhile (predicate: 'T -> bool) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.skipWhile predicate list |> ofSeq
+        trySkipWhile predicate list |> ofList
     
     /// <summary>Sorts the elements of the list in ascending order.</summary>
     /// <param name="list">The input list.</param>
@@ -731,8 +769,14 @@ module NonEmptyList =
     /// <param name="index">The index at which to split the list.</param>
     /// <param name="list">The input list.</param>
     /// <returns>A tuple containing the two lists.</returns>
+    /// <exception cref="System.InvalidOperationException">Thrown when the index is 0, equal to the size of the list, or is larger than the list.</exception>
     let splitAt (index: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> * NonEmptyList<'T> = 
-        list |> toList |> List.splitAt index |> fun (a, b) -> (ofList a, ofList b)
+        if index <= 0 then
+            raise <| new System.InvalidOperationException("Index must be greater than 0.")
+        else if index >= list.Length then
+            raise <| new System.InvalidOperationException("Index must be less than the length of the list.")
+        else
+            list |> toList |> List.splitAt index |> fun (a, b) -> (ofList a, ofList b)
     
     /// <summary>Splits the list into the specified number of lists.</summary>
     /// <param name="count">The number of lists to create.</param>
@@ -758,22 +802,51 @@ module NonEmptyList =
     /// <param name="count">The number of elements to take.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The result list.</returns>
+    let tryTake (count: int) (list: NonEmptyList<'T>) : 'T list = 
+        Seq.take count list |> List.ofSeq
+        
+    /// <summary>Returns a list that contains the first N elements of the list.</summary>
+    /// <param name="count">The number of elements to take.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The result list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the count is less than or equal to zero.</exception>
     let take (count: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.take count list |> ofSeq
+        if count <= 0 then
+            raise <| new System.ArgumentException("Count must be greater than 0.")
+        else
+        tryTake count list |> ofList
     
     /// <summary>Returns a list that contains the elements of the list while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the list.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The result list.</returns>
+    let tryTakeWhile (predicate: 'T -> bool) (list: NonEmptyList<'T>) : 'T list = 
+        Seq.takeWhile predicate list |> List.ofSeq
+    
+    /// <summary>Returns a list that contains the elements of the list while the predicate is true.</summary>
+    /// <param name="predicate">A function to test each element of the list.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The result list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let takeWhile (predicate: 'T -> bool) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.takeWhile predicate list |> ofSeq
+        tryTakeWhile predicate list |> ofList
+    
+    /// <summary>Truncates the list to the specified length.</summary>
+    /// <param name="count">The maximum number of elements to include in the list.</param>
+    /// <param name="list">The input list.</param>
+    /// <returns>The truncated list.</returns>
+    let tryTruncate (count: int) (list: NonEmptyList<'T>) : 'T list = 
+        Seq.truncate count list |> List.ofSeq
     
     /// <summary>Truncates the list to the specified length.</summary>
     /// <param name="count">The maximum number of elements to include in the list.</param>
     /// <param name="list">The input list.</param>
     /// <returns>The truncated list.</returns>
     let truncate (count: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
-        Seq.truncate count list |> ofSeq
+        if count <= 0 then
+            raise <| new System.ArgumentException("Count must be greater than 0.")
+        else
+        tryTruncate count list |> ofList
     
     /// <summary>Returns the only element of the list, or <c>None</c> if the list does not contain exactly one element.</summary>
     /// <param name="list">The input list.</param>
