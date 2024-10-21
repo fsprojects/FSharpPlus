@@ -319,7 +319,7 @@ module NonEmptySeq =
 
     /// <summary>Applies a function to corresponding elements of two collections, threading an accumulator argument through the computation.
     /// The collections must have identical sizes.
-    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN<c/> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
+    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN</c> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
     /// <param name="folder">The function to update the state given the input elements.</param>
     /// <param name="state">The initial state.</param>
     /// <param name="source1">The first input sequence.</param>
@@ -342,7 +342,7 @@ module NonEmptySeq =
 
     /// <summary>Applies a function to corresponding elements of two collections, threading an accumulator argument through the computation.
     /// The collections must have identical sizes.
-    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN<c/> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
+    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN</c> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
     /// <param name="folder">The function to update the state given the input elements.</param>
     /// <param name="source1">The first input sequence.</param>
     /// <param name="source2">The second input sequence.</param>

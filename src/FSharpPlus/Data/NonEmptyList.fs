@@ -395,7 +395,7 @@ module NonEmptyList =
 
     /// <summary>Applies a function to corresponding elements of two collections, threading an accumulator argument through the computation.
     /// The collections must have identical sizes.
-    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN<c/> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
+    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN</c> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
     /// <param name="folder">The function to update the state given the input elements.</param>
     /// <param name="state">The initial state.</param>
     /// <param name="list1">The first input list.</param>
@@ -417,7 +417,7 @@ module NonEmptyList =
 
     /// <summary>Applies a function to corresponding elements of two collections, threading an accumulator argument through the computation.
     /// The collections must have identical sizes.
-    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN<c/> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
+    /// If the input function is <c>f</c> and the elements are <c>i0...iN</c> and <c>j0...jN</c> then computes <c>f (... (f s i0 j0)...) iN jN</c>.</summary>
     /// <param name="folder">The function to update the state given the input elements.</param>
     /// <param name="list1">The first input list.</param>
     /// <param name="list2">The second input list.</param>
