@@ -622,8 +622,8 @@ module NonEmptyList =
     let ``partition works`` () =
         let list = NonEmptyList.create 1 [2; 3; 4]
         let result1, result2 = NonEmptyList.partition (fun x -> x % 2 = 0) list
-        Assert.AreEqual(NonEmptyList.create 2 [4], result1)
-        Assert.AreEqual(NonEmptyList.create 1 [3], result2)
+        Assert.AreEqual([2; 4], result1)
+        Assert.AreEqual([1; 3], result2)
     
     [<Test>]
     let ``permute works`` () =
