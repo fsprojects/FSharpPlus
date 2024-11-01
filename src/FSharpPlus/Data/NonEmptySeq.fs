@@ -39,6 +39,52 @@ module NonEmptySeq =
             member _.First = x.[0]
             member _.GetEnumerator() = (x :> seq<_>).GetEnumerator()
             member _.GetEnumerator() = x.GetEnumerator() }
+
+    /// <summary>Builds a non empty sequence from the given sequence.</summary>
+    /// <param name="seq">The input sequence.</param>
+    /// <returns>Non empty sequence containing the elements of the sequence.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the input sequence is empty.</exception>
+    /// <remarks>
+    ///   Throws exception for empty sequence.
+    /// 
+    ///   Evaluates the first element of the sequence and may trigger side effects.
+    ///   If you are sure that the sequence is not empty and want to avoid that, you can use `unsafeOfSeq` instead.
+    /// </remarks>
+    /// <seealso cref="unsafeOfSeq" />
+    let ofSeq (seq: _ seq) =
+        if isNull seq || Seq.isEmpty seq then invalidArg "seq" "The input sequence was empty."
+        else unsafeOfSeq seq
+
+    /// Transforms a sequence to a NonEmptySeq, returning an option to signal when the original sequence was empty.
+    let tryOfSeq (seq: _ seq) =
+        if isNull seq || Seq.isEmpty seq then None
+        else Some (unsafeOfSeq seq)
+
+    /// <summary>Builds a non empty sequence from the given array.</summary>
+    /// <param name="array">The input array.</param>
+    /// <returns>Non empty sequence containing the elements of the array.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
+    /// <remarks>Throws exception for empty array</remarks>
+    let ofArray (array: _[]) =
+        if isNull array || Array.isEmpty array then invalidArg "array" "The input array was empty."
+        else unsafeOfArray array
+
+    /// Transforms a array to a NonEmptySeq, returning an option to signal when the original array was empty.
+    let tryOfArray (array: _[]) =
+        if isNull array || Array.isEmpty array then None
+        else Some (unsafeOfArray array)
+
+    /// <summary>Builds a non empty sequence from the given list.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>Non empty sequence containing the elements of the list.</returns>
+    /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
+    /// <remarks>Throws exception for empty list</remarks>
+    let ofList (list: _ list) =
+        match list with [] -> invalidArg "list" "The input list was empty." | _ -> unsafeOfSeq list
+
+    /// Transforms a list to a NonEmptySeq, returning an option to signal when the original list was empty.
+    let tryOfList (list: _ list) =
+        match list with [] -> None | _ -> unsafeOfSeq list |> Some
     
     /// <summary>Builds a non empty sequence.</summary>
     let create x xs = seq { yield x; yield! xs } |> unsafeOfSeq
@@ -128,7 +174,8 @@ module NonEmptySeq =
     /// <param name="chooser">The function to be applied to the list elements.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The resulting sequence comprising the values v where the chooser function returned Some(x).</returns>
-    let inline tryChoose chooser (source: NonEmptySeq<'T>) = source |> Seq.choose chooser
+    let inline tryChoose chooser (source: NonEmptySeq<'T>) = 
+      source |> Seq.choose chooser |> tryOfSeq
     
     /// <summary>
     /// Applies a function to each element in a sequence and then returns a sequence of values v where the applied function returned Some(v).
@@ -137,7 +184,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The resulting sequence comprising the values v where the chooser function returned Some(x).</returns>
     /// <exception cref="System.ArgumentException">Thrown when the chooser function returns None for all elements.</exception>
-    let inline choose chooser (source: NonEmptySeq<'T>) = source |> tryChoose chooser |> unsafeOfSeq
+    let inline choose chooser (source: NonEmptySeq<'T>) = 
+      source |> Seq.choose chooser |> ofSeq
 
     /// <summary>Divides the input sequence into sequences (chunks) of size at most chunkSize.
     /// Returns a new sequence containing the generated sequences (chunks) as its elements.</summary>
@@ -165,8 +213,8 @@ module NonEmptySeq =
     /// <param name="mapping">The function to transform each input element into a sublist to be concatenated.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The concatenation of the transformed sublists.</returns>
-    let tryCollect (mapping: 'a -> #seq<'b>) (source: NonEmptySeq<'a>) : seq<'b> = 
-        source |> Seq.collect mapping
+    let tryCollect (mapping: 'a -> #seq<'b>) (source: NonEmptySeq<'a>) : NonEmptySeq<'b> option = 
+        Seq.collect mapping source |> tryOfSeq
     
     /// <summary>Compares two sequences using the given comparison function, element by element.</summary>
     /// <param name="comparer">A function that takes an element from each sequence and returns an int. If it evaluates to a non-zero value iteration is stopped and that value is returned.</param>
@@ -196,19 +244,22 @@ module NonEmptySeq =
     /// Returns None if all of the inner lists are empty.</summary>
     /// <param name="sources">The input list of lists.</param>
     /// <returns>The resulting concatenated list or None.</returns>
-    let inline tryConcat (sources: NonEmptySeq<#seq<'T>>) = sources |> Seq.concat |> unsafeOfSeq
+    let inline tryConcat (sources: NonEmptySeq<#seq<'T>>) = 
+        sources |> Seq.concat |> tryOfSeq
 
     /// <summary>Tests if the sequence contains the specified element.</summary>
     /// <param name="value">The value to locate in the input sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>True if the input sequence contains the specified element; false otherwise.</returns>
-    let inline contains (value: 'T) (source: NonEmptySeq<'T>) = Seq.contains value source
+    let inline contains (value: 'T) (source: NonEmptySeq<'T>) = 
+        Seq.contains value source
 
     /// <summary>Applies a key-generating function to each element of a sequence and returns a sequence yielding unique keys and their number of occurrences in the original list.</summary>
     /// <param name="projection">A function transforming each item of the input sequence into a key to be compared against the others.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The resulting sequence of unique keys and their number of occurrences.</returns>
-    let inline countBy (projection: 'T -> 'U) (source: NonEmptySeq<'T>) = Seq.countBy projection source
+    let inline countBy (projection: 'T -> 'U) (source: NonEmptySeq<'T>) = 
+        Seq.countBy projection source
 
     /// <summary>Returns a sequence that is built from the given delayed specification of a
     /// sequence.</summary>
@@ -217,40 +268,46 @@ module NonEmptySeq =
     /// is requested.</remarks>
     ///
     /// <param name="generator">The generating function for the sequence.</param>
-    let delay (generator: unit -> NonEmptySeq<'a>) : NonEmptySeq<'a> = Seq.delay (fun () -> generator () :> _) |> unsafeOfSeq
+    let delay (generator: unit -> NonEmptySeq<'a>) : NonEmptySeq<'a> = 
+        Seq.delay (fun () -> generator () :> _) |> unsafeOfSeq
 
     /// <summary>Returns a sequence that contains no duplicate entries according to the generic hash and equality comparisons
     /// on the keys returned by the given key-generating function.
     /// If an element occurs multiple times in the sequence then the later occurrences are discarded.</summary>
     /// <param name="source">The input sequence.</param>
     /// <returns>The resulting sequence without duplicates.</returns>
-    let distinct (source: NonEmptySeq<'T>) = source |> Seq.distinct |> unsafeOfSeq
+    let distinct (source: NonEmptySeq<'T>) = 
+        source |> Seq.distinct |> unsafeOfSeq
 
     /// <summary>Returns a sequence that contains no duplicate entries according to the generic hash and equality comparisons on the keys returned by the given key-generating function.
     /// If an element occurs multiple times in the sequence then the later occurrences are discarded.</summary>
     /// <param name="projection">A function transforming the sequence items into comparable keys.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The resulting sequence.</returns>
-    let inline distinctBy (projection: 'T -> 'U) (source: NonEmptySeq<'T>) = Seq.distinctBy projection source |> unsafeOfSeq
+    let inline distinctBy (projection: 'T -> 'U) (source: NonEmptySeq<'T>) = 
+        Seq.distinctBy projection source |> unsafeOfSeq
 
     /// <summary>Returns the only element of the sequence.</summary>
     /// <param name="source">The input sequence.</param>
     /// <returns>The only element of the sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when the input does not have precisely one element.</exception>
-    let inline exactlyOne (source: NonEmptySeq<'T>) = Seq.exactlyOne source
+    let inline exactlyOne (source: NonEmptySeq<'T>) = 
+        Seq.exactlyOne source
 
     /// <summary>Returns a new sequence with the distinct elements of the input sequence which do not appear in the itemsToExclude sequence, using generic hash and equality comparisons to compare values.</summary>
     /// <param name="itemsToExclude">The sequence of items to exclude from the input sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>A sequence that contains the distinct elements of sequence that do not appear in itemsToExclude.</returns>
     /// <exception cref="System.ArgumentException">Thrown when itemsToExclude is null.</exception>
-    let inline except (itemsToExclude: #seq<'T>) (source: NonEmptySeq<'T>) = Seq.except itemsToExclude source |> unsafeOfSeq
+    let inline except (itemsToExclude: #seq<'T>) (source: NonEmptySeq<'T>) = 
+        Seq.except itemsToExclude source |> ofSeq
 
     /// <summary>Tests if any element of the sequence satisfies the given predicate.</summary>
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>True if any element satisfies the predicate.</returns>
-    let inline exists (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = Seq.exists predicate source
+    let inline exists (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = 
+        Seq.exists predicate source
 
     /// <summary>Tests if any pair of corresponding elements of the sequences satisfies the given predicate.</summary>
     /// <param name="predicate">The function to test the input elements.</param>
@@ -266,14 +323,14 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>A sequence containing only the elements that satisfy the predicate.</returns>
     let inline filter (predicate: 'T -> bool) (source: NonEmptySeq<'T>): NonEmptySeq<'T> = 
-      source |> Seq.filter predicate |> unsafeOfSeq
+      source |> Seq.filter predicate |> ofSeq
 
     /// <summary>Returns a new collection containing only the elements of the collection for which the given predicate returns "true."</summary>
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>A sequence containing only the elements that satisfy the predicate.</returns>
-    let inline tryFilter (predicate: 'T -> bool) (source: NonEmptySeq<'T>): 'T seq = 
-      source |> Seq.filter predicate
+    let inline tryFilter (predicate: 'T -> bool) (source: NonEmptySeq<'T>): NonEmptySeq<'T> option = 
+      source |> Seq.filter predicate |> tryOfSeq
 
     /// <summary>Returns the first element for which the given function returns True. 
     /// Raises <see cref="KeyNotFoundException"/> if no such element exists.</summary>
@@ -281,7 +338,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The first element that satisfies the predicate.</returns>
     /// <exception cref="KeyNotFoundException">Thrown if the predicate evaluates to false for all the elements of the sequence.</exception>
-    let inline find (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = Seq.find predicate source
+    let inline find (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = 
+        Seq.find predicate source
 
     /// <summary>Returns the last element for which the given function returns True. 
     /// Raises <see cref="KeyNotFoundException"/> if no such element exists.</summary>
@@ -289,7 +347,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The first element that satisfies the predicate.</returns>
     /// <exception cref="KeyNotFoundException">Thrown if the predicate evaluates to false for all the elements of the sequence.</exception>
-    let inline findBack (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = Seq.findBack predicate source
+    let inline findBack (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = 
+        Seq.findBack predicate source
 
     /// <summary>Returns the index of the first element in the sequence that satisfies the given predicate.
     /// Raises <see cref="KeyNotFoundException"/> if no such element exists.</summary>
@@ -297,7 +356,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The first element that satisfies the predicate.</returns>
     /// <exception cref="KeyNotFoundException">Thrown if the predicate evaluates to false for all the elements of the sequence.</exception>
-    let inline findIndex (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = Seq.findIndex predicate source
+    let inline findIndex (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = 
+        Seq.findIndex predicate source
 
     /// <summary>Returns the index of the last element in the sequence that satisfies the given predicate. 
     /// Raises <see cref="KeyNotFoundException"/> if no such element exists.</summary>
@@ -305,7 +365,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The first element that satisfies the predicate.</returns>
     /// <exception cref="KeyNotFoundException">Thrown if the predicate evaluates to false for all the elements of the sequence.</exception>
-    let inline findIndexBack (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = Seq.findIndexBack predicate source
+    let inline findIndexBack (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = 
+        Seq.findIndexBack predicate source
 
     /// <summary>Applies a function to each element of the collection, threading an accumulator argument through the computation.
     /// Take the second argument, and apply the function to it and the first element of the sequence.
@@ -316,7 +377,8 @@ module NonEmptySeq =
     /// <param name="state">The initial state.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The final state value.</returns>
-    let inline fold (folder: 'State -> 'T -> 'State) (state: 'State) (source: NonEmptySeq<'T>) = Seq.fold folder state source
+    let inline fold (folder: 'State -> 'T -> 'State) (state: 'State) (source: NonEmptySeq<'T>) = 
+        Seq.fold folder state source
 
     /// <summary>Applies a function to corresponding elements of two collections, threading an accumulator argument through the computation.
     /// The collections must have identical sizes.
@@ -356,7 +418,8 @@ module NonEmptySeq =
     /// <param name="predicate">The function to test the input elements.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>True if all of the elements satisfy the predicate.</returns>
-    let inline forall (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = Seq.forall predicate source
+    let inline forall (predicate: 'T -> bool) (source: NonEmptySeq<'T>) = 
+        Seq.forall predicate source
 
     /// <summary>Tests if all corresponding elements of the collection satisfy the given predicate pairwise.</summary>
     /// <param name="predicate">The function to test the input elements.</param>
@@ -388,7 +451,8 @@ module NonEmptySeq =
     /// paired with the integer index (from 0) of each element.</summary>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let indexed (source: NonEmptySeq<_>) = Seq.indexed source |> unsafeOfSeq
+    let indexed (source: NonEmptySeq<_>) = 
+        Seq.indexed source |> unsafeOfSeq
 
     /// <summary>Creates a sequence by applying a function to each index.</summary>
     /// <param name="count">The number of elements to initialize.</param>
@@ -411,7 +475,8 @@ module NonEmptySeq =
     /// <param name="initializer">A function that generates an item in the sequence from a given index.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let initInfinite initializer = Seq.initInfinite initializer |> unsafeOfSeq
+    let initInfinite initializer = 
+        Seq.initInfinite initializer |> unsafeOfSeq
 
     /// <summary>Inserts an element at the specified index.</summary>
     /// <param name="index">The index at which to insert the element.</param>
@@ -487,7 +552,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let map mapping (source: NonEmptySeq<_>) = source |> Seq.map mapping |> unsafeOfSeq
+    let map mapping (source: NonEmptySeq<_>) = 
+        source |> Seq.map mapping |> unsafeOfSeq
 
     /// <summary>Builds a new collection whose elements are the results of applying the given function
     /// to the corresponding pairs of elements from the two sequences. If one input sequence is shorter than 
@@ -498,7 +564,8 @@ module NonEmptySeq =
     /// <param name="source2">The second input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let map2 mapping (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.map2 mapping source1 source2 |> unsafeOfSeq
+    let map2 mapping (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = 
+        Seq.map2 mapping source1 source2 |> unsafeOfSeq
 
     /// <summary>Combines map and fold. Builds a new collection whose elements are the results of applying the given function
     /// to each of the elements of the collection. The function is also used to accumulate a final value.</summary>
@@ -547,7 +614,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let mapi mapping (source: NonEmptySeq<_>) = Seq.mapi mapping source |> unsafeOfSeq
+    let mapi mapping (source: NonEmptySeq<_>) = 
+        Seq.mapi mapping source |> unsafeOfSeq
 
     /// <summary>Builds a new collection whose elements are the results of applying the given function
     /// to the corresponding pairs of elements from the two sequences. If one input sequence is shorter than 
@@ -559,53 +627,8 @@ module NonEmptySeq =
     /// <param name="source2">The second input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let mapi2 mapping (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.mapi2 mapping source1 source2 |> unsafeOfSeq
-
-    /// <summary>Builds a non empty sequence from the given sequence.</summary>
-    /// <param name="seq">The input sequence.</param>
-    /// <returns>Non empty sequence containing the elements of the sequence.</returns>
-    /// <exception cref="System.ArgumentException">Thrown when the input sequence is empty.</exception>
-    /// <remarks>
-    ///   Throws exception for empty sequence.
-    /// 
-    ///   Evaluates the first element of the sequence and may trigger side effects.
-    ///   If you are sure that the sequence is not empty and want to avoid that, you can use `unsafeOfSeq` instead.
-    /// </remarks>
-    /// <seealso cref="unsafeOfSeq" />
-    let ofSeq (seq: _ seq) =
-        if isNull seq || Seq.isEmpty seq then invalidArg "seq" "The input sequence was empty."
-        else unsafeOfSeq seq
-
-    /// Transforms a sequence to a NonEmptySeq, returning an option to signal when the original sequence was empty.
-    let tryOfSeq (seq: _ seq) =
-        if isNull seq || Seq.isEmpty seq then None
-        else Some (unsafeOfSeq seq)
-
-    /// <summary>Builds a non empty sequence from the given array.</summary>
-    /// <param name="array">The input array.</param>
-    /// <returns>Non empty sequence containing the elements of the array.</returns>
-    /// <exception cref="System.ArgumentException">Thrown when the input array is empty.</exception>
-    /// <remarks>Throws exception for empty array</remarks>
-    let ofArray (array: _[]) =
-        if isNull array || Array.isEmpty array then invalidArg "array" "The input array was empty."
-        else unsafeOfArray array
-
-    /// Transforms a array to a NonEmptySeq, returning an option to signal when the original array was empty.
-    let tryOfArray (array: _[]) =
-        if isNull array || Array.isEmpty array then None
-        else Some (unsafeOfArray array)
-
-    /// <summary>Builds a non empty sequence from the given list.</summary>
-    /// <param name="list">The input list.</param>
-    /// <returns>Non empty sequence containing the elements of the list.</returns>
-    /// <exception cref="System.ArgumentException">Thrown when the input list is empty.</exception>
-    /// <remarks>Throws exception for empty list</remarks>
-    let ofList (list: _ list) =
-        match list with [] -> invalidArg "list" "The input list was empty." | _ -> unsafeOfSeq list
-
-    /// Transforms a list to a NonEmptySeq, returning an option to signal when the original list was empty.
-    let tryOfList (list: _ list) =
-        match list with [] -> None | _ -> unsafeOfSeq list |> Some
+    let mapi2 mapping (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = 
+        Seq.mapi2 mapping source1 source2 |> unsafeOfSeq
 
     /// <summary>Returns a sequence of each element in the input sequence and its predecessor, with the
     /// exception of the first element which is only returned as the predecessor of the second element.</summary>
@@ -613,7 +636,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let pairwise (source: NonEmptySeq<_>) = Seq.pairwise source |> unsafeOfSeq
+    let pairwise (source: NonEmptySeq<_>) = 
+        Seq.pairwise source |> unsafeOfSeq
 
     /// <summary>Returns a sequence with all elements permuted according to the
     /// specified permutation.</summary>
@@ -629,7 +653,8 @@ module NonEmptySeq =
     ///
     /// <exception cref="System.ArgumentException">Thrown when indexMap does not produce a valid permutation.</exception>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
-    let permute indexMap (source: NonEmptySeq<_>) = Seq.permute indexMap source |> unsafeOfSeq
+    let permute indexMap (source: NonEmptySeq<_>) = 
+        Seq.permute indexMap source |> unsafeOfSeq
 
     /// <summary>Returns the first element for which the given function returns <c>Some</c>. If no such element exists, raises <c>KeyNotFoundException</c>.</summary>
     /// <param name="chooser">A function to transform elements of the sequence into options.</param>
@@ -647,7 +672,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let readonly (source: NonEmptySeq<_>) = Seq.readonly source |> unsafeOfSeq
+    let readonly (source: NonEmptySeq<_>) = 
+        Seq.readonly source |> unsafeOfSeq
 
     /// <summary>Applies a function to each element of the sequence, threading an accumulator argument
     /// through the computation. Apply the function to the first two elements of the sequence.
@@ -657,7 +683,8 @@ module NonEmptySeq =
     /// <param name="reduction">The function to reduce two sequence elements to a single element.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The final reduced value.</returns>
-    let reduce (reduction: 'T -> 'T -> 'T) source = Seq.reduce reduction source
+    let reduce (reduction: 'T -> 'T -> 'T) source = 
+        Seq.reduce reduction source
 
     /// <summary>Applies a function to each element of the sequence, starting from the end, threading an accumulator argument
     /// through the computation. If the input function is <c>f</c> and the elements are <c>i0...iN</c> then computes 
@@ -666,14 +693,15 @@ module NonEmptySeq =
     /// current accumulated result to produce the next accumulated result.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The final result of the reductions.</returns>
-    let reduceBack (reduction: 'T -> 'T -> 'T)  (source: NonEmptySeq<'T>) = Seq.reduceBack reduction source
+    let reduceBack (reduction: 'T -> 'T -> 'T)  (source: NonEmptySeq<'T>) = 
+        Seq.reduceBack reduction source
 
     /// <summary>Removes the element at the specified index.</summary>
     /// <param name="index">The index of the element to remove.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let tryRemoveAt (index: int) (source: NonEmptySeq<'T>) : 'T seq = 
-        Seq.removeAt index source
+    let tryRemoveAt (index: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> option = 
+        Seq.removeAt index source |> tryOfSeq
 
     /// <summary>Removes the element at the specified index.</summary>
     /// <param name="index">The index of the element to remove.</param>
@@ -681,15 +709,15 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when removing the item results in an empty sequence.</exception>
     let removeAt (index: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        tryRemoveAt index source |> unsafeOfSeq
+        Seq.removeAt index source |> ofSeq
     
     /// <summary>Removes multiple elements starting at the specified index.</summary>
     /// <param name="index">The index at which to start removing elements.</param>
     /// <param name="count">The number of elements to remove.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let tryRemoveManyAt (index: int) (count: int) (source: NonEmptySeq<'T>) : 'T seq = 
-        Seq.removeManyAt index count source
+    let tryRemoveManyAt (index: int) (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> option = 
+        Seq.removeManyAt index count source |> tryOfSeq
     
     /// <summary>Removes multiple elements starting at the specified index.</summary>
     /// <param name="index">The index at which to start removing elements.</param>
@@ -698,7 +726,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when removing the items results in an empty sequence.</exception>
     let removeManyAt (index: int) (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        tryRemoveManyAt index count source |> unsafeOfSeq
+        Seq.removeManyAt index count source |> ofSeq
     
     /// <summary>Creates a sequence that contains one repeated value.</summary>
     /// <param name="count">The number of elements.</param>
@@ -711,7 +739,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The reversed sequence.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the reversed sequence.</remarks>
-    let rev (source: NonEmptySeq<_>) = Seq.rev source |> unsafeOfSeq
+    let rev (source: NonEmptySeq<_>) = 
+        Seq.rev source |> unsafeOfSeq
 
     /// <summary>Like fold, but computes on-demand and returns the sequence of intermediary and final results.</summary>
     ///
@@ -740,14 +769,15 @@ module NonEmptySeq =
     /// <param name="value">The input item.</param>
     ///
     /// <returns>The result sequence of one item.</returns>
-    let singleton value = Seq.singleton value |> unsafeOfSeq
+    let singleton value = 
+        Seq.singleton value |> unsafeOfSeq
 
     /// <summary>Returns a sequence that skips the first N elements of the list.</summary>
     /// <param name="count">The number of elements to skip.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let trySkip (count: int) (source: NonEmptySeq<'T>) : 'T seq = 
-        Seq.skip count source
+    let trySkip (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> option = 
+        Seq.skip count source |> tryOfSeq
 
     /// <summary>Returns a sequence that skips the first N elements of the list.</summary>
     /// <param name="count">The number of elements to skip.</param>
@@ -755,14 +785,14 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let skip (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        trySkip count source |> unsafeOfSeq
+        Seq.skip count source |> unsafeOfSeq
     
     /// <summary>Returns a sequence that skips elements while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let trySkipWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : 'T seq = 
-        Seq.skipWhile predicate source
+    let trySkipWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> option = 
+        Seq.skipWhile predicate source |> tryOfSeq
     
     /// <summary>Returns a sequence that skips elements while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>
@@ -770,7 +800,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when resulting list is empty.</exception>
     let skipWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        trySkipWhile predicate source |> unsafeOfSeq
+        Seq.skipWhile predicate source |> unsafeOfSeq
 
     /// <summary>Yields a sequence ordered by keys.</summary>
     /// 
@@ -786,7 +816,8 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     ///
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
-    let sort (source: NonEmptySeq<_>) = Seq.sort source |> unsafeOfSeq
+    let sort (source: NonEmptySeq<_>) = 
+        Seq.sort source |> unsafeOfSeq
 
     /// <summary>Yields a sequence ordered using the given comparison function.</summary>
     /// <remarks>This function returns a sequence that digests the whole initial sequence as soon as
@@ -799,7 +830,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
     /// <remarks>This function consumes the whole input sequence before yielding the first element of the result sequence.</remarks>
-    let sortWith comparer (source: NonEmptySeq<_>) = Seq.sortWith comparer source |> unsafeOfSeq
+    let sortWith comparer (source: NonEmptySeq<_>) = 
+        Seq.sortWith comparer source |> unsafeOfSeq
 
     /// <summary>Applies a key-generating function to each element of a sequence and yield a sequence ordered
     /// by keys.    The keys are compared using generic comparison as implemented by <c>Operators.compare</c>.</summary> 
@@ -817,7 +849,8 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
-    let sortBy projection (source: NonEmptySeq<_>) = Seq.sortBy projection source |> unsafeOfSeq
+    let sortBy projection (source: NonEmptySeq<_>) = 
+        Seq.sortBy projection source |> unsafeOfSeq
 
     /// <summary>Yields a sequence ordered descending by keys.</summary>
     /// 
@@ -831,7 +864,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let sortDescending (source: NonEmptySeq<_>) = Seq.sortDescending source |> unsafeOfSeq
+    let sortDescending (source: NonEmptySeq<_>) = 
+        Seq.sortDescending source |> unsafeOfSeq
 
     /// <summary>Applies a key-generating function to each element of a sequence and yield a sequence ordered
     /// descending by keys.    The keys are compared using generic comparison as implemented by <c>Operators.compare</c>.</summary> 
@@ -847,7 +881,8 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let sortByDescending projection (source: NonEmptySeq<_>) = Seq.sortByDescending projection source |> unsafeOfSeq
+    let sortByDescending projection (source: NonEmptySeq<_>) = 
+        Seq.sortByDescending projection source |> unsafeOfSeq
     
     /// <summary>Splits the list into the specified number of sequences.</summary>
     /// <param name="count">The number of sequences to create.</param>
@@ -875,14 +910,24 @@ module NonEmptySeq =
     /// <param name="source">The input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let tail (source: NonEmptySeq<_>) = Seq.tail source
+    let tail (source: NonEmptySeq<_>) = 
+        Seq.tail source
+
+    /// <summary>Returns a sequence that skips 1 element of the underlying sequence and then yields the
+    /// remaining elements of the sequence.</summary>
+    ///
+    /// <param name="source">The input sequence.</param>
+    ///
+    /// <returns>The result sequence.</returns>
+    let tryTail (source: NonEmptySeq<_>) = 
+        Seq.tail source |> tryOfSeq
 
     /// <summary>Returns a sequence that contains the first N elements of the sequence.</summary>
     /// <param name="count">The number of elements to take.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let tryTake (count: int) (source: NonEmptySeq<'T>) : 'T seq = 
-        Seq.take count source
+    let tryTake (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> option = 
+        Seq.take count source |> tryOfSeq
 
     /// <summary>Returns a sequence that contains the first N elements of the sequence.</summary>
     /// <param name="count">The number of elements to take.</param>
@@ -893,14 +938,14 @@ module NonEmptySeq =
         if count <= 0 then
             raise <| new System.ArgumentException("Count must be greater than 0.")
         else
-        tryTake count source |> unsafeOfSeq
+        Seq.take count source |> unsafeOfSeq
     
     /// <summary>Returns a sequence that contains the elements of the sequence while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>
     /// <param name="source">The input sequence.</param>
     /// <returns>The result sequence.</returns>
-    let tryTakeWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : 'T seq = 
-        Seq.takeWhile predicate source
+    let tryTakeWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> option = 
+        Seq.takeWhile predicate source |> tryOfSeq
     
     /// <summary>Returns a sequence that contains the elements of the sequence while the predicate is true.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>
@@ -908,7 +953,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     /// <exception cref="System.ArgumentException">Thrown when resulting sequence is empty.</exception>
     let takeWhile (predicate: 'T -> bool) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
-        tryTakeWhile predicate source |> unsafeOfSeq
+        Seq.takeWhile predicate source |> unsafeOfSeq
     
     /// <summary>Truncates the sequence to the specified length.</summary>
     /// <param name="count">The maximum number of elements to include in the sequence.</param>
@@ -1026,7 +1071,8 @@ module NonEmptySeq =
     /// <param name="source2">The second input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let zip (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = Seq.zip source1 source2 |> unsafeOfSeq
+    let zip (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) = 
+        Seq.zip source1 source2 |> unsafeOfSeq
 
     /// <summary>Combines the three sequences into a sequence of triples. The sequences need not have equal lengths:
     /// when one sequence is exhausted any remaining elements in the other
@@ -1037,7 +1083,8 @@ module NonEmptySeq =
     /// <param name="source3">The third input sequence.</param>
     ///
     /// <returns>The result sequence.</returns>
-    let zip3 (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) (source3: NonEmptySeq<_>) = Seq.zip3 source1 source2 source3 |> unsafeOfSeq
+    let zip3 (source1: NonEmptySeq<_>) (source2: NonEmptySeq<_>) (source3: NonEmptySeq<_>) = 
+        Seq.zip3 source1 source2 source3 |> unsafeOfSeq
 
     /// <summary>Applies the given function to each element of the NonEmptySequence and concatenates all the
     /// results.</summary>
