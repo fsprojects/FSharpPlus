@@ -27,7 +27,9 @@ module ResizeArray =
     /// <param name="action">The function to apply to elements from the input ResizeArray.</param>
     /// <param name="source">The input ResizeArray.</param>
     let iter (action: 'T -> 'U) (source: ResizeArray<'T>) =
+        #if !NET45
         raiseIfNull (nameof source) source
+        #endif
         
         ResizeArray (Seq.map action source)
 

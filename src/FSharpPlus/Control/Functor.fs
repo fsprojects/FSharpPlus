@@ -41,7 +41,14 @@ type Iterate =
     #else
     static member Iterate (x: Async<'T>            , action: 'T -> unit) = (x |> Async.map action |> Async.AsTask).Wait ()
     #endif
-    static member Iterate (x: Result<'T, 'E>       , action) = Result.iter action x
+    static member Iterate (x: Result<'T, 'E>       , action) =
+    #if !NET45
+        Result.iter action x
+    #else
+        match x with
+        | Error _ -> ()
+        | Ok value -> action value
+    #endif
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
     static member Iterate (KeyValue(_: 'Key, x: 'T), action) = action x : unit
     static member Iterate (x: Map<'Key,'T>         , action) = Map.iter (const' action) x 
