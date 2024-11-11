@@ -22,7 +22,9 @@ type Iterate =
     static member Iterate (x: Lazy<'T>   , action) = action x.Value : unit
     static member Iterate (x: seq<'T>    , action) = Seq.iter action x
     static member Iterate (x: option<'T> , action) = Option.iter action x
+    #if !NET45 && !FABLE_COMPILER_3
     static member Iterate (x: voption<'T>, action) = ValueOption.iter action x
+    #endif
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
@@ -42,7 +44,7 @@ type Iterate =
     static member Iterate (x: Async<'T>            , action: 'T -> unit) = (x |> Async.map action |> Async.AsTask).Wait ()
     #endif
     static member Iterate (x: Result<'T, 'E>       , action) =
-    #if !NET45
+    #if !NET45 && !FABLE_COMPILER_3
         Result.iter action x
     #else
         match x with
