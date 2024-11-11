@@ -42,15 +42,12 @@ module String =
         
         source.Contains subString
 
-    #if !FABLE_COMPILER
-    
     /// Does the source string start with the given subString? -- function wrapper for String.StartsWith method using InvariantCulture.
     let startsWith (subString: string) (source: string) =
         raiseIfNull (nameof subString) subString
         raiseIfNull (nameof source) source
         
         source.StartsWith (subString, false, CultureInfo.InvariantCulture)
-    #endif
 
     /// Does the source string end with the given subString? -- function wrapper for String.EndsWith method using InvariantCulture.
     let endsWith subString (source: string) =
