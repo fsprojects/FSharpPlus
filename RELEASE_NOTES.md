@@ -2,7 +2,7 @@
  - ZipApplicative docs
  - Add missing iter functions to Extensions
  - Fix issue with iteration of dictionaries
- - Removed String.startsWith !FABLE_COMPILER condition
+ - String.startsWith available now from Fable
  - Add NonEmptyList and NonEmptySeq Helper Functions
  - Add pick related functions to SeqT
  - Monad instance for Vector and Matrix
