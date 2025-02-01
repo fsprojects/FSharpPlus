@@ -34,7 +34,7 @@ module Observable =
 
 
 
-
+#if TODO
     let toAsyncSeq (source: System.IObservable<'T>) : SeqT<Async<bool>, 'T> = monad.plus {
         let cts = new CancellationTokenSource ()
         try 
@@ -76,5 +76,5 @@ module Observable =
         finally
                 // Cancel on early exit
                 cts.Cancel () }
-
+#endif
 #endif

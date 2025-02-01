@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if !FABLE_COMPILER
+#if !FABLE_COMPILER && TODO
 
 open System
 open System.Threading
