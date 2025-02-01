@@ -4,9 +4,16 @@ namespace FSharpPlus
 module Extensions =
 
     open System
-
+    #if NET9_0_OR_GREATER
+    open System.Runtime.CompilerServices
+    [<Extension>]
+    type IEnumerableExtensions =
+        [<Extension>]
+        static member GetSlice (this) = function
+    #else
     type Collections.Generic.IEnumerable<'T> with
         member this.GetSlice = function
+    #endif
             | None  , None   -> this
             | Some a, None   -> this |> Seq.skip a
             | None  , Some b -> this |> Seq.take b

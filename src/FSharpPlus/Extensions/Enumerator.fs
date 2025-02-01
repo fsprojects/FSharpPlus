@@ -11,7 +11,7 @@ module Enumerator =
     // Helper functions used in Enumerators
 
     /// [omit]
-    let inline invalidArgFmt (arg: string) (format: string) paramArray = 
+    let inline invalidArgFmt (arg: string) (format: string) (paramArray: obj array) = 
         let msg = String.Format (format,paramArray)
         raise (ArgumentException (msg, arg))
     
