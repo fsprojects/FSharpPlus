@@ -125,8 +125,4 @@
 		<Content Include="Math/*.fs" PackagePath="fable/Math" />
 		<Content Include="Data/*.fs" PackagePath="fable/Data" />
 	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Update="FSharp.Core" Version="6.0.6" />
-	</ItemGroup>
 </Project>
