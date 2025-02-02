@@ -54,7 +54,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj" />
     <ProjectReference Include="..\..\src\FSharpPlus.TypeLevel\FSharpPlus.TypeLevel.fsproj" />
-    <PackageReference Update="FSharp.Core" Version="6.0.6" />
     <PackageReference Include="MathNet.Numerics.FSharp" Version="4.8.1" />
   </ItemGroup>
 </Project>
