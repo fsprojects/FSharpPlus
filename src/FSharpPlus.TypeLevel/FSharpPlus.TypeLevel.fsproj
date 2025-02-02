@@ -24,9 +24,6 @@
     <Compile Include="Providers/TypeProviderAssembly.fs" />-->
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.6" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="../FSharpPlus/FSharpPlus.fsproj" />
   </ItemGroup>
     <!-- Add the provider dll to Nuget package -->
