@@ -1701,7 +1701,10 @@ module Curry =
         let f16 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16]
         let f17 (t1, t2, t3, t4, t5, t6, t7: float, t8: char, t9: decimal, t10, t11, t12, t13, t14, t15, t16, t17) = [t1+t2+t3+t4+t5+t6+ int t7 + int t8+ int t9+t10+t11+t12+t13+t14+t15+t16+t17]
 
-        let _x1  = curryN f1 100
+        // Possible regression
+        // General.fs(1728,27): error FS0071: Type constraint mismatch when applying the default type 'Tuple<int>' for a type inference variable.
+        // Type mismatch. Expecting a    '(Tuple<int> -> int list) -> int -> obj'    but given a    '(Tuple<int> -> int list) -> int -> int list'    The type 'obj' does not match the type 'int list' Consider adding further type 
+        // let _x1  = curryN f1 100
         let _x2  = curryN f2 1 2
         let _x3  = curryN f3 1 2 3
         let _x7  = curryN f7 1 2 3 4 5 6 7
