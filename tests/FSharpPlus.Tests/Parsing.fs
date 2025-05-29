@@ -110,7 +110,7 @@ module Parsing =
         match "1 2.1 3.4 .3 43.2e32 0 f f ff" with Like "%f %F %g %G %e %E %c %c %c%c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Like "%f %F %g %G %e %E %c %c %c%c%c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f fff 16" with Like "%f %F %g %G %e %E %c %c %c%c%c%i" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff 16" with Like "%f %F %g %G %e %E %c %c %c%c%c%i %f" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16, 17.) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff 16 17" with Like "%f %F %g %G %e %E %c %c %c%c%c%i %f" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16, 17.) -> () | _ -> failwith "didn't match"
         match "13 43 AA 77A" with Like "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
         match "13 43 AA 77A" with Like "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
         match "111AAA" with Like "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
