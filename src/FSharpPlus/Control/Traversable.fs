@@ -50,16 +50,14 @@ type Traverse =
         #if TEST_TRACE
         Traces.add "Traverse seq"
         #endif
-        let cons x y = seq {yield x; yield! y}
-        let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
+        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
         Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
         #if TEST_TRACE
         Traces.add "Traverse NonEmptySeq"
         #endif
-        let cons x y = seq {yield x; yield! y}
-        let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
+        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
         Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (result Seq.empty))
 
     static member inline Traverse (t: seq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
@@ -166,14 +164,13 @@ type Traverse =
         #if TEST_TRACE
         Traces.add "Traverse []"
         #endif
-        let cons x y = Array.append [|x|] y
         let rec loop acc = function
             | [||] -> acc
             | xxs ->
                 let x, xs = Array.head xxs, Array.tail xxs
                 let v = f x
-                loop (cons v acc) xs
-        let cons_f x xs = Map.Invoke cons xs <*> x
+                loop (Array.cons v acc) xs
+        let cons_f x xs = Map.Invoke Array.cons xs <*> x
         Array.fold cons_f (result [||]) (loop [||] t)
 
     static member inline Invoke (f: 'T -> '``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
@@ -185,8 +182,7 @@ type Traverse =
 type Sequence with
 
     static member inline Sequence (t: _ seq, [<Optional>]_output: 'R, [<Optional>]_impl: Default5) : 'R =
-        let cons x y = seq { yield x; yield! y }
-        let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) x <*> ys
+        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) x <*> ys
         Seq.foldBack cons_f t (result Seq.empty)
 
     static member inline Sequence (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<seq<'T>>`` =
@@ -409,14 +405,13 @@ type Gather =
         #if TEST_TRACE
         Traces.add "Gather []"
         #endif
-        let cons x y = Array.append [|x|] y
         let rec loop acc = function
             | [||] -> acc
             | xxs ->
                 let x, xs = Array.head xxs, Array.tail xxs
                 let v = f x
-                loop (cons v acc) xs
-        let cons_f x xs = Map.Invoke cons xs <.> x
+                loop (Array.cons v acc) xs
+        let cons_f x xs = Map.Invoke Array.cons xs <.> x
         Array.fold cons_f (Pure.Invoke [||]) (loop [||] t)
 
     static member inline Invoke (f: 'T -> '``Functor<'U>``) (t: '``Traversable<'T>``) : '``Functor<'Traversable<'U>>`` =
@@ -428,8 +423,7 @@ type Gather =
 type Transpose with
 
     static member inline Transpose (t: _ seq, [<Optional>]_output: 'R, [<Optional>]_impl: Default5) : 'R =
-        let cons x y = seq { yield x; yield! y }
-        let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) x <.> ys
+        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) x <.> ys
         Seq.foldBack cons_f t (Pure.Invoke Seq.empty)
 
     static member inline Transpose (t: seq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<seq<'T>>``   , [<Optional>]_impl: Default4) : '``Applicative<seq<'T>>`` =

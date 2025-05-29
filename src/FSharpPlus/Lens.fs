@@ -186,7 +186,7 @@ module Lens =
     let foldlOf l f z = (flip Endo.run z << Dual.run) << foldMapOf l (Dual << Endo << flip f)
 
     /// Extract a list of the targets of a Fold. See also (^..).
-    let toListOf  l   = let cons x y = x :: y in foldrOf l cons []
+    let toListOf  l   = foldrOf l List.cons []
 
     /// Get the largest target of a Fold.
     let maximumOf l =
