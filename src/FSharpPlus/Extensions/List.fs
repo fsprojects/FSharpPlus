@@ -30,8 +30,7 @@ module List =
     /// <param name="list">The list to add to</param>
     /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
     /// <remarks>
-    /// Note: this function has since been added to FSharp.Core.
-    /// It will be removed in next major release of FSharpPlus.
+    /// Same as <c>List.Cons</c> but with curried parameters.
     /// </remarks>
     let cons value list = value :: list : list<'T>
 
