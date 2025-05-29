@@ -11,20 +11,51 @@ module Parsing =
     open FSharpPlus.Internals
     open FSharpPlus.Internals.Prelude
 
-    let inline private getGroups (pf: PrintfFormat<_,_,_,_,_>) s =
-        let formatters = [|"%A"; "%b"; "%B"; "%c"; "%d"; "%e"; "%E"; "%f"; "%F"; "%g"; "%G"; "%i"; "%M"; "%o"; "%O"; "%s"; "%u"; "%x"; "%X"|]
-        let formatStr = replace "%%" "%" pf.Value
-        let constants = split formatters formatStr
-        let regex = Regex ("^" + String.Join ("(.*?)", constants |> Array.map Regex.Escape) + "$")
-        let getGroup x =
-            let groups =
-                regex.Match(x).Groups
-                |> Seq.cast<Group>
-                |> Seq.skip 1
-            groups
-                |> Seq.map (fun g -> g.Value)
-                |> Seq.toArray
-        (getGroup s, getGroup pf.Value) ||> Array.zipShortest        
+    let inline private getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
+        let format = pf.Value
+        let regex = System.Text.StringBuilder "^"
+        let mutable groups = FSharp.Core.CompilerServices.ArrayCollector()
+        let mutable i = 0
+        while i < String.length format do
+            match format[i] with
+            | '%' ->
+                let mutable j = i + 1
+                while
+                    match format[j] with
+                    | ' ' | '+' | '-' | '*' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' -> true
+                    | _ -> false
+                    do j <- j + 1
+                if format[j] <> '%' then groups.Add format[i..j] // %% does not capture a group
+                i <- j
+                match format[j] with
+                | 'A' | 'O' -> "(.*?)"
+                | 'b' -> "([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])"
+                | 'B' -> "([01]+)"
+                | 'c' -> "(.)"
+                | 'd' | 'i' -> "([+-]?[0-9]+)"
+                | 'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'M' -> "([+-]?[0-9.]+(?:[eE][+-]?[0-9]+)?)"
+                | 'o' -> "([0-7]+)"
+                | 'u' -> "([0-9]+)"
+                | 's' -> "(.*?)"
+                | 'x' | 'X' -> "([0-9a-fA-F]+)"
+                | '%' -> "%"
+                | x -> failwith $"Unknown specifier: {x}"
+                |> regex.Append
+            | '\\' | '*' | '+' | '?' | '|' | '{' | '[' | '(' | ')' | '^' | '$' | '.' | '#' | ' ' as escape ->
+                regex.Append('\\').Append escape
+            | c -> regex.Append c
+            |> ignore
+            i <- i + 1
+        regex.Append '$'
+        |> string
+        |> Regex
+        |> _.Match(str)
+        |> _.Groups
+        |> Seq.cast<Group>
+        |> Seq.skip 1
+        |> Seq.map _.Value
+        |> Seq.toArray 
+        |> Array.zip <| groups.Close()      
        
     let inline private conv (destType: System.Type) (b: int) (s: string) =
         match destType with    
