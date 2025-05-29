@@ -148,8 +148,25 @@ module NonEmptyList =
     let zipShortest (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) =
         { Head = (list1.Head, list2.Head); Tail = List.zipShortest list1.Tail list2.Tail }
     
-    /// Returns a new NonEmptyList with the element added to the beginning.
-    let cons e {Head = x; Tail = xs} = {Head = e ; Tail = x::xs}
+    /// <summary>Adds an element to the beginning of the given list</summary>
+    /// <param name="value">The element to add</param>
+    /// <param name="list">The list to add to</param>
+    /// <returns>A new list with the element added to the beginning.</returns>
+    let cons e { Head = x; Tail = xs } = { Head = e ; Tail = x::xs }
+
+    /// <summary>Splits the list in head and tail.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>A tuple with the head and the tail of the original list.</returns>
+    /// <exception cref="T:System.ArgumentException">Thrown when the input list tail is empty.</exception>
+    let uncons ({ Head = x; Tail = xs } as list) =
+        match xs with
+        | [] -> invalidArg (nameof(list)) "The input sequence has an empty tail"
+        | _  -> x, ofList xs
+
+    /// <summary>Splits the list in head and tail.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>A tuple with the head and the tail of the original list.</returns>
+    let unconsAsList ({ Head = x; Tail = xs } as list) = x, xs
 
     /// Returns the first element of a new non empty list. You can also use property nel.Head.
     let head {Head = x; Tail = _ } = x
@@ -157,10 +174,13 @@ module NonEmptyList =
     /// <summary>Returns a new NonEmptyList of the elements trailing the first element.</summary>
     /// <exception cref="System.ArgumentException">Thrown when the tail is empty.</exception>
     /// <remarks>Throws exception for empty tail</remarks>
-    let tail {Head = _; Tail = xs } = ofList xs
+    let tail ({ Head = _; Tail = xs } as list) =
+        match xs with
+        | [] -> invalidArg (nameof(list)) "The input sequence has an empty tail"
+        | _  -> ofList xs
 
     /// <summary>Returns a new NonEmptyList of the elements trailing the first element or None.</summary>
-    let tryTail {Head = _; Tail = xs } = tryOfList xs
+    let tryTail { Head = _; Tail = xs } = tryOfList xs
     let rec tails s =
         let {Tail = xs} = s
         match xs with
