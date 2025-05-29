@@ -5,6 +5,12 @@ namespace FSharpPlus
 module Seq =
     open System
 
+    /// <summary>Adds an element to the beginning of the given sequence</summary>
+    /// <param name="value">The element to add</param>
+    /// <param name="source">The sequence to add to</param>
+    /// <returns>A new sequence with the element added to the beginning.</returns>
+    let cons value source = seq { yield value; yield! source } : seq<'T>
+
     /// <summary>Applies the given function to each element of the sequence and concatenates the results.</summary>
     ///
     /// <remarks>Remember sequence is lazy, effects are delayed until it is enumerated.</remarks>
