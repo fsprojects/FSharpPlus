@@ -1608,6 +1608,13 @@ module Operators =
     let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
 
     /// <summary>
+    /// Folds the sum of all monoid elements in the Foldable resulting of applying the projection.
+    /// </summary>
+    /// <category index="23">Additional Functions</category>
+    let inline sumBy ([<InlineIfLambda>] projection: 'T -> 'Monoid) (x: '``FoldableFunctor<'T>``) : 'Monoid =        
+        fold (++) (getZero () : 'Monoid) (map projection x)
+
+    /// <summary>
     /// Converts using the implicit operator. 
     /// </summary>
     /// <category index="23">Additional Functions</category>
