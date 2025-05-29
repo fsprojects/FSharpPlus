@@ -102,16 +102,20 @@ module Parsing =
         let _zzz = sscanf "(%%%s)" "(%hello)"
         let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
-        
-        let _f1 = trySscanf "(%%%s)" "(%hello)"
-        let _f2 = trySscanf "%s--%s-%s" "test--this-gg"
-        let _f3 = trySscanf "%f %F %g %G %e %E %c %c"    "1 2.1 3.4 .3 43.2e32 0 f f"
-        let _f4 = trySscanf "%f %F %g %G %e %E %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f"
-        let _f5 = trySscanf "%f %F %g %G %e %E %c %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f f"
-        let _f6 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c"       "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f"
-        let _f7 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i"    "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16"
-        let _f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
-        
+        let inline (|Like|_|) format = FSharpPlus.Parsing.trySscanf format
+        match "(%hello)" with Like "(%%%s)" "hello" -> () | _ -> failwith "didn't match"
+        match "test--this-gg" with Like "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f" with Like "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Like "%f %F %g %G %e %E %c %c %c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f ff" with Like "%f %F %g %G %e %E %c %c %c%c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Like "%f %F %g %G %e %E %c %c %c%c%c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff 16" with Like "%f %F %g %G %e %E %c %c %c%c%c%i" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff 16" with Like "%f %F %g %G %e %E %c %c %c%c%c%i %f" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16, 17.) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Like "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Like "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "111AAA" with Like "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
+        match "100700 100 100" with Like "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
+
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
         
         let x = trySscanf "%X %x" "13 43"
