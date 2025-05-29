@@ -1,5 +1,7 @@
 namespace FSharpPlus
 
+#nowarn "1204" // Suppress warning about using FSharp Compiler's error strings.
+
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
 module Array =
@@ -7,6 +9,23 @@ module Array =
     open System
     open FSharp.Core.CompilerServices
     open FSharpPlus.Internals.Errors
+
+    /// <summary>Adds an element to the beginning of the given array</summary>
+    /// <param name="value">The element to add</param>
+    /// <param name="array">The array to add to</param>
+    /// <returns>A new array with the element added to the beginning.</returns>
+    let cons value array =
+        raiseIfNull (nameof(array)) array
+        Array.insertAt 0 value array
+
+    /// <summary>Splits the array in head and tail.</summary>
+    /// <param name="array">The input array.</param>
+    /// <returns>A tuple with the head and the tail of the original array.</returns>
+    /// <exception cref="T:System.ArgumentException">Thrown when the input array is empty.</exception>
+    let uncons array =
+        raiseIfNull (nameof(array)) array
+        if Array.isEmpty array then invalidArg (nameof(array)) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
+        else array[0], array[1..]
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>

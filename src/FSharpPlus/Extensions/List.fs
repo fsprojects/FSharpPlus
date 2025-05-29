@@ -1,5 +1,7 @@
 namespace FSharpPlus
 
+#nowarn "1204" // Suppress warning about using FSharp Compiler's error strings.
+
 /// Additional operations on List
 [<RequireQualifiedAccess>]
 module List =
@@ -28,11 +30,20 @@ module List =
     /// <summary>Adds an element to the beginning of the given list</summary>
     /// <param name="value">The element to add</param>
     /// <param name="list">The list to add to</param>
-    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    /// <returns>A new list with the element added to the beginning.</returns>
     /// <remarks>
     /// Same as <c>List.Cons</c> but with curried parameters.
     /// </remarks>
     let cons value list = value :: list : list<'T>
+
+    /// <summary>Splits the list in head and tail.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>A tuple with the head and the tail of the original list.</returns>
+    /// <exception cref="T:System.ArgumentException">Thrown when the input list is empty.</exception>
+    let uncons list =
+        match list with
+        | []    -> invalidArg (nameof(list)) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
+        | x::xs -> x, xs
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
     /// <param name="f">The list of functions.</param>
