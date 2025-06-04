@@ -129,13 +129,128 @@ module Dict =
             dct2.Add (k, vy)
         dct1 :> IDictionary<'Key, 'T1>, dct2 :> IDictionary<'Key, 'T2>
 
+
+    /// <summary>Creates a conceptually infinite dictionay containing the same value for all possible keys.</summary>
+    /// <param name="source">The value for all possible keys.</param>
+    let initInfinite<'TKey,'TValue> (source: 'TValue) : IDictionary<'TKey,'TValue> =
+
+        let icollection value =
+            {
+                new  ICollection<'t> with
+                    member __.Contains (item: 't) = obj.ReferenceEquals (item, value)
+                    member __.GetEnumerator () = (Seq.initInfinite (fun _ -> value)).GetEnumerator () :> System.Collections.IEnumerator
+                    member __.GetEnumerator () = (Seq.initInfinite (fun _ -> value)).GetEnumerator () : IEnumerator<'t>
+                    member __.IsReadOnly = true
+
+                    member __.Add (_item: 't) : unit                          = raise (System.NotImplementedException())
+                    member __.Clear () : unit                                 = raise (System.NotImplementedException())
+                    member __.CopyTo (_array: 't [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
+                    member __.Count : int                                     = -1
+                    member __.Remove (_item: 't): bool                        = raise (System.NotImplementedException())
+            }
+
+        {
+            new IDictionary<'TKey,'TValue> with
+                member __.TryGetValue (_key: 'TKey, value: byref<'TValue>) = value <- source; true
+                member __.Count = -1
+                member __.ContainsKey (_key: 'TKey) = true
+                member __.Contains (item: KeyValuePair<'TKey,'TValue>) = obj.ReferenceEquals (item.Value, source)
+                member __.GetEnumerator () = invalidOp "Key set is potentially infinite." : System.Collections.IEnumerator
+                member __.GetEnumerator () = invalidOp "Key set is potentially infinite." : IEnumerator<KeyValuePair<'TKey,'TValue>>
+                member __.IsReadOnly = true
+                member __.Values = icollection source
+                member __.Item
+                    with get (_key: 'TKey)   : 'TValue = source
+                    and set  (_key: 'TKey) (_: 'TValue) : unit = raise (System.NotImplementedException())
+
+                member __.Add (_key: 'TKey, _value: 'TValue) : unit                              = raise (System.NotImplementedException())
+                member __.Add (_item: KeyValuePair<'TKey,'TValue>) : unit                        = raise (System.NotImplementedException())
+                member __.Clear () : unit                                                        = raise (System.NotImplementedException())
+                member __.CopyTo (_arr: KeyValuePair<'TKey,'TValue> [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
+                member __.Keys : ICollection<'TKey>                                              = raise (System.NotImplementedException())
+                member __.Remove (_key: 'TKey) : bool                                            = raise (System.NotImplementedException())
+                member __.Remove (_item: KeyValuePair<'TKey,'TValue>) : bool                     = raise (System.NotImplementedException())
+            }
+
+    let initHybrid<'TKey,'TValue> (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) : IDictionary<'TKey,'TValue> =
+
+        let icollection (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) =
+            {
+                new  ICollection<'t> with
+                    member __.Contains (item: 't) = source.Values.Contains item || obj.ReferenceEquals (item, konst)
+                    member __.GetEnumerator () = (seq { yield! source.Values; yield! (Seq.initInfinite (fun _ -> konst))}).GetEnumerator () :> System.Collections.IEnumerator
+                    member __.GetEnumerator () = (seq { yield! source.Values; yield! (Seq.initInfinite (fun _ -> konst))}).GetEnumerator () : IEnumerator<'t>
+                    member __.IsReadOnly = true
+
+                    member __.Add (_item: 't) : unit                          = raise (System.NotImplementedException())
+                    member __.Clear () : unit                                 = raise (System.NotImplementedException())
+                    member __.CopyTo (_array: 't [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
+                    member __.Count : int                                     = -source.Count-1
+                    member __.Remove (_item: 't): bool                        = raise (System.NotImplementedException())
+            }
+        {
+            new IDictionary<'TKey,'TValue> with
+                member __.TryGetValue (key: 'TKey, value: byref<'TValue>) =
+                    match source.TryGetValue key with
+                    | true, v  -> value <- v
+                    | _        -> value <- konst
+                    true
+                member __.Count = -source.Count-1
+                member __.ContainsKey (_key: 'TKey) = true
+                member __.Contains (item: KeyValuePair<'TKey,'TValue>) =
+                    match source.TryGetValue item.Key with
+                    | true, v -> obj.ReferenceEquals (item.Value, v)
+                    | _       -> obj.ReferenceEquals (item.Value, konst)
+                member __.GetEnumerator () = source.GetEnumerator () : System.Collections.IEnumerator
+                member __.GetEnumerator () = source.GetEnumerator () : IEnumerator<KeyValuePair<'TKey,'TValue>>
+                member __.IsReadOnly = true
+                member __.Values = icollection konst source
+                member __.Item
+                    with get (key: 'TKey)   : 'TValue = match source.TryGetValue key with (true, v) -> v | _ -> konst
+                    and set  (_key: 'TKey) (_: 'TValue) : unit = raise (System.NotImplementedException())
+
+                member __.Add (_key: 'TKey, _value: 'TValue) : unit                              = raise (System.NotImplementedException())
+                member __.Add (_item: KeyValuePair<'TKey,'TValue>) : unit                        = raise (System.NotImplementedException())
+                member __.Clear () : unit                                                        = raise (System.NotImplementedException())
+                member __.CopyTo (_arr: KeyValuePair<'TKey,'TValue> [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
+                member __.Keys : ICollection<'TKey>                                              = raise (System.NotImplementedException())
+                member __.Remove (_key: 'TKey) : bool                                            = raise (System.NotImplementedException())
+                member __.Remove (_item: KeyValuePair<'TKey,'TValue>) : bool                     = raise (System.NotImplementedException())
+            }
+
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IDictionary<'Key, 'Value>) (source2: IDictionary<'Key, 'Value>) =
-        let d = Dictionary<'Key,'Value> ()
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
-        for KeyValue(k, v ) in source1 do d.[k] <- v
-        for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
-        d :> IDictionary<'Key,'Value>
+        let combine () =
+            let d = Dictionary<'Key,'Value> ()
+            let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
+            for KeyValue(k, v ) in source1 do d.[k] <- v
+            for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
+            d :> IDictionary<'Key,'Value>
+        let combineWithKonst source konst =
+            let d = Dictionary<'Key,'Value> ()
+            for KeyValue(k, v) in source do d.[k] <- combiner v konst
+            d :> IDictionary<'Key,'Value>
+        let combineKonstWith konst source =
+            let d = Dictionary<'Key,'Value> ()
+            for KeyValue(k, v) in source do d.[k] <- combiner konst v
+            d :> IDictionary<'Key,'Value>
+        match source1.Count, source2.Count with
+        | -1, -1 ->
+            initInfinite (
+                combiner
+                    (source1[Unchecked.defaultof<'Key>])
+                    (source2[Unchecked.defaultof<'Key>]))
+        | -1, 0 -> source1
+        | 0, -1 -> source2
+        | -1, x when x < -1          -> initHybrid (combiner (source1[Unchecked.defaultof<'Key>]) (source2[Unchecked.defaultof<'Key>])) (combineKonstWith (source1[Unchecked.defaultof<'Key>]) source2)
+        | x, -1 when x < -1          -> initHybrid (combiner (source1[Unchecked.defaultof<'Key>]) (source2[Unchecked.defaultof<'Key>])) (combineWithKonst source1 (source2[Unchecked.defaultof<'Key>]))
+        // Note: this is horrible and Unchecked.defaultof<'Key> is 0 for int keys, so it might not return the default value.
+        // All this hints that a specific (named) class is needed, something like DictWithDefaultValue<'Key, 'Value> then type tests can be added before reading the defaultValue property.
+        | x, y when x < -1 && y < -1 -> initHybrid (combiner (source1[Unchecked.defaultof<'Key>]) (source2[Unchecked.defaultof<'Key>])) (combine())
+        | -1, _ -> combineKonstWith (source1[Unchecked.defaultof<'Key>]) source2 |> initHybrid (source1[Unchecked.defaultof<'Key>])
+        | _, -1 -> combineWithKonst source1 (source2[Unchecked.defaultof<'Key>]) |> initHybrid (source2[Unchecked.defaultof<'Key>])
+        | _, _  -> combine()
+            
 
     #if !FABLE_COMPILER
    ///Returns the union of two maps, preferring values from the first in case of duplicate keys.
@@ -179,44 +294,4 @@ module Dict =
             | None   -> ()
         dct :> IDictionary<'Key, 'U>
 
-    /// <summary>Creates a conceptually infinite dictionay containing the same value for all possible keys.</summary>
-    /// <param name="source">The value for all possible keys.</param>
-    let initInfinite<'TKey,'TValue> (source: 'TValue) : IDictionary<'TKey,'TValue> =
 
-        let icollection value =
-            {
-                new  ICollection<'t> with
-                    member __.Contains (item: 't) = obj.ReferenceEquals (item, value)
-                    member __.GetEnumerator () = (Seq.initInfinite (fun _ -> value)).GetEnumerator () :> System.Collections.IEnumerator
-                    member __.GetEnumerator () = (Seq.initInfinite (fun _ -> value)).GetEnumerator () : IEnumerator<'t>
-                    member __.IsReadOnly = true
-
-                    member __.Add (_item: 't) : unit                          = raise (System.NotImplementedException())
-                    member __.Clear () : unit                                 = raise (System.NotImplementedException())
-                    member __.CopyTo (_array: 't [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
-                    member __.Count : int                                     = raise (System.NotImplementedException())
-                    member __.Remove (_item: 't): bool                        = raise (System.NotImplementedException())
-            }
-
-        {
-            new IDictionary<'TKey,'TValue> with
-                member __.TryGetValue (_key: 'TKey, value: byref<'TValue>) = value <- source; true
-                member __.Count = System.Int32.MaxValue
-                member __.ContainsKey (_key: 'TKey) = true
-                member __.Contains (item: KeyValuePair<'TKey,'TValue>) = obj.ReferenceEquals (item.Value, source)
-                member __.GetEnumerator () = invalidOp "Key set is potentially infinite." : System.Collections.IEnumerator
-                member __.GetEnumerator () = invalidOp "Key set is potentially infinite." : IEnumerator<KeyValuePair<'TKey,'TValue>>
-                member __.IsReadOnly = true
-                member __.Values = icollection source
-                member __.Item
-                    with get (_key: 'TKey)   : 'TValue = source
-                    and set  (_key: 'TKey) (_: 'TValue) : unit = raise (System.NotImplementedException())
-
-                member __.Add (_key: 'TKey, _value: 'TValue) : unit                              = raise (System.NotImplementedException())
-                member __.Add (_item: KeyValuePair<'TKey,'TValue>) : unit                        = raise (System.NotImplementedException())
-                member __.Clear () : unit                                                        = raise (System.NotImplementedException())
-                member __.CopyTo (_arr: KeyValuePair<'TKey,'TValue> [], _arrayIndex: int) : unit = raise (System.NotImplementedException())
-                member __.Keys : ICollection<'TKey>                                              = raise (System.NotImplementedException())
-                member __.Remove (_key: 'TKey) : bool                                            = raise (System.NotImplementedException())
-                member __.Remove (_item: KeyValuePair<'TKey,'TValue>) : bool                     = raise (System.NotImplementedException())
-            }
