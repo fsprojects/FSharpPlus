@@ -48,10 +48,11 @@ type ToSeq =
         #endif
         x
 
-    static member ToSeq (x: Text.StringBuilder,         _: ToSeq) = string x :> seq<char>
-    static member ToSeq (x: string    ,                 _: ToSeq) = String.toSeq x
-    static member ToSeq (x: option<'T>, [<Optional>]_impl: ToSeq) = match x with Some x -> Seq.singleton x | _ -> Seq.empty
-    static member ToSeq (x: Id<'T>    , [<Optional>]_impl: ToSeq) = Seq.singleton x.getValue
+    static member ToSeq (x: Text.StringBuilder,          _: ToSeq) = string x :> seq<char>
+    static member ToSeq (x: string     ,                 _: ToSeq) = String.toSeq x
+    static member ToSeq (x: option<'T> , [<Optional>]_impl: ToSeq) = match x with Some      x -> Seq.singleton x | _ -> Seq.empty
+    static member ToSeq (x: voption<'T>, [<Optional>]_impl: ToSeq) = match x with ValueSome x -> Seq.singleton x | _ -> Seq.empty
+    static member ToSeq (x: Id<'T>     , [<Optional>]_impl: ToSeq) = Seq.singleton x.getValue
 
     static member inline Invoke (source: '``Foldable<'T>``) : seq<'T>  =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member ToSeq : _*_ -> _) b, a)
