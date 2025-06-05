@@ -158,14 +158,20 @@ type Fold =
 
     static member inline FromFoldMap f z t = let (f: _Dual<_Endo<'t>>) = FoldMap.Invoke (_Dual << _Endo << flip f) t in f.Value.Value z
 
-    static member inline Fold (x           , f,             z,     [<Optional>]_impl: Default2) = Seq.fold f z (ToSeq.Invoke x)
-    static member inline Fold (x: 'F       , f: 'b->'a->'b, z: 'b, [<Optional>]_impl: Default1) = (^F : (static member Fold : ^F -> _ -> _-> ^b) x, f, z)
-    static member        Fold (x: option<_>, f,             z    , [<Optional>]_impl: Fold    ) = match x with Some x -> f z x | _ -> z
-    static member        Fold (x: Id<_>    , f,             z    , [<Optional>]_impl: Fold    ) = f z x.getValue
-    static member        Fold (x: seq<_>   , f,             z    , [<Optional>]_impl: Fold    ) = Seq.fold               f z x
-    static member        Fold (x: list<_>  , f,             z    , [<Optional>]_impl: Fold    ) = List.fold              f z x
-    static member        Fold (x: Set<_>   , f,             z    , [<Optional>]_impl: Fold    ) = Set.fold               f z x
-    static member        Fold (x:  _ []    , f,             z    , [<Optional>]_impl: Fold    ) = Array.fold             f z x
+    static member inline Fold (x           , f,             z,     [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "Fold Default"
+        #endif
+        Seq.fold f z (ToSeq.Invoke x)
+
+    static member inline Fold (x: 'F        , f: 'b->'a->'b, z: 'b, [<Optional>]_impl: Default1) = (^F : (static member Fold : ^F -> _ -> _-> ^b) x, f, z)
+    static member        Fold (x: option<_> , f,             z    , [<Optional>]_impl: Fold    ) = match x with      Some x -> f z x | _ -> z
+    static member        Fold (x: voption<_>, f,             z    , [<Optional>]_impl: Fold    ) = match x with ValueSome x -> f z x | _ -> z
+    static member        Fold (x: Id<_>     , f,             z    , [<Optional>]_impl: Fold    ) = f z x.getValue
+    static member        Fold (x: seq<_>    , f,             z    , [<Optional>]_impl: Fold    ) = Seq.fold               f z x
+    static member        Fold (x: list<_>   , f,             z    , [<Optional>]_impl: Fold    ) = List.fold              f z x
+    static member        Fold (x: Set<_>    , f,             z    , [<Optional>]_impl: Fold    ) = Set.fold               f z x
+    static member        Fold (x:  _ []     , f,             z    , [<Optional>]_impl: Fold    ) = Array.fold             f z x
 
     static member inline Invoke (folder: 'State->'T->'State) (state: 'State) (foldable: '``Foldable'<T>``) : 'State =
         let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member Fold : _*_*_*_ -> _) b, f, z, a)
