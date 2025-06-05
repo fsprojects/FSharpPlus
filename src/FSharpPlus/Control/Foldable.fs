@@ -42,7 +42,12 @@ open FSharpPlus.Internals.Prelude
 
 type ToSeq =
     inherit Default1
-    static member ToSeq (x: seq<'T>   , [<Optional>]_impl: ToSeq) = x
+    static member ToSeq (x: seq<'T>, [<Optional>]_impl: ToSeq) =
+        #if TEST_TRACE
+        Traces.add "ToSeq seq"
+        #endif
+        x
+
     static member ToSeq (x: Text.StringBuilder,         _: ToSeq) = string x :> seq<char>
     static member ToSeq (x: string    ,                 _: ToSeq) = String.toSeq x
     static member ToSeq (x: option<'T>, [<Optional>]_impl: ToSeq) = match x with Some x -> Seq.singleton x | _ -> Seq.empty
@@ -56,7 +61,13 @@ type ToSeq =
     static member inline InvokeOnInstance (source: '``Foldable<'T>``) : seq<'T> = (^``Foldable<'T>``: (static member ToSeq : _ -> _) source)
 
 type ToSeq with
-    static member inline ToSeq (x: 'S when 'S :> Collections.IEnumerable, [<Optional>]_impl: Default2) = let _f i x : 'T = (^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
+    static member inline ToSeq (x: 'S when 'S :> Collections.IEnumerable, [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "ToSeq IEnumerable"
+        #endif
+        let _f i x : 'T = (^S : (member get_Item : int -> 'T) x, i)
+        Seq.cast<'T> x : seq<'T>
+
     static member inline ToSeq (x: 'Foldable                            , [<Optional>]_impl: Default1) = ToSeq.InvokeOnInstance x
     static member inline ToSeq (_: 'T when 'T: null and 'T: struct      ,                 _: Default1) = ()
 
