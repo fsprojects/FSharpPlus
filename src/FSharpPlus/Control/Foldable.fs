@@ -259,6 +259,7 @@ type Head =
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = Seq.head (ToSeq.Invoke x) : 'T
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Head : 'T) x)
     static member        Head (x: 'T option        , [<Optional>]_impl: Head    ) = x.Value
+    static member        Head (x: 'T voption       , [<Optional>]_impl: Head    ) = x.Value
     static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]
     static member        Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First
     static member        Head (x: Id<'T>           , [<Optional>]_impl: Head    ) = x.getValue
@@ -418,6 +419,7 @@ type Length =
     static member        Length (x: ResizeArray<'T>  , [<Optional>]_impl: Length  ) = x.Count
     static member        Length (x: 'T list          , [<Optional>]_impl: Length  ) = List.length x
     static member        Length (x: option<'T>       , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
+    static member        Length (x: voption<'T>      , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
     static member        Length (x: 'T []            , [<Optional>]_impl: Length  ) = Array.length x
 
     static member inline Invoke (source: '``Foldable<'T>``) =
