@@ -111,16 +111,21 @@ type ToArray =
 
 type FoldBack =
     inherit Default1
-    static member inline FoldBack (x: 'F           , f: 'a->'b->'b, z: 'b , [<Optional>]_impl: Default2) = List.foldBack  f (ToList.Invoke x) z
+    static member inline FoldBack (x: 'F, f: 'a -> 'b -> 'b, z: 'b, [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "Foldback Default"
+        #endif
+        List.foldBack  f (ToList.Invoke x) z
     static member inline FoldBack (x: 'F           , f: 'a->'b->'b, z: 'b , [<Optional>]_impl: Default1) = (^F : (static member FoldBack : ^F -> _ -> _-> ^b) x, f, z)
-    static member        FoldBack (x: seq<_>       , f            , z     , [<Optional>]_impl: FoldBack) = List.foldBack  f (Seq.toList x) z
-    static member        FoldBack (x: option<_>    , f            , z     , [<Optional>]_impl: FoldBack) = match x with Some x -> f x z | _ -> z
+    static member        FoldBack (x: seq<_>       , f            , z     , [<Optional>]_impl: FoldBack) = List.foldBack f (Seq.toList x) z
+    static member        FoldBack (x: option<_>    , f            , z     , [<Optional>]_impl: FoldBack) = match x with      Some x -> f x z | _ -> z
+    static member        FoldBack (x: voption<_>   , f            , z     , [<Optional>]_impl: FoldBack) = match x with ValueSome x -> f x z | _ -> z
     static member        FoldBack (x: list<_>      , f            , z     , [<Optional>]_impl: FoldBack) = List.foldBack          f x z
     static member        FoldBack (x: _ []         , f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack         f x z
     static member        FoldBack (x: Set<_>       , f            , z     , [<Optional>]_impl: FoldBack) = Set.foldBack           f x z
     static member        FoldBack (x: _ ResizeArray, f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack         f (x.ToArray ()) z
     static member        FoldBack (x: string       , f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack f (x.ToCharArray ()) z
-    static member        FoldBack (x: StringBuilder, f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack f (x.ToString().ToCharArray ()) z   
+    static member        FoldBack (x: StringBuilder, f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack f (x.ToString().ToCharArray ()) z
     static member        FoldBack (x: Id<'a>       , f            , z     , [<Optional>]_impl: FoldBack) = f x.getValue z
 
     static member inline Invoke (folder: 'T->'State->'State) (state: 'State) (foldable: '``Foldable'<T>``) : 'State =
@@ -134,10 +139,11 @@ type FoldMap =
 
     static member inline FromFoldFoldBack f x = FoldBack.Invoke (Plus.Invoke << f) (Zero.Invoke ()) x
 
-    static member inline FoldMap (x: option<_>, f, [<Optional>]_impl: FoldMap ) = match x with Some x -> f x | _ -> Zero.Invoke ()
-    static member inline FoldMap (x: list<_>  , f, [<Optional>]_impl: FoldMap ) = List.fold  (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
-    static member inline FoldMap (x: Set<_>   , f, [<Optional>]_impl: FoldMap ) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
-    static member inline FoldMap (x: _ []     , f, [<Optional>]_impl: FoldMap ) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: option<_> , f, [<Optional>]_impl: FoldMap) = match x with      Some x -> f x | _ -> Zero.Invoke ()
+    static member inline FoldMap (x: voption<_>, f, [<Optional>]_impl: FoldMap) = match x with ValueSome x -> f x | _ -> Zero.Invoke ()
+    static member inline FoldMap (x: list<_>   , f, [<Optional>]_impl: FoldMap) = List.fold  (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: Set<_>    , f, [<Optional>]_impl: FoldMap) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: _ []      , f, [<Optional>]_impl: FoldMap) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
 
     static member inline Invoke (f: 'T->'Monoid) (x: '``Foldable'<T>``) : 'Monoid =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member FoldMap : _*_*_ -> _) b, f, a)
@@ -145,7 +151,11 @@ type FoldMap =
         call (Unchecked.defaultof<FoldMap>, x, f)
 
 type FoldMap with
-    static member inline FoldMap (x: seq<_>          , f, [<Optional>]_impl: Default2) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: seq<_>          , f, [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "FoldMap Default"
+        #endif
+        Seq.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
     static member inline FoldMap (x                  , f, [<Optional>]_impl: Default1) = (^F : (static member FoldMap : ^F -> _ -> _) x, f)
     static member inline FoldMap (_: ^t when  ^t: null and ^t: struct, _, _: Default1) = ()
 
