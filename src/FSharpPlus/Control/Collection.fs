@@ -305,7 +305,7 @@ type GroupBy =
     static member GroupBy (x: list<'T>, f: 'T->'Key, _: list<'Key*list<'T>>, [<Optional>]_impl: GroupBy) = Seq.groupBy f x |> Seq.map (fun (x, y) -> x, Seq.toList  y) |> Seq.toList
     static member GroupBy (x: 'T []   , f: 'T->'Key, _: ('Key*('T [])) []  , [<Optional>]_impl: GroupBy) = Seq.groupBy f x |> Seq.map (fun (x, y) -> x, Seq.toArray y) |> Seq.toArray
 
-    static member inline Invoke    (projection: 'T->'Key) (source: '``C<'T>``) : '``C<'Key * 'C<'T>>`` = 
+    static member inline Invoke    (projection: 'T->'Key) (source: '``Collection<'T>``) : '``Collection<'Key * 'Collection<'T>>`` = 
         let inline call_3 (a: ^a, b: ^b, c: ^c, p) = ((^a or ^b or ^c) : (static member GroupBy : _*_*_*_ -> _) b, p, c, a)
         let inline call (a: 'a, b: 'b, p) = call_3 (a, b, Unchecked.defaultof<'r>, p) : 'r
         call (Unchecked.defaultof<GroupBy>, source, projection)
