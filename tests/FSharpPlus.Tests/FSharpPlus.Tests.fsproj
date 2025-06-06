@@ -22,6 +22,7 @@
     <Compile Include="Splits.fs" />
     <Compile Include="Monoid.fs" />
     <Compile Include="Parsing.fs" />
+    <Compile Include="Folds.fs" />
     <Compile Include="Traversals.fs" />
     <Compile Include="Indexables.fs" />
     <Compile Include="Collections.fs" />

@@ -42,11 +42,18 @@ open FSharpPlus.Internals.Prelude
 
 type ToSeq =
     inherit Default1
-    static member ToSeq (x: seq<'T>   , [<Optional>]_impl: ToSeq) = x
-    static member ToSeq (x: Text.StringBuilder,         _: ToSeq) = string x :> seq<char>
-    static member ToSeq (x: string    ,                 _: ToSeq) = String.toSeq x
-    static member ToSeq (x: option<'T>, [<Optional>]_impl: ToSeq) = match x with Some x -> Seq.singleton x | _ -> Seq.empty
-    static member ToSeq (x: Id<'T>    , [<Optional>]_impl: ToSeq) = Seq.singleton x.getValue
+    static member ToSeq (x: seq<'T>, [<Optional>]_impl: ToSeq) =
+        #if TEST_TRACE
+        Traces.add "ToSeq seq"
+        #endif
+        x
+
+    static member ToSeq (x: Text.StringBuilder,            _: ToSeq) = string x :> seq<char>
+    static member ToSeq (x: string       ,                 _: ToSeq) = String.toSeq x
+    static member ToSeq (x: option<'T>   , [<Optional>]_impl: ToSeq) = match x with Some      x -> Seq.singleton x | _ -> Seq.empty
+    static member ToSeq (x: voption<'T>  , [<Optional>]_impl: ToSeq) = match x with ValueSome x -> Seq.singleton x | _ -> Seq.empty
+    static member ToSeq (x: Result<'T, _>, [<Optional>]_impl: ToSeq) = match x with Ok        x -> Seq.singleton x | _ -> Seq.empty
+    static member ToSeq (x: Id<'T>       , [<Optional>]_impl: ToSeq) = Seq.singleton x.getValue
 
     static member inline Invoke (source: '``Foldable<'T>``) : seq<'T>  =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member ToSeq : _*_ -> _) b, a)
@@ -56,7 +63,13 @@ type ToSeq =
     static member inline InvokeOnInstance (source: '``Foldable<'T>``) : seq<'T> = (^``Foldable<'T>``: (static member ToSeq : _ -> _) source)
 
 type ToSeq with
-    static member inline ToSeq (x: 'S when 'S :> Collections.IEnumerable, [<Optional>]_impl: Default2) = let _f i x : 'T = (^S : (member get_Item : int -> 'T) x, i) in Seq.cast<'T> x : seq<'T>
+    static member inline ToSeq (x: 'S when 'S :> Collections.IEnumerable, [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "ToSeq IEnumerable"
+        #endif
+        let _f i x : 'T = (^S : (member get_Item : int -> 'T) x, i)
+        Seq.cast<'T> x : seq<'T>
+
     static member inline ToSeq (x: 'Foldable                            , [<Optional>]_impl: Default1) = ToSeq.InvokeOnInstance x
     static member inline ToSeq (_: 'T when 'T: null and 'T: struct      ,                 _: Default1) = ()
 
@@ -99,16 +112,22 @@ type ToArray =
 
 type FoldBack =
     inherit Default1
-    static member inline FoldBack (x: 'F           , f: 'a->'b->'b, z: 'b , [<Optional>]_impl: Default2) = List.foldBack  f (ToList.Invoke x) z
+    static member inline FoldBack (x: 'F, f: 'a -> 'b -> 'b, z: 'b, [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "Foldback Default"
+        #endif
+        List.foldBack  f (ToList.Invoke x) z
     static member inline FoldBack (x: 'F           , f: 'a->'b->'b, z: 'b , [<Optional>]_impl: Default1) = (^F : (static member FoldBack : ^F -> _ -> _-> ^b) x, f, z)
-    static member        FoldBack (x: seq<_>       , f            , z     , [<Optional>]_impl: FoldBack) = List.foldBack  f (Seq.toList x) z
-    static member        FoldBack (x: option<_>    , f            , z     , [<Optional>]_impl: FoldBack) = match x with Some x -> f x z | _ -> z
+    static member        FoldBack (x: seq<_>       , f            , z     , [<Optional>]_impl: FoldBack) = List.foldBack f (Seq.toList x) z
+    static member        FoldBack (x: option<_>    , f            , z     , [<Optional>]_impl: FoldBack) = match x with      Some x -> f x z | _ -> z
+    static member        FoldBack (x: voption<_>   , f            , z     , [<Optional>]_impl: FoldBack) = match x with ValueSome x -> f x z | _ -> z
+    static member        FoldBack (x: Result<_, _> , f            , z     , [<Optional>]_impl: FoldBack) = match x with        Ok x -> f x z | _ -> z
     static member        FoldBack (x: list<_>      , f            , z     , [<Optional>]_impl: FoldBack) = List.foldBack          f x z
     static member        FoldBack (x: _ []         , f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack         f x z
     static member        FoldBack (x: Set<_>       , f            , z     , [<Optional>]_impl: FoldBack) = Set.foldBack           f x z
     static member        FoldBack (x: _ ResizeArray, f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack         f (x.ToArray ()) z
     static member        FoldBack (x: string       , f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack f (x.ToCharArray ()) z
-    static member        FoldBack (x: StringBuilder, f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack f (x.ToString().ToCharArray ()) z   
+    static member        FoldBack (x: StringBuilder, f            , z     , [<Optional>]_impl: FoldBack) = Array.foldBack f (x.ToString().ToCharArray ()) z
     static member        FoldBack (x: Id<'a>       , f            , z     , [<Optional>]_impl: FoldBack) = f x.getValue z
 
     static member inline Invoke (folder: 'T->'State->'State) (state: 'State) (foldable: '``Foldable'<T>``) : 'State =
@@ -122,10 +141,12 @@ type FoldMap =
 
     static member inline FromFoldFoldBack f x = FoldBack.Invoke (Plus.Invoke << f) (Zero.Invoke ()) x
 
-    static member inline FoldMap (x: option<_>, f, [<Optional>]_impl: FoldMap ) = match x with Some x -> f x | _ -> Zero.Invoke ()
-    static member inline FoldMap (x: list<_>  , f, [<Optional>]_impl: FoldMap ) = List.fold  (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
-    static member inline FoldMap (x: Set<_>   , f, [<Optional>]_impl: FoldMap ) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
-    static member inline FoldMap (x: _ []     , f, [<Optional>]_impl: FoldMap ) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: option<_>   , f, [<Optional>]_impl: FoldMap) = match x with      Some x -> f x | _ -> Zero.Invoke ()
+    static member inline FoldMap (x: voption<_>  , f, [<Optional>]_impl: FoldMap) = match x with ValueSome x -> f x | _ -> Zero.Invoke ()
+    static member inline FoldMap (x: Result<_, _>, f, [<Optional>]_impl: FoldMap) = match x with        Ok x -> f x | _ -> Zero.Invoke ()
+    static member inline FoldMap (x: list<_>     , f, [<Optional>]_impl: FoldMap) = List.fold  (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: Set<_>      , f, [<Optional>]_impl: FoldMap) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: _ []        , f, [<Optional>]_impl: FoldMap) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
 
     static member inline Invoke (f: 'T->'Monoid) (x: '``Foldable'<T>``) : 'Monoid =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member FoldMap : _*_*_ -> _) b, f, a)
@@ -133,7 +154,11 @@ type FoldMap =
         call (Unchecked.defaultof<FoldMap>, x, f)
 
 type FoldMap with
-    static member inline FoldMap (x: seq<_>          , f, [<Optional>]_impl: Default2) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: seq<_>          , f, [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "FoldMap Default"
+        #endif
+        Seq.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
     static member inline FoldMap (x                  , f, [<Optional>]_impl: Default1) = (^F : (static member FoldMap : ^F -> _ -> _) x, f)
     static member inline FoldMap (_: ^t when  ^t: null and ^t: struct, _, _: Default1) = ()
 
@@ -146,14 +171,21 @@ type Fold =
 
     static member inline FromFoldMap f z t = let (f: _Dual<_Endo<'t>>) = FoldMap.Invoke (_Dual << _Endo << flip f) t in f.Value.Value z
 
-    static member inline Fold (x           , f,             z,     [<Optional>]_impl: Default2) = Seq.fold f z (ToSeq.Invoke x)
-    static member inline Fold (x: 'F       , f: 'b->'a->'b, z: 'b, [<Optional>]_impl: Default1) = (^F : (static member Fold : ^F -> _ -> _-> ^b) x, f, z)
-    static member        Fold (x: option<_>, f,             z    , [<Optional>]_impl: Fold    ) = match x with Some x -> f z x | _ -> z
-    static member        Fold (x: Id<_>    , f,             z    , [<Optional>]_impl: Fold    ) = f z x.getValue
-    static member        Fold (x: seq<_>   , f,             z    , [<Optional>]_impl: Fold    ) = Seq.fold               f z x
-    static member        Fold (x: list<_>  , f,             z    , [<Optional>]_impl: Fold    ) = List.fold              f z x
-    static member        Fold (x: Set<_>   , f,             z    , [<Optional>]_impl: Fold    ) = Set.fold               f z x
-    static member        Fold (x:  _ []    , f,             z    , [<Optional>]_impl: Fold    ) = Array.fold             f z x
+    static member inline Fold (x           , f,             z,     [<Optional>]_impl: Default2) =
+        #if TEST_TRACE
+        Traces.add "Fold Default"
+        #endif
+        Seq.fold f z (ToSeq.Invoke x)
+
+    static member inline Fold (x: 'F          , f: 'b->'a->'b, z: 'b, [<Optional>]_impl: Default1) = (^F : (static member Fold : ^F -> _ -> _-> ^b) x, f, z)
+    static member        Fold (x: option<_>   , f,             z    , [<Optional>]_impl: Fold    ) = match x with      Some x -> f z x | _ -> z
+    static member        Fold (x: voption<_>  , f,             z    , [<Optional>]_impl: Fold    ) = match x with ValueSome x -> f z x | _ -> z
+    static member        Fold (x: Result<_, _>, f,             z    , [<Optional>]_impl: Fold    ) = match x with        Ok x -> f z x | _ -> z
+    static member        Fold (x: Id<_>       , f,             z    , [<Optional>]_impl: Fold    ) = f z x.getValue
+    static member        Fold (x: seq<_>      , f,             z    , [<Optional>]_impl: Fold    ) = Seq.fold               f z x
+    static member        Fold (x: list<_>     , f,             z    , [<Optional>]_impl: Fold    ) = List.fold              f z x
+    static member        Fold (x: Set<_>      , f,             z    , [<Optional>]_impl: Fold    ) = Set.fold               f z x
+    static member        Fold (x:  _ []       , f,             z    , [<Optional>]_impl: Fold    ) = Array.fold             f z x
 
     static member inline Invoke (folder: 'State->'T->'State) (state: 'State) (foldable: '``Foldable'<T>``) : 'State =
         let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member Fold : _*_*_*_ -> _) b, f, z, a)
@@ -170,7 +202,7 @@ type Exists =
     static member        Exists (x: 'a []            , f          , [<Optional>]_impl: Exists  ) = Array.exists  f x
     static member        Exists (x: Set<'a>          , f          , [<Optional>]_impl: Exists  ) = Set.exists    f x
     static member        Exists (x: 'a ResizeArray   , f          , [<Optional>]_impl: Exists  ) = Seq.exists    f x
-    static member        Exists (x: string           , f          , [<Optional>]_impl: Exists  ) = String.exists f x    
+    static member        Exists (x: string           , f          , [<Optional>]_impl: Exists  ) = String.exists f x
     static member        Exists (x: StringBuilder    , f          , [<Optional>]_impl: Exists  ) = x |> string |> String.exists f
 
     static member inline Invoke (predicate: 'T->bool) (source: '``Foldable'<T>``) =
@@ -231,6 +263,8 @@ type Head =
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default2) = Seq.head (ToSeq.Invoke x) : 'T
     static member inline Head (x: '``Foldable<'T>``, [<Optional>]_impl: Default1) = (^``Foldable<'T>`` : (member Head : 'T) x)
     static member        Head (x: 'T option        , [<Optional>]_impl: Head    ) = x.Value
+    static member        Head (x: 'T voption       , [<Optional>]_impl: Head    ) = x.Value
+    static member        Head (x: Result<_, _>     , [<Optional>]_impl: Head    ) = Result.get x
     static member        Head (x: 'T []            , [<Optional>]_impl: Head    ) = x.[0]
     static member        Head (x: NonEmptySeq<'T>  , [<Optional>]_impl: Head    ) = x.First
     static member        Head (x: Id<'T>           , [<Optional>]_impl: Head    ) = x.getValue
@@ -390,6 +424,8 @@ type Length =
     static member        Length (x: ResizeArray<'T>  , [<Optional>]_impl: Length  ) = x.Count
     static member        Length (x: 'T list          , [<Optional>]_impl: Length  ) = List.length x
     static member        Length (x: option<'T>       , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
+    static member        Length (x: voption<'T>      , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
+    static member        Length (x: Result<_, _>     , [<Optional>]_impl: Length  ) = if Result.isOk x then 1 else 0
     static member        Length (x: 'T []            , [<Optional>]_impl: Length  ) = Array.length x
 
     static member inline Invoke (source: '``Foldable<'T>``) =
