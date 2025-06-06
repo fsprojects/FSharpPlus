@@ -256,6 +256,34 @@ module Operators =
     /// <category index="2">Applicative</category>
     let inline map3 (f: 'T->'U->'V->'W) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) (z: '``ZipApplicative<'V>``) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
 
+    /// <summary>
+    /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// Operator version of 'map2'.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (<<||) (f: 'T->'U->'V) (x: '``ZipApplicative<'T>``, y: '``ZipApplicative<'U>``) : '``ZipApplicative<'V>`` = Map2.Invoke f x y
+
+    /// <summary>
+    /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// Operator version of 'map2' but with arguments flipped.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (||>>) (x: '``ZipApplicative<'T>``, y: '``ZipApplicative<'U>``) (f: 'T->'U->'V) : '``ZipApplicative<'V>`` = Map2.Invoke f x y
+
+    /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// Operator version of 'map3'.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (<<|||) (f: 'T->'U->'V->'W) (x: '``ZipApplicative<'T>``, y: '``ZipApplicative<'U>``, z: '``ZipApplicative<'V>``) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
+
+    /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// Operator version of 'map3' but with arguments flipped.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (|||>>) (x: '``ZipApplicative<'T>``, y: '``ZipApplicative<'U>``, z: '``ZipApplicative<'V>``) (f: 'T->'U->'V->'W) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
+
 
 
     // Monad -----------------------------------------------------------
