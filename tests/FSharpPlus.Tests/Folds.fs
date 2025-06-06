@@ -27,10 +27,12 @@ module Folds =
         let r2 = set [1..3] |> toSeq
         let r3 = ValueSome 1 |> toSeq
         let r4 = ValueSome 1 |> fold (+) 0
+        let r5 = Ok 1 |> fold (+) 0
         Assert.AreEqual (6, r1)
         CollectionAssert.AreEqual ([1; 2; 3], r2)
         CollectionAssert.AreEqual ([1], r3)
         Assert.AreEqual (1, r4)
+        Assert.AreEqual (1, r5)
         #if TEST_TRACE
         CollectionAssert.AreEqual (["ToSeq seq"], Traces.get())
         #endif
