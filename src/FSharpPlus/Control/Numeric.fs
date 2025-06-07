@@ -143,8 +143,7 @@ type Zero =
     static member        Zero (_: StringBuilder                  , _: Zero    ) = new StringBuilder ()
     static member        Zero (_: unit                           , _: Zero    ) = ()
     static member        Zero (_: bool                           , _: Zero    ) = false
-    static member        Zero (_: Set<'a>                        , _: Zero    ) = Set.empty : Set<'a>
-    static member        Zero (_: HashSet<'a>                    , _: Zero    ) = HashSet.empty : HashSet<'a>
+    static member        Zero (_: Set<'a>                        , _: Zero    ) = Set.empty : Set<'a>    
     static member        Zero (_: Map<'a,'b>                     , _: Zero    ) = Map.empty : Map<'a,'b>
 
     static member inline Invoke () =
@@ -208,6 +207,7 @@ type Zero with
     static member inline Zero (_: Lazy<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in lazy v
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
+    static member        Zero (_: HashSet<'a>                    , _: Zero    ) = HashSet.empty : HashSet<'a>
 
 type Zero with
     static member inline Zero (_: ^R                             , _: Default6) = FromInt64.Invoke 0L : ^R
