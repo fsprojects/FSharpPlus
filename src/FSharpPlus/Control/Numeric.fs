@@ -6,6 +6,7 @@ namespace FSharpPlus.Control
 
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
+open FSharpPlus
 #if FABLE_COMPILER
 /// NOTE
 type OptionalAttribute ()=
@@ -143,6 +144,7 @@ type Zero =
     static member        Zero (_: unit                           , _: Zero    ) = ()
     static member        Zero (_: bool                           , _: Zero    ) = false
     static member        Zero (_: Set<'a>                        , _: Zero    ) = Set.empty : Set<'a>
+    static member        Zero (_: HashSet<'a>                    , _: Zero    ) = HashSet.empty : HashSet<'a>
     static member        Zero (_: Map<'a,'b>                     , _: Zero    ) = Map.empty : Map<'a,'b>
 
     static member inline Invoke () =
@@ -213,7 +215,7 @@ type Zero with
     static member inline Zero (_: ^R                             , _: Default5) = Implicit.Invoke 0   : ^R
 
     static member        Zero (_: seq<'a>                        , _: Default4) = Seq.empty      : seq<'a>
-    static member        Zero (_: IEnumerator<'a>                , _: Default4) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
+    static member        Zero (_: IEnumerator<'a>                , _: Default4) = Enumerator.Empty () : IEnumerator<'a>
     static member        Zero (_: IDictionary<'a,'b>             , _: Default4) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
     static member        Zero (_: IReadOnlyDictionary<'a,'b>     , _: Default4) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
     static member inline Zero (_: 't                             , _: Default3) = (^t : (static member Empty: ^t) ()) : 't
