@@ -56,9 +56,9 @@ type NonEmptySeq<'t> =
     static member        Head (x: NonEmptySeq<'T>, [<Optional>]_impl: Head) = x.First
     static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
     static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
-    static member Unzip (source: NonEmptySeq<'T * 'U>) = Map.Invoke fst source, Map.Invoke snd source
     #endif
 
+    static member Unzip (source: NonEmptySeq<'T * 'U>) = NonEmptySeq<_>.map fst source, NonEmptySeq<_>.map snd source
 
     static member (<*>) (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>) : NonEmptySeq<'U> = NonEmptySeq<_>.apply f x
     static member        Lift2 (f, x: NonEmptySeq<_>     , y: NonEmptySeq<_>) = NonEmptySeq<_>.lift2 f x y
