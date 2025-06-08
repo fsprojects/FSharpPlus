@@ -63,8 +63,14 @@ type NonEmptySeq<'t> =
     static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
 
     static member        Map (x: NonEmptySeq<_>, f: 'T -> 'U) = NonEmptySeq<_>.map f x      : NonEmptySeq<'U>
+
+    static member Pure (x: 'T) : NonEmptySeq<'T> = Seq.initInfinite (fun _ -> x) |> NonEmptySeq<_>.unsafeOfSeq
+    static member (<.>) (f: NonEmptySeq<_>, x: NonEmptySeq<'T>) : NonEmptySeq<'U> = Seq.map2 (<|) f x |> NonEmptySeq<_>.unsafeOfSeq
+    static member Map2  (f, x: NonEmptySeq<_>, y: NonEmptySeq<_>) = Seq.map2 f x y |> NonEmptySeq<_>.unsafeOfSeq
+    static member Map3  (f, x: NonEmptySeq<_>, y: NonEmptySeq<_>, z: NonEmptySeq<_>) = Seq.map3 f x y z |> NonEmptySeq<_>.unsafeOfSeq
+    static member IsZipLeftZero (_: NonEmptySeq<_>) = false
     
-    static member        Unzip (source: NonEmptySeq<'T * 'U>) = Map.Invoke fst source, Map.Invoke snd source
+    static member Unzip (source: NonEmptySeq<'T * 'U>) = Map.Invoke fst source, Map.Invoke snd source
     static member Zip (x: NonEmptySeq<'T>, y: NonEmptySeq<'U>) = NonEmptySeq<_>.zip         x y
     static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq<_>.collect f source : NonEmptySeq<'U>
 
