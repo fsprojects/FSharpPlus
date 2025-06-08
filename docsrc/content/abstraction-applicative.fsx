@@ -199,7 +199,7 @@ let opt122  = iI tryDiv (tryParse "488") (trySqrt 16) Ji
 
 open FSharpPlus.Math.Applicative
 
-let opt121'  = Some 21 .+. tryParse "100"
+// let opt121'  = Some 21 .+. tryParse "100"
 let optTrue  = 30 >. tryParse "29"
 let optFalse = tryParse "30" .< 29
 let m1m2m3 = -.[1; 2; 3]
