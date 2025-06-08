@@ -336,6 +336,20 @@ module Extensions =
             | ValueSome x -> Choice2Of2 x
         #endif
 
+        /// Returns the Choice2Of2 if it contains an Choice2Of2 element, otherwise the option inside a Choice1Of2.
+        static member Sequential (t: option<Choice<'T, 'Choice2Of2>>) : Choice<'T option, 'Choice2Of2> =
+            match t with
+            | Some (Choice1Of2 x) -> Choice1Of2 (Some x)
+            | Some (Choice2Of2 x) -> Choice2Of2 x
+            | None -> Choice1Of2 None
+        
+        /// Returns the Choice2Of2 if it contains an Choice2Of2 element, otherwise the option inside a Choice1Of2.
+        static member Sequential (t: voption<Choice<'T, 'Choice2Of2>>) : Choice<'T voption, 'Choice2Of2> =
+            match t with
+            | ValueSome (Choice1Of2 x) -> Choice1Of2 (ValueSome x)
+            | ValueSome (Choice2Of2 x) -> Choice2Of2 x
+            | ValueNone -> Choice1Of2 ValueNone
+
 
         /// Returns all Choice2Of2's combined, otherwise a sequence of all Choice1Of2 elements.
         static member Parallel (choice2Combiner, t: seq<Choice<'T1, 'T2>>) =
