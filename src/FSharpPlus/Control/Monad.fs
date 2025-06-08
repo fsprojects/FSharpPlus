@@ -130,6 +130,22 @@ type Join =
                         | _       -> ()
                     dct
 
+    static member Join (x: IDictionary<_, IDictionary<_, _>>, [<Optional>]_output: IDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IDictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue(k, v) in x do
+            match v.TryGetValue (k)  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IDictionary<'Key, 'U>
+
+    static member Join (x: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>, [<Optional>]_output: IReadOnlyDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IReadOnlyDictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue(k, v) in x do
+            match v.TryGetValue (k)  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
+
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
     
     static member        Join (x: NonEmptySeq<NonEmptySeq<'T>> , [<Optional>]_output: NonEmptySeq<'T>        , [<Optional>]_mthd: Join) = NonEmptySeq.concat x : NonEmptySeq<'T> 
