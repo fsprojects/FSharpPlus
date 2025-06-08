@@ -128,7 +128,8 @@ type Map with
                                                        and  '``Applicative<'T->'U>`` : (static member Return : ('T -> 'U) -> '``Applicative<'T->'U>``)
                                                           , f: 'T->'U), [<Optional>]_mthd: Default3) = Apply.InvokeOnInstance (Return.InvokeOnInstance f: '``Applicative<'T->'U>``) x : '``Applicative<'U>``
 
-    static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>    
+    static member        Map ((x: seq<_>                  , f: 'T->'U), _mthd: Default2) = Seq.map f x              : seq<'U>
+    static member        Map ((x: NonEmptySeq2<'T>        , f: 'T->'U), _mthd: Default2) = failwith "no Map implementation for NonEmptySeq2<'U>" : NonEmptySeq2<'U>
     static member        Map ((x: IEnumerator<_>          , f: 'T->'U), _mthd: Default2) = Enumerator.map f x       : IEnumerator<'U>
     static member        Map ((x: IDictionary<_,_>        , f: 'T->'U), _mthd: Default2) = Dict.map f x             : IDictionary<'Key,'U>
     static member        Map ((x: IReadOnlyDictionary<_,_>, f: 'T->'U), _mthd: Default2) = IReadOnlyDictionary.mapValues f x : IReadOnlyDictionary<'Key,_>
