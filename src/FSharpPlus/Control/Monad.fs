@@ -50,13 +50,29 @@ type Bind =
                        | Some v -> yield k, v
                        | _      -> () })
 
-    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) = 
-                   let dct = Dictionary ()
-                   for KeyValue(k, v) in source do
-                       match (f v).TryGetValue (k) with
-                       | true, v -> dct.Add (k, v)
-                       | _       -> ()
-                   dct
+    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) =
+               let dct = Dictionary ()
+               for KeyValue(k, v) in source do
+                   match (f v).TryGetValue (k) with
+                   | true, v -> dct.Add (k, v)
+                   | _       -> ()
+               dct
+
+    static member (>>=) (source: IDictionary<'Key,'T>, f: 'T -> IDictionary<'Key,'U>) =
+               let dct = Dictionary ()
+               for KeyValue(k, v) in source do
+                   match (f v).TryGetValue (k) with
+                   | true, v -> dct.Add (k, v)
+                   | _       -> ()
+               dct :> IDictionary<'Key,'U>
+
+    static member (>>=) (source: IReadOnlyDictionary<'Key,'T>, f: 'T -> IReadOnlyDictionary<'Key,'U>) =
+               let dct = Dictionary ()
+               for KeyValue(k, v) in source do
+                   match (f v).TryGetValue (k) with
+                   | true, v -> dct.Add (k, v)
+                   | _       -> ()
+               dct :> IReadOnlyDictionary<'Key,'U>
 
     static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray (Seq.bind (f >> seq<_>) source) : ResizeArray<'U>
 
