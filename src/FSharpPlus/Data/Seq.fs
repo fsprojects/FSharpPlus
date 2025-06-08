@@ -764,6 +764,14 @@ module SeqT_V2 =
     let inline iteri<'T, .. > (f: int -> 'T -> unit)      (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iteriM (fun i x -> result (f i x)) source
     let inline iter<'T, .. > f (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<unit>`` = iterM (f >> result) source
 
+    let inline tryHead (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T option>`` =
+        use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+        Bind.Invoke (ie.MoveNext ()) (fun b -> Return.Invoke (if b then Some ie.Current else None))
+
+    let inline head (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T>`` =
+        use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+        Bind.Invoke (ie.MoveNext ()) (fun b -> Return.Invoke (if b then ie.Current else invalidArg (nameof source) "The input sequence was empty."))
+    
     let inline internal tryPickMAndMap<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) (postMap: 'U option -> 'V) : '``Monad<'V>`` = innerMonad2<_, '``Monad<unit>``> () {
         use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
         let! move = ie.MoveNext ()
