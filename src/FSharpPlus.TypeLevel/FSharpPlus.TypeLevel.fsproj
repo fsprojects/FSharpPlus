@@ -7,6 +7,7 @@
     <Platforms>AnyCPU</Platforms>
     <LangVersion Condition=" '$(Configuration)' == 'Fable'">5.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <OtherFlags>--nowarn:0044 $(OtherFlags)</OtherFlags>
   </PropertyGroup>
 
   <ItemGroup>

@@ -11,7 +11,7 @@
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags>--nowarn:0044 --warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
