@@ -45,22 +45,27 @@ type NonEmptySeq<'t> =
 
     static member        (<|>) (x: 'T NonEmptySeq      , y) = NonEmptySeq<'T>.append x y
 
-    static member inline Choice (x: ref<NonEmptySeq<'``Alternative<'T>``>>, _mthd: Choice) =
-        use e = x.Value.GetEnumerator ()
+    #if !FABLE_COMPILER
+    static member inline Choice (x: NonEmptySeq<'``Alternative<'T>``>) =
+        use e = x.GetEnumerator ()
         e.MoveNext() |> ignore
         let mutable res = e.Current
         while e.MoveNext() && not (IsAltLeftZero.Invoke res) do
             res <- Append.Invoke res e.Current
+
+    static member        Head (x: NonEmptySeq<'T>, [<Optional>]_impl: Head) = x.First
+    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
+    static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
+    static member Unzip (source: NonEmptySeq<'T * 'U>) = Map.Invoke fst source, Map.Invoke snd source
+    #endif
+
 
     static member (<*>) (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>) : NonEmptySeq<'U> = NonEmptySeq<_>.apply f x
     static member        Lift2 (f, x: NonEmptySeq<_>     , y: NonEmptySeq<_>) = NonEmptySeq<_>.lift2 f x y
     static member        Lift3 (f, x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>) = NonEmptySeq<_>.lift3 f x y z
     static member IsLeftZero (_: NonEmptySeq<_>) = false
 
-    static member        Head (x: NonEmptySeq<'T>, [<Optional>]_impl: Head) = x.First
     
-    static member        TryHead (x: NonEmptySeq<'T>,[<Optional>]_impl: TryHead) = Some x.First
-    static member        TryLast (x: NonEmptySeq<'T>, [<Optional>]_impl: TryLast)  = Some <| Seq.last x
 
     static member        Map (x: NonEmptySeq<_>, f: 'T -> 'U) = NonEmptySeq<_>.map f x      : NonEmptySeq<'U>
 
@@ -70,7 +75,6 @@ type NonEmptySeq<'t> =
     static member Map3  (f, x: NonEmptySeq<_>, y: NonEmptySeq<_>, z: NonEmptySeq<_>) = Seq.map3 f x y z |> NonEmptySeq<_>.unsafeOfSeq
     static member IsZipLeftZero (_: NonEmptySeq<_>) = false
     
-    static member Unzip (source: NonEmptySeq<'T * 'U>) = Map.Invoke fst source, Map.Invoke snd source
     static member Zip (x: NonEmptySeq<'T>, y: NonEmptySeq<'U>) = NonEmptySeq<_>.zip         x y
     static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq<_>.collect f source : NonEmptySeq<'U>
 
@@ -84,6 +88,7 @@ type NonEmptySeq<'t> =
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq<_>.unsafeOfSeq : NonEmptySeq<'U>
     static member inline (+) (x: _ NonEmptySeq             , y: _ NonEmptySeq) = NonEmptySeq<_>.append x y
 
+    #if !FABLE_COMPILER
 
     static member inline Traverse (t: _ seq, f) =
         let cons x y = seq {yield x; yield! y}
@@ -94,14 +99,13 @@ type NonEmptySeq<'t> =
         let mapped = NonEmptySeq<_>.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq<_>.ofList, Return.Invoke) : '``Functor<NonEmptySeq<'U>>``
 
-    #if !FABLE_COMPILER
     static member Traverse (t: 'T NonEmptySeq, f: 'T->Async<'u>) : Async<NonEmptySeq<_>> = async {
         let! ct = Async.CancellationToken
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq<_>.unsafeOfSeq }
-    #endif
+    // #endif
 
     static member inline SequenceImpl (t, _, _:obj) = printfn "Using default4"; Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList , Return.Invoke)
     static member        SequenceImpl (t: NonEmptySeq<option<'T>>, _: option<NonEmptySeq<'T>>, _:Sequence) : option<NonEmptySeq<'T>> = printfn "Not using default4"; Option.Sequential t |> Option.map NonEmptySeq<_>.unsafeOfSeq
@@ -110,15 +114,15 @@ type NonEmptySeq<'t> =
     static member        SequenceImpl (t: NonEmptySeq<Choice<'T, 'E>>) : Choice<NonEmptySeq<'T>, 'E> = Choice.Sequential t |> Choice.map NonEmptySeq<_>.unsafeOfSeq
     static member        SequenceImpl (t: NonEmptySeq<list<'T>>  , _: list<NonEmptySeq<'T>>  , _:Sequence) : list<NonEmptySeq<'T>> = printfn "Not using default4"; Sequence.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq<_>.ofList, List.singleton)
     static member        SequenceImpl (t: NonEmptySeq<'T []>                                                                     ) : NonEmptySeq<'T> []          = Sequence.ForInfiniteSequences (t, Array.isEmpty, NonEmptySeq<_>.ofList, Array.singleton)
-    #if !FABLE_COMPILER
+    // #if !FABLE_COMPILER
     static member        SequenceImpl (t: NonEmptySeq<Async<'T>>     ) : Async<NonEmptySeq<'T>>      = Async.SequentialLazy t |> Async.map NonEmptySeq<_>.unsafeOfSeq
-    #endif
     
     static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) : '``Applicative<NonEmptySeq<'T>>`` =
         let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member SequenceImpl : _*_*_ -> _) b, c, a)
         let inline call (a: 'a, b: 'b) = call_3 (a, b, Unchecked.defaultof<'R>) : 'R
         call (Unchecked.defaultof<Sequence>, t)
 
+    #endif
 
 
 
