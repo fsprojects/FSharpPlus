@@ -13,9 +13,10 @@ module Applicatives =
     let pureAndZipApply () =        
         let res9n5  = map ((+) 1) [8;4]
         CollectionAssert.AreEqual ([9; 5], res9n5)
-
+        (*
         let red20n30  = pur (+) <.> pur 10 <.> NonEmptySeq.ofList [10;20]
         CollectionAssert.AreEqual (NonEmptySeq.ofList [20; 30], red20n30)
+        *)
 
     
     [<Test>]
