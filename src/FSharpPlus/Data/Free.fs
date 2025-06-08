@@ -33,14 +33,14 @@ module Free =
         | Free.Pure x -> Choice1Of2 x
         | Free.Roll x -> let x = unbox x in Choice2Of2 x
 
-    let inline map f x =
+    let inline map ([<InlineIfLambda>]f) x =
         let rec loop (f: 'T->'U) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
             match run x with
             | Pure x -> Pure (f x)
             | Roll (x: ^``Functor<Free<'Functor<'T>,'T>>``) -> Roll (Map.Invoke (loop f : Free<'``Functor<'T>``,'T> -> _) x: ^``Functor<Free<'Functor<'U>,'U>>``)
         loop f x
 
-    let inline bind (f: 'T -> Free<'``Functor<'U>``,'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
+    let inline bind ([<InlineIfLambda>]f: 'T -> Free<'``Functor<'U>``,'U>) (x: Free<'``Functor<'T>``,'T>) : Free<'``Functor<'U>``,'U> =
         let rec loop f (x: Free<_,_>) =
             match run x with
             | Pure r -> f r
@@ -54,14 +54,14 @@ module Free =
             | Roll (f: ^``Functor<Free<'Functor<'T->'U>,'T->'U>>``) -> Roll (Map.Invoke (loop x: Free<'``Functor<'T->'U>``,'T->'U> -> _) f: '``Functor<Free<'Functor<'U>,'U>>``)
         loop x f
 
-    let inline map2 (f: 'T->'U->'V) (x: Free<'``Functor<'T>``,'T>) (y: Free<'``Functor<'U>``,'U>) : Free<'``Functor<'V>``,'V> =
+    let inline map2 ([<InlineIfLambda>]f: 'T->'U->'V) (x: Free<'``Functor<'T>``,'T>) (y: Free<'``Functor<'U>``,'U>) : Free<'``Functor<'V>``,'V> =
         let rec loop (y: Free<_,_>) (x: Free<_,_>) =
             match run x with
             | Pure x -> map<'U,'V,'``Functor<'U>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<Free<'Functor<'V>,'V>>``,'``Functor<'V>``> (f x) y : Free<'``Functor<'V>``,'V>
             | Roll (x: ^``Functor<Free<'Functor<'T>,'T>>``) -> Roll (Map.Invoke (loop y: Free<'``Functor<'T>``,'T> -> _) x: '``Functor<Free<'Functor<'V>,'V>>``)
         loop y x
 
-    let inline map3 (f: 'T->'U->'V->'W) (x: Free<'``Functor<'T>``,'T>) (y: Free<'``Functor<'U>``,'U>) (z: Free<'``Functor<'V>``,'V>) : Free<'``Functor<'W>``,'W> =
+    let inline map3 ([<InlineIfLambda>]f: 'T->'U->'V->'W) (x: Free<'``Functor<'T>``,'T>) (y: Free<'``Functor<'U>``,'U>) (z: Free<'``Functor<'V>``,'V>) : Free<'``Functor<'W>``,'W> =
         let rec loop (y: Free<_,_>) (z: Free<_,_>) (x: Free<_,_>) =
             match run x with
             | Pure x -> map2<'U,'V,'W,'``Functor<'U>``,'``Functor<Free<'Functor<'U>,'U>>``,'``Functor<Free<'Functor<'W>,'W>>``,'``Functor<Free<'Functor<'V>,'V>>``,'``Functor<'V>``,'``Functor<'W>``> (f x) y z : Free<'``Functor<'W>``,'W>
@@ -69,7 +69,7 @@ module Free =
         loop y z x
 
     /// Folds the Free structure into a Monad
-    let inline fold (f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'U>``,'U>) : '``Monad<'U>`` =
+    let inline fold ([<InlineIfLambda>]f: '``Functor<'T>`` -> '``Monad<'T>``) (x: Free<'``Functor<'U>``,'U>) : '``Monad<'U>`` =
         let rec loop f x =
             match run x with
             | Pure a -> Return.Invoke a
@@ -77,7 +77,7 @@ module Free =
         loop f x
 
     /// Tear down a Free monad using iteration.
-    let inline iterM (f: '``Functor<'Monad<'T>>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
+    let inline iterM ([<InlineIfLambda>]f: '``Functor<'Monad<'T>>`` -> '``Monad<'T>``) (x: Free<'``Functor<'T>``,'T>) : '``Monad<'T>`` =
         let rec loop f x =
             match run x with
             | Pure  x -> Return.Invoke x
@@ -88,7 +88,7 @@ module Free =
     let inline liftF (x: '``Functor<'T>``) : Free<'``Functor<'T>``,'T> = Roll (Map.Invoke (Pure: 'T -> Free<'``Functor<'T>``,'T>) x : '``Functor<Free<'Functor<'T>,'T>>``)
 
     /// Lift a natural transformation from functor F to functor G into a natural transformation from Free of F to Free of G.
-    let inline hoist (f: ^``F<Free<'F<'T>, 'T>>`` -> ^``G<Free<'F<'T>, 'T>>``) (x: Free<'``F<'T>``, 'T>) : Free<'``G<'T>``, 'T> =
+    let inline hoist ([<InlineIfLambda>]f: ^``F<Free<'F<'T>, 'T>>`` -> ^``G<Free<'F<'T>, 'T>>``) (x: Free<'``F<'T>``, 'T>) : Free<'``G<'T>``, 'T> =
         let rec loop f x =
             if opaqueId false then
                 let _: '``G<Free<'F<'T>, 'T>>`` = Map.Invoke Unchecked.defaultof<Free<'``G<'T>``, 'T> -> Free<'``F<'T>``, 'T>> Unchecked.defaultof<'``G<Free<'G<'T>, 'T>>``>
