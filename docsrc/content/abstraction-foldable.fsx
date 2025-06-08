@@ -58,6 +58,8 @@ From .Net/F#
  -  ``seq<'T>``
  -  ``list<'T>``
  -  ``'T []``
+ -  ``Set<'T>``
+ -  ``HashSet<'T>``
  -  ``option<'T>`` 
  -  ``voption<'T>``
  -  ``Result<'T, 'Error>``

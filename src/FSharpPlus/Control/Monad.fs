@@ -167,7 +167,7 @@ type Return =
     static member        Return (_: string         , _: Return  ) = fun (x: char) -> string x : string
     static member        Return (_: StringBuilder  , _: Return  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
     static member        Return (_: 'a Set         , _: Return  ) = fun (x: 'a  ) -> Set.singleton x
-    static member        Return (_: 'a Set2        , _: Return  ) = fun (_: 'a  ) -> Set2() : 'a Set2
+    static member        Return (_: 'a HashSet     , _: Return  ) = fun (x: 'a  ) -> HashSet.singleton x
 
 
 type Delay =

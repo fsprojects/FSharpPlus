@@ -57,6 +57,7 @@ From .Net/F#
  -  ``StringBuilder``
  -  ``unit``
  -  ``Set<'T>``
+ -  ``HashSet<'T>``
  -  ``Map<'T,'Monoid>``
  -  ``TimeSpan`` 
  -  ``Tuple<'Monoid1* ... *'MonoidN>``
