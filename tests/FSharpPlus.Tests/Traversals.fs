@@ -115,7 +115,7 @@ module Traversable =
         // It hangs if we try to share this value between tests
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
@@ -180,7 +180,7 @@ module Traversable =
         // It hangs if we try to share this value between tests
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
@@ -334,3 +334,39 @@ module Bitraversable =
     let _Const3 = bitraverse NonEmptyList.singleton NonEmptyList.singleton e
 
     ()
+
+module ZipApplicatives =
+
+    [<Test>]
+    let transposeOptions () =
+        let a1 = nelist { Some 1; Some 2; Some 3 }
+        let a2 = transpose a1
+        let a3 = transpose a2
+        let b1 = [ Some 1; Some 2; Some 3 ]
+        let b2 = transpose b1
+        let b3 = transpose b2
+        let c1 = [| Some 1; Some 2; Some 3 |]
+        let c2 = transpose c1
+        CollectionAssert.AreEqual (a1, a3)
+        CollectionAssert.AreEqual (b1, b3)
+        Assert.AreEqual (Some [|1; 2; 3|], c2)
+
+    [<Test>]
+    let transposeCollections () =
+        let a1 = nelist { [1; 2]; [3; 4; 0]; [5; 6] }
+        let a2 = transpose a1
+        let a3 = transpose a2
+        let a4 = transpose a3
+        let b1 = [ [1; 2]; [3; 4; 0]; [5; 6] ]
+        let b2 = transpose b1
+        let b3 = transpose b2
+        let b4 = transpose b3
+        let c1 = [| Some 1; Some 2; Some 3 |]
+        let c2 = transpose c1
+        let d1 = List.empty<int list>
+        let d2 = transpose d1
+        let d3 = transpose d2
+        CollectionAssert.AreEqual (a2, a4)
+        CollectionAssert.AreEqual (b2, b4)
+        Assert.AreEqual (Some [|1; 2; 3|], c2)
+        CollectionAssert.AreEqual (d1, d3)

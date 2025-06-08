@@ -4,7 +4,7 @@ open FSharpPlus
 open FSharpPlus.Data
 open FSharpPlus.Control
 open Testing
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type WrappedMapA<'K,'V when 'K : comparison> = WrappedMapA of Map<'K,'V> with
     static member ToMap (WrappedMapA m) = m
     static member inline TraverseIndexed (WrappedMapA m, f) =
@@ -42,7 +42,7 @@ type WrappedListA<'s> = WrappedListA of 's list with
         List.length lst
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type WrappedListB<'s> = WrappedListB of 's list with
     static member Return x = WrappedListB [x]
     static member (+) (WrappedListB l, WrappedListB x) = WrappedListB (l @ x)
@@ -63,7 +63,7 @@ type WrappedListC<'s> = WrappedListC of 's list with
     static member Zero = WrappedListC List.empty
     static member Sum (lst: seq<WrappedListC<_>>) = Seq.head lst
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type WrappedListD<'s> = WrappedListD of 's list with
     interface Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator ()
     interface Collections.IEnumerable             with member x.GetEnumerator () = (let (WrappedListD x) = x in x :> _ seq).GetEnumerator () :> Collections.IEnumerator
@@ -103,12 +103,13 @@ type WrappedListD<'s> = WrappedListD of 's list with
         WrappedListD <!> (traversei f x : ^r)
     static member FindIndex (WrappedListD x, y) =
         SideEffects.add "Using WrappedListD's FindIndex"
-        printfn "WrappedListD.FindIndex"
         findIndex y x
     static member FindSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindSliceIndex"
-        printfn "WrappedListD.FindSliceIndex"
         findSliceIndex y x
+    static member FindLastSliceIndex (WrappedListD x, WrappedListD y) =
+        SideEffects.add "Using WrappedListD's FindLastSliceIndex"
+        findLastSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -139,7 +140,7 @@ type WrappedListG<'s> = WrappedListG of 's list with
     static member Delay (f: unit -> WrappedListG<_>) = SideEffects.add "Using WrappedListG's Delay"; f ()
     static member Using (resource, body)             = SideEffects.add "Using WrappedListG's Using"; using resource body
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type WrappedListH<'s> = WrappedListH of 's list with
     static member Map (WrappedListH lst, f) = WrappedListH (List.map f lst)
     static member inline Sequence (x: WrappedListH<'``Functor<'T>``>) =
@@ -200,7 +201,7 @@ type WrappedSeqC<'s> = WrappedSeqC of 's seq with
                     SideEffects.add "Using WrappedSeqC's TryFinally"
                     try computation finally compensation ()
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 type WrappedSeqD<'s> = WrappedSeqD of 's seq with
     static member Return x = SideEffects.add "Using WrappedSeqD's Return"; WrappedSeqD (Seq.singleton x)
     static member (<*>)  (WrappedSeqD f, WrappedSeqD x) = SideEffects.add "Using WrappedSeqD's Apply"; WrappedSeqD (f <*> x)

@@ -112,6 +112,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		docsrc\tools\templates\abstractions.plantuml = docsrc\tools\templates\abstractions.plantuml
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{153F4C68-EF70-4CF2-AA64-73482955999F}"
+	ProjectSection(SolutionItems) = preProject
+		.github\release.yml = .github\release.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{877F7C02-2F44-4314-AA00-3F5C4FFEC187}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
+		.github\workflows\fable.yml = .github\workflows\fable.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ISSUE_TEMPLATE", "ISSUE_TEMPLATE", "{B9238B1E-C83C-4196-8C86-DA3E2CCDA309}"
+	ProjectSection(SolutionItems) = preProject
+		.github\ISSUE_TEMPLATE\config.yml = .github\ISSUE_TEMPLATE\config.yml
+		.github\ISSUE_TEMPLATE\01_bug_report.yml = .github\ISSUE_TEMPLATE\01_bug_report.yml
+		.github\ISSUE_TEMPLATE\02_api_proposal.yml = .github\ISSUE_TEMPLATE\02_api_proposal.yml
+		.github\ISSUE_TEMPLATE\03_general_feature.yml = .github\ISSUE_TEMPLATE\03_general_feature.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -225,6 +244,8 @@ Global
 		{EEFF08EB-8B0C-4F63-9425-4281EFF12087} = {ED8079DD-2B06-4030-9F0F-DC548F98E1C4}
 		{ACBBD11E-0746-4B9D-9CED-A90FE5824CE2} = {83F16175-43B1-4C90-A1EE-8E351C33435D}
 		{F4D5D32F-D47A-4727-8965-80A4BB7A29DD} = {A6A6AF7D-D6E3-442D-9B1E-58CC91879BE1}
+		{877F7C02-2F44-4314-AA00-3F5C4FFEC187} = {153F4C68-EF70-4CF2-AA64-73482955999F}
+		{B9238B1E-C83C-4196-8C86-DA3E2CCDA309} = {153F4C68-EF70-4CF2-AA64-73482955999F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {789B5FFA-7891-4F60-831E-42C3C5ED2C51}

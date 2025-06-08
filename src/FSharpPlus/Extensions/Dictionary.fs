@@ -48,6 +48,16 @@ module Dictionary =
     /// <returns>A seq of the values in the dictionary.</returns>
     let values (source: Dictionary<_,_>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
+    /// <summary>Applies the given function to each key and value pair of the dictionary.</summary>
+    /// <param name="action">The function to apply to each key and value pair of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iter action (source: Dictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
+
+    /// <summary>Applies the given function to each value of the dictionary.</summary>
+    /// <param name="action">The function to apply to each value of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iterValues action (source: Dictionary<'Key, 'T>) = for KeyValue(_, v) in source do action v
+
     /// <summary>Maps the given function over each value in the dictionary.</summary>
     /// <param name="mapping">The mapping function.</param>
     /// <param name="source">The input dictionary.</param>

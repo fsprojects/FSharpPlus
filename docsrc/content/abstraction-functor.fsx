@@ -1,13 +1,15 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 
 (**
 Functor
 =======
+
 The Functor abstraction is used for types that can be mapped over.
 ___
+
 Minimal complete definition
 ---------------------------
  * ``map f x`` &nbsp; / &nbsp; ``(|>>) x f`` &nbsp; / &nbsp; ``(<<|) f x`` &nbsp; / &nbsp; ``(<!>) f x``

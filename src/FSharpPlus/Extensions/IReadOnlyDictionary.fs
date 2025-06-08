@@ -49,6 +49,16 @@ module IReadOnlyDictionary =
     /// <returns>A seq of the values in the read-only dictionary.</returns>
     let values (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
+    /// <summary>Applies the given function to each key and value pair of the read-only dictionary.</summary>
+    /// <param name="action">The function to apply to each key and value pair of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iter action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
+
+    /// <summary>Applies the given function to each value of the read-only dictionary.</summary>
+    /// <param name="action">The function to apply to each value of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iterValues action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(_, v) in source do action v
+
     /// <summary>Maps the given function over each value in the read-only dictionary.</summary>
     /// <param name="mapper">The mapping function.</param>
     /// <param name="source">The input IReadOnlyDictionary.</param>
@@ -59,9 +69,6 @@ module IReadOnlyDictionary =
         for KeyValue(k, v) in source do
             dct.Add (k, mapper v)
         dct :> IReadOnlyDictionary<'Key, 'U>
-
-    [<System.Obsolete("Name is a bit ambiguous, use mapValues if the intention is to map only over the values or mapi to map over both keys and values.")>]
-    let map f (x: IReadOnlyDictionary<'Key, 'T>) = mapValues f x // F#+ 2: if following F# core naming, it should point to mapi instead.
 
     /// <summary>Creates a read-only dictionary value from a pair of read-only dictionaries,
     /// using a function to combine them.</summary>
@@ -80,6 +87,24 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'U>
 
+    /// <summary>Combines values from three read-only dictionaries using mapping function.</summary>
+    /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
+    /// <param name="mapping">The mapping function.</param>
+    /// <param name="source1">First input dictionary.</param>
+    /// <param name="source2">Second input dictionary.</param>
+    /// <param name="source3">Third input dictionary.</param>
+    ///
+    /// <returns>The mapped IReadOnlyDictionary.</returns>
+    let map3 mapping (source1: IReadOnlyDictionary<'Key, 'T1>) (source2: IReadOnlyDictionary<'Key, 'T2>) (source3: IReadOnlyDictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
+        for KeyValue(k, vx) in source1 do
+            match tryGetValue k source2, tryGetValue k source3 with
+            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+            | _      , _       -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
+
+
     /// <summary>Maps the given function over each key and value in the read-only dictionary.</summary>
     /// <param name="mapper">The mapping function.</param>
     /// <param name="source">The input IReadOnlyDictionary.</param>
@@ -90,13 +115,6 @@ module IReadOnlyDictionary =
         for KeyValue(k, v) in source do
             dct.Add (k, mapper k v)
         dct :> IReadOnlyDictionary<'Key, 'U>
-
-    /// <summary>Applies the given action over each key and value in the read-only dictionary.</summary>
-    /// <param name="action">The action to apply.</param>
-    /// <param name="source">The input IReadOnlyDictionary.</param>
-    ///
-    /// <returns>The mapped IReadOnlyDictionary.</returns>
-    let iter action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
 
 
     /// <summary>Applies a function to each value in a read-only dictionary and then returns

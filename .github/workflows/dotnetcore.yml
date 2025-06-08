@@ -5,10 +5,6 @@ env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  # GitHub Packages Feed settings
-  GITHUB_FEED: https://nuget.pkg.github.com/fsprojects
-  GITHUB_USER: fsprojects
-  #GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   push:
@@ -41,7 +37,9 @@ jobs:
 
   package:
     runs-on: windows-latest
-
+    permissions:
+      packages: write
+      contents: read
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET Core
@@ -70,17 +68,19 @@ jobs:
     - name: Package 
       run: dotnet pack build.proj --version-suffix ${{ steps.version_suffix.outputs.version_suffix }}
     - name: Upload Artifacts
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
-        name: nupkg
+        name: nupkg-${{ matrix.runs-on }}
         path: ./bin/nupkg/*.nupkg
-    #- name: Push to GitHub Feed
-    #  shell: bash
-    #  run: |
-    #      for f in ./bin/nupkg/*.nupkg
-    #      do
-    #        curl -vX PUT -u "$GITHUB_USER:$GITHUB_TOKEN" -F package=@$f $GITHUB_FEED
-    #      done
+    - name: Push to GitHub Feed
+      continue-on-error: true
+      shell: bash
+      run: |
+          for f in ./bin/nupkg/*.nupkg
+          do
+            echo $f
+            dotnet nuget push $f -k ${{ secrets.GITHUB_TOKEN }} -s https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
+          done
 
   docs:
     runs-on: windows-latest

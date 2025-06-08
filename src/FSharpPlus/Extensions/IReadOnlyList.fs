@@ -32,4 +32,7 @@ module IReadOnlyList =
         if 0 <= i && i < source.Count then Some source.[i]
         else None
 
-    let iter mapping (source: IReadOnlyList<'T>) = Seq.iter mapping source
+    /// <summary>Applies the given function to each element of the collection.</summary>
+    /// <param name="action">The function to apply to elements from the input list.</param>
+    /// <param name="source">The input list.</param>
+    let iter action (source: IReadOnlyList<'T>) = Seq.iter action source

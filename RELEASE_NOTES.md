@@ -1,3 +1,31 @@
+#### 1.7.0  - December 15 2024
+ - ZipApplicative docs
+ - Add missing iter functions to Extensions
+ - Fix issue with iteration of dictionaries
+ - String.startsWith available now from Fable
+ - Add NonEmptyList and NonEmptySeq Helper Functions
+ - Add pick related functions to SeqT
+ - Monad instance for Vector and Matrix
+
+#### 1.6.1  - February 13 2024
+ - Add Non-sequential-Applicative operators and computation expressions
+ - Add proper SeqT implementation
+ - Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
+ - Add limited applicative support to dictionaries
+ - Add (forward) tee operator (|-)
+ - Add "mapsquared" pipe operators (|>>>) and (<<<|)
+ - Add some functions, interfaces and optimizations to DList<'T>
+ - Add findLastSliceIndex and tryFindLastSliceIndex
+ - Add Result.Sequence
+ - Add Result.iterError
+ - Add Validation.ofOptionWith
+ - Add List.chunkBy
+ - Rename Sequence overloads to Sequential
+ - Add Async.Await Async.AsTask and more overloads to Async.Sequential
+ - Add empty and isEmpty to IReadOnlyCollection and Exception module
+ - Fix bug in lift3 for List and Array
+ - Type inference for generic traversals slightly improved
+
 #### 1.5.0  - October 15 2023
  - Support for Fable 4 (some functions had to be removed from Fable in order to it)
  - More IList and IReadOnlyList functions

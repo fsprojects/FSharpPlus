@@ -1,9 +1,10 @@
-Release Notes for FSharpPlus 1.5.0  - October 15 2023
+Release Notes for FSharpPlus 1.7.0  - December 15 2024
 ------------------------------------------------------
 
-Support for Fable 4 (some functions had to be removed from Fable in order to it)
-More IList and IReadOnlyList functions
-Bug fixes in parse, tryParse, seq's TryFinally and (=>>) for ValueTask
-Add Free.hoist
-Add distinct for NonEmptySeq and NonEmptyList
-Add ValueOption.ofOption and Task.result for Task and ValueTask
+ZipApplicative docs
+Add missing iter functions to Extensions
+Fix issue with iteration of dictionaries
+String.startsWith available now from Fable
+Add NonEmptyList and NonEmptySeq Helper Functions
+Add pick related functions to SeqT
+Monad instance for Vector and Matrix

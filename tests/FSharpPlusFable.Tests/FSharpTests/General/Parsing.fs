@@ -6,7 +6,7 @@ open FSharpPlus.Data
 #nowarn "686"
 open System
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 let (|Int32|_|) : _-> Int32 option = tryParse
 type ProductId = { Value:int }
 with
@@ -17,7 +17,7 @@ with
 #endif
 
 let parsing = testList "Parsing" [
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testCase "parse" (fun () -> 
 
         let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"

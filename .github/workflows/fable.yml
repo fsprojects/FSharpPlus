@@ -8,37 +8,6 @@ on:
 
 
 jobs:
-  testfable3:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Restore
-      run: git submodule update --init --recursive
-    - name: Remove global json
-      run: rm global.json
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          8.0.x
-          7.0.x
-          6.0.x
-    - name: Restore tools
-      run: dotnet tool restore
-    - name: Install fable
-      run: dotnet tool install --global Fable --version 3.7.20
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
-    - name: Install npm dependencies
-      working-directory: tests/FSharpPlusFable.Tests
-      run: npm install
-    - name: Run Fable tests
-      working-directory: tests/FSharpPlusFable.Tests
-      run: fable . --outDir bin --runScript ./bin
-
   testfable4:
     runs-on: ubuntu-latest
 
@@ -74,33 +43,3 @@ jobs:
       working-directory: tests/FSharpPlusFable.Tests
       run: fable . --outDir bin --runScript ./bin
 
-  testFable3SubsetOnCore:
-    runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Restore
-      run: git submodule update --init --recursive
-    - name: Remove global json
-      run: rm global.json
-    - name: Remove global json in subfolder
-      run: rm global.json
-      working-directory: tests/FSharpPlusFable.Tests
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: |
-          8.0.x
-          7.0.x
-          6.0.x
-    - name: Restore tools
-      run: dotnet tool restore
-    # - name: Run tests (Fable2 subset but on .net)
-    #   working-directory: tests/FSharpPlusFable.Tests
-    #   run: dotnet run -c Fable
-    - name: Run tests (Fable3 subset but on .net)
-      working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet run -c Fable3
-    - name: Run tests (Full subset for of tests .net)
-      working-directory: tests/FSharpPlusFable.Tests
-      run: dotnet run -c Release

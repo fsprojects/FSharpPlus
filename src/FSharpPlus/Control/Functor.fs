@@ -12,15 +12,15 @@ open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && ! FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 // Functor class ----------------------------------------------------------
 
 type Iterate =
     static member Iterate (x: Lazy<'T>   , action) = action x.Value : unit
     static member Iterate (x: seq<'T>    , action) = Seq.iter action x
-    static member Iterate (x: option<'T> , action) = match x with Some x -> action x | _ -> ()
-    static member Iterate (x: voption<'T> , action) = match x with ValueSome x -> action x | _ -> ()
+    static member Iterate (x: option<'T> , action) = Option.iter action x
+    static member Iterate (x: voption<'T>, action) = ValueOption.iter action x
     static member Iterate (x: list<'T>   , action) = List.iter action x
     static member Iterate ((_: 'W, a: 'T), action) = action a :unit
     static member Iterate (x: 'T []      , action) = Array.iter   action x
@@ -34,17 +34,19 @@ type Iterate =
                                 for l = 0 to Array4D.length4 x - 1 do
                                     action x.[i,j,k,l]
     #endif
-    #if !FABLE_COMPILER
+    #if FABLE_COMPILER
     static member Iterate (x: Async<'T>            , action) = action (Async.RunSynchronously x) : unit
     #else
-    static member Iterate (x: Async<'T>            , action) = action (x |> Async.Ignore |> Async.StartImmediate) : unit
+    static member Iterate (x: Async<'T>            , action: 'T -> unit) = (x |> Async.map action |> Async.AsTask).Wait ()
     #endif
-    static member Iterate (x: Result<'T, 'E>       , action) = match x with Ok x         -> action x | _ -> ()
+    static member Iterate (x: Result<'T, 'E>       , action) = Result.iter action x
     static member Iterate (x: Choice<'T, 'E>       , action) = match x with Choice1Of2 x -> action x | _ -> ()
     static member Iterate (KeyValue(_: 'Key, x: 'T), action) = action x : unit
     static member Iterate (x: Map<'Key,'T>         , action) = Map.iter (const' action) x 
-    static member Iterate (x: Dictionary<'Key, 'T> , action) = Seq.iter action x.Values
-    static member Iterate (x: _ ResizeArray        , action) = Seq.iter action x
+    static member Iterate (x: IDictionary<'Key, 'T>, action) = Dict.iterValues action x
+    static member Iterate (x: Dictionary<'Key, 'T> , action) = Dictionary.iterValues action x
+    static member Iterate (x: IReadOnlyDictionary<'Key, 'T>, action) = IReadOnlyDictionary.iterValues action x
+    static member Iterate (x: _ ResizeArray        , action) = ResizeArray.iter action x
 
     // Restricted
     static member Iterate (x:string         , action) = String.iter action x
@@ -60,13 +62,13 @@ type Iterate =
 type Map =
     inherit Default1
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member Map ((x: Lazy<_>             , f: 'T->'U), _mthd: Map) = Lazy.map f x
     #if !FABLE_COMPILER
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member Map ((x: ValueTask<'T>       , f: 'T->'U), _mthd: Map) = ValueTask.map f x : ValueTask<'U>
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
@@ -113,7 +115,7 @@ type Map =
     static member inline InvokeOnInstance (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
         (^``Functor<'T>`` : (static member Map : _ * _ -> _) source, mapping)
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 
 type Map with
@@ -138,7 +140,7 @@ type Map with
     static member inline Map ((_: ^t when ^t: null and ^t: struct, _ ), _mthd: Default1) = ()
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Unzip =
     inherit Default1
@@ -151,7 +153,7 @@ type Unzip =
     #if !FABLE_COMPILER
     static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Unzip ((source: ValueTask<'T * 'U>                , _output: ValueTask<'T> * ValueTask<'U>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
     #endif
     static member        Unzip ((source: option<'T * 'U>                   , _output: option<'T> * option<'U>                              ) , _mthd: Unzip   ) = Option.unzip source
@@ -197,7 +199,7 @@ type Unzip =
         call (Unchecked.defaultof<Unzip>, source) : '``Functor<'T1>`` * '``Functor<'T2>``
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Zip =
     inherit Default1
@@ -213,13 +215,14 @@ type Zip =
     static member Zip ((x: 'T []                      , y: 'U []                     , _output: ('T*'U) []                   ), _mthd: Zip) = Array.zipShortest       x y
     static member Zip ((x: ResizeArray<'T>            , y: ResizeArray<'U>           , _output: ResizeArray<'T*'U>           ), _mthd: Zip) = ResizeArray.zipShortest x y
     static member Zip ((x: option<'T>                 , y: option<'U>                , _output: option<'T*'U>                ), _mthd: Zip) = Option.zip              x y
-    static member Zip ((x: voption<'T>                , y: voption<'U>              , _output: voption<'T*'U>                ), _mthd: Zip) = ValueOption.zip         x y
-    static member Zip ((x: Result<'T, 'Error>         , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.zip              x y
+    static member Zip ((x: voption<'T>                , y: voption<'U>               , _output: voption<'T*'U>               ), _mthd: Zip) = ValueOption.zip         x y
+    static member inline Zip ((x: Result<'T, 'Error>  , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.apply2With Plus.Invoke (fun a b -> a, b) x y
+    static member inline Zip ((x: Choice<'T, 'Error>  , y: Choice<'U, 'Error>        , _output: Choice<'T * 'U, 'Error>      ), _mthd: Zip) = Choice.apply2With Plus.Invoke (fun a b -> a, b) x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member Zip ((x: ValueTask<'T>              , y: ValueTask<'U>             , _output: ValueTask<'T*'U>             ), _mthd: Zip) = ValueTask.zip           x y
     #endif
 
@@ -236,7 +239,7 @@ type Zip with
     static member inline Zip ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , _output: '``ZipFunctor<'T1 * 'T2>``      ), _mthd: Default1) = Zip.InvokeOnInstance x y : '``ZipFunctor<'T1 * 'T2>``
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 // Bifunctor class --------------------------------------------------------
 
@@ -257,7 +260,7 @@ type Bimap =
         (^``Bifunctor<'T,'V>``: (static member Bimap : _*_*_ -> _) source, f, g)
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type MapFirst =
     inherit Default1
@@ -309,7 +312,7 @@ type Dimap =
         (^``Profunctor<'B,'C>`` : (static member Dimap : _*_*_ -> _) source, ab, cd)
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 // Contravariant class ----------------------------------------------------
 
@@ -335,7 +338,7 @@ type Contramap =
     #endif
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
     
 type Contramap with
     static member inline Contramap (x: '``Profunctor<'B,'C>``, f: 'A->'B, [<Optional>]_mthd: Default2) = Dimap.InvokeOnInstance f id x : '``Profunctor<'A,'C>``
@@ -343,13 +346,13 @@ type Contramap with
     static member inline Contramap (_: ^t when ^t: null and ^t: struct  , _: 'A->'B,  _mthd: Default1) = ()
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Map with
     static member inline Map ((x: '``Profunctor<'B,'C>``, cd: 'C->'D), [<Optional>]_mthd: Default5) = Dimap.InvokeOnInstance id cd x : '``Profunctor<'B,'D>``
 
 #endif
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Dimap with
     static member inline Dimap (x: '``Profunctor<'B,'C>``, ab: 'A->'B, cd: 'C->'D, [<Optional>]_mthd: Default2) = x |> Map.InvokeOnInstance cd |> Contramap.InvokeOnInstance ab : '``Profunctor<'A,'D>``

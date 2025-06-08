@@ -29,7 +29,7 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline uncurry f (x: 'T1, y: 'T2) : 'Result = f x y
     
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     /// <summary>
     /// Takes a function expecting a tuple of any N number of elements and returns a function expecting N curried arguments.
     /// </summary>
@@ -55,6 +55,12 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline (/>) x = flip x
     
+    /// <summary>
+    /// Executes a side-effect function and returns the original input value. Same as 'tap' but with arguments flipped.
+    /// </summary>
+    /// <category index="0">Common Combinators</category>
+    let inline (|-) source ([<InlineIfLambda>]f: 'T -> unit) = f source; source
+
     /// <summary>
     /// Executes a side-effect function and returns the original input value.
     /// </summary>
@@ -116,7 +122,7 @@ module Operators =
     /// <category index="0">Common Combinators</category>
     let inline tuple8<'T1, 'T2, 'T3, 'T4, 'T5, 'T6, 'T7, 'T8> (t1: 'T1) (t2: 'T2) (t3: 'T3) (t4: 'T4) (t5: 'T5) (t6: 'T6) (t7: 'T7) (t8: 'T8) = t1, t2, t3, t4, t5, t6, t7, t8
          
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     // Functor ----------------------------------------------------------------
 
@@ -142,6 +148,21 @@ module Operators =
     /// </summary>
     /// <category index="1">Functor</category>
     let inline (|>>) (x: '``Functor<'T>``) (f: 'T->'U) : '``Functor<'U>`` = Map.Invoke f x
+
+    /// <summary>
+    /// Lifts a function into two Functors.
+    /// To be used in pipe-forward style expressions
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (|>>>) (x: '``Functor1<Functor2<'T>>``) (f: 'T -> 'U) : '``Functor1<Functor2<'U>>`` =
+        (Map.Invoke >> (Map.Invoke: ('``Functor2<'T>`` -> '``Functor2<'U>``) -> _)) f x
+
+    /// <summary>
+    /// Lifts a function into two Functors.
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (<<<|) (f: 'T -> 'U) (x: '``Functor1<Functor2<'T>>``) : '``Functor1<Functor2<'U>`` =
+        (Map.Invoke >> (Map.Invoke: ('``Functor2<'T>`` -> '``Functor2<'U>``) -> _)) f x
 
     /// <summary>
     /// Like map but ignoring the results.
@@ -184,9 +205,6 @@ module Operators =
     /// <category index="2">Applicative</category>
     let inline lift2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = Lift2.Invoke f x y
 
-    [<System.Obsolete("Use lift2 instead.")>]
-    let inline liftA2 (f: 'T->'U->'V) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'V>`` = lift2 f x y
-
     /// <summary>
     /// Applies 3 lifted arguments to a non-lifted function. Equivalent to map3 in non list-like types.
     /// </summary>
@@ -205,18 +223,38 @@ module Operators =
     /// <category index="2">Applicative</category>
     let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
-    [<System.Obsolete("Use flip (<*>) instead.")>]
-    let inline (<**>) (x: '``Applicative<'T>``) : '``Applicative<'T -> 'U>``->'``Applicative<'U>`` = flip (<*>) x
-    
-    [<System.Obsolete("Use opt instead.")>]
-    let inline optional v = Some <!> v </Append.Invoke/> result None
-
     /// <summary>
     /// Transforms an alternative value (which has the notion of success/failure) to an alternative
     /// that always succeed, wrapping the original value into an option to signify success/failure of the original alternative.
     /// </summary>
     /// <category index="2">Applicative</category>
     let inline opt (v: '``Alternative<'T>``) : '``Alternative<option<'T>>`` = (Some : 'T -> _) <!> v </Append.Invoke/> result (None: option<'T>)
+
+
+    /// <summary>
+    /// Lifts a value into a ZipFunctor. Same as return in (zip) Computation Expressions.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline pur (x: 'T) : '``ZipFunctor<'T>`` = Pure.Invoke x
+
+    /// <summary>
+    /// Apply a lifted argument to a lifted function: f &lt;/&gt; arg.
+    /// Same as &lt;*&gt; but for non sequential applicatives.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (<.>) (f: '``ZipApplicative<'T -> 'U>``) (x: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` = ZipApply.Invoke f x : '``ZipApplicative<'U>``
+
+    /// <summary>
+    /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline map2 (f: 'T->'U->'V) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) : '``ZipApplicative<'V>`` = Map2.Invoke f x y
+
+    /// <summary>
+    /// Applies 3 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline map3 (f: 'T->'U->'V->'W) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) (z: '``ZipApplicative<'V>``) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
 
 
 
@@ -386,7 +424,7 @@ module Operators =
     let inline invmap (f: 'T -> 'U) (g: 'U -> 'T) (source: '``InvariantFunctor<'T>``) = Invmap.Invoke f g source : '``InvariantFunctor<'U>``
 
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     // Category ---------------------------------------------------------------
 
@@ -697,6 +735,21 @@ module Operators =
     /// <category index="13">Traversable</category>
     let inline sequence (t: '``Traversable<'Functor<'T>>``) : '``Functor<'Traversable<'T>>`` = Sequence.Invoke t
 
+
+    // Traversable (Parallel / Pointwise)
+
+    /// <summary>
+    /// Map each element of a structure to an action, evaluate these actions from left to right, pointwise, and/or in parallel, and collect the results.
+    /// </summary>
+    /// <category index="13">Traversable</category>
+    let inline gather (f: 'T->'``ZipFunctor<'U>``) (t: '``Traversable<'T>``) : '``ZipFunctor<'Traversable<'U>>`` = Gather.Invoke f t
+
+    /// <summary>
+    /// Evaluate each action in the structure from left to right, pointwise, and/or in parallel, and collect the results.
+    /// </summary>
+    /// <category index="13">Traversable</category>
+    let inline transpose (t: '``Traversable<'ZipFunctor<'T>>``) : '``ZipFunctor<'Traversable<'T>>`` = Transpose.Invoke t
+
     
     // Bifoldable
 
@@ -848,6 +901,33 @@ module Operators =
     /// </returns>
     let inline tryFindSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindSliceIndex.Invoke slice source
 
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    /// 
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the source.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let inline findLastSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index = FindLastSliceIndex.Invoke slice source
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <category index="16">Indexable</category>
+    /// 
+    /// <param name="slice">The slice to be searched.</param>
+    /// <param name="source">The input collection.</param>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let inline tryFindLastSliceIndex (slice: '``Indexable<'T>``) (source: '``Indexable<'T>``) : 'Index option = TryFindLastSliceIndex.Invoke slice source
 
     // Comonads
 
@@ -1312,7 +1392,7 @@ module Operators =
     let inline mapItem5 (mapping: 'T -> 'U) (tuple: '``('A * 'B * 'C * 'D * 'T * ..)``) = MapItem5.Invoke mapping tuple : '``('A * 'B * 'C * 'D * 'U * ..)``
     
     
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     
     // Converter
 
@@ -1358,7 +1438,7 @@ module Operators =
 
     #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     /// <summary>
     /// Converts to a value from its string representation.
@@ -1507,7 +1587,7 @@ module Operators =
 
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     // Additional functions
 
@@ -1530,15 +1610,18 @@ module Operators =
     let inline sum (x: '``Foldable<'Monoid>``) : 'Monoid = fold (++) (getZero () : 'Monoid) x
 
     /// <summary>
+    /// Folds the sum of all monoid elements in the Foldable resulting of applying the projection.
+    /// </summary>
+    /// <category index="23">Additional Functions</category>
+    let inline sumBy ([<InlineIfLambda>] projection: 'T -> 'Monoid) (x: '``FoldableFunctor<'T>``) : 'Monoid =        
+        fold (++) (getZero () : 'Monoid) (map projection x)
+
+    /// <summary>
     /// Converts using the implicit operator. 
     /// </summary>
     /// <category index="23">Additional Functions</category>
     let inline implicit (x: ^T) = ((^R or ^T) : (static member op_Implicit : ^T -> ^R) x) : ^R
 
-    
-    [<System.Obsolete("Use Parsed instead.")>]
-    /// <category index="23">Additional Functions</category>
-    let inline (|Parse|_|) str : 'T option = tryParse str
     
     /// <summary>
     /// An active recognizer for a generic value parser.
@@ -1556,7 +1639,7 @@ module Operators =
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
     
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =
