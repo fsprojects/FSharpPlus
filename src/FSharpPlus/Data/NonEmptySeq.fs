@@ -107,20 +107,8 @@ type NonEmptySeq<'t> =
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq<_>.unsafeOfSeq }
     // #endif
 
-    static member inline SequenceImpl (t, _, _:obj) = printfn "Using default4"; Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList , Return.Invoke)
-    static member        SequenceImpl (t: NonEmptySeq<option<'T>>, _: option<NonEmptySeq<'T>>, _:Sequence) : option<NonEmptySeq<'T>> = printfn "Not using default4"; Option.Sequential t |> Option.map NonEmptySeq<_>.unsafeOfSeq
-
-    static member        SequenceImpl (t: NonEmptySeq<Result<'T, 'E>>) : Result<NonEmptySeq<'T>, 'E> = Result.Sequential t |> Result.map NonEmptySeq<_>.unsafeOfSeq
-    static member        SequenceImpl (t: NonEmptySeq<Choice<'T, 'E>>) : Choice<NonEmptySeq<'T>, 'E> = Choice.Sequential t |> Choice.map NonEmptySeq<_>.unsafeOfSeq
-    static member        SequenceImpl (t: NonEmptySeq<list<'T>>  , _: list<NonEmptySeq<'T>>  , _:Sequence) : list<NonEmptySeq<'T>> = printfn "Not using default4"; Sequence.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq<_>.ofList, List.singleton)
-    static member        SequenceImpl (t: NonEmptySeq<'T []>                                                                     ) : NonEmptySeq<'T> []          = Sequence.ForInfiniteSequences (t, Array.isEmpty, NonEmptySeq<_>.ofList, Array.singleton)
-    // #if !FABLE_COMPILER
-    static member        SequenceImpl (t: NonEmptySeq<Async<'T>>     ) : Async<NonEmptySeq<'T>>      = Async.SequentialLazy t |> Async.map NonEmptySeq<_>.unsafeOfSeq
-    
-    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) : '``Applicative<NonEmptySeq<'T>>`` =
-        let inline call_3 (a: ^a, b: ^b, c: ^c) = ((^a or ^b or ^c) : (static member SequenceImpl : _*_*_ -> _) b, c, a)
-        let inline call (a: 'a, b: 'b) = call_3 (a, b, Unchecked.defaultof<'R>) : 'R
-        call (Unchecked.defaultof<Sequence>, t)
+    static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) =
+        Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList, Return.Invoke) : '``Applicative<NonEmptySeq<'T>>``
 
     #endif
 
