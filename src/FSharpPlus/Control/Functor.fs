@@ -11,6 +11,7 @@ open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
+open FSharpPlus.Extensions
 
 #if !FABLE_COMPILER
 
