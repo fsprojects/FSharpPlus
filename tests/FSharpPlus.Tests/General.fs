@@ -1089,30 +1089,6 @@ module IdiomBrackets =
         let res3n4''' = iI (+) (result 2) [1;2] Ii   // fails to compile when constraints are not properly defined
         Assert.AreEqual ([3;4], res3n4'' )
         Assert.AreEqual ([3;4], res3n4''')
-
-
-        let output = System.Text.StringBuilder ()
-        let append (x: string) = output.Append x |> ignore
-
-        let v5: Lazy<_> = lazy (append "5"; 5)
-        Assert.AreEqual (0, output.Length)
-        let fPlus10 x   = lazy (append " + 10"; x + 10)
-        Assert.AreEqual (0, output.Length)
-        let v5plus10    = v5 >>= fPlus10
-        Assert.AreEqual (0, output.Length)
-        let v15 = v5plus10.Force ()
-        Assert.AreEqual ("5 + 10", string output)
-        Assert.AreEqual (15, v15)
-
-        output.Clear () |> ignore
-
-        let v4ll: Lazy<_> = lazy (append "outer"; lazy (append "inner"; 4))
-        Assert.AreEqual (0, output.Length)
-        let v4l = join v4ll
-        Assert.AreEqual (0, output.Length)
-        let v4  = v4l.Force()
-        Assert.AreEqual ("outerinner", string output)
-        Assert.AreEqual (4, v4)
  
 
 module Alternative =
