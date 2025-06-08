@@ -29,6 +29,7 @@ type Plus =
     static member        ``+`` (x: Set<_>            , y                    , [<Optional>]_mthd: Plus    ) = Set.union x y
     
     #if !FABLE_COMPILER
+    static member        ``+`` (x: HashSet<_>        , y                    , [<Optional>]_mthd: Plus    ) = HashSet.union x y
     static member        ``+`` (x: StringBuilder     , y: StringBuilder     , [<Optional>]_mthd: Plus    ) = StringBuilder().Append(x).Append(y)
     static member        ``+`` (_: Id0               , _: Id0               , [<Optional>]_mthd: Plus    ) = Id0 ""    
     static member        ``+`` (x: AggregateException, y: AggregateException, [<Optional>]_mthd: Plus    ) = Exception.add x y

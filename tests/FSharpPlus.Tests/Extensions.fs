@@ -236,6 +236,25 @@ module Extensions =
     areEquivalent r1 r2
 
   [<Test>]
+  let ``HashSet.union gives the same set when joined with an empty set (identity)`` () =
+    let m1 = HashSet.singleton "42"
+    let m2 = HashSet.empty
+
+    let r1 = HashSet.union m1 m2
+
+    areEquivalent r1 m1
+
+  [<Test>]
+  let ``HashSet.union returns same results independent of the order (commutative)`` () =
+    let m1 = HashSet [1..4]
+    let m2 = HashSet [3..6]
+
+    let r1 = HashSet.union m1 m2
+    let r2 = HashSet.union m2 m1
+
+    areEquivalent r1 r2
+
+  [<Test>]
   let ``String.toCodePoints >> String.ofCodePoints should preserve the original string`` () =
     // some naughty strings adopted from https://github.com/minimaxir/big-list-of-naughty-strings
     // The MIT License (MIT), Copyright (c) 2015 Max Woolf

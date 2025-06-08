@@ -104,6 +104,7 @@ Restricted:
  -  ``string``
  -  ``StringBuilder``
  -  ``Set<'T>``
+ -  ``HashSet<'T>``
  -  ``IEnumerator<'T>``
  [Suggest another](https://github.com/fsprojects/FSharpPlus/issues/new) concrete implementation
 

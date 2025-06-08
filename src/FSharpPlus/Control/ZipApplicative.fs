@@ -61,14 +61,14 @@ type Pure =
     [<CompilerMessage(MessagePure + "ResizeArray<'t>.", Code, IsError = true)>]
     static member        Pure (x: ResizeArray<'a>, _: Pure  ) = Return.Return (x, Unchecked.defaultof<Return>)
 
-    //Restricted
     [<CompilerMessage(MessagePure + "string.", Code, IsError = true)>]
     static member        Pure (_: string         , _: Pure  ) = fun (x: char) -> string x : string
     [<CompilerMessage(MessagePure + "StringBuilder.", Code, IsError = true)>]
     static member        Pure (_: StringBuilder  , _: Pure  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
     [<CompilerMessage(MessagePure + "Set.", Code, IsError = true)>]
     static member        Pure (_: 'a Set         , _: Pure  ) = fun (x: 'a  ) -> Set.singleton x
-    static member        Pure (_: 'a Set2        , _: Pure  ) = fun (_: 'a  ) -> Set2() : 'a Set2
+    [<CompilerMessage(MessagePure + "HashSet.", Code, IsError = true)>]
+    static member        Pure (_: 'a HashSet     , _: Pure  ) = fun (x: 'a  ) -> HashSet.singleton x
 
 #endif
 

@@ -53,6 +53,7 @@
     <Compile Include="Extensions/Map.fs" />
     <Compile Include="Extensions/Dictionary.fs" />
     <Compile Include="Extensions/Dict.fs" />
+    <Compile Include="Extensions/HashSet.fs" />
     <Compile Include="Extensions/IReadOnlyDictionary.fs" />
     <Compile Include="Extensions/Enumerator.fs" />
     <Compile Include="Extensions/Task.fs" />

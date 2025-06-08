@@ -42,6 +42,7 @@ From .Net/F#
  -  ``StringBuilder``
  -  ``unit``
  -  ``Set<'T>``
+ -  ``HashSet<'T>``
  -  ``Map<'T, 'U>``
  -  ``TimeSpan`` 
  -  ``Tuple<*>``

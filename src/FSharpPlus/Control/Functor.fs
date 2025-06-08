@@ -115,6 +115,7 @@ type Map =
     static member Map ((x: StringBuilder       , f        ), _mthd: Map) = StringBuilder (String.map f (string x))
     static member Map ((x: Set<_>              , f        ), _mthd: Map) = Set.map f x
     static member Map ((_: Set2<'T>            , _: 'T->'U), _mthd: Map) = Set2<'U>()
+    static member Map ((x: HashSet<_ >         , f        ), _mthd: Map) = HashSet.map f x
 
 
     static member inline Invoke (mapping: 'T->'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = 
