@@ -58,8 +58,11 @@ From .Net/F#
  -  ``seq<'T>``
  -  ``list<'T>``
  -  ``'T []``
+ -  ``Set<'T>``
+ -  ``HashSet<'T>``
  -  ``option<'T>`` 
- -  ``voption<'T>`` 
+ -  ``voption<'T>``
+ -  ``Result<'T, 'Error>``
  -  ``ResizeArray<'T>`` 
  -  ``ReadOnlyCollection<'T>`` 
  -  ``IReadOnlyCollection<'T>``

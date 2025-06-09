@@ -78,6 +78,8 @@ let testCompile =
 
     #if !FABLE_COMPILER
     let mapAB = plus mapA mapB
+    #else
+    let _ = mapA, mapB  // avoid unused warning for mapA and mapB
     #endif
     #if !FABLE_COMPILER
     let _greeting1 = Async.RunSynchronously mapAB.[2]

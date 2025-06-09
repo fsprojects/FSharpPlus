@@ -19,9 +19,11 @@
     <Compile Include="Data.fs" />
     <Compile Include="General.fs" />
     <Compile Include="Applicatives.fs" />
+    <Compile Include="Monads.fs" />
     <Compile Include="Splits.fs" />
     <Compile Include="Monoid.fs" />
     <Compile Include="Parsing.fs" />
+    <Compile Include="Folds.fs" />
     <Compile Include="Traversals.fs" />
     <Compile Include="Indexables.fs" />
     <Compile Include="Collections.fs" />

@@ -50,13 +50,29 @@ type Bind =
                        | Some v -> yield k, v
                        | _      -> () })
 
-    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) = 
-                   let dct = Dictionary ()
-                   for KeyValue(k, v) in source do
-                       match (f v).TryGetValue (k) with
-                       | true, v -> dct.Add (k, v)
-                       | _       -> ()
-                   dct
+    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) =
+               let dct = Dictionary ()
+               for KeyValue(k, v) in source do
+                   match (f v).TryGetValue (k) with
+                   | true, v -> dct.Add (k, v)
+                   | _       -> ()
+               dct
+
+    static member (>>=) (source: IDictionary<'Key,'T>, f: 'T -> IDictionary<'Key,'U>) =
+               let dct = Dictionary ()
+               for KeyValue(k, v) in source do
+                   match (f v).TryGetValue (k) with
+                   | true, v -> dct.Add (k, v)
+                   | _       -> ()
+               dct :> IDictionary<'Key,'U>
+
+    static member (>>=) (source: IReadOnlyDictionary<'Key,'T>, f: 'T -> IReadOnlyDictionary<'Key,'U>) =
+               let dct = Dictionary ()
+               for KeyValue(k, v) in source do
+                   match (f v).TryGetValue (k) with
+                   | true, v -> dct.Add (k, v)
+                   | _       -> ()
+               dct :> IReadOnlyDictionary<'Key,'U>
 
     static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray (Seq.bind (f >> seq<_>) source) : ResizeArray<'U>
 
@@ -114,6 +130,22 @@ type Join =
                         | _       -> ()
                     dct
 
+    static member Join (x: IDictionary<_, IDictionary<_, _>>, [<Optional>]_output: IDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IDictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue(k, v) in x do
+            match v.TryGetValue (k)  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IDictionary<'Key, 'Value>
+
+    static member Join (x: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>, [<Optional>]_output: IReadOnlyDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IReadOnlyDictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue(k, v) in x do
+            match v.TryGetValue (k)  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IReadOnlyDictionary<'Key, 'Value>
+
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
     
     static member        Join (x: NonEmptySeq<NonEmptySeq<'T>> , [<Optional>]_output: NonEmptySeq<'T>        , [<Optional>]_mthd: Join) = NonEmptySeq.concat x : NonEmptySeq<'T> 
@@ -167,7 +199,7 @@ type Return =
     static member        Return (_: string         , _: Return  ) = fun (x: char) -> string x : string
     static member        Return (_: StringBuilder  , _: Return  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
     static member        Return (_: 'a Set         , _: Return  ) = fun (x: 'a  ) -> Set.singleton x
-    static member        Return (_: 'a Set2        , _: Return  ) = fun (_: 'a  ) -> Set2() : 'a Set2
+    static member        Return (_: 'a HashSet     , _: Return  ) = fun (x: 'a  ) -> HashSet.singleton x
 
 
 type Delay =

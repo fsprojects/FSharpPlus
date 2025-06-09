@@ -92,7 +92,7 @@ module ResultOldVersion =
 module ResultNewVersion =
          
     let sequence (t: seq<Result<int, string>>) : Result<int seq, string> =
-        let mutable accumulator = ArrayCollector<'T> ()
+        let mutable accumulator = ArrayCollector<_> ()
         let mutable error = None
         use e = t.GetEnumerator ()
         while e.MoveNext () && error.IsNone do
