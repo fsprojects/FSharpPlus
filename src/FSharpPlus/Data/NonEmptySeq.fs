@@ -5,6 +5,7 @@ open System.Runtime.InteropServices
 open System.ComponentModel
 open System.Collections.Generic
 open FSharpPlus
+open FSharpPlus.Internals
 open FSharpPlus.Extensions
 open FSharpPlus.Control
 open Microsoft.FSharp.Core.CompilerServices
@@ -91,26 +92,71 @@ type NonEmptySeq<'t> =
     #if !FABLE_COMPILER
 
     static member inline Traverse (t: _ seq, f) =
-        let cons x y = seq {yield x; yield! y}
-        let cons_f x ys = Map.Invoke (cons: 'a->seq<_>->seq<_>) (f x) <*> ys
+        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
         Map.Invoke NonEmptySeq<_>.unsafeOfSeq (Seq.foldBack cons_f t (result Seq.empty))
 
-    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T->'``Functor<'U>``) =
+    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``) =
         let mapped = NonEmptySeq<_>.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq<_>.ofList, Return.Invoke) : '``Functor<NonEmptySeq<'U>>``
 
-    static member Traverse (t: 'T NonEmptySeq, f: 'T->Async<'u>) : Async<NonEmptySeq<_>> = async {
+    static member Traverse (t: 'T NonEmptySeq, f: 'T -> Async<'u>) : Async<NonEmptySeq<_>> = async {
         let! ct = Async.CancellationToken
         return seq {
             use enum = t.GetEnumerator ()
             while enum.MoveNext() do
                 yield Async.RunSynchronously (f enum.Current, cancellationToken = ct) } |> NonEmptySeq<_>.unsafeOfSeq }
-    // #endif
 
     static member inline Sequence (t: NonEmptySeq<'``Applicative<'T>``>) =
         Sequence.ForInfiniteSequences (t, IsLeftZero.Invoke, NonEmptySeq<_>.ofList, Return.Invoke) : '``Applicative<NonEmptySeq<'T>>``
 
+
+
+    
+    static member inline Gather (t: seq<'T>, f: 'T -> '``Functor<'U>``) =
+        #if TEST_TRACE
+        Traces.add "Gather seq, 'T -> Functor<'U>"
+        #endif
+        let mapped = Seq.map f t
+        Transpose.ForInfiniteSequences (mapped, IsZipLeftZero.Invoke, List.toSeq, Pure.Invoke) : '``Functor<seq<'U>>``
+
+    static member inline Gather (t: _ NonEmptySeq, f: 'T -> '``ZipFunctor<'U>``) =
+        #if TEST_TRACE
+        Traces.add "Gather NonEmptySeq"
+        #endif
+        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <.> ys
+        Map.Invoke NonEmptySeq<_>.unsafeOfSeq (Seq.foldBack cons_f t (Pure.Invoke Seq.empty))
+
+
+    static member inline Gather (t: NonEmptySeq<'T>, f: 'T -> '``ZipFunctor<'U>``) =
+        #if TEST_TRACE
+        Traces.add "Gather NonEmptySeq, 'T -> Functor<'U>"
+        #endif
+        let mapped = NonEmptySeq<_>.map f t
+        Transpose.ForInfiniteSequences (mapped, IsZipLeftZero.Invoke, NonEmptySeq<_>.ofList, Pure.Invoke) : '``Functor<NonEmptySeq<'U>>``
+
+
+    static member Gather (t: 't NonEmptySeq, f: 't -> Async<'u>) : Async<NonEmptySeq<_>> = async {
+        #if TEST_TRACE
+        Traces.add "Gather 't NonEmptySeq, 't -> Async<'u>"
+        #endif
+
+        let! ct = Async.CancellationToken
+        return seq {
+            use enum = t.GetEnumerator ()
+            while enum.MoveNext() do
+                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } |> NonEmptySeq<_>.unsafeOfSeq }
     #endif
+
+    static member inline Transpose (t: NonEmptySeq<'``ZipApplicative<'T>``>) : '``ZipApplicative<NonEmptySeq<'T>>`` = Transpose.ForInfiniteSequences (t, IsZipLeftZero.Invoke, NonEmptySeq<_>.ofList, fun _ -> Unchecked.defaultof<_>)
+    static member        Transpose (t: NonEmptySeq<option<'t>>          ) : option<NonEmptySeq<'t>>     = Option.Sequential t |> Option.map NonEmptySeq<_>.unsafeOfSeq
+    static member inline Transpose (t: NonEmptySeq<Result<'t,'e>>       ) : Result<NonEmptySeq<'t>, 'e> = Result.Parallel ((++), t) |> Result.map NonEmptySeq<_>.unsafeOfSeq
+    static member inline Transpose (t: NonEmptySeq<Choice<'t,'e>>       ) : Choice<NonEmptySeq<'t>, 'e> = Choice.Parallel ((++), t) |> Choice.map NonEmptySeq<_>.unsafeOfSeq
+    static member        Transpose (t: NonEmptySeq<list<'t>>            ) : list<NonEmptySeq<'t>>       = Transpose.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq<_>.ofList, fun _ -> Unchecked.defaultof<_>)
+    static member        Transpose (t: NonEmptySeq<'t []>               ) : NonEmptySeq<'t> []          = Transpose.ForInfiniteSequences (t, Array.isEmpty, NonEmptySeq<_>.ofList, fun _ -> Unchecked.defaultof<_>)
+    #if !FABLE_COMPILER
+    static member        Transpose (t: NonEmptySeq<Async<'t>>) : Async<NonEmptySeq<'t>> = Async.Parallel t |> Async.map NonEmptySeq<_>.unsafeOfSeq
+    #endif
+
 
 
 

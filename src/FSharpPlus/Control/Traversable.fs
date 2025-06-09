@@ -256,29 +256,7 @@ type Gather =
         let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) (f x) <.> ys
         Seq.foldBack cons_f t (Pure.Invoke Seq.empty)
 
-    (*
-    static member inline Gather (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
-        #if TEST_TRACE
-        Traces.add "Gather NonEmptySeq"
-        #endif
-        let cons x y = seq {yield x; yield! y}
-        let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) (f x) <.> ys
-        Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (Pure.Invoke Seq.empty))
-
-    static member inline Gather (t: seq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
-        #if TEST_TRACE
-        Traces.add "Gather seq, 'T -> Functor<'U>"
-        #endif
-        let mapped = Seq.map f t
-        Transpose.ForInfiniteSequences (mapped, IsZipLeftZero.Invoke, List.toSeq, Pure.Invoke) : '``Functor<seq<'U>>``
-
-    static member inline Gather (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) =
-        #if TEST_TRACE
-        Traces.add "Gather NonEmptySeq, 'T -> Functor<'U>"
-        #endif
-        let mapped = NonEmptySeq.map f t
-        Transpose.ForInfiniteSequences (mapped, IsZipLeftZero.Invoke, NonEmptySeq.ofList, Pure.Invoke) : '``Functor<NonEmptySeq<'U>>``
-    *)
+    
 
     static member inline Gather (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
         #if TEST_TRACE
@@ -300,20 +278,6 @@ type Gather =
                 yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
     #endif
 
-    (*
-    #if !FABLE_COMPILER
-    static member Gather (t: 't NonEmptySeq, f: 't -> Async<'u>, [<Optional>]_output: Async<NonEmptySeq<'u>>, [<Optional>]_impl: Gather) : Async<NonEmptySeq<_>> = async {
-        #if TEST_TRACE
-        Traces.add "Gather 't NonEmptySeq, 't -> Async<'u>"
-        #endif
-
-        let! ct = Async.CancellationToken
-        return seq {
-            use enum = t.GetEnumerator ()
-            while enum.MoveNext() do
-                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } |> NonEmptySeq.unsafeOfSeq }
-    #endif
-    *)
     
     static member Gather (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Gather) =
         #if TEST_TRACE
@@ -407,18 +371,6 @@ type Transpose with
     #if !FABLE_COMPILER
     static member        Transpose (t: seq<Async<'t>>    , [<Optional>]_output: Async<seq<'t>>     , [<Optional>]_impl: Default3) : Async<seq<'t>> = Async.Parallel t |> Async.map Array.toSeq
     #endif
-
-    (*
-    static member inline Transpose (t: NonEmptySeq<'``Applicative<'T>``>, [<Optional>]_output: '``Applicative<NonEmptySeq<'T>>``, [<Optional>]_impl: Default4) : '``Applicative<NonEmptySeq<'T>>`` = Transpose.ForInfiniteSequences (t, IsZipLeftZero.Invoke, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
-    static member        Transpose (t: NonEmptySeq<option<'t>>   , [<Optional>]_output: option<NonEmptySeq<'t>>    , [<Optional>]_impl: Default3) : option<NonEmptySeq<'t>>     = Option.Sequential t |> Option.map NonEmptySeq.unsafeOfSeq
-    static member inline Transpose (t: NonEmptySeq<Result<'t,'e>>, [<Optional>]_output: Result<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Result<NonEmptySeq<'t>, 'e> = Result.Parallel ((++), t) |> Result.map NonEmptySeq.unsafeOfSeq
-    static member inline Transpose (t: NonEmptySeq<Choice<'t,'e>>, [<Optional>]_output: Choice<NonEmptySeq<'t>, 'e>, [<Optional>]_impl: Default3) : Choice<NonEmptySeq<'t>, 'e> = Choice.Parallel ((++), t) |> Choice.map NonEmptySeq.unsafeOfSeq
-    static member        Transpose (t: NonEmptySeq<list<'t>>     , [<Optional>]_output: list<NonEmptySeq<'t>>      , [<Optional>]_impl: Default3) : list<NonEmptySeq<'t>>       = Transpose.ForInfiniteSequences (t, List.isEmpty , NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
-    static member        Transpose (t: NonEmptySeq<'t []>        , [<Optional>]_output: NonEmptySeq<'t> []         , [<Optional>]_impl: Default3) : NonEmptySeq<'t> []          = Transpose.ForInfiniteSequences (t, Array.isEmpty, NonEmptySeq.ofList, fun _ -> Unchecked.defaultof<_>)
-    #if !FABLE_COMPILER
-    static member        Transpose (t: NonEmptySeq<Async<'t>>    , [<Optional>]_output: Async<NonEmptySeq<'t>>     , [<Optional>]_impl: Default3) = Async.Parallel t |> Async.map NonEmptySeq.unsafeOfSeq                                                         : Async<NonEmptySeq<'t>>
-    #endif
-    *)
 
     static member inline Transpose (t: ^a        , [<Optional>]_output: 'R, [<Optional>]_impl: Default2) : 'R = Gather.InvokeOnInstance id t
     static member inline Transpose (t: ^a        , [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R = Transpose.InvokeOnInstance t
