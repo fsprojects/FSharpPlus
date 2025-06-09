@@ -322,6 +322,8 @@ let addStuff4 =                                                          // 19
     State monad
    --------------------------------------------------*)
 
+#nowarn "0025" // Incomplete pattern matches on this expression. For example, the value '[]' may indicate a case not covered by the pattern(s)
+
 type Stack = List<int>
 
 let pop (x::xs) = (x,xs)
