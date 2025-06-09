@@ -56,6 +56,8 @@ let monoid = testList "Monoid" [
         let z = x |> map (Seq.singleton >>             dict                      >> map List.singleton) |> Seq.sum
         Assert.IsInstanceOf<Option< Dictionary<string,int list>>> (Some y)
         Assert.IsInstanceOf<Option<IDictionary<string,int list>>> (Some z)
+        #else
+        let _ = x // Avoid unused variable warning
         #endif
         SideEffects.reset ()
 

@@ -136,7 +136,7 @@ type Join =
             match v.TryGetValue (k)  with
             | true, v -> dct.Add (k, v)
             | _       -> ()
-        dct :> IDictionary<'Key, 'U>
+        dct :> IDictionary<'Key, 'Value>
 
     static member Join (x: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>, [<Optional>]_output: IReadOnlyDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IReadOnlyDictionary<'Key, 'Value> =
         let dct = Dictionary ()
@@ -144,7 +144,7 @@ type Join =
             match v.TryGetValue (k)  with
             | true, v -> dct.Add (k, v)
             | _       -> ()
-        dct :> IReadOnlyDictionary<'Key, 'U>
+        dct :> IReadOnlyDictionary<'Key, 'Value>
 
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
     

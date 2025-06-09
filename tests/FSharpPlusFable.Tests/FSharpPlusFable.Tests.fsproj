@@ -9,6 +9,7 @@
     <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3;FABLE_COMPILER_FAKE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4;FABLE_COMPILER_FAKE</DefineConstants>
     <TargetFramework>net6.0</TargetFramework>
+    <OtherFlags>--nowarn:3520 $(OtherFlags)</OtherFlags>
   </PropertyGroup>
 
   <ItemGroup>

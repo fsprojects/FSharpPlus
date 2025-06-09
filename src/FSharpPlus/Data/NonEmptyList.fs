@@ -178,7 +178,7 @@ module NonEmptyList =
     /// <summary>Splits the list in head and tail.</summary>
     /// <param name="list">The input list.</param>
     /// <returns>A tuple with the head and the tail of the original list.</returns>
-    let unconsAsList ({ Head = x; Tail = xs } as list) = x, xs
+    let unconsAsList { Head = x; Tail = xs } = x, xs
 
     /// Returns the first element of a new non empty list. You can also use property nel.Head.
     let head {Head = x; Tail = _ } = x

@@ -3,6 +3,7 @@
 // it to define helpers that you do not want to show in the documentation.
 
 #r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#nowarn "0044" // Suppress warning FS0044: This construct is deprecated. WebRequest, HttpWebRequest, ServicePoint, and WebClient are obsolete. Use HttpClient instead.
 
 // For some reason AsyncDownloadString is not found during doc build. The following is a dumb implementation just to make the compiler happy.
 // TODO find out why.
