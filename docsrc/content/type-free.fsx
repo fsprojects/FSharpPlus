@@ -92,7 +92,7 @@ type Reservation = {
     Name : string
     Email : string
     Quantity : int }
-    with static member Create (Quantity, Date, Name, Email) = { Date = Date; Name = Name; Email = Email; Quantity = Quantity }
+    with static member Create (quantity, date, name, email) = { Date = date; Name = name; Email = email; Quantity = quantity }
 
 let readReservationRequest =
     curryN Reservation.Create
