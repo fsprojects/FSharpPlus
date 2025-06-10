@@ -33,56 +33,49 @@ type Traverse =
     inherit Default1
     static member inline InvokeOnInstance f (t: ^a) = (^a : (static member Traverse : _ * _ -> 'R) t, f)
 
-    static member inline Traverse (t: '``Traversable<'T>``, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'Traversable<'U>>``, [<Optional>]_impl: Default4) =
+    static member inline Traverse (t: '``Traversable<'T>``, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'Traversable<'U>>``, [<Optional>]_impl: Default5) =
         #if TEST_TRACE
         Traces.add "Traverse 'Traversable, 'T -> Functor<'U>"
         #endif
         let mapped = Map.Invoke f t : '``Traversable<'Functor<'U>>``
         (^``Traversable<'T>`` : (static member Sequence : _ -> _) mapped) : '``Functor<'Traversable<'U>>``
 
-    static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+    static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) =
         #if TEST_TRACE
         Traces.add "Traverse Id"
         #endif
         Map.Invoke Id.create (f (Id.run t))
 
-    static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+    static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) =
         #if TEST_TRACE
         Traces.add "Traverse seq"
         #endif
         let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
         Seq.foldBack cons_f t (result Seq.empty)
 
-    static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+    static member inline Traverse (t: _ NonEmptySeq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) =
         #if TEST_TRACE
         Traces.add "Traverse NonEmptySeq"
         #endif
         let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
         Map.Invoke NonEmptySeq.ofSeq (Seq.foldBack cons_f t (result Seq.empty))
 
-    static member inline Traverse (t: seq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
+    static member inline Traverse (t: seq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default3) =
         #if TEST_TRACE
         Traces.add "Traverse seq, 'T -> Functor<'U>"
         #endif
         let mapped = Seq.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq, Return.Invoke) : '``Functor<seq<'U>>``
 
-    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) =
+    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default3) =
         #if TEST_TRACE
         Traces.add "Traverse NonEmptySeq, 'T -> Functor<'U>"
         #endif
         let mapped = NonEmptySeq.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq.ofList, Return.Invoke) : '``Functor<NonEmptySeq<'U>>``
 
-    static member inline Traverse (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
-        #if TEST_TRACE
-        Traces.add "Traverse ^a"
-        #endif
-        Traverse.InvokeOnInstance f t
-    static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R, _impl: Default1) = id
-
     #if !FABLE_COMPILER
-    static member Traverse (t: 't seq, f: 't -> Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Traverse) : Async<seq<_>> = async {
+    static member Traverse (t: 't seq, f: 't -> Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Default2) : Async<seq<_>> = async {
         #if TEST_TRACE
         Traces.add "Traverse 't seq, 't -> Async<'u>"
         #endif
@@ -93,6 +86,14 @@ type Traverse =
             while enum.MoveNext() do
                 yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
     #endif
+
+    static member inline Traverse (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
+        #if TEST_TRACE
+        Traces.add "Traverse ^a"
+        #endif
+        Traverse.InvokeOnInstance f t
+
+    static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R, _impl: Default1) = id
 
     #if !FABLE_COMPILER
     static member Traverse (t: 't NonEmptySeq, f: 't -> Async<'u>, [<Optional>]_output: Async<NonEmptySeq<'u>>, [<Optional>]_impl: Traverse) : Async<NonEmptySeq<_>> = async {
