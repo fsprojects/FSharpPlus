@@ -73,6 +73,12 @@ type NonEmptySeq<'t> =
     static member Map2  (f, x: NonEmptySeq<_>, y: NonEmptySeq<_>) = Seq.map2 f x y |> NonEmptySeq<_>.unsafeOfSeq
     static member Map3  (f, x: NonEmptySeq<_>, y: NonEmptySeq<_>, z: NonEmptySeq<_>) = Seq.map3 f x y z |> NonEmptySeq<_>.unsafeOfSeq
     static member IsZipLeftZero (_: NonEmptySeq<_>) = false
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member ``<.>`` (struct (f: NonEmptySeq<_>, x: NonEmptySeq<'T> ), [<Optional>]_output: NonEmptySeq<'U>, [<Optional>]_mthd: ZipApply) = Seq.map2 (<|) f x |> NonEmptySeq<_>.unsafeOfSeq
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member ``<*>`` (struct (f: NonEmptySeq<_>, x: NonEmptySeq<'T> ), [<Optional>]_output: NonEmptySeq<'U>, [<Optional>]_mthd: ZipApply) = NonEmptySeq<_>.apply f x
     
     static member Zip (x: NonEmptySeq<'T>, y: NonEmptySeq<'U>) = NonEmptySeq<_>.zip         x y
     static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq<_>.collect f source : NonEmptySeq<'U>
