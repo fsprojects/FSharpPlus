@@ -291,7 +291,7 @@ module Traversable =
         Assert.AreEqual(None, r3)
         Assert.IsInstanceOf<Option<NonEmptySeq<int> option>> (Some r3)
         #if TEST_TRACE
-        CollectionAssert.AreEqual (["Traverse ^a"; "Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"], Traces.get())
+        CollectionAssert.AreEqual (["Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"], Traces.get())
         #endif
 
         #if TEST_TRACE

@@ -95,19 +95,12 @@ type NonEmptySeq<'t> =
 
     #if !FABLE_COMPILER
 
-    static member inline Traverse (t: _ seq, f) =
-        #if TEST_TRACE
-        Traces.add "Traverse NonEmptySeq: Seq, 'T -> Functor<'U>"
-        #endif
-        let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
-        Map.Invoke NonEmptySeq<_>.unsafeOfSeq (Seq.foldBack cons_f t (result Seq.empty))
-
-    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``) =
+    static member inline Traverse (t: NonEmptySeq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<NonEmptySeq<'U>>``, [<Optional>]_impl: Default2) : '``Functor<NonEmptySeq<'U>>`` =
         #if TEST_TRACE
         Traces.add "Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"
         #endif
         let mapped = NonEmptySeq<_>.map f t
-        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq<_>.ofList, Return.Invoke) : '``Functor<NonEmptySeq<'U>>``
+        Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, NonEmptySeq<_>.ofList, Return.Invoke)
 
     static member Traverse (t: 'T NonEmptySeq, f: 'T -> Async<'U>) : Async<NonEmptySeq<_>> =
         #if TEST_TRACE

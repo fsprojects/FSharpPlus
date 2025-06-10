@@ -32,32 +32,45 @@ type Traverse =
     inherit Default1
     static member inline InvokeOnInstance f (t: ^a) = (^a : (static member Traverse : _ * _ -> 'R) t, f)
 
-    static member inline Traverse (t: '``Traversable<'T>``, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'Traversable<'U>>``, [<Optional>]_impl: Default4) =
+    static member inline Traverse (t: '``Traversable<'T>``, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<'Traversable<'U>>``, [<Optional>]_impl: Default5) =
         #if TEST_TRACE
         Traces.add "Traverse 'Traversable, 'T -> Functor<'U>"
         #endif
         let mapped = Map.Invoke f t : '``Traversable<'Functor<'U>>``
         (^``Traversable<'T>`` : (static member Sequence : _ -> _) mapped) : '``Functor<'Traversable<'U>>``
 
-    static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+    static member inline Traverse (t: Id<_>, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) =
         #if TEST_TRACE
         Traces.add "Traverse Id"
         #endif
         Map.Invoke Id.create (f (Id.run t))
 
-    static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default3) =
+    static member inline Traverse (t: _ seq, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default4) =
         #if TEST_TRACE
         Traces.add "Traverse seq"
         #endif
         let cons_f x ys = Map.Invoke (Seq.cons: 'a -> seq<_> -> seq<_>) (f x) <*> ys
         Seq.foldBack cons_f t (result Seq.empty)
 
-    static member inline Traverse (t: seq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default2) =
+    static member inline Traverse (t: seq<'T>, f: 'T -> '``Functor<'U>``, [<Optional>]_output: '``Functor<seq<'U>>``, [<Optional>]_impl: Default3) =
         #if TEST_TRACE
         Traces.add "Traverse seq, 'T -> Functor<'U>"
         #endif
         let mapped = Seq.map f t
         Sequence.ForInfiniteSequences (mapped, IsLeftZero.Invoke, List.toSeq, Return.Invoke) : '``Functor<seq<'U>>``
+
+    #if !FABLE_COMPILER
+    static member Traverse (t: 't seq, f: 't -> Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Default2) : Async<seq<_>> =
+        #if TEST_TRACE
+        Traces.add "Traverse 't seq, 't -> Async<'u>"
+        #endif
+        async {
+            let! ct = Async.CancellationToken
+            return seq {
+                use enum = t.GetEnumerator ()
+                while enum.MoveNext() do
+                    yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
+    #endif
 
     static member inline Traverse (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
         #if TEST_TRACE
@@ -65,19 +78,6 @@ type Traverse =
         #endif
         Traverse.InvokeOnInstance f t
     static member inline Traverse (_: ^a when ^a : null and ^a :struct, _, _: 'R, _impl: Default1) = id
-
-    #if !FABLE_COMPILER
-    static member Traverse (t: 't seq, f: 't -> Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Traverse) : Async<seq<_>> = async {
-        #if TEST_TRACE
-        Traces.add "Traverse 't seq, 't -> Async<'u>"
-        #endif
-        
-        let! ct = Async.CancellationToken
-        return seq {
-            use enum = t.GetEnumerator ()
-            while enum.MoveNext() do
-                yield Async.AsTask(f enum.Current, cancellationToken = ct).Result }}
-    #endif
     
     static member Traverse (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Traverse) =
         #if TEST_TRACE
@@ -256,17 +256,10 @@ type Gather =
         let cons_f x ys = Map.Invoke (cons: 'a -> seq<_> -> seq<_>) (f x) <.> ys
         Seq.foldBack cons_f t (Pure.Invoke Seq.empty)
 
-    
 
-    static member inline Gather (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
-        #if TEST_TRACE
-        Traces.add "Gather ^a"
-        #endif
-        Gather.InvokeOnInstance f t
-    static member inline Gather (_: ^a when ^a : null and ^a :struct, _, _: 'R, _impl: Default1) = id
 
     #if !FABLE_COMPILER
-    static member Gather (t: 't seq, f: 't -> Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Gather) : Async<seq<_>> =
+    static member Gather (t: 't seq, f: 't -> Async<'u>, [<Optional>]_output: Async<seq<'u>>, [<Optional>]_impl: Default2) : Async<seq<_>> =
         #if TEST_TRACE
         Traces.add "Gather 't seq, 't -> Async<'u>"
         #endif
@@ -277,6 +270,13 @@ type Gather =
                 while enum.MoveNext() do
                     yield Async.AsTask(f enum.Current, cancellationToken = ct).Result } }
     #endif
+    
+    static member inline Gather (t: ^a, f, [<Optional>]_output: 'R, [<Optional>]_impl: Default1) : 'R =
+        #if TEST_TRACE
+        Traces.add "Gather ^a"
+        #endif
+        Gather.InvokeOnInstance f t
+    static member inline Gather (_: ^a when ^a : null and ^a :struct, _, _: 'R, _impl: Default1) = id
 
     
     static member Gather (t: Id<'t>, f: 't -> option<'u>, [<Optional>]_output: option<Id<'u>>, [<Optional>]_impl: Gather) =
