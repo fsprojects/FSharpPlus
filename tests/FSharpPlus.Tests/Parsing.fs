@@ -100,17 +100,24 @@ module Parsing =
         
         
         let _zzz = sscanf "(%%%s)" "(%hello)"
+        let _zzz1 = sscanf "%%(%s)" "%(hello)"
         let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
         let inline (|Like|_|) format = FSharpPlus.Parsing.trySscanf format
-        match "(%hello)" with Like "(%%%s)" "hello" -> () | _ -> failwith "didn't match"
+        match "ab" with Like "%c" _ -> failwith "wrong match" | Like "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
+        match "abc" with Like "%c%c" ('a', 'b') -> failwith "wrong match" | Like "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
+        match "(%hello)" with
+        | Like "%d" _ | Like "%f" _ | Like "%x" _ -> failwith "wrong match"
+        | Like "%%(%%%s)" _ | Like "(%%%sa" _ | Like "(%%hel%c" _ | Like "%%h%cllo)" _ -> failwith "wrong match"
+        | Like "(%%%s)" "hello" -> ()
+        | _ -> failwith "didn't match"
         match "test--this-gg" with Like "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f" with Like "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f f" with Like "%f %F %g %G %e %E %c %c %c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f ff" with Like "%f %F %g %G %e %E %c %c %c%c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Like "%f %F %g %G %e %E %c %c %c%c%c" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff 16" with Like "%f %F %g %G %e %E %c %c %c%c%c%i" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff 16 17" with Like "%f %F %g %G %e %E %c %c %c%c%c%i %f" (1f, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16, 17.) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f ff" with Like "%B %F %g %G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Like "%o %F %g %G %e %E %c %c %c%c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff16" with Like "%x %F %g %G %e %E %c %c %c%c%c%i" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff16 17" with Like "%X %F %g %G %e %E %c %c %c%c%c%i %f" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16, 17.) -> () | _ -> failwith "didn't match"
         match "13 43 AA 77A" with Like "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
         match "13 43 AA 77A" with Like "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
         match "111AAA" with Like "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"

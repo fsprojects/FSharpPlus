@@ -11,7 +11,7 @@ module Parsing =
     open FSharpPlus.Internals
     open FSharpPlus.Internals.Prelude
 
-    let inline private getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
+    let getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
         let format = pf.Value
         let regex = System.Text.StringBuilder "^"
         let mutable groups = FSharp.Core.CompilerServices.ArrayCollector()
@@ -33,7 +33,7 @@ module Parsing =
                 | 'B' -> "([01]+)"
                 | 'c' -> "(.)"
                 | 'd' | 'i' -> "([+-]?[0-9]+)"
-                | 'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'M' -> "([+-]?(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][+-]?[0-9]+)?)"
+                | 'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'M' -> "([+-]?[0-9.]+(?:[eE][+-]?[0-9]+)?)"
                 | 'o' -> "([0-7]+)"
                 | 'u' -> "([0-9]+)"
                 | 's' -> "(.*?)"
@@ -50,12 +50,14 @@ module Parsing =
         |> string
         |> Regex
         |> _.Match(str)
-        |> _.Groups
+        |> fun m ->
+        if not m.Success then [||] else
+        m.Groups
         |> Seq.cast<Group>
         |> Seq.skip 1
         |> Seq.map _.Value
         |> Seq.toArray 
-        |> Array.zip <| groups.Close()      
+        |> Array.zip <| groups.Close()
        
     let inline private conv (destType: System.Type) (b: int) (s: string) =
         match destType with    
