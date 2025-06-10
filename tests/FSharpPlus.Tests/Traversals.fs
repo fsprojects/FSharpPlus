@@ -253,6 +253,60 @@ module Traversable =
         CollectionAssert.AreEqual ([0;1;2;3;4;5;6;7;8;9], l)
 
     [<Test>]
+    let traverseInfiniteAsyncNonEmptySequences =
+        let s = NonEmptySeq.initInfinite async.Return
+        let s' = sequence s
+        let l = s' |> Async.RunSynchronously |> Seq.take 10 |> Seq.toList
+        CollectionAssert.AreEqual ([0;1;2;3;4;5;6;7;8;9], l)
+
+    [<Test>]
+    let traverseNonEmptySeqs () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r1 = traverse async.Return (NonEmptySeq.unsafeOfSeq (Seq.initInfinite id))
+        CollectionAssert.AreEqual ([0; 1], r1 |> map (NonEmptySeq.take 2) |> Async.RunSynchronously)
+        Assert.IsInstanceOf<Option<Async<int NonEmptySeq>>> (Some r1)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse ^a"; "Traverse NonEmptySeq: 'T NonEmptySeq, 'T -> Async<'U>"], Traces.get())
+        #endif
+
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r2 = NonEmptySeq<_>.Traverse (NonEmptySeq.unsafeOfSeq (Seq.initInfinite id), async.Return)
+        CollectionAssert.AreEqual ([0; 1], r2 |> map (NonEmptySeq.take 2) |> Async.RunSynchronously)
+        Assert.IsInstanceOf<Option<Async<int NonEmptySeq>>> (Some r2)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse NonEmptySeq: 'T NonEmptySeq, 'T -> Async<'U>"], Traces.get())
+        #endif
+
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r3 = traverse (fun x -> if x <> 10 then Some x else None) (NonEmptySeq.initInfinite id)
+        Assert.AreEqual(None, r3)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int> option>> (Some r3)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse ^a"; "Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"], Traces.get())
+        #endif
+
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r4 = NonEmptySeq<_>.Traverse (NonEmptySeq.initInfinite id, fun x -> if x <> 10 then Some x else None)
+        Assert.AreEqual(None, r4)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int> option>> (Some r4)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"], Traces.get())
+        #endif
+
+
+    [<Test>]
     let traverseTask () =
         #if TEST_TRACE
         Traces.reset()
