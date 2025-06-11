@@ -87,7 +87,10 @@ module Parsing =
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
         
         let _t = sscanf "(%i-%i-%f-%i-%i-%i-%i-%i-%i)" "(32-66-888-4-5-6-7-8-9)"
-        let (_a,_b) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
+        let (_a,_b) = sscanf "(%%%s,%M)" "(%hello,4.53)"
+        let (_a1,_b1) = sscanf "(%%%s,% M)" "(%hello, 4.53)"
+        let (_a2,_b2) = sscanf "(%%%s,%-M)" "(%hello,4.53 )"
+        let (_a3,_b3) = sscanf "(%%%s,% -M)" "(%hello, 4.53 )"
         let (_x,_y,_z) = sscanf "%s-%s-%s" "test-this-string"
         let (_j,_k,_l,_m,_n,_o,_p) = sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
         
@@ -111,10 +114,19 @@ module Parsing =
         | Like "%%(%%%s)" _ | Like "(%%%sa" _ | Like "(%%hel%c" _ | Like "%%h%cllo)" _ -> failwith "wrong match"
         | Like "(%%%s)" "hello" -> ()
         | _ -> failwith "didn't match"
+        match " 3" with Like "% d" 3 -> () | _ -> failwith "didn't match"
+        match "  3" with Like "% d" 3 -> () | _ -> failwith "didn't match"
+        match " 3" with Like "% d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "3 " with Like "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3  " with Like "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3 " with Like "%-d" 3 -> () | _ -> failwith "didn't match" // em space
+        match " 3 " with Like "% -d" 3 -> () | _ -> failwith "didn't match"
+        match "  3  " with Like "% -d" 3 -> () | _ -> failwith "didn't match"
+        match " 3 " with Like "% -d" 3 -> () | _ -> failwith "didn't match" // em space
         match "test--this-gg" with Like "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f" with Like "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4m, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Like "%f %F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f ff" with Like "%B %F %g %G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Like "%f% F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f ff" with Like "%B %F %-g %G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Like "%o %F %g %G %e %E %c %c %c%c%c" (1y, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f fff16" with Like "%x %F %g %G %e %E %c %c %c%c%c%i" (1us, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
         match "1 2.1 3.4 .3 43.2e32 0 f f fff16 17" with Like "%X %F %g %G %e %E %c %c %c%c%c%i %f" (1s, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16L, 17.) -> () | _ -> failwith "didn't match"
