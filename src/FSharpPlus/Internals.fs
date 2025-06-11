@@ -125,6 +125,10 @@ end
 [<Sealed>]
 type Set2<'T when 'T: comparison >() = class end
 
+type NonEmptySeq2<'T> =
+    inherit System.Collections.Generic.IEnumerable<'T>
+    abstract member First: 'T
+
 // BitConverter
 
 #nowarn "9"

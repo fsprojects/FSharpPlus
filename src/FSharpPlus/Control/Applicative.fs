@@ -17,6 +17,7 @@ type Apply =
 
     static member        ``<*>`` (struct (f: Lazy<'T->'U>     , x: Lazy<'T>           )  , _output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (struct (f: seq<_>           , x: seq<'T>            )  , _output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
+    static member        ``<*>`` (struct (_: NonEmptySeq2<_>  , _: NonEmptySeq2<'T>   )  , _output: NonEmptySeq2<'U>     , [<Optional>]_mthd: Apply) = failwith "no <*> implementation for NonEmptySeq2<'U>" : NonEmptySeq2<'U>
     static member        ``<*>`` (struct (f: IEnumerator<_>   , x: IEnumerator<'T>    )  , _output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     static member        ``<*>`` (struct (f: list<_>          , x: list<'T>           )  , _output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (struct (f: _ []             , x: 'T []              )  , _output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
