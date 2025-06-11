@@ -11,7 +11,7 @@ module Parsing =
     open FSharpPlus.Internals
     open FSharpPlus.Internals.Prelude
 
-    let getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
+    let inline private getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
         let format = pf.Value
         let regex = System.Text.StringBuilder "^"
         let mutable groups = FSharp.Core.CompilerServices.ArrayCollector()
