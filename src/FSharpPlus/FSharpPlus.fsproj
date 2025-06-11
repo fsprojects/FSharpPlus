@@ -59,7 +59,6 @@
     <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Tuple.fs" />
     <Compile Include="Extensions/ValueTuple.fs" />
-    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -102,6 +101,7 @@
     <Compile Include="Data/Monoids.fs" />
     <Compile Include="Data/MultiMap.fs" />
     <Compile Include="Lens.fs" />
+    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Data/NonEmptyList.fs" />
     <Compile Include="Data/NonEmptySet.fs" />
     <Compile Include="Data/NonEmptyMap.fs" />

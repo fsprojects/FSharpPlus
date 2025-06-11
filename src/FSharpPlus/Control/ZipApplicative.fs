@@ -10,7 +10,6 @@ open Microsoft.FSharp.Quotations
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 open FSharpPlus
-open FSharpPlus.Data
 
 
 [<System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)>]
@@ -30,8 +29,7 @@ type Pure =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Pure : _*_ -> _) output, mthd)
         call (Unchecked.defaultof<Pure>, Unchecked.defaultof<'``ZipApplicative<'T>``>) x
 
-    static member        Pure (_: seq<'a>         , _: Default2 ) = fun x -> Seq.initInfinite (fun _ -> x)         : seq<'a>
-    static member        Pure (_: NonEmptySeq<'a> , _: Default2 ) = fun x -> NonEmptySeq.initInfinite (fun _ -> x) : NonEmptySeq<'a>
+    static member        Pure (_: seq<'a>         , _: Default2 ) = fun x -> Seq.initInfinite (fun _ -> x)         : seq<'a>    
     static member        Pure (_: IEnumerator<'a> , _: Default2 ) = fun x -> Enumerator.upto None (fun _ -> x)     : IEnumerator<'a>
     static member inline Pure (_: 'R              , _: Default1 ) = fun (x: 'T) -> Pure.InvokeOnInstance x    : 'R
     static member        Pure (x: Lazy<'a>        , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>) : _ -> Lazy<'a>
@@ -78,8 +76,7 @@ type ZipApply =
 #if !FABLE_COMPILER
 
     static member        ``<.>`` (struct (f: Lazy<'T->'U>        , x: Lazy<'T>             ), [<Optional>]_output: Lazy<'U>             , [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
-    static member        ``<.>`` (struct (f: seq<_>              , x: seq<'T>              ), [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: ZipApply) = Seq.map2 (<|) f x
-    static member        ``<.>`` (struct (f: NonEmptySeq<_>      , x: NonEmptySeq<'T>      ), [<Optional>]_output: NonEmptySeq<'U>      , [<Optional>]_mthd: ZipApply) = NonEmptySeq.map2 (<|) f x
+    static member        ``<.>`` (struct (f: seq<_>              , x: seq<'T>              ), [<Optional>]_output: seq<'U>              , [<Optional>]_mthd: ZipApply) = Seq.map2 (<|) f x    
     static member        ``<.>`` (struct (f: IEnumerator<_>      , x: IEnumerator<'T>      ), [<Optional>]_output: IEnumerator<'U>      , [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member        ``<.>`` (struct (f: list<_>             , x: list<'T>             ), [<Optional>]_output: list<'U>             , [<Optional>]_mthd: ZipApply) = List.map2Shortest (<|) f x
     static member        ``<.>`` (struct (f: _ []                , x: 'T []                ), [<Optional>]_output: 'U []                , [<Optional>]_mthd: ZipApply) = Array.map2Shortest (<|) f x
@@ -136,8 +133,7 @@ type Map2 =
     inherit Default1
 
     static member        Map2 (f, (x: Lazy<_>            , y: Lazy<_>            ), _mthd: Map2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
-    static member        Map2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Map2) = Seq.map2 f x y
-    static member        Map2 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     ), _mthd: Map2) = NonEmptySeq.map2 f x y
+    static member        Map2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Map2) = Seq.map2 f x y    
     static member        Map2 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     ), _mthd: Map2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
     static member        Map2 (f, (x                     , y                     ), _mthd: Map2) = List.map2Shortest f x y
     static member        Map2 (f, (x: _ []               , y: _ []               ), _mthd: Map2) = Array.map2Shortest f x y
@@ -183,8 +179,7 @@ type Map3 =
     inherit Default1
 
     static member        Map3 (f, (x: Lazy<_>            , y: Lazy<_>            , z: Lazy<_>             ), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
-    static member        Map3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Map3) = Seq.map3 f x y z
-    static member        Map3 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>      ), _mthd: Map3) = NonEmptySeq.map3 f x y z
+    static member        Map3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Map3) = Seq.map3 f x y z    
     static member        Map3 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     , z: IEnumerator<_>      ), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     static member        Map3 (f, (x                     , y                     , z                      ), _mthd: Map3) = List.map3Shortest f x y z
     static member        Map3 (f, (x: _ []               , y: _ []               , z: _ []                ), _mthd: Map3) = Array.map3Shortest f x y z
@@ -228,8 +223,7 @@ type Map3 with
 type IsZipLeftZero =
     inherit Default1
 
-    static member IsZipLeftZero (t: ref<seq<_>>        , _mthd: IsZipLeftZero) = Seq.isEmpty t.Value
-    static member IsZipLeftZero (_: ref<NonEmptySeq<_>>, _mthd: IsZipLeftZero) = false
+    static member IsZipLeftZero (t: ref<seq<_>>        , _mthd: IsZipLeftZero) = Seq.isEmpty t.Value    
     static member IsZipLeftZero (t: ref<list<_>>       , _mthd: IsZipLeftZero) = List.isEmpty t.Value
     static member IsZipLeftZero (t: ref<array<_>>      , _mthd: IsZipLeftZero) = Array.isEmpty t.Value
     static member IsZipLeftZero (t: ref<option<_>>     , _mthd: IsZipLeftZero) = IsLeftZero.IsLeftZero (t, Unchecked.defaultof<IsLeftZero>)
