@@ -74,15 +74,15 @@ module Parsing =
         
     let inline private parse (s: string, f: char) : 'r =
         match f with
-        | 'B'        -> conv typeof<'r>  2 s |> string |> parse
-        | 'o'        -> conv typeof<'r>  8 s |> string |> parse
+        | 'B'       -> conv typeof<'r>  2 s |> string |> parse
+        | 'o'       -> conv typeof<'r>  8 s |> string |> parse
         | 'x' | 'X' -> conv typeof<'r> 16 s |> string |> parse
         | _ -> parse s
 
     let inline private tryParse (s: string, f: char) : 'r option =
         match f with
-        | 'B'        -> Option.protect (conv typeof<'r>  2) s |> Option.map string |> Option.bind tryParse
-        | 'o'        -> Option.protect (conv typeof<'r>  8) s |> Option.map string |> Option.bind tryParse
+        | 'B'       -> Option.protect (conv typeof<'r>  2) s |> Option.map string |> Option.bind tryParse
+        | 'o'       -> Option.protect (conv typeof<'r>  8) s |> Option.map string |> Option.bind tryParse
         | 'x' | 'X' -> Option.protect (conv typeof<'r> 16) s |> Option.map string |> Option.bind tryParse
         | _ -> tryParse s
         
