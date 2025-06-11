@@ -8,7 +8,6 @@ open Microsoft.FSharp.Quotations
 
 open FSharpPlus.Internals
 open FSharpPlus
-open FSharpPlus.Data
 
 
 type Apply =
@@ -18,7 +17,6 @@ type Apply =
 
     static member        ``<*>`` (struct (f: Lazy<'T->'U>     , x: Lazy<'T>           )  , _output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (struct (f: seq<_>           , x: seq<'T>            )  , _output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
-    static member        ``<*>`` (struct (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>    )  , _output: NonEmptySeq<'U>      , [<Optional>]_mthd: Apply) = NonEmptySeq.apply  f x                       : NonEmptySeq<'U>
     static member        ``<*>`` (struct (f: IEnumerator<_>   , x: IEnumerator<'T>    )  , _output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     static member        ``<*>`` (struct (f: list<_>          , x: list<'T>           )  , _output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (struct (f: _ []             , x: 'T []              )  , _output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
@@ -101,8 +99,7 @@ type Lift2 =
     inherit Default1
 
     static member        Lift2 (f, (x: Lazy<_>            , y: Lazy<_>            ), _mthd: Lift2) = Lazy.map2 f x y
-    static member        Lift2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift2) = Seq.lift2 f x y
-    static member        Lift2 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     ), _mthd: Lift2) = NonEmptySeq.lift2 f x y
+    static member        Lift2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift2) = Seq.lift2 f x y    
     static member        Lift2 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     ), _mthd: Lift2) = Enumerator.map2 f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = List.lift2 f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Array.lift2 f x y
@@ -150,8 +147,7 @@ type Lift3 =
     inherit Default1
 
     static member        Lift3 (f, (x: Lazy<_>            , y: Lazy<_>            , z: Lazy<_>             ), _mthd: Lift3) = Lazy.map3 f x y z
-    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Lift3) = Seq.lift3 f x y z
-    static member        Lift3 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>      ), _mthd: Lift3) = NonEmptySeq.lift3 f x y z
+    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Lift3) = Seq.lift3 f x y z    
     static member        Lift3 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     , z: IEnumerator<_>      ), _mthd: Lift3) = Enumerator.map3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = List.lift3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Array.lift3 f x y z
@@ -197,8 +193,7 @@ type Lift3 with
 type IsLeftZero =
     inherit Default1
 
-    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = Seq.isEmpty t.Value
-    static member IsLeftZero (_: ref<NonEmptySeq<_>>, _mthd: IsLeftZero) = false
+    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = Seq.isEmpty t.Value    
     static member IsLeftZero (t: ref<list<_>>     , _mthd: IsLeftZero) = List.isEmpty t.Value
     static member IsLeftZero (t: ref<array<_>>    , _mthd: IsLeftZero) = Array.isEmpty t.Value
     static member IsLeftZero (t: ref<option<_>>   , _mthd: IsLeftZero) = Option.isNone t.Value
