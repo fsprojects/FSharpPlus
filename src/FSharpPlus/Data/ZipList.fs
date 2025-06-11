@@ -9,7 +9,7 @@ open FSharpPlus
 type ZipList<'s> = ZipList of 's seq with
     member this.Item n = let (ZipList s) = this in Seq.item n s
 
-    interface IEnumerable<'s> with member x.GetEnumerator () = (let (ZipList x) = x in x).GetEnumerator ()
+    interface System.Collections.Generic.IEnumerable<'s> with member x.GetEnumerator () = (let (ZipList x) = x in x).GetEnumerator ()
     interface System.Collections.IEnumerable with member x.GetEnumerator () = (let (ZipList x) = x in x).GetEnumerator () :> System.Collections.IEnumerator
 
 /// Basic operations on ZipList
