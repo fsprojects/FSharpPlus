@@ -328,6 +328,7 @@ type DistinctBy =
 
 type GroupBy =
     static member GroupBy (x: Id<'T>  , f: 'T->'Key, _: Id<'Key*Id<'T>>    , [<Optional>]_impl: GroupBy) = let a = Id.run x in Id.create (f a, x)
+    static member GroupBy (x: Id2<'T> , f: 'T->'Key, _: Id2<'Key*Id2<'T>>  , [<Optional>]_impl: GroupBy) = let a = Id2.run x in Id2.create (f a, x)
     static member GroupBy (x: seq<'T> , f: 'T->'Key, _: seq<'Key*seq<'T>>  , [<Optional>]_impl: GroupBy) = Seq.groupBy f x
     static member GroupBy (x: list<'T>, f: 'T->'Key, _: list<'Key*list<'T>>, [<Optional>]_impl: GroupBy) = Seq.groupBy f x |> Seq.map (fun (x, y) -> x, Seq.toList  y) |> Seq.toList
     static member GroupBy (x: 'T []   , f: 'T->'Key, _: ('Key*('T [])) []  , [<Optional>]_impl: GroupBy) = Seq.groupBy f x |> Seq.map (fun (x, y) -> x, Seq.toArray y) |> Seq.toArray
