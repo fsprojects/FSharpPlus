@@ -106,34 +106,33 @@ module Parsing =
         let _zzz1 = sscanf "%%(%s)" "%(hello)"
         let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
-        let inline (|Like|_|) format = FSharpPlus.Parsing.trySscanf format
-        match "ab" with Like "%c" _ -> failwith "wrong match" | Like "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
-        match "abc" with Like "%c%c" ('a', 'b') -> failwith "wrong match" | Like "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
+        match "ab" with Scan "%c" _ -> failwith "wrong match" | Scan "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
+        match "abc" with Scan "%c%c" ('a', 'b') -> failwith "wrong match" | Scan "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
         match "(%hello)" with
-        | Like "%d" _ | Like "%f" _ | Like "%x" _ -> failwith "wrong match"
-        | Like "%%(%%%s)" _ | Like "(%%%sa" _ | Like "(%%hel%c" _ | Like "%%h%cllo)" _ -> failwith "wrong match"
-        | Like "(%%%s)" "hello" -> ()
+        | Scan "%d" _ | Scan "%f" _ | Scan "%x" _ -> failwith "wrong match"
+        | Scan "%%(%%%s)" _ | Scan "(%%%sa" _ | Scan "(%%hel%c" _ | Scan "%%h%cllo)" _ -> failwith "wrong match"
+        | Scan "(%%%s)" "hello" -> ()
         | _ -> failwith "didn't match"
-        match " 3" with Like "% d" 3 -> () | _ -> failwith "didn't match"
-        match "  3" with Like "% d" 3 -> () | _ -> failwith "didn't match"
-        match " 3" with Like "% d" 3 -> () | _ -> failwith "didn't match" // em space
-        match "3 " with Like "%-d" 3 -> () | _ -> failwith "didn't match"
-        match "3  " with Like "%-d" 3 -> () | _ -> failwith "didn't match"
-        match "3 " with Like "%-d" 3 -> () | _ -> failwith "didn't match" // em space
-        match " 3 " with Like "% -d" 3 -> () | _ -> failwith "didn't match"
-        match "  3  " with Like "% -d" 3 -> () | _ -> failwith "didn't match"
-        match " 3 " with Like "% -d" 3 -> () | _ -> failwith "didn't match" // em space
-        match "test--this-gg" with Like "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f" with Like "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4m, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Like "%f% F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4.3 43.2e32 0 f f ff" with Like "%B %F %-g %G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Like "%o %F %g %G %e %E %c %c %c%c%c" (1y, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff16" with Like "%x %F %g %G %e %E %c %c %c%c%c%i" (1us, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f fff16 17" with Like "%X %F %g %G %e %E %c %c %c%c%c%i %f" (1s, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16L, 17.) -> () | _ -> failwith "didn't match"
-        match "13 43 AA 77A" with Like "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
-        match "13 43 AA 77A" with Like "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
-        match "111AAA" with Like "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
-        match "100700 100 100" with Like "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
+        match " 3" with Scan "% d" 3 -> () | _ -> failwith "didn't match"
+        match "  3" with Scan "% d" 3 -> () | _ -> failwith "didn't match"
+        match " 3" with Scan "% d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "3 " with Scan "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3  " with Scan "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3 " with Scan "%-d" 3 -> () | _ -> failwith "didn't match" // em space
+        match " 3 " with Scan "% -d" 3 -> () | _ -> failwith "didn't match"
+        match "  3  " with Scan "% -d" 3 -> () | _ -> failwith "didn't match"
+        match " 3 " with Scan "% -d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "test--this-gg" with Scan "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f" with Scan "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4m, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Scan "%f% F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f ff" with Scan "%B %F %-g %G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff" with Scan "%o %F %g %G %e %E %c %c %c%c%c" (1y, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff16" with Scan "%x %F %g %G %e %E %c %c %c%c%c%i" (1us, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f fff16 17" with Scan "%X %F %g %G %e %E %c %c %c%c%c%i %f" (1s, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16L, 17.) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Scan "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Scan "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "111AAA" with Scan "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
+        match "100700 100 100" with Scan "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
 
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
         
