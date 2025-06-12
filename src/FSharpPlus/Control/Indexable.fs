@@ -286,7 +286,7 @@ type FindSliceIndex =
         (^``Collection<'T>``: (static member FindSliceIndex: _*_->_) source, slice)
 
     static member        FindSliceIndex ((x: #seq<'a>          , e                   ), [<Optional>]_impl: Default2) = Seq.findSliceIndex e x
-    static member inline FindSliceIndex ((x: '``C<'T>``, e: '``C<'T>``), _impl: Default1) : 'Index = FindSliceIndex.InvokeOnInstance e x
+    static member inline FindSliceIndex ((x: '``collection<'T>``, e: '``collection<'T>``), _impl: Default1) : 'Index = FindSliceIndex.InvokeOnInstance e x
     static member inline FindSliceIndex ((_: ^t when ^t: null and ^t: struct, _), _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
@@ -315,7 +315,7 @@ type TryFindSliceIndex =
         (^``Collection<'T>``: (static member TryFindSliceIndex: _*_->_) source, slice)
 
     static member        TryFindSliceIndex ((x: #seq<'a>          , e                   ), [<Optional>]_impl: Default2) = Seq.tryFindSliceIndex e x
-    static member inline TryFindSliceIndex ((x: '``C<'T>``, e: '``C<'T>``), _impl: Default1) : 'Index option = TryFindSliceIndex.InvokeOnInstance e x
+    static member inline TryFindSliceIndex ((x: '``collection<'T>``, e: '``collection<'T>``), _impl: Default1) : 'Index option = TryFindSliceIndex.InvokeOnInstance e x
     static member inline TryFindSliceIndex ((_: ^t when ^t: null and ^t: struct, _), _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
@@ -336,7 +336,7 @@ type FindLastSliceIndex =
     static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
         (^``Collection<'T>``: (static member FindLastSliceIndex: _*_->_) source, slice)
     static member        FindLastSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.findLastSliceIndex e x
-    static member inline FindLastSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index = FindLastSliceIndex.InvokeOnInstance e x
+    static member inline FindLastSliceIndex (x: '``collection<'T>``, e: '``collection<'T>``, _impl: Default1) : 'Index = FindLastSliceIndex.InvokeOnInstance e x
     static member inline FindLastSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index =
@@ -355,7 +355,7 @@ type TryFindLastSliceIndex =
     static member inline InvokeOnInstance (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
         (^``Collection<'T>``: (static member TryFindLastSliceIndex: _*_->_) source, slice)
     static member        TryFindLastSliceIndex (x: seq<'a>          , e                   , [<Optional>]_impl: Default2) = Seq.tryFindLastSliceIndex e x
-    static member inline TryFindLastSliceIndex (x: '``C<'T>``, e: '``C<'T>``, _impl: Default1) : 'Index option = TryFindLastSliceIndex.InvokeOnInstance e x
+    static member inline TryFindLastSliceIndex (x: '``collection<'T>``, e: '``collection<'T>``, _impl: Default1) : 'Index option = TryFindLastSliceIndex.InvokeOnInstance e x
     static member inline TryFindLastSliceIndex (_: ^t when ^t: null and ^t: struct, _, _impl: Default1) = ()
 
     static member inline Invoke (slice: '``Collection<'T>``) (source: '``Collection<'T>``) : 'Index option =
