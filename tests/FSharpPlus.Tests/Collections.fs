@@ -291,3 +291,10 @@ module Collections =
         
         let m = choose Some ((ofSeq :seq<_*_> -> Map<_,_>) (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<Map<string,int>>> (Some m)
+
+    // Compile tests
+    
+    let inline mapOfGroup (key: 'T -> 'Key when 'Key : equality) (sequence: '``Collection<'T>``) : Map<'Key, '``Collection<'T>``> =
+        sequence
+        |> groupBy key
+        |> Map.ofSeq
