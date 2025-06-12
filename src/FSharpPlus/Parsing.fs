@@ -18,6 +18,7 @@ module Parsing =
         while i < String.length format do
             match format[i] with
             | '%' ->
+                i <- i + 1
                 let mutable consumeSpacesAfter = false // consume spaces after if '-' specified
                 while
                     match format[i] with
@@ -167,6 +168,9 @@ module Parsing =
 
     /// Gets a tuple with the result of parsing each element of a formatted text. Returns None in case of failure.
     let inline trySscanf (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = getGroups pf s |> TryParseArray.Invoke
+
+    /// Matches a formatted text with the result of parsing each element. Will not match in case of failure.
+    let inline (|Scan|_|) (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) s : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf s
 
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console. Returns None in case of failure.
     let inline tryScanfn pf : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf (Console.ReadLine ())
