@@ -91,6 +91,7 @@ module Parsing =
         let (_a1,_b1) = sscanf "(%%%s,% M)" "(%hello, 4.53)"
         let (_a2,_b2) = sscanf "(%%%s,%-M)" "(%hello,4.53 )"
         let (_a3,_b3) = sscanf "(%%%s,% -M)" "(%hello, 4.53 )"
+        let (_a4,_b4) = sscanf "(%%%s,% d%-M)" "(%hello, 4.53 )"
         let (_x,_y,_z) = sscanf "%s-%s-%s" "test-this-string"
         let (_j,_k,_l,_m,_n,_o,_p) = sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
         
