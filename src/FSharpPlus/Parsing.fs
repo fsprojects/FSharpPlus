@@ -95,7 +95,7 @@ module Parsing =
         | _ -> tryParse s
         
     type ParseArray =
-        static member inline ParseArray struct(_: 't  , _: obj) = fun (g: struct(string * char) []) -> (parse (g.[0])) : 't
+        static member inline ParseArray (_: 't  , _: obj) = fun (g: struct(string * char) []) -> (parse (g.[0])) : 't
 
         static member inline Invoke (g: struct(string * char) []) =
             let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member ParseArray: _*_ -> _) b, a) g
