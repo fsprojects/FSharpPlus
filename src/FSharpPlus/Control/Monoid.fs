@@ -8,7 +8,6 @@ open System.Runtime.InteropServices
 open Microsoft.FSharp.Quotations
 open System.Threading.Tasks
 open FSharpPlus
-open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -156,7 +155,6 @@ type Plus with
     #if !FABLE_COMPILER
     static member inline ``+`` (x: IReadOnlyDictionary<'K,'V>, y: IReadOnlyDictionary<'K,'V>, [<Optional>]_mthd: Default3) = IReadOnlyDictionary.unionWith Plus.Invoke x y
     #endif
-    static member inline ``+`` (x: _ NonEmptySeq             , y: _ NonEmptySeq             , [<Optional>]_mthd: Default3) = NonEmptySeq.append x y
     
 
 

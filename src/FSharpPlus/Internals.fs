@@ -105,6 +105,16 @@ module Id =
     let map f (x: Id<_>) = Id (f x.getValue)
     let create x = Id x
 
+type Id2<'t> (v: 't) =
+   let value = v
+   member _.getValue = value
+
+[<RequireQualifiedAccess>]
+module Id2 =
+    let run   (x: Id2<_>) = x.getValue
+    let map f (x: Id2<_>) = Id2 (f x.getValue)
+    let create x = Id2 x
+
 type Id0 (v: string) =
    let value = v
    member _.getValue = value
@@ -124,6 +134,10 @@ end
 
 [<Sealed>]
 type Set2<'T when 'T: comparison >() = class end
+
+type NonEmptySeq2<'T> =
+    inherit System.Collections.Generic.IEnumerable<'T>
+    abstract member First: 'T
 
 // BitConverter
 
