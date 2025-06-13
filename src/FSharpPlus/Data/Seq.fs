@@ -803,7 +803,11 @@ module SeqT_V2 =
 
     let inline head (source: SeqT<'``Monad<bool>``, 'T>) : '``Monad<'T>`` =
         use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
+        #if !NET45
         Bind.Invoke (ie.MoveNext ()) (fun b -> Return.Invoke (if b then ie.Current else invalidArg (nameof source) "The input sequence was empty."))
+        #else
+        Bind.Invoke (ie.MoveNext ()) (fun b -> Return.Invoke (if b then ie.Current else invalidArg "source" "The input sequence was empty."))
+        #endif
     
     let inline internal tryPickMAndMap<'T, 'U, .. > (f: 'T -> '``Monad<'U option>``) (source: SeqT<'``Monad<bool>``, 'T>) (postMap: 'U option -> 'V) : '``Monad<'V>`` = innerMonad2<_, '``Monad<unit>``> () {
         use ie = (source :> IEnumerableM<'``Monad<bool>``, 'T>).GetEnumerator ()
