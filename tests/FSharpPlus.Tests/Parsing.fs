@@ -107,44 +107,44 @@ module Parsing =
         let _zzz1 = sscanf "%%(%s)" "%(hello)"
         let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
-        match "ab" with Scan "%c" _ -> failwith "wrong match" | Scan "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
-        match "abc" with Scan "%c%c" ('a', 'b') -> failwith "wrong match" | Scan "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
+        match "ab" with Parsedf "%c" _ -> failwith "wrong match" | Parsedf "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
+        match "abc" with Parsedf "%c%c" ('a', 'b') -> failwith "wrong match" | Parsedf "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
         match "(%hello)" with
-        | Scan "%d" _ | Scan "%f" _ | Scan "%x" _ -> failwith "wrong match"
-        | Scan "%%(%%%s)" _ | Scan "(%%%sa" _ | Scan "(%%hel%c" _ | Scan "%%h%cllo)" _ -> failwith "wrong match"
-        | Scan "(%%%s)" "hello" -> ()
+        | Parsedf "%d" _ | Parsedf "%f" _ | Parsedf "%x" _ -> failwith "wrong match"
+        | Parsedf "%%(%%%s)" _ | Parsedf "(%%%sa" _ | Parsedf "(%%hel%c" _ | Parsedf "%%h%cllo)" _ -> failwith "wrong match"
+        | Parsedf "(%%%s)" "hello" -> ()
         | _ -> failwith "didn't match"
-        match " 3" with Scan "% d" 3 -> () | _ -> failwith "didn't match"
-        match "  3" with Scan "% d" 3 -> () | _ -> failwith "didn't match"
-        match " 3" with Scan "% d" 3 -> () | _ -> failwith "didn't match" // em space
-        match "3 " with Scan "%-d" 3 -> () | _ -> failwith "didn't match"
-        match "3  " with Scan "%-d" 3 -> () | _ -> failwith "didn't match"
-        match "3 " with Scan "%-d" 3 -> () | _ -> failwith "didn't match" // em space
-        match " 3 " with Scan "% -d" 3 -> () | _ -> failwith "didn't match"
-        match "  3  " with Scan "% -d" 3 -> () | _ -> failwith "didn't match"
-        match " 3 " with Scan "% -d" 3 -> () | _ -> failwith "didn't match" // em space
-        match "test--this-gg" with Scan "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f" with Scan "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4m, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Scan "%f% F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4.3 43.2e32 0 f f ff" with Scan "%B %F %-g%G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4.3 43.2e32 0 f f fff" with Scan "%o %F % g%-G %e %E %c %c %c%c%c" (1y, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4.3 43.2e32 0 f f fff16" with Scan "%x %F %- g%- G %e %E %c %c %c%c%c%i" (1us, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
-        match "1 2.1 3.4.3 43.2e32 0 f f fff16 17" with Scan "%X %F %g% G %e %E %c %c %c%c%c%i %f" (1s, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16L, 17.) -> () | _ -> failwith "didn't match"
-        match "13 43 AA 77A" with Scan "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
-        match "13 43 AA 77A" with Scan "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
-        match "111AAA" with Scan "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
-        match "100700 100 100" with Scan "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
+        match " 3" with Parsedf "% d" 3 -> () | _ -> failwith "didn't match"
+        match "  3" with Parsedf "% d" 3 -> () | _ -> failwith "didn't match"
+        match " 3" with Parsedf "% d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "3 " with Parsedf "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3  " with Parsedf "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3 " with Parsedf "%-d" 3 -> () | _ -> failwith "didn't match" // em space
+        match " 3 " with Parsedf "% -d" 3 -> () | _ -> failwith "didn't match"
+        match "  3  " with Parsedf "% -d" 3 -> () | _ -> failwith "didn't match"
+        match " 3 " with Parsedf "% -d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "test--this-gg" with Parsedf "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f" with Parsedf "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4m, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Parsedf "%f% F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f ff" with Parsedf "%B %F %-g%G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f fff" with Parsedf "%o %F % g%-G %e %E %c %c %c%c%c" (1y, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f fff16" with Parsedf "%x %F %- g%- G %e %E %c %c %c%c%c%i" (1us, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f fff16 17" with Parsedf "%X %F %g% G %e %E %c %c %c%c%c%i %f" (1s, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16L, 17.) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Parsedf "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Parsedf "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "111AAA" with Parsedf "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
+        match "100700 100 100" with Parsedf "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
 
         match "1+1-2+2-8+8" with
-        | Scan "%s%o" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%+u%+u" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%+d%o" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%-d%u" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%u%+d" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%+o%+u" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%+B%+u" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%+x%+X" _ -> failwith "wrong match"
-        | Scan "%+u%+u%+d%+u%+d%+X" (a, b, c, d, e, f) ->
+        | Parsedf "%s%o" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%+u%+u" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%+d%o" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%-d%u" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%u%+d" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%+o%+u" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%+B%+u" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%+x%+X" _ -> failwith "wrong match"
+        | Parsedf "%+u%+u%+d%+u%+d%+X" (a, b, c, d, e, f) ->
             areEqual (a |> box |> unbox<int>) 1
             areEqual (b |> box |> unbox<int>) 1
             areEqual (c |> box |> unbox<int>) -2
@@ -152,21 +152,21 @@ module Parsing =
             areEqual (e |> box |> unbox<int>) -8
             areEqual (f |> box |> unbox<int>) 8
         | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8" with Scan "%+-d%+d%+-d%+d%+-d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8" with Scan "%d+%d%d%+d%d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8" with Scan "%+B%+B-%+o%+o-%+X%+X" (1,1,2,2,8,8) -> () | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8e" with Scan "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,8M,0xE) -> () | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8e1a" with Scan "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,80M,0xA) -> () | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8e-1a" with Scan "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,0.8M,0xA) -> () | _ -> failwith "didn't match"
-        match "1+1-2+2-8+8ea" with Scan "%+-f%+-F%+-e%+-E%+-g%+-G%+-X" (1f,1.,-2m,2f,-8.,8M,0xEA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Parsedf "%+-d%+d%+-d%+d%+-d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Parsedf "%d+%d%d%+d%d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Parsedf "%+B%+B-%+o%+o-%+X%+X" (1,1,2,2,8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e" with Parsedf "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,8M,0xE) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e1a" with Parsedf "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,80M,0xA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e-1a" with Parsedf "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,0.8M,0xA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8ea" with Parsedf "%+-f%+-F%+-e%+-E%+-g%+-G%+-X" (1f,1.,-2m,2f,-8.,8M,0xEA) -> () | _ -> failwith "didn't match"
 
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
         let _date1: DateTime option = trySscanf "%A" "Saturday March 25 1989"
         
-        match "12:34" with Scan "%A" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 0)) x | _ -> failwith "Pattern match failed"
-        match "12:34:56" with Scan "%O" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 56)) x | _ -> failwith "Pattern match failed"
-        match "9876-5-4 3:2:1" with Scan "%A" (x: DateTime) -> areEqual (DateTime(9876,5,4,3,2,1)) x | _ -> failwith "Pattern match failed"
-        match "9876-5-4 3:2:1 a" with Scan "%O %x" (x: DateTime, y) -> areEqual (DateTime(9876,5,4,3,2,1)) x; areEqual 0xA y | _ -> failwith "Pattern match failed"
+        match "12:34" with Parsedf "%A" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 0)) x | _ -> failwith "Pattern match failed"
+        match "12:34:56" with Parsedf "%O" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 56)) x | _ -> failwith "Pattern match failed"
+        match "9876-5-4 3:2:1" with Parsedf "%A" (x: DateTime) -> areEqual (DateTime(9876,5,4,3,2,1)) x | _ -> failwith "Pattern match failed"
+        match "9876-5-4 3:2:1 a" with Parsedf "%O %x" (x: DateTime, y) -> areEqual (DateTime(9876,5,4,3,2,1)) x; areEqual 0xA y | _ -> failwith "Pattern match failed"
         
         let x = trySscanf "%X %x" "13 43"
         let o = trySscanf "%o" "10"
