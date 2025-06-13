@@ -66,7 +66,7 @@ module Parsing =
         fun str ->
             let m = Regex.Match(str, regex)
             if not m.Success then [||] else
-            Array.init (m.Groups.Count - 1) <| fun i -> struct(m.Groups[i + 1].Value, groups[i + 1])
+            Array.init (m.Groups.Count - 1) <| fun i -> struct(m.Groups[i + 1].Value, groups[i])
        
     let inline private conv (destType: System.Type) (b: int) (s: string) =
         match destType with    
