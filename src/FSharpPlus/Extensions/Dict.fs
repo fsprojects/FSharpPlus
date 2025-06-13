@@ -67,7 +67,7 @@ module Dict =
     open System.Collections.ObjectModel
     open Auto
 
-    /// <summary>Creates a conceptually infinite dictionay containing the same value for all possible keys.</summary>
+    /// <summary>Creates a conceptually infinite dictionary containing the same value for all possible keys.</summary>
     /// <param name="source">The value for all possible keys.</param>
     let initInfinite<'TKey,'TValue when 'TKey : equality> (source: 'TValue) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(source, Dictionary<'TKey,'TValue> ())
     let initHybrid<'TKey,'TValue> (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, source)
