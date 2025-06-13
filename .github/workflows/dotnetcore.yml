@@ -8,9 +8,9 @@ env:
 
 on:
   push:
-    branches: [ master, v1.2, v1.3, v1.4, v1.5, v1.6, v1.7 ]
+    branches: [ master, v1.2, v1.3, v1.4, v1.5, v1.6, v1.7, v1.8]
   pull_request:
-    branches: [ master, v1.2, v1.3, v1.4, v1.5, v1.6, v1.7 ]
+    branches: [ master, v1.2, v1.3, v1.4, v1.5, v1.6, v1.7, v1.8]
 jobs:
   build:
 
