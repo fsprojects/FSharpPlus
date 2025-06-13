@@ -46,6 +46,16 @@ module Dict =
     /// <returns>A seq of the values in the dictionary.</returns>
     let values (source: IDictionary<_, _>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
+    /// <summary>Applies the given function to each key and value pair of the dictionary.</summary>
+    /// <param name="action">The function to apply to each key and value pair of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iter action (source: IDictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
+
+    /// <summary>Applies the given function to each value of the dictionary.</summary>
+    /// <param name="action">The function to apply to each value of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iterValues action (source: IDictionary<'Key, 'T>) = for KeyValue(_, v) in source do action v
+
     /// <summary>Maps the given function over each value in the dictionary.</summary>
     /// <param name="mapper">The mapping function.</param>
     /// <param name="source">The input dictionary.</param>
@@ -71,6 +81,23 @@ module Dict =
             match tryGetValue k source2 with
             | Some vy -> dct.Add (k, f.Invoke (vx, vy))
             | None    -> ()
+        dct :> IDictionary<'Key, 'U>
+
+    /// <summary>Combines values from three dictionaries using mapping function.</summary>
+    /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
+    /// <param name="mapping">The mapping function.</param>
+    /// <param name="source1">First input dictionary.</param>
+    /// <param name="source2">Second input dictionary.</param>
+    /// <param name="source3">Third input dictionary.</param>
+    ///
+    /// <returns>The mapped dictionary.</returns>
+    let map3 mapping (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'U> ()
+        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
+        for KeyValue(k, vx) in source1 do
+            match tryGetValue k source2, tryGetValue k source3 with
+            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+            | _      , _       -> ()
         dct :> IDictionary<'Key, 'U>
 
     /// <summary>Applies given function to each value of the given dictionary.</summary>

@@ -6,14 +6,6 @@ module Result =
     open FSharp.Core.CompilerServices
     open System
     
-    /// Creates an Ok with the supplied value.
-    [<Obsolete("Prefer Result.Ok")>]
-    let result value : Result<'T,'Error> = Ok value
-
-    /// Creates an Error With the supplied value.
-    [<Obsolete("Prefer Result.Error")>]
-    let throw value : Result<'T,'Error> = Error value
-
     /// Applies the wrapped value to the wrapped function when both are Ok and returns a wrapped result or the first Error.
     /// <param name="f">The function wrapped in an Ok or an Error.</param>
     /// <param name="x">The value wrapped in an Ok or an Error.</param>
@@ -78,15 +70,27 @@ module Result =
     /// <remarks><c>flatten</c> is equivalent to <c>bind id</c>.</remarks>
     let flatten source : Result<'T,'Error> = match source with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
-    // Note: To be fixed in F#+ 2. Arguments should be flipped in order to match the generic catch.
-    [<System.Obsolete("Use Result.bindError instead.")>]
-    let inline catch f = function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
+    /// Like Result.bindError but with flipped arguments.
+    let inline catch x f = x |> function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
 
     /// <summary>If the input value is an Ok leaves it unchanged, otherwise maps the Error value and flattens the resulting nested Result.</summary>
     /// <param name="binder">A function that takes the error and transforms it into a result.</param>
     /// <param name="source">The source input value.</param>
     /// <returns>A result of the output type of the binder.</returns>
     let inline bindError (binder: 'Error->Result<'T,'Error2>) (source: Result<'T,'Error>) = match source with Ok v -> Ok v | Error e -> binder e
+
+    /// <summary><c>iterError f inp</c> executes <c>match inp with Ok _ -> () | Error x -> f x</c>.</summary>
+    ///
+    /// <param name="action">A function to apply to the error part of the source value.</param>
+    /// <param name="source">The input result.</param>
+    ///
+    /// <example id="iter-1">
+    /// <code lang="fsharp">
+    /// Ok "Hello world" |> Result.iter (printfn "%s") // does nothing
+    /// Error "Hello world" |> Result.iter (printfn "%s") // prints "Hello world"
+    /// </code>
+    /// </example>
+    let inline iterError ([<InlineIfLambda>]action: 'Error -> unit) (source: Result<'T, 'Error>) = match source with Ok _ -> () | Error x -> action x
 
     /// <summary>Extracts a value from either side of a Result.</summary>
     /// <param name="fOk">Function to be applied to source, if it contains an Ok value.</param>
@@ -159,3 +163,16 @@ module Result =
         List.iter (function Ok e -> coll1.Add e | Error e -> coll2.Add e) source
         coll1.Close (), coll2.Close ()
     #endif
+
+    let apply2With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> =
+        match x, y with
+        | Ok a, Ok b -> Ok (f a b)
+        | Error e, Ok _ | Ok _, Error e -> Error e
+        | Error e1, Error e2 -> Error (combiner e1 e2)
+
+    let apply3With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) (z: Result<'V,'Error>) : Result<'W,'Error> =
+        match x, y, z with
+        | Ok a, Ok b, Ok c -> Ok (f a b c)
+        | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
+        | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
+        | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)

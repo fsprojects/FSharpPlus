@@ -1,5 +1,7 @@
 namespace FSharpPlus
 
+#nowarn "1204" // Suppress warning about using FSharp Compiler's error strings.
+
 /// Additional operations on List
 [<RequireQualifiedAccess>]
 module List =
@@ -28,12 +30,20 @@ module List =
     /// <summary>Adds an element to the beginning of the given list</summary>
     /// <param name="value">The element to add</param>
     /// <param name="list">The list to add to</param>
-    /// <returns>A concatenated list of the result lists of applying each function to each value</returns>
+    /// <returns>A new list with the element added to the beginning.</returns>
     /// <remarks>
-    /// Note: this function has since been added to FSharp.Core.
-    /// It will be removed in next major release of FSharpPlus.
+    /// Same as <c>List.Cons</c> but with curried parameters.
     /// </remarks>
     let cons value list = value :: list : list<'T>
+
+    /// <summary>Splits the list in head and tail.</summary>
+    /// <param name="list">The input list.</param>
+    /// <returns>A tuple with the head and the tail of the original list.</returns>
+    /// <exception cref="T:System.ArgumentException">Thrown when the input list is empty.</exception>
+    let uncons list =
+        match list with
+        | []    -> invalidArg (nameof(list)) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
+        | x::xs -> x, xs
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
     /// <param name="f">The list of functions.</param>
@@ -76,12 +86,12 @@ module List =
     /// <param name="x3">Third list.</param>
     ///
     /// <returns>List with values returned from mapping function.</returns>
-    let lift3 f x1 x2 x3 =
-    #if !FABLE_COMPILER || FABLE_COMPILER_3 || FABLE_COMPILER_4
+    let lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: list<'T1>) (x2: list<'T2>) (x3: list<'T3>) =
+    #if FABLE_COMPILER
         List.allPairs x2 x3
         |> List.allPairs x1
         |> List.map (fun x -> (fst (snd x), snd (snd x), fst x))
-        |> List.map (fun (x, y, z) -> f x y z)
+        |> List.map (fun (x, y, z) -> f z x y)
     #else
         let mutable coll = ListCollector<'U> ()
         x1 |> List.iter (fun x1 ->
@@ -243,7 +253,7 @@ module List =
             member _.GetEnumerator () = (source :> _ seq).GetEnumerator ()
             member _.GetEnumerator () = (source :> System.Collections.IEnumerable).GetEnumerator () }
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
@@ -270,6 +280,33 @@ module List =
     /// </returns>
     let tryFindSliceIndex (slice: _ list) (source: _ list) =
         let index = Internals.FindSliceIndex.listImpl slice source
+        if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: _ list) (source: _ list) =
+        let index = Internals.FindLastSliceIndex.listImpl slice source
         if index = -1 then None else Some index
     #endif
 
@@ -318,6 +355,22 @@ module List =
                 loop (ls, rs)
         loop (list1, list2)
     #endif
+
+    let map3Shortest mapping (list1: list<'T1>) (list2: list<'T2>) (list3: list<'T3>) : list<'U> =
+    #if FABLE_COMPILER
+        let rec loop acc = function
+            | (l1::l1s, l2::l2s, l3::l3s) -> loop ((mapping l1 l2 l3)::acc) (l1s, l2s, l3s)
+            | (_, _, _)                   -> acc
+        loop [] (list1, list2, list3) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'U> ()
+        let rec loop = function
+            | ([], _, _) | (_, [], _)| (_, _, []) -> coll.Close ()
+            | (l1::l1s, l2::l2s, l3::l3s) ->
+                coll.Add (mapping l1 l2 l3)
+                loop (l1s, l2s, l3s)
+        loop (list1, list2, list3)
+    #endif
         
     /// <summary>
     /// Zip safely two lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
@@ -340,6 +393,48 @@ module List =
                 loop (ls,rs)
         loop (list1, list2)
     #endif
+
+    /// <summary>
+    /// Chunks the list up into groups with the same projected key by applying
+    /// the key-generating projection function to each element and yielding a list of 
+    /// keys tupled with values.
+    /// </summary>
+    ///
+    /// <remarks>
+    /// Each key is tupled with an array of all adjacent elements that match 
+    /// to the key, therefore keys are not unique but can't be adjacent
+    /// as each time the key changes a new group is yield.
+    /// 
+    /// The ordering of the original list is respected.
+    /// </remarks>
+    ///
+    /// <param name="projection">A function that transforms an element of the list into a comparable key.</param>
+    /// <param name="source">The input list.</param>
+    ///
+    /// <returns>The resulting list of keys tupled with a list of matching values</returns>
+    let chunkBy (projection: 'T -> 'Key) (source: _ list) =
+        #if FABLE_COMPILER
+        Seq.chunkBy projection source |> Seq.map (fun (x, y) -> x, Seq.toList y) |> Seq.toList
+        #else
+        match source with
+        | [] -> []
+        | x::xs ->
+            let mutable acc = new ListCollector<_> ()
+            let mutable members = new ListCollector<_> ()
+            let rec loop source g =
+                match source with
+                | [] -> acc.Add (g, members.Close ())
+                | x::xs ->
+                    let key = projection x
+                    if g <> key then
+                        acc.Add (g, members.Close ())
+                        members <- new ListCollector<_> ()
+                    members.Add x
+                    loop xs key
+            members.Add x
+            loop xs (projection x)
+            acc.Close ()
+        #endif
         
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>
@@ -364,9 +459,6 @@ module List =
              lst.[0..i-1] @ lst.[i+1..]
          else lst
 
-    [<Obsolete("This function was included in FSharp.Core but throwing. Use deletaAt instead or if you want to throw exceptions use the full path to removeAt in FSharp.Core until this function is removed from this library")>]
-    let removeAt i lst = deleteAt i lst
-
     /// <summary>Updates the value of an item in a list</summary>
     /// <param name="i">The index of the item to update</param>
     /// <param name="x">The new value of the item</param>
@@ -378,3 +470,27 @@ module List =
         if List.length lst > i && i >= 0 then
             lst.[0..i-1] @ x::lst.[i+1..]
         else lst
+
+    #if !FABLE_COMPILER
+    open System.Reflection
+
+    /// Creates an infinite list which cycles the element of the source.
+    let cycle lst =
+        let last = ref lst
+        let rec copy = function
+            | [] -> failwith "empty list"
+            | [z] -> 
+                let v = [z]
+                last.Value <- v
+                v
+            | x::xs ->  x::copy xs
+        let cycled = copy lst
+        let strs = last.Value.GetType().GetFields(BindingFlags.NonPublic ||| BindingFlags.Instance) |> Array.map (fun field -> field.Name)
+        let tailField = last.Value.GetType().GetField(Array.find(fun (s:string) -> s.ToLower().Contains("tail")) strs, BindingFlags.NonPublic ||| BindingFlags.Instance)
+        tailField.SetValue(last.Value, cycled)
+        cycled
+    #else
+    let cycle lst = lst
+    // TODO does it get garbage collected ? Is there a way to implement it in fable ?
+    #endif
+

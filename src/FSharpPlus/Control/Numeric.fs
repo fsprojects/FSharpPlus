@@ -6,6 +6,7 @@ namespace FSharpPlus.Control
 
 open System.Runtime.InteropServices
 open FSharpPlus.Internals
+open FSharpPlus
 #if FABLE_COMPILER
 /// NOTE
 type OptionalAttribute ()=
@@ -42,7 +43,7 @@ type FromBigInt =
         call Unchecked.defaultof<FromBigInt> x
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type FromInt64 =
     inherit Default1
@@ -174,17 +175,17 @@ type Zero with
 #endif
 
 type Zero with
-    static member inline Zero (_: Tuple<'a>, _: Zero) = tuple1 (Zero.Invoke ()) : Tuple<'a>
-    static member inline Zero (_: Id<'a>   , _: Zero) = Id<_>  (Zero.Invoke ())
-    static member inline Zero (_: ValueTuple<'a>, _: Zero) = valueTuple1 (Zero.Invoke ()) : ValueTuple<'a>
-    
+    static member inline Zero (_: Tuple<'a>     , _: Zero) = Tuple<_>      (Zero.Invoke ()) : Tuple<'a>
+    static member inline Zero (_: Id<'a>        , _: Zero) = Id<_>         (Zero.Invoke ())
+    static member inline Zero (_: ValueTuple<'a>, _: Zero) = ValueTuple<_> (Zero.Invoke ()) : ValueTuple<'a>
+
 type Zero with static member inline Zero (_: 'a*'b               , _: Zero) = (Zero.Invoke (), Zero.Invoke ()                                                                                ) : 'a*'b
 type Zero with static member inline Zero (_: 'a*'b*'c            , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : 'a*'b*'c
 type Zero with static member inline Zero (_: 'a*'b*'c*'d         , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                ) : 'a*'b*'c*'d
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e      , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                ) : 'a*'b*'c*'d*'e
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f   , _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                ) : 'a*'b*'c*'d*'e*'f
 type Zero with static member inline Zero (_: 'a*'b*'c*'d*'e*'f*'g, _: Zero) = (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()) : 'a*'b*'c*'d*'e*'f*'g
-    
+
 type Zero with static member inline Zero (_: ValueTuple<'a,'b>               , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke ()                                                                                ) : ValueTuple<'a,'b>
 type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c>            , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                                ) : ValueTuple<'a,'b,'c>
 type Zero with static member inline Zero (_: ValueTuple<'a,'b,'c,'d>         , _: Zero) = ValueTuple.Create (Zero.Invoke (), Zero.Invoke (), Zero.Invoke (), Zero.Invoke ()                                                ) : ValueTuple<'a,'b,'c,'d>
@@ -201,7 +202,7 @@ type Zero with
         s.SetResult v
         s.Task
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member inline Zero (_: ValueTask<'a>, _: Zero) : ValueTask<'a> =
         let (v: 'a) = Zero.Invoke ()
         ValueTask<'a>(v)
@@ -214,6 +215,7 @@ type Zero with
     static member inline Zero (_: Lazy<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in lazy v
     static member        Zero (_: Dictionary<'a,'b>         , _: Zero) = Dictionary<'a,'b> ()
     static member        Zero (_: ResizeArray<'a>           , _: Zero) = ResizeArray () : ResizeArray<'a>
+    static member        Zero (_: HashSet<'a>                    , _: Zero    ) = HashSet.empty : HashSet<'a>
 
 type Zero with
     static member inline Zero (_: ^R                             , _: Default6) = FromInt64.Invoke 0L : ^R
@@ -221,7 +223,7 @@ type Zero with
     static member inline Zero (_: ^R                             , _: Default5) = Implicit.Invoke 0   : ^R
 
     static member        Zero (_: seq<'a>                        , _: Default4) = Seq.empty      : seq<'a>
-    static member        Zero (_: IEnumerator<'a>                , _: Default4) = FSharpPlus.Enumerator.Empty () : IEnumerator<'a>
+    static member        Zero (_: IEnumerator<'a>                , _: Default4) = Enumerator.Empty () : IEnumerator<'a>
     static member        Zero (_: IDictionary<'a,'b>             , _: Default4) = Dictionary<'a,'b> () :> IDictionary<'a,'b>
     static member        Zero (_: IReadOnlyDictionary<'a,'b>     , _: Default4) = Dictionary<'a,'b> () :> IReadOnlyDictionary<'a,'b>
     static member inline Zero (_: 't                             , _: Default3) = (^t : (static member Empty: ^t) ()) : 't
@@ -583,8 +585,8 @@ type MinValue =
         let (t1: 't1) = MinValue.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
-    static member inline MinValue (_: Tuple<'a>, _: MinValue) = tuple1 (MinValue.Invoke ()) : Tuple<'a>
-    static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>  (MinValue.Invoke ())
+    static member inline MinValue (_: Tuple<'a>, _: MinValue) = Tuple<_> (MinValue.Invoke ()) : Tuple<'a>
+    static member inline MinValue (_: Id<'a>   , _: MinValue) = Id<_>    (MinValue.Invoke ())
 
     static member inline MinValue (_: 'a*'b               , _: MinValue) = (MinValue.Invoke (), MinValue.Invoke ())
     static member inline MinValue (_: 'a*'b*'c            , _: MinValue) = (MinValue.Invoke (), MinValue.Invoke (), MinValue.Invoke ())
@@ -633,8 +635,8 @@ type MaxValue =
         let (t1: 't1) = MaxValue.Invoke ()
         Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
-    static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = tuple1 (MaxValue.Invoke ()) : Tuple<'a>
-    static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>  (MaxValue.Invoke ())
+    static member inline MaxValue (_: Tuple<'a>, _: MaxValue) = Tuple<_> (MaxValue.Invoke ()) : Tuple<'a>
+    static member inline MaxValue (_: Id<'a>   , _: MaxValue) = Id<_>    (MaxValue.Invoke ())
 
     static member inline MaxValue (_: 'a*'b               , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke ())
     static member inline MaxValue (_: 'a*'b*'c            , _: MaxValue) = (MaxValue.Invoke (), MaxValue.Invoke (), MaxValue.Invoke ())

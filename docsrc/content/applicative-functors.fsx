@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 
 (**
 Functors and Applicatives
@@ -78,6 +78,9 @@ A List functor can be thought of as a function which takes an integer index to r
 So, you can think of ``map`` on a List functor as composing a function:
 
 **)
+
+#nowarn "0025" // Incomplete pattern matches on this expression. For example, the value '3' may indicate a case not covered by the pattern(s)
+
 let listFunc = function 0 -> 1 | 1 -> 2 | 2 -> 3 // [1;2;3]
 let r01'' = map (fun x -> string (x + 10)) listFunc
 

@@ -5,13 +5,13 @@
     <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
   </PropertyGroup>
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <Title>FSharpPlus.Providers</Title>
     <AssemblyName>FSharpPlus.Providers</AssemblyName>
     <AssemblyVersion>$(VersionPrefix).0</AssemblyVersion>
     <FileVersion>$(VersionPrefix).0</FileVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <OtherFlags>--warnon:1182 $(OtherFlags)</OtherFlags>
+    <OtherFlags>--nowarn:0044 --warnon:1182 $(OtherFlags)</OtherFlags>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
@@ -19,6 +19,12 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+
+    <!--
+      https://github.com/fsprojects/FSharp.TypeProviders.SDK/issues/408#issuecomment-2200299743
+      Make the consuming project compile on .NET 8 or later
+    -->
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
 
     <BaseOutputPath>..\bin</BaseOutputPath>
 

@@ -2,7 +2,7 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 
 (**
 Traversable
@@ -21,8 +21,20 @@ Minimal complete definition
  * ``traverse f x`` | ``sequence x``
 *)
 (**
-    static member Traverse (t:'Traversable<'T>, f: 'T -> 'Functor<'U>) : 'Functor<'Traversable<'U>>
-    static member Sequence (t:'Traversable<'Functor<'T>>) : 'Functor<'Traversable<'T>>
+    static member Traverse (t: 'Traversable<'T>, f: 'T -> 'Applicative<'U>) : 'Applicative<'Traversable<'U>>
+    static member Sequence (t: 'Traversable<'Applicative<'T>>) : 'Applicative<'Traversable<'T>>
+*)
+(**
+
+
+Other operations
+----------------
+
+ * ``gather f x`` | ``transpose x`` (same as ``traverse`` and ``sequence`` but operating on [ZipApplicatives](abstraction-zipapplicative.html) )
+*)
+(**
+    static member Gather (t: 'Traversable<'T>, f: 'T -> 'ZipApplicative<'U>) : 'ZipApplicative<'Traversable<'U>>
+    static member Transpose (t: 'Traversable<'ZipApplicative<'T>>) : 'ZipApplicative<'Traversable<'T>>
 *)
 (**
 
@@ -43,7 +55,7 @@ Related Abstractions
 --------------------
 
  - [Functor](abstraction-functor.html): A traversable is generic on the Traversable type parameter and the (Applicative) Functor inner type parameter.
- - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations. 
+ - [Applicative](abstraction-applicative.html): An applicative is a functor whose ``map`` operation can be splitted in ``return`` and ``(<*>)`` operations.
  - [Foldable](abstraction-foldable.html) : All traversables are foldables.
 
 
