@@ -135,7 +135,38 @@ module Parsing =
         match "111AAA" with Scan "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
         match "100700 100 100" with Scan "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
 
+        match "1+1-2+2-8+8" with
+        | Scan "%s%o" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%+u%+u" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%+d%o" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%-d%u" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%u%+d" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%+o%+u" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%+B%+u" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%+x%+X" _ -> failwith "wrong match"
+        | Scan "%+u%+u%+d%+u%+d%+X" (a, b, c, d, e, f) ->
+            areEqual (a |> box |> unbox<int>) 1
+            areEqual (b |> box |> unbox<int>) 1
+            areEqual (c |> box |> unbox<int>) -2
+            areEqual (d |> box |> unbox<int>) 2
+            areEqual (e |> box |> unbox<int>) -8
+            areEqual (f |> box |> unbox<int>) 8
+        | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Scan "%+-d%+d%+-d%+d%+-d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Scan "%d+%d%d%+d%d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Scan "%+B%+B-%+o%+o-%+X%+X" (1,1,2,2,8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e" with Scan "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,8M,0xE) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e1a" with Scan "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,80M,0xA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e-1a" with Scan "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,0.8M,0xA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8ea" with Scan "%+-f%+-F%+-e%+-E%+-g%+-G%+-X" (1f,1.,-2m,2f,-8.,8M,0xEA) -> () | _ -> failwith "didn't match"
+
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
+        let _date1: DateTime option = trySscanf "%A" "Saturday March 25 1989"
+        
+        match "12:34" with Scan "%A" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 0)) x | _ -> failwith "Pattern match failed"
+        match "12:34:56" with Scan "%O" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 56)) x | _ -> failwith "Pattern match failed"
+        match "9876-5-4 3:2:1" with Scan "%A" (x: DateTime) -> areEqual (DateTime(9876,5,4,3,2,1)) x | _ -> failwith "Pattern match failed"
+        match "9876-5-4 3:2:1 a" with Scan "%O %x" (x: DateTime, y) -> areEqual (DateTime(9876,5,4,3,2,1)) x; areEqual 0xA y | _ -> failwith "Pattern match failed"
         
         let x = trySscanf "%X %x" "13 43"
         let o = trySscanf "%o" "10"

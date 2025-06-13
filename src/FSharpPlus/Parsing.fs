@@ -10,7 +10,7 @@ module Parsing =
     open FSharpPlus.Internals
     open Prelude
 
-    let inline private getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
+    let getGroups (pf: PrintfFormat<_,_,_,_,_>) str =
         let format = pf.Value
         let regex = System.Text.StringBuilder "^"
         let mutable groups = FSharp.Core.CompilerServices.ArrayCollector()
@@ -20,25 +20,39 @@ module Parsing =
             | '%' ->
                 i <- i + 1
                 let mutable consumeSpacesAfter = false // consume spaces after if '-' specified
+                let mutable consumeNumericPlus = false // consume plus for numeric values after if '+' specified
                 while
                     match format[i] with
                     | ' ' -> regex.Append @"\s*" |> ignore; true // consume spaces before if ' ' specified
                     | '-' -> consumeSpacesAfter <- true; true
-                    | '+' | '*' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' -> true
+                    | '+' -> consumeNumericPlus <- true; true
+                    | '*' | '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' -> true
                     | _ -> false
                     do i <- i + 1
                 if format[i] <> '%' then groups.Add format[i] // %% does not capture a group
                 match format[i] with
                 | 'A' | 'O' -> "(.*?)"
                 | 'b' -> "([Tt][Rr][Uu][Ee]|[Ff][Aa][Ll][Ss][Ee])"
-                | 'B' -> "([01]+)"
+                | 'B' ->
+                    if consumeNumericPlus then regex.Append @"\+?" |> ignore
+                    "([01]+)"
                 | 'c' -> "(.)"
-                | 'd' | 'i' -> "([+-]?[0-9]+)"
-                | 'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'M' -> @"([+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?)"
-                | 'o' -> "([0-7]+)"
-                | 'u' -> "([0-9]+)"
+                | 'd' | 'i' ->
+                    regex.Append (if consumeNumericPlus then "([+-]?" else "(-?") |> ignore
+                    "[0-9]+)"
+                | 'e' | 'E' | 'f' | 'F' | 'g' | 'G' | 'M' ->
+                    regex.Append (if consumeNumericPlus then "([+-]?" else "(-?") |> ignore
+                    @"(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?)"
+                | 'o' ->
+                    if consumeNumericPlus then regex.Append @"\+?" |> ignore
+                    "([0-7]+)"
+                | 'u' -> 
+                    if consumeNumericPlus then regex.Append @"\+?" |> ignore
+                    "([0-9]+)"
                 | 's' -> "(.*?)"
-                | 'x' | 'X' -> "([0-9a-fA-F]+)"
+                | 'x' | 'X' ->
+                    if consumeNumericPlus then regex.Append @"\+?" |> ignore
+                    "([0-9a-fA-F]+)"
                 | '%' -> "%"
                 | x -> failwith $"Unknown specifier: {x}"
                 |> regex.Append |> ignore
@@ -142,7 +156,7 @@ module Parsing =
             match t1, t2, t3, t4, t5, t6, t7, tr with
             |  Some t1, Some t2, Some t3, Some t4, Some t5, Some t6, Some t7, Some tr -> Some (Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't)
             | _ -> None
-            
+
         static member inline TryParseArray (_: unit                        , _: TryParseArray) = fun (_: (string * char) []) -> ()
         static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: (string * char) []) -> Tuple<_> <!> tryParseElemAt 0 g : Tuple<'t1> option
         static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: (string * char) []) -> Id<_>    <!> tryParseElemAt 0 g
