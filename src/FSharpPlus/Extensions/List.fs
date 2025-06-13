@@ -40,10 +40,17 @@ module List =
     /// <param name="list">The input list.</param>
     /// <returns>A tuple with the head and the tail of the original list.</returns>
     /// <exception cref="T:System.ArgumentException">Thrown when the input list is empty.</exception>
+    #if !NET45
     let uncons list =
         match list with
         | []    -> invalidArg (nameof(list)) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
         | x::xs -> x, xs
+    #else
+    let uncons list =
+        match list with
+        | []    -> invalidArg "list" LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
+        | x::xs -> x, xs
+    #endif
 
     /// <summary>Applies a list of functions to a list of values and concatenates them</summary>
     /// <param name="f">The list of functions.</param>

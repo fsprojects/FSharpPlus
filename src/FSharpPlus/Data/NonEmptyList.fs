@@ -165,9 +165,15 @@ module NonEmptyList =
     /// <returns>A tuple with the head and the tail of the original list.</returns>
     /// <exception cref="T:System.ArgumentException">Thrown when the input list tail is empty.</exception>
     let uncons ({ Head = x; Tail = xs } as list) =
+    #if !NET45
         match xs with
         | [] -> invalidArg (nameof(list)) "The input sequence has an empty tail"
         | _  -> x, ofList xs
+    #else
+        match xs with
+        | [] -> invalidArg "list" "The input sequence has an empty tail"
+        | _  -> x, ofList xs
+    #endif
 
     /// <summary>Splits the list in head and tail.</summary>
     /// <param name="list">The input list.</param>
@@ -181,9 +187,15 @@ module NonEmptyList =
     /// <exception cref="System.ArgumentException">Thrown when the tail is empty.</exception>
     /// <remarks>Throws exception for empty tail</remarks>
     let tail ({ Head = _; Tail = xs } as list) =
+    #if !NET45
         match xs with
         | [] -> invalidArg (nameof(list)) "The input sequence has an empty tail"
         | _  -> ofList xs
+    #else
+        match xs with
+        | [] -> invalidArg "list" "The input sequence has an empty tail"
+        | _  -> ofList xs
+    #endif
 
     /// <summary>Returns a new NonEmptyList of the elements trailing the first element or None.</summary>
     let tryTail { Head = _; Tail = xs } = tryOfList xs

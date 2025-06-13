@@ -9,23 +9,53 @@ module Array =
     open System
     open FSharp.Core.CompilerServices
     open FSharpPlus.Internals.Errors
+    #if NET45 // from FSharp.Core
+    let insertAt (index: int) (value: 'T) (source: 'T array) : 'T array =
+
+        if index < 0 || index > source.Length then
+            invalidArg "index" "index must be within bounds of the array"
+
+        let length = source.Length + 1
+        let result: 'T array = Array.zeroCreate(length)
+
+        if index > 0 then
+            Array.Copy(source, result, index)
+
+        result[index] <- value
+
+        if source.Length - index > 0 then
+            Array.Copy(source, index, result, index + 1, source.Length - index)
+
+        result
+    #endif
 
     /// <summary>Adds an element to the beginning of the given array</summary>
     /// <param name="value">The element to add</param>
     /// <param name="array">The array to add to</param>
     /// <returns>A new array with the element added to the beginning.</returns>
     let cons value array =
+    #if !NET45
         raiseIfNull (nameof(array)) array
         Array.insertAt 0 value array
+    #else
+        raiseIfNull "array" array
+        insertAt 0 value array
+    #endif
 
     /// <summary>Splits the array in head and tail.</summary>
     /// <param name="array">The input array.</param>
     /// <returns>A tuple with the head and the tail of the original array.</returns>
     /// <exception cref="T:System.ArgumentException">Thrown when the input array is empty.</exception>
     let uncons array =
+    #if !NET45
         raiseIfNull (nameof(array)) array
         if Array.isEmpty array then invalidArg (nameof(array)) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
         else array[0], array[1..]
+    #else
+        raiseIfNull "array" array
+        if Array.isEmpty array then invalidArg "array" LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
+        else array[0], array[1..]
+    #endif
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
