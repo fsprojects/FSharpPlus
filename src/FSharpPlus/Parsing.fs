@@ -20,7 +20,7 @@ module Parsing =
             | '%' ->
                 i <- i + 1
                 let mutable consumeSpacesAfter = false // consume spaces after if '-' specified
-                let mutable consumeNumericPlus = false // consume plus for numeric values after if '+' specified
+                let mutable consumeNumericPlus = false // consume plus before numeric values if '+' specified
                 while
                     match format[i] with
                     | ' ' -> regex.Append @"\s*" |> ignore; true // consume spaces before if ' ' specified
