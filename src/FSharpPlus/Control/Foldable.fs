@@ -425,7 +425,7 @@ type Length =
     static member        Length (x: 'T list          , [<Optional>]_impl: Length  ) = List.length x
     static member        Length (x: option<'T>       , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
     static member        Length (x: voption<'T>      , [<Optional>]_impl: Length  ) = if x.IsSome then 1 else 0
-    #if !NET45
+    #if !NET45 && !FABLE_COMPILER
     static member        Length (x: Result<_, _>     , [<Optional>]_impl: Length  ) = if Result.isOk x then 1 else 0
     #else
     static member        Length (x: Result<_, _>     , [<Optional>]_impl: Length  ) = match x with | Ok _ -> 1 | _ -> 0
