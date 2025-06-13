@@ -13,7 +13,7 @@ module Parsing =
     let inline private getGroups (pf: PrintfFormat<_,_,_,_,_>) =
         let format = pf.Value
         let regex = System.Text.StringBuilder "^"
-        let groups = ResizeArray<char>(format.Length / 2) // worst case, every character is a group
+        let groups = ResizeArray<char>(format.Length / 2) // worst case, there are only format specifiers
         let mutable i = 0
         while i < String.length format do
             match format[i] with
