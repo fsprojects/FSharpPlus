@@ -1,10 +1,76 @@
 namespace FSharpPlus
 
+[<AutoOpen>]
+module Auto =
+    open System
+    open System.Collections
+    open System.Collections.Generic
+
+    let icollection (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) =
+        {
+            new  ICollection<'TValue> with
+                member _.Contains item = source.Values.Contains item || obj.ReferenceEquals (item, konst)
+                member _.GetEnumerator () = (seq { yield! source.Values; yield! (Seq.initInfinite (fun _ -> konst))}).GetEnumerator () :> System.Collections.IEnumerator
+                member _.GetEnumerator () = (seq { yield! source.Values; yield! (Seq.initInfinite (fun _ -> konst))}).GetEnumerator () : IEnumerator<'TValue>
+                member _.IsReadOnly = true
+                member _.Add (_item: 'TValue) : unit                          = raise (NotImplementedException ())
+                member _.Clear () : unit                                      = raise (NotImplementedException ())
+                member _.CopyTo (_array: 'TValue [], _arrayIndex: int) : unit = raise (NotImplementedException ())
+                member _.Count : int                                          = source.Count
+                member _.Remove (_item: 'TValue): bool                        = raise (NotImplementedException ())
+        }
+
+    type DefaultableDict<'TKey, 'TValue> (konst: 'TValue, source: IDictionary<'TKey,'TValue>) =
+
+        interface IDictionary<'TKey, 'TValue> with
+            member _.TryGetValue (key: 'TKey, value: byref<'TValue>) =
+                match source.TryGetValue key with
+                | true, v  -> value <- v
+                | _        -> value <- konst
+                true
+            member _.Count = source.Count
+                // if typeof<'TKey>.IsValueType then                
+                //     if typeof<'TKey> = typeof<bool> then 2
+                //     else
+                //         let s = sizeof<'TKey>
+                //         if s < 4 then pown 2 (sizeof<'TKey> * 8)
+                //         else -1 // infinity
+                // elif typeof<'TKey> = typeof<unit> then 1
+                // else -1
+            member _.ContainsKey (_key: 'TKey) = true
+            member _.Contains (item: KeyValuePair<'TKey,'TValue>) =
+                match source.TryGetValue item.Key with
+                | true, v -> obj.ReferenceEquals (item.Value, v)
+                | _       -> obj.ReferenceEquals (item.Value, konst)
+            member _.GetEnumerator () = source.GetEnumerator () : System.Collections.IEnumerator
+            member _.GetEnumerator () = source.GetEnumerator () : IEnumerator<KeyValuePair<'TKey,'TValue>>
+            member _.IsReadOnly = true
+            member _.Values = icollection konst source
+            member _.Item
+                with get (key: 'TKey)   : 'TValue = match source.TryGetValue key with (true, v) -> v | _ -> konst
+                and set  (_key: 'TKey) (_: 'TValue) : unit = raise (System.NotImplementedException())
+
+            member _.Add (_key: 'TKey, _value: 'TValue) : unit                              = raise (NotImplementedException ())
+            member _.Add (_item: KeyValuePair<'TKey,'TValue>) : unit                        = raise (NotImplementedException ())
+            member _.Clear () : unit                                                        = raise (NotImplementedException ())
+            member _.CopyTo (_arr: KeyValuePair<'TKey,'TValue> [], _arrayIndex: int) : unit = raise (NotImplementedException ())
+            member _.Keys : ICollection<'TKey>                                              = raise (NotImplementedException ())
+            member _.Remove (_key: 'TKey) : bool                                            = raise (NotImplementedException ())
+            member _.Remove (_item: KeyValuePair<'TKey,'TValue>) : bool                     = raise (NotImplementedException ())
+    
+        member _.DefaultValue = konst
+
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
     open System.Collections.Generic
     open System.Collections.ObjectModel
+    open Auto
+
+    /// <summary>Creates a conceptually infinite dictionary containing the same value for all possible keys.</summary>
+    /// <param name="source">The value for all possible keys.</param>
+    let initInfinite<'TKey,'TValue when 'TKey : equality> (source: 'TValue) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(source, Dictionary<'TKey,'TValue> ())
+    let initHybrid<'TKey,'TValue> (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, source)
 
     #if !FABLE_COMPILER
     open System.Linq
@@ -62,10 +128,18 @@ module Dict =
     ///
     /// <returns>The mapped dictionary.</returns>
     let map mapper (source: IDictionary<'Key, 'T>) =
-        let dct = Dictionary<'Key, 'U> ()
-        for KeyValue(k, v) in source do
-            dct.Add (k, mapper v)
-        dct :> IDictionary<'Key, 'U>
+        match source with
+        | :? DefaultableDict<'Key, 'T> as s ->
+            let dct = DefaultableDict<'Key, 'U> (mapper s.DefaultValue, Dictionary<'Key, 'U> ())
+            let dct = dct :> IDictionary<'Key, 'U>
+            for KeyValue(k, v) in source do
+                dct.Add (k, mapper v)
+            dct
+        | _ ->
+            let dct = Dictionary<'Key, 'U> ()
+            for KeyValue(k, v) in source do
+                dct.Add (k, mapper v)
+            dct :> IDictionary<'Key, 'U>
 
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
@@ -75,13 +149,21 @@ module Dict =
     ///
     /// <returns>The combined dictionary.</returns>
     let map2 mapper (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let dct = Dictionary<'Key, 'U> ()
-        let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2 with
-            | Some vy -> dct.Add (k, f.Invoke (vx, vy))
-            | None    -> ()
-        dct :> IDictionary<'Key, 'U>
+        let map k1 k2 =
+            let dct = Dictionary<'Key, 'U> ()
+            let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
+            for k in set source1.Keys + set source2.Keys do
+                match tryGetValue k source1, tryGetValue k source2, k1, k2 with
+                | Some vx, Some vy, _      , _
+                | None   , Some vy, Some vx, _ 
+                | Some vx, None   , _      , Some vy -> dct.Add (k, f.Invoke (vx, vy))
+                | _      , _      , _      , _       -> ()
+            dct :> IDictionary<'Key, 'U>
+        match source1, source2 with
+        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2) -> initHybrid (mapper s1.DefaultValue s2.DefaultValue) (map (Some s1.DefaultValue) (Some s2.DefaultValue))
+        | (:? DefaultableDict<'Key,'T1> as s1), _ -> map (Some s1.DefaultValue) None
+        | _, (:? DefaultableDict<'Key,'T2> as s2) -> map None (Some s2.DefaultValue)
+        | _, _  -> map None None
 
     /// <summary>Combines values from three dictionaries using mapping function.</summary>
     /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
@@ -119,13 +201,7 @@ module Dict =
     /// <param name="source2">The second input dictionary.</param>
     ///
     /// <returns>The tupled dictionary.</returns>
-    let zip (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let dct = Dictionary<'Key, 'T1 * 'T2> ()
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2 with
-            | Some vy -> dct.Add (k, (vx, vy))
-            | None    -> ()
-        dct :> IDictionary<'Key, 'T1 * 'T2>
+    let zip (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) = map2 (fun x y -> (x, y)) source1 source2
 
     /// <summary>Splits a dictionary with tuple pair values to two separate dictionaries.</summary>
     /// <param name="source">The source dictionary.</param>
@@ -141,11 +217,26 @@ module Dict =
 
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IDictionary<'Key, 'Value>) (source2: IDictionary<'Key, 'Value>) =
-        let d = Dictionary<'Key,'Value> ()
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
-        for KeyValue(k, v ) in source1 do d.[k] <- v
-        for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
-        d :> IDictionary<'Key,'Value>
+        let combine () =
+            let d = Dictionary<'Key,'Value> ()
+            let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
+            for KeyValue(k, v ) in source1 do d.[k] <- v
+            for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
+            d :> IDictionary<'Key,'Value>
+        // let combineWithKonst source konst =
+        //     let d = Dictionary<'Key,'Value> ()
+        //     for KeyValue(k, v) in source do d.[k] <- combiner v konst
+        //     d :> IDictionary<'Key,'Value>
+        // let combineKonstWith konst source =
+        //     let d = Dictionary<'Key,'Value> ()
+        //     for KeyValue(k, v) in source do d.[k] <- combiner konst v
+        //     d :> IDictionary<'Key,'Value>
+        match source1, source2 with
+        | (:? DefaultableDict<'Key,'Value> as s1), (:? DefaultableDict<'Key,'Value> as s2) -> initHybrid (combiner s1.DefaultValue s2.DefaultValue) (combine())
+        | (:? DefaultableDict<'Key,'Value> as s), _ | _, (:? DefaultableDict<'Key,'Value> as s)  -> initHybrid s.DefaultValue (combine())
+        | s, empty | empty, s when empty.Count = 0 -> s
+        | _, _  -> combine()
+            
 
     #if !FABLE_COMPILER
    ///Returns the union of two maps, preferring values from the first in case of duplicate keys.
