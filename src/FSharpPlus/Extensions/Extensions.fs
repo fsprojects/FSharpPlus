@@ -350,7 +350,6 @@ module Extensions =
         #endif
         [<Obsolete("Renamed to Choice.Sequential")>]static member Sequence (t: seq<Choice<_, _>>) = Choice<_, _>.Sequential t
 
-
         /// Returns all Choice2Of2's combined, otherwise a sequence of all Choice1Of2 elements.
         static member Parallel (choice2Combiner, t: seq<Choice<'T1, 'T2>>) =
             let mutable error = ValueNone
@@ -366,6 +365,47 @@ module Extensions =
             match error with
             | ValueNone -> Choice1Of2 (Array.toSeq res)
             | ValueSome e -> Choice2Of2 e
+
+        /// Returns the first Choice2Of2 if it contains a Choice2Of2 element, otherwise a list of all elements.
+        static member Sequential (t: list<Choice<'T, 'Choice2Of2>>) =
+        #if FABLE_COMPILER
+            let mutable error = ValueNone
+            let res = Seq.toList (seq {
+                use e = (t :> seq<_>).GetEnumerator ()
+                while e.MoveNext () && error.IsNone do
+                    match e.Current with
+                    | Choice1Of2 v -> yield v
+                    | Choice2Of2 e -> error <- ValueSome e })
+
+            match error with
+            | ValueNone   -> Choice1Of2 res
+            | ValueSome x -> Choice2Of2 x
+        #else
+            let mutable accumulator = ListCollector<'T> ()
+            let mutable error = ValueNone
+            use e = (t :> seq<_>).GetEnumerator ()
+            while e.MoveNext () && error.IsNone do
+                match e.Current with
+                | Choice1Of2 v -> accumulator.Add v
+                | Choice2Of2 x -> error <- ValueSome x
+            match error with
+            | ValueNone   -> Choice1Of2 (accumulator.Close ())
+            | ValueSome x -> Choice2Of2 x
+        #endif
+
+        /// Returns the Choice2Of2 if it contains an Choice2Of2 element, otherwise the option inside a Choice1Of2.
+        static member Sequential (t: option<Choice<'T, 'Choice2Of2>>) : Choice<'T option, 'Choice2Of2> =
+            match t with
+            | Some (Choice1Of2 x) -> Choice1Of2 (Some x)
+            | Some (Choice2Of2 x) -> Choice2Of2 x
+            | None -> Choice1Of2 None
+        
+        /// Returns the Choice2Of2 if it contains an Choice2Of2 element, otherwise the option inside a Choice1Of2.
+        static member Sequential (t: voption<Choice<'T, 'Choice2Of2>>) : Choice<'T voption, 'Choice2Of2> =
+            match t with
+            | ValueSome (Choice1Of2 x) -> Choice1Of2 (ValueSome x)
+            | ValueSome (Choice2Of2 x) -> Choice2Of2 x
+            | ValueNone -> Choice1Of2 ValueNone
 
 
     type Result<'T, 'Error> with
