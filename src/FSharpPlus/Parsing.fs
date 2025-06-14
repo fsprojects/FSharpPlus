@@ -179,4 +179,10 @@ module Parsing =
     /// Gets a tuple with the result of parsing each element of a formatted text from the Console. Returns None in case of failure.
     let inline tryScanfn pf : '``(T1 * T2 * ... * Tn)`` option = trySscanf pf (Console.ReadLine ())
 
+    /// <summary>
+    /// An active recognizer for scanning a formatted string of generic values.
+    /// </summary>
+    /// <category index="23">Additional Functions</category>
+    let inline (|Scanned|_|) (pf: PrintfFormat<_,_,_,_,'``(T1 * T2 * ... * Tn)``>) : string -> '``(T1 * T2 * ... * Tn)`` option = trySscanf pf
+
 #endif
