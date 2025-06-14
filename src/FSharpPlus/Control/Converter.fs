@@ -10,7 +10,7 @@ open System.Text
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Explicit =
     inherit Default1
@@ -26,10 +26,8 @@ type Explicit =
     static member inline Explicit (_: uint32    , _: Explicit) = fun x -> uint32          x
     static member inline Explicit (_: int64     , _: Explicit) = fun x -> int64           x
     static member inline Explicit (_: uint64    , _: Explicit) = fun x -> uint64          x
-#if !FABLE_COMPILER_3
     static member inline Explicit (_: nativeint , _: Explicit) = fun x -> nativeint  (int x)
     static member inline Explicit (_: unativeint, _: Explicit) = fun x -> unativeint (uint32 x)
-#endif    
     static member inline Explicit (_: float     , _: Explicit) = fun x -> float           x
     static member inline Explicit (_: float32   , _: Explicit) = fun x -> float32         x    
     static member inline Explicit (_: decimal   , _: Explicit) = fun x -> decimal         x
@@ -38,7 +36,7 @@ type Explicit =
         let inline call_2 (a: ^a, b: ^r) = ((^a or ^r or ^t) : (static member Explicit : _*_ -> ('t  -> ^r)) b, a)
         let inline call (a: 'a) = fun (x: 'x) -> call_2 (a, Unchecked.defaultof<'r>) x : 'r
         call Unchecked.defaultof<Explicit> value
-#if !FABLE_COMPILER_3
+
 type OfBytes =
     static member OfBytes (_: bool   , _: OfBytes) = fun (x, i, _) -> BitConverter.ToBoolean(x, i)
 
@@ -81,12 +79,10 @@ type ToBytes =
         let inline call (a: 'a, b: 'b, e) = call_2 (a, b, e)
         call (Unchecked.defaultof<ToBytes>, value, isLittleEndian)
 
-#endif
 open System.Globalization
 
 type TryParse =
     inherit Default1
-#if !FABLE_COMPILER_3
     static member TryParse (_: decimal       , _: TryParse) = fun (x:string) -> Decimal.TryParse (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<decimal>
     static member TryParse (_: float32       , _: TryParse) = fun (x:string) -> Single.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float32>
     static member TryParse (_: float         , _: TryParse) = fun (x:string) -> Double.TryParse  (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<float>
@@ -96,18 +92,6 @@ type TryParse =
     static member TryParse (_: int16         , _: TryParse) = fun (x:string) -> Int16.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int16>
     static member TryParse (_: int           , _: TryParse) = fun (x:string) -> Int32.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int>
     static member TryParse (_: int64         , _: TryParse) = fun (x:string) -> Int64.TryParse   (x, NumberStyles.Any, CultureInfo.InvariantCulture) |> tupleToOption : option<int64>
-#else
-    static member TryParse (_: decimal       , _: TryParse) = fun (x:string) -> Decimal.TryParse (x) |> tupleToOption : option<decimal>
-    static member TryParse (_: float32       , _: TryParse) = fun (x:string) -> Single.TryParse  (x) |> tupleToOption : option<float32>
-    static member TryParse (_: float         , _: TryParse) = fun (x:string) -> Double.TryParse  (x) |> tupleToOption : option<float>
-    static member TryParse (_: uint16        , _: TryParse) = fun (x:string) -> UInt16.TryParse  (x) |> tupleToOption : option<uint16>
-    static member TryParse (_: uint32        , _: TryParse) = fun (x:string) -> UInt32.TryParse  (x) |> tupleToOption : option<uint32>
-    static member TryParse (_: uint64        , _: TryParse) = fun (x:string) -> UInt64.TryParse  (x) |> tupleToOption : option<uint64>
-    static member TryParse (_: int16         , _: TryParse) = fun (x:string) -> Int16.TryParse   (x) |> tupleToOption : option<int16>
-    static member TryParse (_: int           , _: TryParse) = fun (x:string) -> Int32.TryParse   (x) |> tupleToOption : option<int>
-    static member TryParse (_: int64         , _: TryParse) = fun (x:string) -> Int64.TryParse   (x) |> tupleToOption : option<int64>
-#endif
-
     static member TryParse (_: string        , _: TryParse) = fun x -> Some x                               : option<string>
     static member TryParse (_: StringBuilder , _: TryParse) = fun x -> Some (new StringBuilder (x: string)) : option<StringBuilder>
     #if !FABLE_COMPILER
@@ -142,7 +126,7 @@ type TryParse =
         let mutable r = Unchecked.defaultof< ^R>
         if (^R: (static member TryParse : _ * _ -> _) (value, &r)) then Some r else None
 
-    #if NET7_0
+    #if NET7_0_OR_GREATER
     /// IParsable<'T>
     static member InvokeOnInterface<'T when 'T :> IParsable<'T>> (value: string) =
         let mutable r = Unchecked.defaultof<'T>
@@ -199,7 +183,7 @@ type Parse with
     
     static member inline Parse (_: ^R                  , _: Default2) : string -> ^R  = Parse.InvokeOnInstance
 
-    #if NET7_0
+    #if NET7_0_OR_GREATER
     static member Parse<'T when 'T :> IParsable<'T>> (_: 'T, _: Default1) = fun (x: string) -> 'T.Parse (x, CultureInfo.InvariantCulture)
     static member inline Parse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
     #else
@@ -217,7 +201,7 @@ type TryParse with
 
     static member inline TryParse (_: 'R, _: Default2) : string -> 'R option = TryParse.InvokeOnInstance
 
-    #if NET7_0
+    #if NET7_0_OR_GREATER
     static member inline TryParse (_: 'R, _: Default1) : string -> 'R option = TryParse.InvokeOnInterface
     static member inline TryParse (_: ^t when ^t: null and ^t: struct, _: Default1) = id
     #else

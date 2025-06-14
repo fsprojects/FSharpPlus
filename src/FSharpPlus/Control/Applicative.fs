@@ -8,17 +8,16 @@ open Microsoft.FSharp.Quotations
 
 open FSharpPlus.Internals
 open FSharpPlus
-open FSharpPlus.Data
 
 
 type Apply =
     inherit Default1
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member        ``<*>`` (struct (f: Lazy<'T->'U>     , x: Lazy<'T>           )  , _output: Lazy<'U>             , [<Optional>]_mthd: Apply) = Lazy.apply f x                               : Lazy<'U>
     static member        ``<*>`` (struct (f: seq<_>           , x: seq<'T>            )  , _output: seq<'U>              , [<Optional>]_mthd: Apply) = Seq.apply  f x                               : seq<'U>
-    static member        ``<*>`` (struct (f: NonEmptySeq<_>   , x: NonEmptySeq<'T>    )  , _output: NonEmptySeq<'U>      , [<Optional>]_mthd: Apply) = NonEmptySeq.apply  f x                       : NonEmptySeq<'U>
+    static member        ``<*>`` (struct (_: NonEmptySeq2<_>  , _: NonEmptySeq2<'T>   )  , _output: NonEmptySeq2<'U>     , [<Optional>]_mthd: Apply) = failwith "no <*> implementation for NonEmptySeq2<'U>" : NonEmptySeq2<'U>
     static member        ``<*>`` (struct (f: IEnumerator<_>   , x: IEnumerator<'T>    )  , _output: IEnumerator<'U>      , [<Optional>]_mthd: Apply) = Enumerator.map2 id f x : IEnumerator<'U>
     static member        ``<*>`` (struct (f: list<_>          , x: list<'T>           )  , _output: list<'U>             , [<Optional>]_mthd: Apply) = List.apply f x                               : list<'U>
     static member        ``<*>`` (struct (f: _ []             , x: 'T []              )  , _output: 'U []                , [<Optional>]_mthd: Apply) = Array.apply f x                              : 'U []
@@ -28,8 +27,9 @@ type Apply =
     #if !FABLE_COMPILER
     static member        ``<*>`` (struct (f: Task<_>          , x: Task<'T>             ), _output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Default2) = ValueTask.apply   f x : ValueTask<'U>
+    #if !FABLE_COMPILER
+    static member        ``<*>`` (struct (f: ValueTask<_>     , x: ValueTask<'T>        ), _output: ValueTask<'U>        , [<Optional>]_mthd: Apply) : ValueTask<'U> = ValueTask.apply f x
+    static member        ``<*>`` (struct (_: DmStruct1<_>     , _: DmStruct1<'T>        ), _output: DmStruct1<'U>        , [<Optional>]_mthd: Apply) : DmStruct1<'U> = Unchecked.defaultof<DmStruct1<'U>>
     #endif
     static member        ``<*>`` (struct (f: Async<_>         , x: Async<'T>            ), _output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
     static member        ``<*>`` (struct (f: option<_>        , x: option<'T>           ), _output: option<'U>           , [<Optional>]_mthd: Apply) = Option.apply f x : option<'U>
@@ -87,7 +87,7 @@ type Apply =
     static member inline InvokeOnInstance (f: '``Applicative<'T->'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         ((^``Applicative<'T->'U>`` or ^``Applicative<'T>`` or ^``Applicative<'U>``) : (static member (<*>) : _*_ -> _) (f, x))
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 type Apply with
     static member inline ``<*>`` (struct (f: '``Monad<'T->'U>``      , x: '``Monad<'T>``     ) , _output: '``Monad<'U>``      , [<Optional>]_mthd:Default2) : '``Monad<'U>``       = Bind.InvokeOnInstance f (fun (x1: 'T->'U) -> Bind.InvokeOnInstance x (fun x2 -> Return.InvokeOnInstance (x1 x2)))
@@ -100,8 +100,7 @@ type Lift2 =
     inherit Default1
 
     static member        Lift2 (f, (x: Lazy<_>            , y: Lazy<_>            ), _mthd: Lift2) = Lazy.map2 f x y
-    static member        Lift2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift2) = Seq.lift2 f x y
-    static member        Lift2 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     ), _mthd: Lift2) = NonEmptySeq.lift2 f x y
+    static member        Lift2 (f, (x: seq<_>             , y: seq<_>             ), _mthd: Lift2) = Seq.lift2 f x y    
     static member        Lift2 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     ), _mthd: Lift2) = Enumerator.map2 f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = List.lift2 f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Array.lift2 f x y
@@ -109,12 +108,12 @@ type Lift2 =
     static member inline Lift2 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   ), _mthd: Lift2) = Plus.Invoke a b, f x y
     static member inline Lift2 (f, (struct (a: 'Monoid, x: 'T), struct (b: 'Monoid, y: 'U)), _mthd: Lift2) = struct (Plus.Invoke a b, f x y)
     #if !FABLE_COMPILER
-    static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.map2  f x y
+    static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.lift2  f x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        Lift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Lift2) = ValueTask.map2  f x y
+    #if !FABLE_COMPILER
+    static member        Lift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Lift2) = ValueTask.lift2  f x y
     #endif
-    static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.map2  f x y
+    static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.lift2  f x y
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Option.map2 f x y
     
     #if !FABLE_COMPILER
@@ -149,8 +148,7 @@ type Lift3 =
     inherit Default1
 
     static member        Lift3 (f, (x: Lazy<_>            , y: Lazy<_>            , z: Lazy<_>             ), _mthd: Lift3) = Lazy.map3 f x y z
-    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Lift3) = Seq.lift3 f x y z
-    static member        Lift3 (f, (x: NonEmptySeq<_>     , y: NonEmptySeq<_>     , z: NonEmptySeq<_>      ), _mthd: Lift3) = NonEmptySeq.lift3 f x y z
+    static member        Lift3 (f, (x: seq<_>             , y: seq<_>             , z: seq<_>              ), _mthd: Lift3) = Seq.lift3 f x y z    
     static member        Lift3 (f, (x: IEnumerator<_>     , y: IEnumerator<_>     , z: IEnumerator<_>      ), _mthd: Lift3) = Enumerator.map3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = List.lift3 f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Array.lift3 f x y z
@@ -158,12 +156,12 @@ type Lift3 =
     static member inline Lift3 (f, ((a: 'Monoid, x: 'T)   , (b: 'Monoid, y: 'U)   , (c: 'Monoid, z: 'U)    ), _mthd: Lift3) = Plus.Invoke (Plus.Invoke a b) c, f x y z
     static member inline Lift3 (f, (struct (a: 'Monoid, x: 'T), struct (b: 'Monoid, y: 'U), struct (c: 'Monoid, z: 'U)), _mthd: Lift3) = struct (Plus.Invoke (Plus.Invoke a b) c, f x y z)
     #if !FABLE_COMPILER
-    static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.map3  f x y z
+    static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.lift3  f x y z
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        Lift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Lift3) = ValueTask.map3  f x y z
+    #if !FABLE_COMPILER
+    static member        Lift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Lift3) = ValueTask.lift3  f x y z
     #endif
-    static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.map3  f x y z
+    static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.lift3  f x y z
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Option.map3 f x y z
     
     #if !FABLE_COMPILER
@@ -196,8 +194,7 @@ type Lift3 with
 type IsLeftZero =
     inherit Default1
 
-    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = Seq.isEmpty t.Value
-    static member IsLeftZero (_: ref<NonEmptySeq<_>>, _mthd: IsLeftZero) = false
+    static member IsLeftZero (t: ref<seq<_>>      , _mthd: IsLeftZero) = Seq.isEmpty t.Value    
     static member IsLeftZero (t: ref<list<_>>     , _mthd: IsLeftZero) = List.isEmpty t.Value
     static member IsLeftZero (t: ref<array<_>>    , _mthd: IsLeftZero) = Array.isEmpty t.Value
     static member IsLeftZero (t: ref<option<_>>   , _mthd: IsLeftZero) = Option.isNone t.Value

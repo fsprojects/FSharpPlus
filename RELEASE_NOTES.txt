@@ -1,9 +1,10 @@
-Release Notes for FSharpPlus 1.6.0-RC1  - December 17 2023
-----------------------------------------------------------
+Release Notes for FSharpPlus 1.7.0  - December 15 2024
+------------------------------------------------------
 
-Target net 8
-Add Result.Sequence
-Add Validation.ofOptionWith
-Add List.chunkBy
-Matrix and Vector types implement IEnumerable's and IReadOnly's interfaces
-Add limited applicative support to dictionaries
+ZipApplicative docs
+Add missing iter functions to Extensions
+Fix issue with iteration of dictionaries
+String.startsWith available now from Fable
+Add NonEmptyList and NonEmptySeq Helper Functions
+Add pick related functions to SeqT
+Monad instance for Vector and Matrix

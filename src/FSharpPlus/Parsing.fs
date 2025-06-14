@@ -1,6 +1,6 @@
 ﻿namespace FSharpPlus
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
 [<AutoOpen>]
 module Parsing =
@@ -73,8 +73,8 @@ module Parsing =
             Tuple<_,_,_,_,_,_,_,_> (t1, t2, t3, t4, t5, t6, t7, tr) |> retype : 't
 
         static member inline ParseArray (_: unit                        , _: ParseArray) = fun (_: (string * string) []) -> ()
-        static member inline ParseArray (_: Tuple<'t1>                  , _: ParseArray) = fun (g: (string * string) []) -> tuple1 (parse g.[0]) : Tuple<'t1>
-        static member inline ParseArray (_: Id<'t1>                     , _: ParseArray) = fun (g: (string * string) []) -> Id<_>  (parse g.[0])
+        static member inline ParseArray (_: Tuple<'t1>                  , _: ParseArray) = fun (g: (string * string) []) -> Tuple<_> (parse g.[0]) : Tuple<'t1>
+        static member inline ParseArray (_: Id<'t1>                     , _: ParseArray) = fun (g: (string * string) []) -> Id<_>    (parse g.[0])
         static member inline ParseArray (_: 't1*'t2                     , _: ParseArray) = fun (g: (string * string) []) -> parse g.[0], parse g.[1]
         static member inline ParseArray (_: 't1*'t2'*'t3                , _: ParseArray) = fun (g: (string * string) []) -> parse g.[0], parse g.[1], parse g.[2]
         static member inline ParseArray (_: 't1*'t2'*'t3*'t4            , _: ParseArray) = fun (g: (string * string) []) -> parse g.[0], parse g.[1], parse g.[2], parse g.[3]
@@ -109,8 +109,8 @@ module Parsing =
             | _ -> None
 
         static member inline TryParseArray (_: unit                        , _: TryParseArray) = fun (_: (string * string) []) -> ()
-        static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: (string * string) []) -> tuple1 <!> tryParseElemAt 0 g : Tuple<'t1> option
-        static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: (string * string) []) -> Id<_>  <!> tryParseElemAt 0 g
+        static member inline TryParseArray (_: Tuple<'t1>                  , _: TryParseArray) = fun (g: (string * string) []) -> Tuple<_> <!> tryParseElemAt 0 g : Tuple<'t1> option
+        static member inline TryParseArray (_: Id<'t1>                     , _: TryParseArray) = fun (g: (string * string) []) -> Id<_>    <!> tryParseElemAt 0 g
         static member inline TryParseArray (_: 't1*'t2                     , _: TryParseArray) = fun (g: (string * string) []) -> tuple2 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g
         static member inline TryParseArray (_: 't1*'t2'*'t3                , _: TryParseArray) = fun (g: (string * string) []) -> tuple3 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g
         static member inline TryParseArray (_: 't1*'t2'*'t3*'t4            , _: TryParseArray) = fun (g: (string * string) []) -> tuple4 <!> tryParseElemAt 0 g <*> tryParseElemAt 1 g <*> tryParseElemAt 2 g <*> tryParseElemAt 3 g

@@ -11,7 +11,7 @@ open System.Collections.ObjectModel
 open FSharpPlus.Control
 
 let indexable = testList "Indexable" [
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testList "testCompileAndExecuteItem" [
         testCase "map" (fun () ->
             let a = Map.ofSeq [1, "one"; 2, "two"]
@@ -68,7 +68,7 @@ let indexable = testList "Indexable" [
     ]
     #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testList "testCompileAndExecuteTryItem" [
         testCase "map" (fun () ->
             let a = Map.ofSeq [1, "one"; 2, "two"]
@@ -228,7 +228,7 @@ let indexable = testList "Indexable" [
         equalSeq ["Using WrappedMapA's TraverseIndexed"] (SideEffects.get ()))
     #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testCase "findIndexUsage" (fun () ->
         let m1 = WrappedListD [0..4]
         SideEffects.reset ()
@@ -237,13 +237,21 @@ let indexable = testList "Indexable" [
         equal i1 2)
     #endif
 
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     testCase "findSliceIndexUsage" (fun () ->
         let m1 = WrappedListD [0..4]
         let m2 = WrappedListD [1..3]
         SideEffects.reset ()
         let i1 = findSliceIndex m2 m1
         SideEffects.are ["Using WrappedListD's FindSliceIndex"]
+        equal i1 1)
+
+    testCase "findLastSliceIndexUsage" (fun () ->
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findLastSliceIndex m2 m1
+        SideEffects.are ["Using WrappedListD's FindLastSliceIndex"]
         equal i1 1)
     #endif
     ]

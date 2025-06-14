@@ -1,5 +1,7 @@
 namespace FSharpPlus
 
+#nowarn "1204" // Suppress warning about using FSharp Compiler's error strings.
+
 /// Additional operations on Array
 [<RequireQualifiedAccess>]
 module Array =
@@ -7,6 +9,23 @@ module Array =
     open System
     open FSharp.Core.CompilerServices
     open FSharpPlus.Internals.Errors
+
+    /// <summary>Adds an element to the beginning of the given array</summary>
+    /// <param name="value">The element to add</param>
+    /// <param name="array">The array to add to</param>
+    /// <returns>A new array with the element added to the beginning.</returns>
+    let cons value array =
+        raiseIfNull (nameof(array)) array
+        Array.insertAt 0 value array
+
+    /// <summary>Splits the array in head and tail.</summary>
+    /// <param name="array">The input array.</param>
+    /// <returns>A tuple with the head and the tail of the original array.</returns>
+    /// <exception cref="T:System.ArgumentException">Thrown when the input array is empty.</exception>
+    let uncons array =
+        raiseIfNull (nameof(array)) array
+        if Array.isEmpty array then invalidArg (nameof(array)) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
+        else array[0], array[1..]
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
@@ -49,7 +68,7 @@ module Array =
         let lenx, leny, lenz = Array.length list1, Array.length list2, Array.length list3
         let combinedFirstTwo = Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in (list1.[d], list2.[r]))
 
-        Array.init (lenx * leny * lenz) (fun i -> let (d, r) = Math.DivRem (i, leny) in combinedFirstTwo.[d], list3.[r])
+        Array.init (lenx * leny * lenz) (fun i -> let (d, r) = Math.DivRem (i, lenz) in combinedFirstTwo.[d], list3.[r])
         |> Array.map (fun x -> mapping (fst (fst x)) (snd (fst x)) (snd x))
 
     /// Concatenates all elements, using the specified separator between each element.
@@ -150,7 +169,7 @@ module Array =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
 
     /// <summary>
     /// Returns the index of the first occurrence of the specified slice in the source.
@@ -182,6 +201,37 @@ module Array =
 
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
+
+    /// <summary>
+    /// Returns the index of the last occurrence of the specified slice in the source.
+    /// Note: this is unsafe and will throw ArgumentException when the specified slice is not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let findLastSliceIndex (slice: _ []) (source: _ []) =
+        raiseIfNull (nameof(slice)) slice
+        raiseIfNull (nameof(source)) source
+
+        let index = Internals.FindLastSliceIndex.arrayImpl slice source
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Returns the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: _ []) (source: _ []) =
+        raiseIfNull (nameof(slice)) slice
+        raiseIfNull (nameof(source)) source
+
+        let index = Internals.FindLastSliceIndex.arrayImpl slice source
+        if index = -1 then None else Some index
     #endif
 
     /// <summary>
@@ -207,6 +257,15 @@ module Array =
 
         Array.init (min a1.Length a2.Length) (fun i -> f a1.[i] a2.[i])
     
+    /// <summary>Safely build a new array whose elements are the results of applying the given function
+    /// to each of the elements of the three arrays pairwise.</summary>
+    /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
+    let map3Shortest f (a1: 'T1 []) (a2: 'T2 []) (a3: 'T3 []) =
+        raiseIfNull (nameof a1) a1
+        raiseIfNull (nameof a2) a2
+        raiseIfNull (nameof a3) a3
+        Array.init (min a1.Length a2.Length |> min a3.Length) (fun i -> f a1.[i] a2.[i] a3.[i])
+    
     /// <summary>
     /// Zip safely two arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
     /// </summary>
@@ -218,6 +277,19 @@ module Array =
         raiseIfNull (nameof(a2)) a2
 
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
+
+    /// <summary>
+    /// Zip safely three arrays. If one array is shorter, excess elements are discarded from the right end of the longer array. 
+    /// </summary>
+    /// <param name="a1">First input array.</param>
+    /// <param name="a2">Second input array.</param>
+    /// <param name="a3">Third input array.</param>
+    /// <returns>Array with corresponding tuple of input arrays.</returns>
+    let zip3Shortest (a1: array<'T1>) (a2: array<'T2>) (a3: array<'T3>) =
+        raiseIfNull (nameof a1) a1
+        raiseIfNull (nameof a2) a2
+        raiseIfNull (nameof a3) a3
+        Array.init (min a1.Length a2.Length |> min a3.Length) (fun i -> a1.[i], a2.[i], a3.[i])
 
     /// <summary>Same as choose but with access to the index.</summary>
     /// <param name="mapping">The mapping function, taking index and element as parameters.</param>

@@ -33,6 +33,11 @@ module Map =
     /// </remarks>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
+    /// <summary>Applies the given function to each value of the Map.</summary>
+    /// <param name="action">The function to apply to each value of the input Map.</param>
+    /// <param name="source">The input Map.</param>
+    let iterValues action (source: Map<'Key, 'T>) = Map.iter (fun _ v -> action v) source
+
     /// <summary>Maps the values of the original Map.</summary>
     /// <remarks>
     /// The core `Map.map` function maps over values too, but it passes both

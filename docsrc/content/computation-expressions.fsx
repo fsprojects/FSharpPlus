@@ -2,7 +2,7 @@
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
 
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 open FSharpPlus
 open FSharpPlus.Data
 
@@ -12,9 +12,11 @@ Computations Expressions
 
 This library allows to use some common computation expressions without writing any boiler plate code.
 
-For applicatives there is single computation expression: ``applicative { .. }``. Additionally ``applicative2 { .. }`` and ``applicative3 { .. }`` exists for composed (aka layered) applicatives.
+For [Applicatives](abstraction-applicative.html) there is single computation expression: ``applicative { .. }``. Additionally ``applicative2 { .. }`` and ``applicative3 { .. }`` exists for composed (aka layered) applicatives.
 
-For monadic code there is a single computation expression: ``monad { .. }`` but it comes in 4 flavours:
+For [ZipApplicatives](abstraction-zipapplicative.html) there is a counterpart set of computation expressions: ``applicative' { .. }``, ``applicative2' { .. }`` and ``applicative3' { .. }``.
+
+For [monadic](abstraction-monad.html) code there is a single computation expression: ``monad { .. }`` but it comes in 4 flavours:
 
  - Delayed or strict
 

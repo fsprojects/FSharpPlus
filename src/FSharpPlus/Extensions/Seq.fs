@@ -5,6 +5,12 @@ namespace FSharpPlus
 module Seq =
     open System
 
+    /// <summary>Adds an element to the beginning of the given sequence</summary>
+    /// <param name="value">The element to add</param>
+    /// <param name="source">The sequence to add to</param>
+    /// <returns>A new sequence with the element added to the beginning.</returns>
+    let cons value source = seq { yield value; yield! source } : seq<'T>
+
     /// <summary>Applies the given function to each element of the sequence and concatenates the results.</summary>
     ///
     /// <remarks>Remember sequence is lazy, effects are delayed until it is enumerated.</remarks>
@@ -203,7 +209,7 @@ module Seq =
     /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: seq<_>) = source |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
     #endif
-    #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+    #if !FABLE_COMPILER
     /// <summary>
     /// Gets the index of the first occurrence of the specified slice in the source.
     /// </summary>
@@ -246,6 +252,49 @@ module Seq =
         let index = Internals.FindSliceIndex.seqImpl slice source
         #else
         let index = Internals.FindSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
+        if index = -1 then None else Some index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// </summary>
+    /// <remarks>
+    /// It is assumed that both the slice and the source are finite, otherwise it will not return forever.
+    /// Both the slice and the source will always be iterated to the end.
+    /// </remarks>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when the slice was not found in the sequence.
+    /// </exception>
+    /// <returns>
+    /// The index of the slice.
+    /// </returns>
+    let findLastSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindLastSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
+        #endif
+        if index = -1 then
+            ArgumentException("The specified slice was not found in the sequence.") |> raise
+        else
+            index
+
+    /// <summary>
+    /// Gets the index of the last occurrence of the specified slice in the source.
+    /// Returns <c>None</c> if not found.
+    /// </summary>
+    /// <remarks>
+    /// It is assumed that both the slice and the source are finite, otherwise it will not return forever.
+    /// Both the slice and the source will always be iterated to the end.
+    /// </remarks>
+    /// <returns>
+    /// The index of the slice or <c>None</c>.
+    /// </returns>
+    let tryFindLastSliceIndex (slice: seq<_>) (source: seq<_>) =
+        #if !FABLE_COMPILER
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
+        #else
+        let index = Internals.FindLastSliceIndex.arrayImpl (Seq.toArray slice) (Seq.toArray source)
         #endif
         if index = -1 then None else Some index
     #endif

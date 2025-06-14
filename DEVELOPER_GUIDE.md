@@ -69,3 +69,7 @@ Defaults are not intended to be used by developers of F#+, as F#+ should afford 
 #### Invoker
 
 The signature of the Invoker should ideally be the same as the generic function. This will allow Invokers to be used in lieu of functions in scenarios where passing a type leads to more generic code than passing a function.
+
+### Releases
+
+See the documentation in [BRANCHES](./BRANCHES.md).

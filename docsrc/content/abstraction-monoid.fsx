@@ -1,13 +1,15 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 
 (**
 Monoid
 ======
 Types with an associative binary operation that has an identity.
+
 ___
+
 Minimal complete definition
 ---------------------------
  * `zero``
@@ -55,6 +57,7 @@ From .Net/F#
  -  ``StringBuilder``
  -  ``unit``
  -  ``Set<'T>``
+ -  ``HashSet<'T>``
  -  ``Map<'T,'Monoid>``
  -  ``TimeSpan`` 
  -  ``Tuple<'Monoid1* ... *'MonoidN>``

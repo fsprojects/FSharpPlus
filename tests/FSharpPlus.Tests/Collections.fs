@@ -69,6 +69,8 @@ module Collections =
         let ls2:_ list                    = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
         let st1:_ Set                     = ofSeq {'1'..'3'}
         let st2:_ Set                     = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
+        let hs1:_ HashSet                 = ofSeq {'1'..'3'}
+        let hs2:_ HashSet                 = ofSeq (seq [(1, "One", '1'); (2, "Two", '2')])
         let ss: Generic.SortedSet<_>      = ofSeq (seq [3..6])
         let ra: Generic.List<_>           = ofSeq (seq [1..3])
         let sl: Generic.SortedList<_,_>   = ofSeq (seq [(1, "One"); (2, "Two")]) // but it will come back as ...
@@ -118,6 +120,8 @@ module Collections =
         let _ls2' = toSeq ls2
         let _st1' = toSeq st1
         let _st2' = toSeq st2
+        let _hs1' = toSeq hs1
+        let _hs2' = toSeq hs2
         let _ss'  = toSeq ss 
         let _ra'  = toSeq ra 
         let _sl'  = toSeq sl 
@@ -168,6 +172,8 @@ module Collections =
         let ls2:_ list                    = ofList ([(1, "One", '1'); (2, "Two", '2')])
         let st1:_ Set                     = ofList ['1'..'3']
         let st2:_ Set                     = ofList ([(1, "One", '1'); (2, "Two", '2')])
+        let hs1:_ HashSet                 = ofList ['1'..'3']
+        let hs2:_ HashSet                 = ofList ([(1, "One", '1'); (2, "Two", '2')])
         let ss: Generic.SortedSet<_>      = ofList ([3..6])
         let ra: Generic.List<_>           = ofList ([1..3])
         let sl: Generic.SortedList<_,_>   = ofList ([(1, "One"); (2, "Two")]) // but it will come back as ...
@@ -218,6 +224,8 @@ module Collections =
         let _ls2' = toList ls2
         let _st1' = toList st1
         let _st2' = toList st2
+        let _hs1' = toList hs1
+        let _hs2' = toList hs2
         let _ss'  = toList ss
         let _ra'  = toList ra
         let _sl'  = toList sl
@@ -283,3 +291,10 @@ module Collections =
         
         let m = choose Some ((ofSeq :seq<_*_> -> Map<_,_>) (seq ["a", 1; "b", 2]))
         Assert.IsInstanceOf<Option<Map<string,int>>> (Some m)
+
+    // Compile tests
+    
+    let inline mapOfGroup (key: 'T -> 'Key when 'Key : equality) (sequence: '``Collection<'T>``) : Map<'Key, '``Collection<'T>``> =
+        sequence
+        |> groupBy key
+        |> Map.ofSeq

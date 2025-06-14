@@ -1,7 +1,7 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
 
 (**
 Extensions
@@ -186,6 +186,7 @@ The String type:
    * truncate, drop
    * findIndex, tryFindIndex
    * findSliceIndex, tryFindSliceIndex
+   * findLastSliceIndex, tryFindLastSliceIndex
    * toArray, ofArray, toList, ofList, toSeq, ofSeq, toCodePoints, ofCodePoints
    * getBytes
 
@@ -195,6 +196,7 @@ Collections / Traversable types:
    * intercalate, intersperse,
    * split, replace,
    * findSliceIndex, trySliceIndex,
+   * findLastSliceIndex, tryLastSliceIndex,
    * partitionMap
  * [IList](reference/fsharpplus-ilist.html)
    * toIReadOnlyList
@@ -207,6 +209,7 @@ Collections / Traversable types:
    * split, replace,
    * toIReadOnlyList,
    * findSliceIndex, tryFindSliceIndex,
+   * findLastSliceIndex, tryLastSliceIndex,
    * partitionMap
    * setAt, removeAt
  * [Enumerator](reference/fsharpplus-enumerator.html)
@@ -232,6 +235,7 @@ Collections / Traversable types:
     * replicate
     * toIReadOnlyList
     * findSliceIndex, tryFindSliceIndex
+    * findLastSliceIndex, tryLastSliceIndex,
  * [ IReadOnlyCollection ](reference/fsharpplus-ireadonlycollection.html)
      * ofArray, ofList, ofSeq
      * map

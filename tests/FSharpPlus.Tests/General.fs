@@ -112,12 +112,13 @@ type WrappedListD<'s> = WrappedListD of 's list with
         WrappedListD <!> (traversei f x : ^r)
     static member FindIndex (WrappedListD x, y) =
         SideEffects.add "Using WrappedListD's FindIndex"
-        printfn "WrappedListD.FindIndex"
         findIndex y x
     static member FindSliceIndex (WrappedListD x, WrappedListD y) =
         SideEffects.add "Using WrappedListD's FindSliceIndex"
-        printfn "WrappedListD.FindSliceIndex"
         findSliceIndex y x
+    static member FindLastSliceIndex (WrappedListD x, WrappedListD y) =
+        SideEffects.add "Using WrappedListD's FindLastSliceIndex"
+        findLastSliceIndex y x
     member this.Length =
         SideEffects.add "Using WrappedListD's Length"
         let (WrappedListD lst) = this
@@ -408,6 +409,13 @@ module Functor =
 
 
     [<Test>]
+    let mapSquared () =
+        let x =
+            [Some 1; Some 2]
+            |>>> string
+        Assert.AreEqual ([Some "1"; Some "2"], x)    
+    
+    [<Test>]
     let unzip () = 
         let testVal = unzip {Head = (1, 'a'); Tail = [(2, 'b');(3, 'b')]}
         Assert.IsInstanceOf<Option<NonEmptyList<int> * NonEmptyList<char>>> (Some testVal)
@@ -490,6 +498,22 @@ module Functor =
         
         let nel = zip (NonEmptyList.ofList [1; 2]) (NonEmptyList.ofList ["a"; "b"; "c"])
         CollectionAssert.AreEqual (NonEmptyList.ofList [1,"a"; 2,"b"], nel)
+
+    [<Test>]
+    let iterTests () =
+        let li = [1, 2; 3, 4]
+        let di: Dictionary<int, int> = ofList li
+        let id = dict li
+        let ir = readOnlyDict li
+        let ma = Map.ofList li
+
+        let r = ResizeArray<string> []
+
+        iter (r.Add << string) di
+        iter (r.Add << string) id
+        iter (r.Add << string) ir
+        iter (r.Add << string) ma
+        CollectionAssert.AreEqual (ResizeArray ["2"; "4"; "2"; "4"; "2"; "4"; "2"; "4"], r)
 
 
         
@@ -879,6 +903,15 @@ module Foldable =
         areEquivalent ["Using WrappedListD's FindSliceIndex"] (SideEffects.get ())
         areEqual i1 1
 
+    [<Test>]
+    let findLastSliceIndexUsage () =
+        let m1 = WrappedListD [0..4]
+        let m2 = WrappedListD [1..3]
+        SideEffects.reset ()
+        let i1 = findLastSliceIndex m2 m1
+        areEquivalent ["Using WrappedListD's FindLastSliceIndex"] (SideEffects.get ())
+        areEqual i1 1
+
 module Monad = 
     [<Test>]
     let joinDefaultCustom () = 
@@ -1068,30 +1101,6 @@ module IdiomBrackets =
         let res3n4''' = iI (+) (result 2) [1;2] Ii   // fails to compile when constraints are not properly defined
         Assert.AreEqual ([3;4], res3n4'' )
         Assert.AreEqual ([3;4], res3n4''')
-
-
-        let output = System.Text.StringBuilder ()
-        let append (x: string) = output.Append x |> ignore
-
-        let v5: Lazy<_> = lazy (append "5"; 5)
-        Assert.AreEqual (0, output.Length)
-        let fPlus10 x   = lazy (append " + 10"; x + 10)
-        Assert.AreEqual (0, output.Length)
-        let v5plus10    = v5 >>= fPlus10
-        Assert.AreEqual (0, output.Length)
-        let v15 = v5plus10.Force ()
-        Assert.AreEqual ("5 + 10", string output)
-        Assert.AreEqual (15, v15)
-
-        output.Clear () |> ignore
-
-        let v4ll: Lazy<_> = lazy (append "outer"; lazy (append "inner"; 4))
-        Assert.AreEqual (0, output.Length)
-        let v4l = join v4ll
-        Assert.AreEqual (0, output.Length)
-        let v4  = v4l.Force()
-        Assert.AreEqual ("outerinner", string output)
-        Assert.AreEqual (4, v4)
  
 
 module Alternative =

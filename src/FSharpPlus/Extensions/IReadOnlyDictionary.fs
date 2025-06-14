@@ -49,6 +49,16 @@ module IReadOnlyDictionary =
     /// <returns>A seq of the values in the read-only dictionary.</returns>
     let values (source: IReadOnlyDictionary<'Key, 'Value>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
+    /// <summary>Applies the given function to each key and value pair of the read-only dictionary.</summary>
+    /// <param name="action">The function to apply to each key and value pair of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iter action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
+
+    /// <summary>Applies the given function to each value of the read-only dictionary.</summary>
+    /// <param name="action">The function to apply to each value of the input dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    let iterValues action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(_, v) in source do action v
+
     /// <summary>Maps the given function over each value in the read-only dictionary.</summary>
     /// <param name="mapper">The mapping function.</param>
     /// <param name="source">The input IReadOnlyDictionary.</param>
@@ -59,9 +69,6 @@ module IReadOnlyDictionary =
         for KeyValue(k, v) in source do
             dct.Add (k, mapper v)
         dct :> IReadOnlyDictionary<'Key, 'U>
-
-    [<System.Obsolete("Name is a bit ambiguous, use mapValues if the intention is to map only over the values or mapi to map over both keys and values.")>]
-    let map f (x: IReadOnlyDictionary<'Key, 'T>) = mapValues f x // F#+ 2: if following F# core naming, it should point to mapi instead.
 
     /// <summary>Creates a read-only dictionary value from a pair of read-only dictionaries,
     /// using a function to combine them.</summary>
@@ -108,13 +115,6 @@ module IReadOnlyDictionary =
         for KeyValue(k, v) in source do
             dct.Add (k, mapper k v)
         dct :> IReadOnlyDictionary<'Key, 'U>
-
-    /// <summary>Applies the given action over each key and value in the read-only dictionary.</summary>
-    /// <param name="action">The action to apply.</param>
-    /// <param name="source">The input IReadOnlyDictionary.</param>
-    ///
-    /// <returns>The mapped IReadOnlyDictionary.</returns>
-    let iter action (source: IReadOnlyDictionary<'Key, 'T>) = for KeyValue(k, v) in source do action k v
 
 
     /// <summary>Applies a function to each value in a read-only dictionary and then returns

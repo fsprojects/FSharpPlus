@@ -8,7 +8,7 @@ open FSharpPlus.Data
 
 
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 let testEmpty () =
     let _: WrappedListE<int> = empty
     let _: list<int>         = empty
@@ -21,7 +21,7 @@ let testEmpty () =
     ()
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 let testAppend () =
     let _ = WrappedListE [1;2] <|> WrappedListE [3;4]
     let _ = [1;2] <|> [3;4]
@@ -35,7 +35,7 @@ let testAppend () =
     ()
 #endif
 let alternative = testList "Alternative" [
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
     testCase "testEmptyAndAppendForCustomType" (fun () ->
         let u = WrappedListE [1;2]
         let v = WrappedListG [1;2]
@@ -61,7 +61,7 @@ let alternative = testList "Alternative" [
         Assert.AreEqual (Some 1, z))
 #endif
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
     testCase "testChoice" (fun () ->
         let s = seq { 
             yield (SideEffects.add "a"; None)
