@@ -368,7 +368,7 @@ module Extensions =
 
         /// Returns the first Choice2Of2 if it contains a Choice2Of2 element, otherwise a list of all elements.
         static member Sequential (t: list<Choice<'T, 'Choice2Of2>>) =
-        #if FABLE_COMPILER
+        #if FABLE_COMPILER || NET45
             let mutable error = ValueNone
             let res = Seq.toList (seq {
                 use e = (t :> seq<_>).GetEnumerator ()
