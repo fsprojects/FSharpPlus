@@ -107,6 +107,7 @@ module Parsing =
         let _zzz1 = sscanf "%%(%s)" "%(hello)"
         let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
+        let inline (|Parsedf|_|) pf = trySscanf pf
         match "ab" with Parsedf "%c" _ -> failwith "wrong match" | Parsedf "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
         match "abc" with Parsedf "%c%c" ('a', 'b') -> failwith "wrong match" | Parsedf "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
         match "(%hello)" with
