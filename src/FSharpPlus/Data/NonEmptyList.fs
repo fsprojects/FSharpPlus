@@ -175,10 +175,10 @@ module NonEmptyList =
         | _  -> x, ofList xs
     #endif
 
-    /// <summary>Splits the list in head and tail.</summary>
-    /// <param name="list">The input list.</param>
+    /// <summary>Splits the NonEmptyList in head and tail.</summary>
+    /// <param name="list">The input (non empty) list.</param>
     /// <returns>A tuple with the head and the tail of the original list.</returns>
-    let unconsAsList { Head = x; Tail = xs } = x, xs
+    let unconsAsList list = match list with { Head = x; Tail = xs } -> x, xs
 
     /// Returns the first element of a new non empty list. You can also use property nel.Head.
     let head {Head = x; Tail = _ } = x
