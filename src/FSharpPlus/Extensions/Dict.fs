@@ -128,10 +128,18 @@ module Dict =
     ///
     /// <returns>The mapped dictionary.</returns>
     let map mapper (source: IDictionary<'Key, 'T>) =
-        let dct = Dictionary<'Key, 'U> ()
-        for KeyValue(k, v) in source do
-            dct.Add (k, mapper v)
-        dct :> IDictionary<'Key, 'U>
+        match source with
+        | :? DefaultableDict<'Key, 'T> as s ->
+            let dct = DefaultableDict<'Key, 'U> (mapper s.DefaultValue, Dictionary<'Key, 'U> ())
+            let dct = dct :> IDictionary<'Key, 'U>
+            for KeyValue(k, v) in source do
+                dct.Add (k, mapper v)
+            dct
+        | _ ->
+            let dct = Dictionary<'Key, 'U> ()
+            for KeyValue(k, v) in source do
+                dct.Add (k, mapper v)
+            dct :> IDictionary<'Key, 'U>
 
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
@@ -141,13 +149,21 @@ module Dict =
     ///
     /// <returns>The combined dictionary.</returns>
     let map2 mapper (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let dct = Dictionary<'Key, 'U> ()
-        let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2 with
-            | Some vy -> dct.Add (k, f.Invoke (vx, vy))
-            | None    -> ()
-        dct :> IDictionary<'Key, 'U>
+        let map k1 k2 =
+            let dct = Dictionary<'Key, 'U> ()
+            let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
+            for k in set source1.Keys + set source2.Keys do
+                match tryGetValue k source1, tryGetValue k source2, k1, k2 with
+                | Some vx, Some vy, _      , _
+                | None   , Some vy, Some vx, _ 
+                | Some vx, None   , _      , Some vy -> dct.Add (k, f.Invoke (vx, vy))
+                | _      , _      , _      , _       -> ()
+            dct :> IDictionary<'Key, 'U>
+        match source1, source2 with
+        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2) -> initHybrid (mapper s1.DefaultValue s2.DefaultValue) (map (Some s1.DefaultValue) (Some s2.DefaultValue))
+        | (:? DefaultableDict<'Key,'T1> as s1), _ -> map (Some s1.DefaultValue) None
+        | _, (:? DefaultableDict<'Key,'T2> as s2) -> map None (Some s2.DefaultValue)
+        | _, _  -> map None None
 
     /// <summary>Combines values from three dictionaries using mapping function.</summary>
     /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
@@ -185,13 +201,7 @@ module Dict =
     /// <param name="source2">The second input dictionary.</param>
     ///
     /// <returns>The tupled dictionary.</returns>
-    let zip (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let dct = Dictionary<'Key, 'T1 * 'T2> ()
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2 with
-            | Some vy -> dct.Add (k, (vx, vy))
-            | None    -> ()
-        dct :> IDictionary<'Key, 'T1 * 'T2>
+    let zip (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) = map2 (fun x y -> (x, y)) source1 source2
 
     /// <summary>Splits a dictionary with tuple pair values to two separate dictionaries.</summary>
     /// <param name="source">The source dictionary.</param>
@@ -223,6 +233,7 @@ module Dict =
         //     d :> IDictionary<'Key,'Value>
         match source1, source2 with
         | (:? DefaultableDict<'Key,'Value> as s1), (:? DefaultableDict<'Key,'Value> as s2) -> initHybrid (combiner s1.DefaultValue s2.DefaultValue) (combine())
+        | (:? DefaultableDict<'Key,'Value> as s), _ | _, (:? DefaultableDict<'Key,'Value> as s)  -> initHybrid s.DefaultValue (combine())
         | s, empty | empty, s when empty.Count = 0 -> s
         | _, _  -> combine()
             

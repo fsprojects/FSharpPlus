@@ -57,12 +57,7 @@ type Apply =
        dct
 
     static member        ``<*>`` (struct (f: IDictionary<'Key,_>, x: IDictionary<'Key,'T>) , _output: IDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IDictionary<'Key,'U> =
-       let dct = Dictionary ()
-       for KeyValue(k, vf) in f do
-           match x.TryGetValue k with
-           | true, vx -> dct.Add (k, vf vx)
-           | _        -> ()
-       dct :> IDictionary<'Key,'U>
+       Dict.map2 id f x
 
     static member        ``<*>`` (struct (f: IReadOnlyDictionary<'Key,_>, x: IReadOnlyDictionary<'Key,'T>) , _output: IReadOnlyDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IReadOnlyDictionary<'Key,'U> =
        let dct = Dictionary ()
