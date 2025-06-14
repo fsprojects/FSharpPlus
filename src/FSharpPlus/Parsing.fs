@@ -54,7 +54,7 @@ module Parsing =
                     if consumeNumericPlus then regex.Append @"\+?" |> ignore
                     "([0-9a-fA-F]+)"
                 | '%' -> "%"
-                | x -> failwith $"Unknown format specifier: {x}"
+                | x -> failwithf "Unknown format specifier: %c" x
                 |> regex.Append |> ignore
                 if consumeSpacesAfter then regex.Append @"\s*" else regex
             | '\\' | '*' | '+' | '?' | '|' | '{' | '[' | '(' | ')' | '^' | '$' | '.' | '#' | ' ' as escape ->
