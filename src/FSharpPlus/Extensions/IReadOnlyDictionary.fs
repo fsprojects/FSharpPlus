@@ -169,6 +169,21 @@ module IReadOnlyDictionary =
             | None    -> ()
         dct :> IReadOnlyDictionary<'Key, 'T1 * 'T2>
 
+    /// <summary>Tuples values of three dictionaries.</summary>
+    /// <remarks>Keys that are not present on all three dictionaries are dropped.</remarks>
+    /// <param name="source1">The first input dictionary.</param>
+    /// <param name="source2">The second input dictionary.</param>
+    /// <param name="source3">The third input dictionary.</param>
+    ///
+    /// <returns>The tupled dictionary.</returns>
+    let zip3 (source1: IReadOnlyDictionary<'Key, 'T1>) (source2: IReadOnlyDictionary<'Key, 'T2>) (source3: IReadOnlyDictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'T1 * 'T2 * 'T3> ()
+        for KeyValue(k, vx) in source1 do
+            match tryGetValue k source2, tryGetValue k source3 with
+            | Some vy, Some vz -> dct.Add (k, (vx, vy, vz))
+            | _                -> ()
+        dct :> IReadOnlyDictionary<'Key, 'T1 * 'T2 * 'T3>
+
     /// <summary>Splits a read-only dictionary with tuple pair values to two separate read-only dictionaries.</summary>
     /// <param name="source">The source IReadOnlyDictionary.</param>
     ///
@@ -181,6 +196,20 @@ module IReadOnlyDictionary =
             dct2.Add (k, vy)
         dct1 :> IReadOnlyDictionary<'Key, 'T1>, dct2 :> IReadOnlyDictionary<'Key, 'T2>
 
+    /// <summary>Splits a dictionary with tuple of 3 values to three separate dictionaries.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A tuple of each untupled dictionary.</returns>
+    let unzip3 (source: IReadOnlyDictionary<'Key, 'T1 * 'T2 * 'T3>) =
+        let dct1 = Dictionary<'Key, 'T1> ()
+        let dct2 = Dictionary<'Key, 'T2> ()
+        let dct3 = Dictionary<'Key, 'T3> ()
+        for KeyValue(k, (vx, vy, vz)) in source do
+            dct1.Add (k, vx)
+            dct2.Add (k, vy)
+            dct3.Add (k, vz)
+        dct1 :> IReadOnlyDictionary<'Key, 'T1>, dct2 :> IReadOnlyDictionary<'Key, 'T2>, dct3 :> IReadOnlyDictionary<'Key, 'T3>
+
     /// Returns the union of two read-only dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IReadOnlyDictionary<'Key, 'Value>) (source2: IReadOnlyDictionary<'Key, 'Value>) =
         let d = Dictionary<'Key,'Value> ()
@@ -188,6 +217,31 @@ module IReadOnlyDictionary =
         for KeyValue(k, v ) in source1 do d.[k] <- v
         for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
         d :> IReadOnlyDictionary<'Key,'Value>
+
+    /// <summary>Flattens a read-only dictionary of read-only dictionaries into a single read-only dictionary on matching keys.</summary>
+    /// <remarks>Keys that are not present in the inner dictionaries are dropped.</remarks>
+    /// <param name="source">The source IReadOnlyDictionary of IReadOnlyDictionaries.</param>
+    /// <returns>A flattened IReadOnlyDictionary.</returns>
+    let flatten (source: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>) : IReadOnlyDictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue (k, v) in source do
+            match v.TryGetValue k  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IReadOnlyDictionary<'Key, 'Value>
+    
+    /// <summary>Applies a function to each value in a read-only dictionary and then flattens the result on matching keys into a new read-only dictionary.</summary>
+    /// <remarks>Keys that are not present in the inner dictionaries are dropped.</remarks>
+    /// <param name="mapper">The function to be applied to each value in the read-only dictionary.</param>
+    /// <param name="source">The input read-only dictionary.</param>
+    /// <returns>A flattened IReadOnlyDictionary.</returns>
+    let bind (mapper: 'T -> IReadOnlyDictionary<'Key, 'U>) (source: IReadOnlyDictionary<'Key, 'T>) =
+        let dct = Dictionary ()
+        for KeyValue (k, v) in source do
+            match (mapper v).TryGetValue k with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
 
     #if !FABLE_COMPILER
 
