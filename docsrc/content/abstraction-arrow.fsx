@@ -169,10 +169,10 @@ let plusminus =
 let double = 
     Kleisli (fun x -> [x * 2])
 
-// Combine using Kleisli composition
-let h2 = plusminus >>= fun x -> double
-
-let h2Output = Kleisli.run h2 8
+// Simple example: apply plusminus first
+let h2Output = 
+    let result1 = Kleisli.run plusminus 8
+    result1 |> List.collect (Kleisli.run double)
 // Result: [16; -16] (because [8; -8] each get doubled to [16; -16])
 
 (**
@@ -187,13 +187,11 @@ Here's an example of building string transformations using Kleisli arrows:
 let prepend x = Kleisli (fun s -> [x + s])
 let append x = Kleisli (fun s -> [s + x])
 
-// Simple example - compose transformations using monadic bind
-let simpleTransform = 
-    prepend "<" >>= fun _ -> append ">"
-
+// Simple example - apply transformations in sequence
 let transformStrings () =
     ["test"; "foobar"] 
-    |> List.collect (Kleisli.run simpleTransform)
+    |> List.collect (Kleisli.run (prepend "<"))
+    |> List.collect (Kleisli.run (append ">"))
     |> List.iter (printfn "%s")
 
 // Example usage
