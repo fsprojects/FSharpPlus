@@ -95,6 +95,8 @@ type SimpleFunc<'a, 'b> with
     static member Arr f = SimpleFunc f
     static member First (SimpleFunc f) = 
         SimpleFunc (fun (a, b) -> (f a, b))
+    static member Second (SimpleFunc f) = 
+        SimpleFunc (fun (a, b) -> (a, f b))
 
 // Category instance for SimpleFunc  
 type SimpleFunc<'a, 'b> with
