@@ -169,8 +169,8 @@ let plusminus =
 let double = 
     Kleisli (fun x -> [x * 2])
 
-// Combine using arrow composition - this creates all combinations
-let h2 = plusminus >>> double
+// Combine using Kleisli composition
+let h2 = plusminus >>= fun x -> double
 
 let h2Output = Kleisli.run h2 8
 // Result: [16; -16] (because [8; -8] each get doubled to [16; -16])
@@ -187,9 +187,9 @@ Here's an example of building string transformations using Kleisli arrows:
 let prepend x = Kleisli (fun s -> [x + s])
 let append x = Kleisli (fun s -> [s + x])
 
-// Simple example - compose transformations
+// Simple example - compose transformations using monadic bind
 let simpleTransform = 
-    prepend "<" >>> append ">"
+    prepend "<" >>= fun _ -> append ">"
 
 let transformStrings () =
     ["test"; "foobar"] 
