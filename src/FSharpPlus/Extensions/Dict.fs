@@ -10,8 +10,8 @@ module Auto =
         {
             new  ICollection<'TValue> with
                 member _.Contains item = source.Values.Contains item || obj.ReferenceEquals (item, konst)
-                member _.GetEnumerator () = (seq { yield! source.Values; yield! (Seq.initInfinite (fun _ -> konst))}).GetEnumerator () :> System.Collections.IEnumerator
-                member _.GetEnumerator () = (seq { yield! source.Values; yield! (Seq.initInfinite (fun _ -> konst))}).GetEnumerator () : IEnumerator<'TValue>
+                member _.GetEnumerator () = source.Values.GetEnumerator () :> System.Collections.IEnumerator
+                member _.GetEnumerator () = source.Values.GetEnumerator () : IEnumerator<'TValue>
                 member _.IsReadOnly = true
                 member _.Add (_item: 'TValue) : unit                          = raise (NotImplementedException ())
                 member _.Clear () : unit                                      = raise (NotImplementedException ())
