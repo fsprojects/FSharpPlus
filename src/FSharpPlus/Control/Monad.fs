@@ -165,7 +165,7 @@ type Return =
 
     static member        Return (_: seq<'a>        , _: Default4) = fun  x      -> Seq.singleton x : seq<'a>
     static member        Return (_: IEnumerator<'a>, _: Default3) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
-    static member        Return (_: IDictionary<'k,'t>        , _: Default2) = fun x -> Dict.initInfinite x                 : IDictionary<'k,'t>
+    static member        Return (_: IDictionary<'k,'t>        , _: Default2) = fun x -> Dict.emptyWithDefault x                 : IDictionary<'k,'t>
     #if (!FABLE_COMPILER_3) // TODO Dummy overload for now
     static member        Return (_: IReadOnlyDictionary<'k,'t>, _: Default3) = fun x -> readOnlyDict [Unchecked.defaultof<'k>, x] :  IReadOnlyDictionary<'k,'t>
     #endif

@@ -29,14 +29,6 @@ module Auto =
                 | _        -> value <- konst
                 true
             member _.Count = source.Count
-                // if typeof<'TKey>.IsValueType then                
-                //     if typeof<'TKey> = typeof<bool> then 2
-                //     else
-                //         let s = sizeof<'TKey>
-                //         if s < 4 then pown 2 (sizeof<'TKey> * 8)
-                //         else -1 // infinity
-                // elif typeof<'TKey> = typeof<unit> then 1
-                // else -1
             member _.ContainsKey (_key: 'TKey) = true
             member _.Contains (item: KeyValuePair<'TKey,'TValue>) =
                 match source.TryGetValue item.Key with
@@ -67,10 +59,15 @@ module Dict =
     open System.Collections.ObjectModel
     open Auto
 
-    /// <summary>Creates a conceptually infinite dictionary containing the same value for all possible keys.</summary>
-    /// <param name="source">The value for all possible keys.</param>
-    let initInfinite<'TKey,'TValue when 'TKey : equality> (source: 'TValue) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(source, Dictionary<'TKey,'TValue> ())
-    let initHybrid<'TKey,'TValue> (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, source)
+    /// <summary>Creates a defaultable dictionary.</summary>
+    /// <param name="konst">The value for all missing keys.</param>
+    /// <param name="source">The source dictionary.</param>
+    let emptyWithDefault<'TKey,'TValue when 'TKey : equality> (konst: 'TValue) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, dict [])
+
+    /// <summary>Creates a defaultable dictionary.</summary>
+    /// <param name="konst">The value for all missing keys.</param>
+    /// <param name="source">The source dictionary.</param>
+    let initWithDefault<'TKey,'TValue> (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, source)
 
     #if !FABLE_COMPILER
     open System.Linq
@@ -128,18 +125,13 @@ module Dict =
     ///
     /// <returns>The mapped dictionary.</returns>
     let map mapper (source: IDictionary<'Key, 'T>) =
-        match source with
-        | :? DefaultableDict<'Key, 'T> as s ->
-            let dct = DefaultableDict<'Key, 'U> (mapper s.DefaultValue, Dictionary<'Key, 'U> ())
-            let dct = dct :> IDictionary<'Key, 'U>
-            for KeyValue(k, v) in source do
-                dct.Add (k, mapper v)
-            dct
-        | _ ->
-            let dct = Dictionary<'Key, 'U> ()
-            for KeyValue(k, v) in source do
-                dct.Add (k, mapper v)
-            dct :> IDictionary<'Key, 'U>
+        let dct = 
+            match source with
+            | :? DefaultableDict<'Key, 'T> as s -> emptyWithDefault (mapper s.DefaultValue)
+            | _                                 -> Dictionary<'Key, 'U> () :> IDictionary<'Key, 'U>
+        for KeyValue(k, v) in source do
+            dct.Add (k, mapper v)
+        dct
 
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
@@ -149,38 +141,41 @@ module Dict =
     ///
     /// <returns>The combined dictionary.</returns>
     let map2 mapper (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let map k1 k2 =
+        let map () =
             let dct = Dictionary<'Key, 'U> ()
             let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
-            for k in set source1.Keys + set source2.Keys do
-                match tryGetValue k source1, tryGetValue k source2, k1, k2 with
-                | Some vx, Some vy, _      , _
-                | None   , Some vy, Some vx, _ 
-                | Some vx, None   , _      , Some vy -> dct.Add (k, f.Invoke (vx, vy))
-                | _      , _      , _      , _       -> ()
+            let keys = Seq.append source1.Keys source2.Keys |> Seq.distinct
+            for k in keys do
+                match tryGetValue k source1, tryGetValue k source2 with
+                | Some vx, Some vy -> dct.Add (k, f.Invoke (vx, vy))
+                | _      , _       -> ()
             dct :> IDictionary<'Key, 'U>
         match source1, source2 with
-        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2) -> initHybrid (mapper s1.DefaultValue s2.DefaultValue) (map (Some s1.DefaultValue) (Some s2.DefaultValue))
-        | (:? DefaultableDict<'Key,'T1> as s1), _ -> map (Some s1.DefaultValue) None
-        | _, (:? DefaultableDict<'Key,'T2> as s2) -> map None (Some s2.DefaultValue)
-        | _, _  -> map None None
+        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2) -> initWithDefault (mapper s1.DefaultValue s2.DefaultValue) (map ())
+        | _, _  -> map ()
 
     /// <summary>Combines values from three dictionaries using mapping function.</summary>
     /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
-    /// <param name="mapping">The mapping function.</param>
+    /// <param name="mapper">The mapping function.</param>
     /// <param name="source1">First input dictionary.</param>
     /// <param name="source2">Second input dictionary.</param>
     /// <param name="source3">Third input dictionary.</param>
     ///
     /// <returns>The mapped dictionary.</returns>
-    let map3 mapping (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
-        let dct = Dictionary<'Key, 'U> ()
-        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2, tryGetValue k source3 with
-            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
-            | _      , _       -> ()
-        dct :> IDictionary<'Key, 'U>
+    let map3 mapper (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
+        let map () =
+            let dct = Dictionary<'Key, 'U> ()
+            let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapper
+            let keys = source1.Keys |> Seq.append source2.Keys |> Seq.append source3.Keys |> Seq.distinct
+            for k in keys do
+                match tryGetValue k source1, tryGetValue k source2, tryGetValue k source3 with
+                | Some vx, Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+                | _      , _      , _       -> ()
+            dct :> IDictionary<'Key, 'U>
+        match source1, source2, source3 with
+        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2), (:? DefaultableDict<'Key,'T3> as s3) ->
+            initWithDefault (mapper s1.DefaultValue s2.DefaultValue s3.DefaultValue) (map ())
+        | _, _, _  -> map ()
 
     /// <summary>Applies given function to each value of the given dictionary.</summary>
     /// <param name="chooser">The mapping function.</param>
@@ -223,17 +218,9 @@ module Dict =
             for KeyValue(k, v ) in source1 do d.[k] <- v
             for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
             d :> IDictionary<'Key,'Value>
-        // let combineWithKonst source konst =
-        //     let d = Dictionary<'Key,'Value> ()
-        //     for KeyValue(k, v) in source do d.[k] <- combiner v konst
-        //     d :> IDictionary<'Key,'Value>
-        // let combineKonstWith konst source =
-        //     let d = Dictionary<'Key,'Value> ()
-        //     for KeyValue(k, v) in source do d.[k] <- combiner konst v
-        //     d :> IDictionary<'Key,'Value>
         match source1, source2 with
-        | (:? DefaultableDict<'Key,'Value> as s1), (:? DefaultableDict<'Key,'Value> as s2) -> initHybrid (combiner s1.DefaultValue s2.DefaultValue) (combine())
-        | (:? DefaultableDict<'Key,'Value> as s), _ | _, (:? DefaultableDict<'Key,'Value> as s)  -> initHybrid s.DefaultValue (combine())
+        | (:? DefaultableDict<'Key,'Value> as s1)   ,   (:? DefaultableDict<'Key,'Value> as s2) -> initWithDefault (combiner s1.DefaultValue s2.DefaultValue) (combine())
+        | (:? DefaultableDict<'Key,'Value> as s), _ | _, (:? DefaultableDict<'Key,'Value> as s) -> initWithDefault s.DefaultValue (combine())
         | s, empty | empty, s when empty.Count = 0 -> s
         | _, _  -> combine()
             

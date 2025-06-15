@@ -31,7 +31,7 @@ type Pure =
 
     static member        Pure (_: seq<'a>         , _: Default4 ) = fun x -> Seq.initInfinite (fun _ -> x)         : seq<'a>
     static member        Pure (_: IEnumerator<'a> , _: Default3 ) = fun x -> Enumerator.upto None (fun _ -> x)     : IEnumerator<'a>
-    static member        Pure (_: IDictionary<'k,'t>, _: Default2) = fun x -> Dict.initInfinite x: IDictionary<'k,'t>
+    static member        Pure (_: IDictionary<'k,'t>, _: Default2) = fun x -> Dict.emptyWithDefault x: IDictionary<'k,'t>
     #if (!FABLE_COMPILER_3) // TODO Dummy overload for now
     static member        Pure (_: IReadOnlyDictionary<'k,'t>, _: Default3) = fun x -> readOnlyDict [Unchecked.defaultof<'k>, x] :  IReadOnlyDictionary<'k,'t>
     #endif
