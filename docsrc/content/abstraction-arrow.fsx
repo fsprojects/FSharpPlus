@@ -115,8 +115,9 @@ let split<'a> : SimpleFunc<'a, 'a * 'a> =
 let unsplit op = arr (fun (x, y) -> op x y)
 
 // liftA2: combines output from two arrows using a binary operation
-let liftA2 op f g = 
-    split >>> first f >>> second g >>> unsplit op
+let liftA2 op (f: SimpleFunc<'a, 'b>) (g: SimpleFunc<'a, 'c>) : SimpleFunc<'a, 'd> = 
+    let splitForA : SimpleFunc<'a, 'a * 'a> = arr (fun x -> (x, x))
+    splitForA >>> first f >>> second g >>> unsplit op
 
 (**
 
