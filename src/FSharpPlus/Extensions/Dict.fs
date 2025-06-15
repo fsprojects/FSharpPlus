@@ -127,6 +127,21 @@ module Dict =
             | None    -> ()
         dct :> IDictionary<'Key, 'T1 * 'T2>
 
+    /// <summary>Tuples values of three dictionaries.</summary>
+    /// <remarks>Keys that are not present on all three dictionaries are dropped.</remarks>
+    /// <param name="source1">The first input dictionary.</param>
+    /// <param name="source2">The second input dictionary.</param>
+    /// <param name="source3">The third input dictionary.</param>
+    ///
+    /// <returns>The tupled dictionary.</returns>
+    let zip3 (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'T1 * 'T2 * 'T3> ()
+        for KeyValue(k, vx) in source1 do
+            match tryGetValue k source2, tryGetValue k source3 with
+            | Some vy, Some vz -> dct.Add (k, (vx, vy, vz))
+            | _                -> ()
+        dct :> IDictionary<'Key, 'T1 * 'T2 * 'T3>
+
     /// <summary>Splits a dictionary with tuple pair values to two separate dictionaries.</summary>
     /// <param name="source">The source dictionary.</param>
     ///
@@ -138,6 +153,46 @@ module Dict =
             dct1.Add (k, vx)
             dct2.Add (k, vy)
         dct1 :> IDictionary<'Key, 'T1>, dct2 :> IDictionary<'Key, 'T2>
+
+    /// <summary>Splits a dictionary with tuple of 3 values to three separate dictionaries.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A tuple of each untupled dictionary.</returns>
+    let unzip3 (source: IDictionary<'Key, 'T1 * 'T2 * 'T3>) =
+        let dct1 = Dictionary<'Key, 'T1> ()
+        let dct2 = Dictionary<'Key, 'T2> ()
+        let dct3 = Dictionary<'Key, 'T3> ()
+        for KeyValue(k, (vx, vy, vz)) in source do
+            dct1.Add (k, vx)
+            dct2.Add (k, vy)
+            dct3.Add (k, vz)
+        dct1 :> IDictionary<'Key, 'T1>, dct2 :> IDictionary<'Key, 'T2>, dct3 :> IDictionary<'Key, 'T3>
+
+
+    /// <summary>Flattens a dictionary of dictionaries into a single dictionary on matching keys.</summary>
+    /// <remarks>Keys that are not present in the inner dictionaries are dropped.</remarks>
+    /// <param name="source">The source IDictionary of IDictionaries.</param>
+    /// <returns>A flattened IDictionary.</returns>
+    let flatten (source: IDictionary<_, IDictionary<_, _>>) : IDictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue (k, v) in source do
+            match v.TryGetValue k  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IDictionary<'Key, 'Value>
+    
+    /// <summary>Applies a function to each value in a dictionary and then flattens the result on matching keys into a new dictionary.</summary>
+    /// <remarks>Keys that are not present in the inner dictionaries are dropped.</remarks>
+    /// <param name="mapper">The function to be applied to each value in the dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    /// <returns>A flattened IDictionary.</returns>
+    let bind (mapper: 'T -> IDictionary<'Key, 'U>) (source: IDictionary<'Key, 'T>) =
+        let dct = Dictionary ()
+        for KeyValue (k, v) in source do
+            match (mapper v).TryGetValue k with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct :> IDictionary<'Key, 'U>
 
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IDictionary<'Key, 'Value>) (source2: IDictionary<'Key, 'Value>) =
