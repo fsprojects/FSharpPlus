@@ -36,3 +36,20 @@ module Folds =
         #if TEST_TRACE
         CollectionAssert.AreEqual (["ToSeq seq"], Traces.get())
         #endif
+
+    [<Test>]
+    let dictFolds () =
+        let r1 = dict         [1, 2; 3, 4] |> fold (fun acc v -> acc + v) 0
+        let r2 = readOnlyDict [1, 2; 3, 4] |> fold (fun acc v -> acc + v) 0
+        let r3 = Map.ofSeq    [1, 2; 3, 4] |> fold (fun acc v -> acc + v) 0
+        let r4 = dict         [1, 2; 3, 4] |> foldMap ((+) 10)
+        let r5 = readOnlyDict [1, 2; 3, 4] |> foldMap ((+) 10)
+        let r6 = Map.ofSeq    [1, 2; 3, 4] |> foldMap ((+) 10)
+        Assert.AreEqual (6, r1)
+        Assert.AreEqual (6, r2)
+        Assert.AreEqual (6, r3)
+        Assert.AreEqual (26, r4)
+        Assert.AreEqual (26, r5)
+        Assert.AreEqual (26, r6)
+
+        
