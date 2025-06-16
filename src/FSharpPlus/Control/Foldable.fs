@@ -147,6 +147,10 @@ type FoldMap =
     static member inline FoldMap (x: Set<_>      , f, [<Optional>]_impl: FoldMap) = Seq.fold   (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
     static member inline FoldMap (x: _ []        , f, [<Optional>]_impl: FoldMap) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
 
+    static member inline FoldMap (x: Map<_, _>                , f, [<Optional>]_impl: FoldMap) = Map.fold                 (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: IDictionary<_, _>        , f, [<Optional>]_impl: FoldMap) = Dict.fold                (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+    static member inline FoldMap (x: IReadOnlyDictionary<_, _>, f, [<Optional>]_impl: FoldMap) = IReadOnlyDictionary.fold (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
+
     static member inline Invoke (f: 'T->'Monoid) (x: '``Foldable'<T>``) : 'Monoid =
         let inline call_2 (a: ^a, b: ^b, f) = ((^a or ^b) : (static member FoldMap : _*_*_ -> _) b, f, a)
         let inline call (a: 'a, b: 'b, f) = call_2 (a, b, f)
@@ -185,6 +189,9 @@ type Fold =
     static member        Fold (x: list<_>     , f,             z    , [<Optional>]_impl: Fold    ) = List.fold              f z x
     static member        Fold (x: Set<_>      , f,             z    , [<Optional>]_impl: Fold    ) = Set.fold               f z x
     static member        Fold (x:  _ []       , f,             z    , [<Optional>]_impl: Fold    ) = Array.fold             f z x
+    static member        Fold (x: Map<_,_>    , f,             z    , [<Optional>]_impl: Fold    ) = Map.fold                 (fun s _ -> f s) z x
+    static member        Fold (x: IDictionary<_,_>        , f, z    , [<Optional>]_impl: Fold    ) = Dict.fold                (fun s _ -> f s) z x
+    static member        Fold (x: IReadOnlyDictionary<_,_>, f, z    , [<Optional>]_impl: Fold    ) = IReadOnlyDictionary.fold (fun s _ -> f s) z x
 
     static member inline Invoke (folder: 'State->'T->'State) (state: 'State) (foldable: '``Foldable'<T>``) : 'State =
         let inline call_2 (a: ^a, b: ^b, f, z) = ((^a or ^b) : (static member Fold : _*_*_*_ -> _) b, f, z, a)

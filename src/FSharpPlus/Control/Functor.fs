@@ -149,13 +149,13 @@ type Unzip =
     static member inline Unzip ((source: '``Functor<'T * 'U>``             , _output: '``Functor<'T>`` * '``Functor<'U>``                  ) , _mthd: Default1) = (^``Functor<'T * 'U>``: (static member Unzip : _->_) source) : '``Functor<'T>`` * '``Functor<'U>``
     static member inline Unzip (( _    : ^t when ^t: null and ^t: struct   , _                                                             ) , _              ) = ()
     
-    static member        Unzip ((source: Lazy<'T * 'U>                     , _output: Lazy<'T> * Lazy<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: Lazy<'T * 'U>                     , _output: Lazy<'T> * Lazy<'U>                                  ) , _mthd: Unzip   ) = Lazy.map fst source, Lazy.map snd source
 
     #if !FABLE_COMPILER
-    static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Task.map fst source, Task.map snd source
     #endif
     #if !FABLE_COMPILER
-    static member        Unzip ((source: ValueTask<'T * 'U>                , _output: ValueTask<'T> * ValueTask<'U>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: ValueTask<'T * 'U>                , _output: ValueTask<'T> * ValueTask<'U>                        ) , _mthd: Unzip   ) = ValueTask.map fst source, ValueTask.map snd source
     #endif
     static member        Unzip ((source: option<'T * 'U>                   , _output: option<'T> * option<'U>                              ) , _mthd: Unzip   ) = Option.unzip source
     static member        Unzip ((source: voption<'T * 'U>                  , _output: voption<'T> * voption<'U>                            ) , _mthd: Unzip   ) = ValueOption.unzip source
@@ -167,17 +167,17 @@ type Unzip =
     static member        Unzip ((struct (m: 'Monoid, t: ('T * 'U))         , _output: struct ('Monoid * 'T) * struct ('Monoid * 'U)        ) , _mthd: Unzip   ) = struct (m, fst t), struct (m, snd t)
     static member        Unzip ((source: ('T * 'U) []                      , _output: 'T []    * 'U []                                     ) , _mthd: Unzip   ) = Array.unzip  source
     #if !FABLE_COMPILER
-    static member        Unzip ((source: ('T * 'U) [,]                     , _output: 'T [,]   * 'U [,]                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    static member        Unzip ((source: ('T * 'U) [,,]                    , _output: 'T [,,]  * 'U [,,]                                   ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    static member        Unzip ((source: ('T * 'U) [,,,]                   , _output: 'T [,,,] * 'U [,,,]                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: ('T * 'U) [,]                     , _output: 'T [,]   * 'U [,]                                    ) , _mthd: Unzip   ) = Array2D.map fst source, Array2D.map snd source
+    static member        Unzip ((source: ('T * 'U) [,,]                    , _output: 'T [,,]  * 'U [,,]                                   ) , _mthd: Unzip   ) = Array3D.map fst source, Array3D.map snd source
+    static member        Unzip ((source: ('T * 'U) [,,,]                   , _output: 'T [,,,] * 'U [,,,]                                  ) , _mthd: Unzip   ) = Map.Invoke  fst source, Map.Invoke  snd source
     #endif
 
-    static member        Unzip ((source: Async<'T * 'U>                    , _output: Async<'T> * Async<'U>                                ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: Async<'T * 'U>                    , _output: Async<'T> * Async<'U>                                ) , _mthd: Unzip   ) = Async.map fst source, Async.map snd source
     static member        Unzip ((source: Result<'T * 'U, 'E>               , _output: Result<'T,'E> * Result<'U,'E>                        ) , _mthd: Unzip   ) = Result.unzip source
-    static member        Unzip ((source: Choice<'T * 'U, 'E>               , _output: Choice<'T,'E> * Choice<'U,'E>                        ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: Choice<'T * 'U, 'E>               , _output: Choice<'T,'E> * Choice<'U,'E>                        ) , _mthd: Unzip   ) = Choice.map fst source, Choice.map snd source
     static member        Unzip ((source: KeyValuePair<'Key, 'T * 'U>       , _output: KeyValuePair<_, 'T> * KeyValuePair<_, 'U>            ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
-    static member        Unzip ((source: Map<'Key, 'T * 'U>                , _output: Map<_, 'T> * Map<_, 'U>                              ) , _mthd: Unzip   ) = Map.unzip    source
-    static member        Unzip ((source: Dictionary<'Key, 'T * 'U>         , _output: Dictionary<_, 'T> * Dictionary<_, 'U>                ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: Map<'Key, 'T * 'U>                , _output: Map<_, 'T> * Map<_, 'U>                              ) , _mthd: Unzip   ) = Map.unzip        source
+    static member        Unzip ((source: Dictionary<'Key, 'T * 'U>         , _output: Dictionary<_, 'T> * Dictionary<_, 'U>                ) , _mthd: Unzip   ) = Dictionary.unzip source
 
     #if !FABLE_COMPILER
     static member        Unzip ((source: Expr<'T * 'U>                     , _output: Expr<'T> * Expr<'U>                                  ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
@@ -187,10 +187,10 @@ type Unzip =
     
     static member        Unzip ((source: seq<'T * 'U>                      , _output: seq<'T> * seq<'U>                                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source    
 
-    static member        Unzip ((source: IEnumerator<'T * 'U>              , _output: IEnumerator<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: IEnumerator<'T * 'U>              , _output: IEnumerator<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Enumerator.map fst source, Enumerator.map snd source
     static member        Unzip ((source: IDictionary<'Key, 'T * 'U>        , _output: IDictionary<_,'T> * IDictionary<_,'U>                ) , _mthd: Unzip   ) = Dict.unzip source
     static member        Unzip ((source: IReadOnlyDictionary<'Key,'T * 'U> , _output: IReadOnlyDictionary<_,'T> * IReadOnlyDictionary<_,'U>) , _mthd: Unzip   ) = IReadOnlyDictionary.unzip source
-    static member        Unzip ((source: IObservable<'T * 'U>              , _output: IObservable<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Map.Invoke fst source, Map.Invoke snd source
+    static member        Unzip ((source: IObservable<'T * 'U>              , _output: IObservable<'T> * ResizeArray<'U>                    ) , _mthd: Unzip   ) = Observable.map fst source, Observable.map snd source
 
 
 
@@ -208,7 +208,7 @@ type Zip =
     static member Zip ((x: seq<'T>                    , y: seq<'U>                   , _output: seq<'T*'U>                   ), _mthd: Zip) = Seq.zip                 x y    
     static member Zip ((x: IDictionary<'K, 'T>        , y: IDictionary<'K,'U>        , _output: IDictionary<'K,'T*'U>        ), _mthd: Zip) = Dict.zip                x y
     static member Zip ((x: IReadOnlyDictionary<'K, 'T>, y: IReadOnlyDictionary<'K,'U>, _output: IReadOnlyDictionary<'K,'T*'U>), _mthd: Zip) = IReadOnlyDictionary.zip x y
-    static member Zip ((x: Dictionary<'K, 'T>         , y: Dictionary<'K,'U>         , _output: Dictionary<'K,'T*'U>         ), _mthd: Zip) = Dict.zip       x y :?> Dictionary<'K,'T*'U>
+    static member Zip ((x: Dictionary<'K, 'T>         , y: Dictionary<'K,'U>         , _output: Dictionary<'K,'T*'U>         ), _mthd: Zip) = Dictionary.zip          x y
     static member Zip ((x: Map<'K, 'T>                , y: Map<'K,'U>                , _output: Map<'K,'T*'U>                ), _mthd: Zip) = Map.zip        x y
     static member Zip ((f: 'R -> 'T                   , g: 'R -> 'U                  , _output: 'R -> 'T * 'U                ), _mthd: Zip) = fun x -> (f x, g x)
     static member Zip ((f: Func<'R, 'T>               , g: Func<'R, 'U>              , _output: Func<'R, 'T * 'U>            ), _mthd: Zip) = Func<_,_> (fun x -> (f.Invoke x, g.Invoke x))

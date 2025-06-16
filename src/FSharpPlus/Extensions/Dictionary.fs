@@ -4,7 +4,7 @@
 [<RequireQualifiedAccess>]
 module Dictionary =
     open System.Collections.Generic
-    open System.Collections.ObjectModel
+    open System.Collections.ObjectModel    
 
     #if !FABLE_COMPILER
     open System.Linq
@@ -13,6 +13,10 @@ module Dictionary =
     let toIReadOnlyDictionary (source: Dictionary<'Key, 'Value>) = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
     
     #endif
+
+    /// <summary>Creates an empty dictionary.</summary>
+    [<GeneralizableValue>]
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> ()
 
     /// <summary>Tries to get the value of the given key.</summary>
     /// <remarks>Note: this is a function wrapper for the Dictionary.TryGetValue method,
@@ -67,6 +71,31 @@ module Dictionary =
         let dct = Dictionary<'Key, 'U> ()
         for KeyValue(k, v) in source do
             dct.Add (k, mapping v)
+        dct
+
+    /// <summary>Applies each function in the dictionary of functions to the corresponding value in the dictionary of values,
+    /// producing a new dictionary of values.</summary>
+    /// <remarks>
+    /// If a key is present in the function dictionary but not in the value dictionary, that key is simply ignored.
+    /// If a key is present in the value dictionary but not in the function dictionary, that key is also ignored.
+    /// </remarks>
+    /// <param name="f">The dictionary of functions.</param>
+    /// <param name="x">The dictionary of values.</param>
+    /// <returns>The resulting dictionary of values.</returns>
+    /// <typeparam name="'Key">The type of the keys in the dictionaries.</typeparam>
+    /// <typeparam name="'T">The type of the values in the dictionary of values.</typeparam>
+    /// <typeparam name="'U">The type of the values in the resulting dictionary.</typeparam>    
+    /// <returns>A dictionary of values.</returns>
+    /// <remarks>
+    /// This function is useful for applying a set of transformations to a dictionary of values,
+    /// where each transformation is defined by a function in a dictionary of functions.
+    /// </remarks>
+    let apply (f: Dictionary<'Key, _>) (x: Dictionary<'Key, 'T>) : Dictionary<'Key, 'U> =
+        let dct = Dictionary ()
+        for KeyValue (k, vf) in f do
+            match x.TryGetValue k with
+            | true, vx -> dct.Add (k, vf vx)
+            | _        -> ()
         dct
 
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
@@ -129,6 +158,21 @@ module Dictionary =
             | None    -> ()
         dct
 
+    /// <summary>Tuples values of three dictionaries.</summary>
+    /// <remarks>Keys that are not present on all three dictionaries are dropped.</remarks>
+    /// <param name="source1">The first input dictionary.</param>
+    /// <param name="source2">The second input dictionary.</param>
+    /// <param name="source3">The third input dictionary.</param>
+    ///
+    /// <returns>The tupled dictionary.</returns>
+    let zip3 (source1: Dictionary<'Key, 'T1>) (source2: Dictionary<'Key, 'T2>) (source3: Dictionary<'Key, 'T3>) =
+        let dct = Dictionary<'Key, 'T1 * 'T2 * 'T3> ()
+        for KeyValue(k, vx) in source1 do
+            match tryGetValue k source2, tryGetValue k source3 with
+            | Some vy, Some vz -> dct.Add (k, (vx, vy, vz))
+            | _                -> ()
+        dct
+
     /// <summary>Splits a dictionary with tuple pair values to two separate dictionaries.</summary>
     /// <param name="source">The source dictionary.</param>
     ///
@@ -140,6 +184,45 @@ module Dictionary =
             dct1.Add (k, vx)
             dct2.Add (k, vy)
         dct1, dct2
+
+    /// <summary>Splits a dictionary with tuple of 3 values to three separate dictionaries.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A tuple of each untupled dictionary.</returns>
+    let unzip3 (source: Dictionary<'Key, 'T1 * 'T2 * 'T3>) =
+        let dct1 = Dictionary<'Key, 'T1> ()
+        let dct2 = Dictionary<'Key, 'T2> ()
+        let dct3 = Dictionary<'Key, 'T3> ()
+        for KeyValue(k, (vx, vy, vz)) in source do
+            dct1.Add (k, vx)
+            dct2.Add (k, vy)
+            dct3.Add (k, vz)
+        dct1, dct2, dct3
+
+    /// <summary>Flattens a dictionary of dictionaries into a single dictionary on matching keys.</summary>
+    /// <remarks>Keys that are not present in the inner dictionaries are dropped.</remarks>
+    /// <param name="source">The source Dictionary of IDictionaries.</param>
+    /// <returns>A flattened Dictionary.</returns>
+    let flatten (source: Dictionary<_, Dictionary<_, _>>) : Dictionary<'Key, 'Value> =
+        let dct = Dictionary ()
+        for KeyValue (k, v) in source do
+            match v.TryGetValue k  with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct
+    
+    /// <summary>Applies a function to each value in a dictionary and then flattens the result on matching keys into a new dictionary.</summary>
+    /// <remarks>Keys that are not present in the inner dictionaries are dropped.</remarks>
+    /// <param name="mapper">The function to be applied to each value in the dictionary.</param>
+    /// <param name="source">The input dictionary.</param>
+    /// <returns>A flattened Dictionary.</returns>
+    let bind (mapper: 'T -> Dictionary<'Key, 'U>) (source: Dictionary<'Key, 'T>) =
+        let dct = Dictionary ()
+        for KeyValue (k, v) in source do
+            match (mapper v).TryGetValue k with
+            | true, v -> dct.Add (k, v)
+            | _       -> ()
+        dct
 
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: Dictionary<'Key, 'Value>) (source2: Dictionary<'Key, 'Value>) =
@@ -190,3 +273,38 @@ module Dictionary =
             | Some v -> dct.Add (k, v)
             | None   -> ()
         dct
+
+    /// <summary>Converts a dictionary to a ResizeArray.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A ResizeArray containing the Key and Value of the original dictionary.</returns>
+    let toResizeArray (source: Dictionary<'Key, 'T>) =
+        let arr = ResizeArray<KeyValuePair<'Key, 'T>> ()
+        for KeyValue (k, x) in source do
+            arr.Add (KeyValuePair (k, x))
+        arr
+
+    /// <summary>Converts a dictionary to a sequence.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A sequence containing the Key and Value of the original dictionary.</returns>
+    let toSeq (source: Dictionary<'Key, 'T>) = toResizeArray source :> seq<_>
+
+    /// <summary>Folds over the bindings in the dictionary.</summary>
+    /// <remarks>
+    /// This function takes a folder function, an initial state, and a source dictionary.
+    /// The folder function is applied to each key-value pair in the source, accumulating a state.
+    /// The initial state is provided as the first argument to the folder function.
+    /// The function returns the final accumulated state after processing all key-value pairs.
+    /// </remarks>
+    /// <param name="folder">The folder function that takes the current state, a key, and a value, and returns the new state.</param>
+    /// <param name="state">The initial state to start the folding process.</param>
+    /// <param name="source">The source dictionary to fold over.</param>
+    /// <typeparam name="'State">The type of the state being accumulated.</typeparam>
+    /// <typeparam name="'Key">The type of the keys in the dictionary.</typeparam>
+    /// <typeparam name="'T">The type of the values in the dictionary.</typeparam>
+    ///
+    /// <returns>The final accumulated state after folding over all key-value pairs in the source.</returns>
+    let fold (folder: 'State -> 'Key -> 'T -> 'State) (state: 'State) (source: Dictionary<'Key, 'T>) =
+        let unzip source = Seq.map fst source, Seq.map snd source
+        source |> toSeq |> Seq.map (|KeyValue|) |> unzip ||> Seq.fold2 folder state
