@@ -10,6 +10,10 @@ module IReadOnlyDictionary =
 
     open System.Collections.Generic
 
+    /// <summary>Creates an empty read-only dictionary.</summary>
+    [<GeneralizableValue>]
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> () :> IReadOnlyDictionary<_,_>
+
     /// Replaces or sets the item associated with a specified key with the specified value.
     let add key value (source: IReadOnlyDictionary<'Key, 'Value>) = source |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>
 
@@ -298,10 +302,6 @@ module IReadOnlyDictionary =
         intersectWith (fun a _ -> a) source1 source2
 
     #endif
-
-    /// <summary>Creates an empty read-only dictionary.</summary>
-    [<GeneralizableValue>]
-    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> () :> IReadOnlyDictionary<_,_>
 
     /// <summary>Converts a read-only dictionary to a ResizeArray.</summary>
     /// <param name="source">The source IReadOnlyDictionary.</param>

@@ -4,7 +4,7 @@
 [<RequireQualifiedAccess>]
 module Dictionary =
     open System.Collections.Generic
-    open System.Collections.ObjectModel
+    open System.Collections.ObjectModel    
 
     #if !FABLE_COMPILER
     open System.Linq
@@ -13,6 +13,10 @@ module Dictionary =
     let toIReadOnlyDictionary (source: Dictionary<'Key, 'Value>) = ReadOnlyDictionary source :> IReadOnlyDictionary<_,_>
     
     #endif
+
+    /// <summary>Creates an empty dictionary.</summary>
+    [<GeneralizableValue>]
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> ()
 
     /// <summary>Tries to get the value of the given key.</summary>
     /// <remarks>Note: this is a function wrapper for the Dictionary.TryGetValue method,
@@ -269,10 +273,6 @@ module Dictionary =
             | Some v -> dct.Add (k, v)
             | None   -> ()
         dct
-
-    /// <summary>Creates an empty dictionary.</summary>
-    [<GeneralizableValue>]
-    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> ()
 
     /// <summary>Converts a dictionary to a ResizeArray.</summary>
     /// <param name="source">The source dictionary.</param>
