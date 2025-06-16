@@ -269,3 +269,42 @@ module Dictionary =
             | Some v -> dct.Add (k, v)
             | None   -> ()
         dct
+
+    /// <summary>Creates an empty dictionary.</summary>
+    [<GeneralizableValue>]
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> ()
+
+    /// <summary>Converts a dictionary to a ResizeArray.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A ResizeArray containing the Key and Value of the original dictionary.</returns>
+    let toResizeArray (source: Dictionary<'Key, 'T>) =
+        let arr = ResizeArray<KeyValuePair<'Key, 'T>> ()
+        for KeyValue (k, x) in source do
+            arr.Add (KeyValuePair (k, x))
+        arr
+
+    /// <summary>Converts a dictionary to a sequence.</summary>
+    /// <param name="source">The source dictionary.</param>
+    ///
+    /// <returns>A sequence containing the Key and Value of the original dictionary.</returns>
+    let toSeq (source: Dictionary<'Key, 'T>) = toResizeArray source :> seq<_>
+
+    /// <summary>Folds over the bindings in the dictionary.</summary>
+    /// <remarks>
+    /// This function takes a folder function, an initial state, and a source dictionary.
+    /// The folder function is applied to each key-value pair in the source, accumulating a state.
+    /// The initial state is provided as the first argument to the folder function.
+    /// The function returns the final accumulated state after processing all key-value pairs.
+    /// </remarks>
+    /// <param name="folder">The folder function that takes the current state, a key, and a value, and returns the new state.</param>
+    /// <param name="state">The initial state to start the folding process.</param>
+    /// <param name="source">The source dictionary to fold over.</param>
+    /// <typeparam name="'State">The type of the state being accumulated.</typeparam>
+    /// <typeparam name="'Key">The type of the keys in the dictionary.</typeparam>
+    /// <typeparam name="'T">The type of the values in the dictionary.</typeparam>
+    ///
+    /// <returns>The final accumulated state after folding over all key-value pairs in the source.</returns>
+    let fold (folder: 'State -> 'Key -> 'T -> 'State) (state: 'State) (source: Dictionary<'Key, 'T>) =
+        let unzip source = Seq.map fst source, Seq.map snd source
+        source |> toSeq |> Seq.map (|KeyValue|) |> unzip ||> Seq.fold2 folder state

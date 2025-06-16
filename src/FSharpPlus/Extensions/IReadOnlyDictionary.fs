@@ -299,6 +299,8 @@ module IReadOnlyDictionary =
 
     #endif
 
+    /// <summary>Creates an empty read-only dictionary.</summary>
+    [<GeneralizableValue>]
     let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> () :> IReadOnlyDictionary<_,_>
 
     /// <summary>Converts a read-only dictionary to a ResizeArray.</summary>
@@ -317,12 +319,40 @@ module IReadOnlyDictionary =
     /// <returns>A sequence containing the Key and Value of the original IReadOnlyDictionary.</returns>
     let toSeq (source: IReadOnlyDictionary<'Key, 'T>) = toResizeArray source :> seq<_>
 
-    /// Folds over the bindings in the Dictionary
+    /// <summary>Folds over the bindings in the Dictionary.</summary>
+    /// <remarks>
+    /// This function takes a folder function, an initial state, and a source read-only dictionary.
+    /// The folder function is applied to each key-value pair in the source, accumulating a state.
+    /// The initial state is provided as the first argument to the folder function.
+    /// The function returns the final accumulated state after processing all key-value pairs.
+    /// </remarks>
+    /// <param name="folder">The folder function that takes the current state, a key, and a value, and returns the new state.</param>
+    /// <param name="state">The initial state to start the folding process.</param>
+    /// <param name="source">The source read-only dictionary to fold over.</param>
+    /// <typeparam name="'State">The type of the state being accumulated.</typeparam>
+    /// <typeparam name="'Key">The type of the keys in the read-only dictionary.</typeparam>
+    /// <typeparam name="'T">The type of the values in the read-only dictionary.</typeparam>
+    ///
+    /// <returns>The final accumulated state after folding over all key-value pairs in the source.</returns>
     let fold     (folder: 'State -> 'Key -> 'T -> 'State) (state: 'State) (source: IReadOnlyDictionary<'Key, 'T>) =
         let unzip source = Seq.map fst source, Seq.map snd source
         source |> toSeq |> Seq.map (|KeyValue|) |> unzip ||> Seq.fold2 folder state
 
-    /// Folds over the bindings in the Dictionary
+    /// <summary>Folds over the bindings in the Dictionary in reverse order.</summary>
+    /// <remarks>
+    /// This function takes a folder function, a source read-only dictionary, and an initial state.
+    /// The folder function is applied to each key-value pair in the source, accumulating a state.
+    /// The initial state is provided as the last argument to the folder function.
+    /// The function returns the final accumulated state after processing all key-value pairs.
+    /// </remarks>
+    /// <param name="folder">The folder function that takes a key, a value, and the current state, and returns the new state.</param>
+    /// <param name="source">The source read-only dictionary to fold over.</param>
+    /// <param name="state">The initial state to start the folding process.</param>
+    /// <typeparam name="'State">The type of the state being accumulated.</typeparam>
+    /// <typeparam name="'Key">The type of the keys in the read-only dictionary.</typeparam>
+    /// <typeparam name="'T">The type of the values in the read-only dictionary.</typeparam>
+    ///
+    /// <returns>The final accumulated state after folding over all key-value pairs in the source.</returns>
     let foldBack (folder: 'Key -> 'T -> 'State -> 'State) (source: IReadOnlyDictionary<'Key, 'T>) state =
         let unzip source = Seq.map fst source, Seq.map snd source
         source |> toSeq |> Seq.map (|KeyValue|) |> unzip ||> Seq.foldBack2 folder <| state
