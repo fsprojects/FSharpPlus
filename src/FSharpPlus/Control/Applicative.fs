@@ -91,45 +91,20 @@ type Apply =
         let f, x = f.Value, x.Value
         KeyValuePair2 (Plus.Invoke a b, f x)
 
-    static member        ``<*>`` (struct (f: Map<'Key,_>      , x: Map<'Key,'T>        ) , _output: Map<'Key,'U>         , [<Optional>]_mthd: Apply) : Map<'Key,'U> = Map (seq {
-       for KeyValue(k, vf) in f do
-           match Map.tryFind k x with
-           | Some vx -> yield k, vf vx
-           | _       -> () })
-
-    static member        ``<*>`` (struct (f: Dictionary<'Key,_>, x: Dictionary<'Key,'T>) , _output: Dictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U> =
-       let dct = Dictionary ()
-       for KeyValue(k, vf) in f do
-           match x.TryGetValue k with
-           | true, vx -> dct.Add (k, vf vx)
-           | _        -> ()
-       dct
-
-    static member        ``<*>`` (struct (f: IDictionary<'Key,_>, x: IDictionary<'Key,'T>) , _output: IDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IDictionary<'Key,'U> =
-       let dct = Dictionary ()
-       for KeyValue(k, vf) in f do
-           match x.TryGetValue k with
-           | true, vx -> dct.Add (k, vf vx)
-           | _        -> ()
-       dct :> IDictionary<'Key,'U>
-
-    static member        ``<*>`` (struct (f: IReadOnlyDictionary<'Key,_>, x: IReadOnlyDictionary<'Key,'T>) , _output: IReadOnlyDictionary<'Key,'U>  , [<Optional>]_mthd: Apply) : IReadOnlyDictionary<'Key,'U> =
-       let dct = Dictionary ()
-       for KeyValue(k, vf) in f do
-           match x.TryGetValue k with
-           | true, vx -> dct.Add (k, vf vx)
-           | _        -> ()
-       dct :> IReadOnlyDictionary<'Key,'U>
+    static member ``<*>`` (struct (f: Map<'Key,_>                , x: Map<'Key,'T>                ) , _output: Map<'Key,'U>                , [<Optional>]_mthd: Apply) : Map<'Key,'U>                 = Map.apply f x
+    static member ``<*>`` (struct (f: Dictionary<'Key,_>         , x: Dictionary<'Key,'T>         ) , _output: Dictionary<'Key,'U>         , [<Optional>]_mthd: Apply) : Dictionary<'Key,'U>          = Dictionary.apply f x
+    static member ``<*>`` (struct (f: IDictionary<'Key,_>        , x: IDictionary<'Key,'T>        ) , _output: IDictionary<'Key,'U>        , [<Optional>]_mthd: Apply) : IDictionary<'Key,'U>         = Dict.apply f x
+    static member ``<*>`` (struct (f: IReadOnlyDictionary<'Key,_>, x: IReadOnlyDictionary<'Key,'T>) , _output: IReadOnlyDictionary<'Key,'U>, [<Optional>]_mthd: Apply) : IReadOnlyDictionary<'Key,'U> = IReadOnlyDictionary.apply f x
 
     #if !FABLE_COMPILER
     // Compatibility member:
     static member        ``<*>`` (f: Expr<'T->'U>, x: Expr<'T>, [<Optional>]_output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
-    static member        ``<*>`` (struct (f: Expr<'T->'U>, x: Expr<'T>), _output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
+    static member ``<*>`` (struct (f: Expr<'T->'U>, x: Expr<'T>), _output: Expr<'U>, [<Optional>]_mthd: Apply) = Expr.Cast<'U> (Expr.Application (f, x))
     #endif
     // Compatibility member:
     static member        ``<*>`` (f: ('T->'U) ResizeArray, x: 'T ResizeArray, [<Optional>]_output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
 
-    static member        ``<*>`` (struct (f: ('T->'U) ResizeArray, x: 'T ResizeArray), _output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
+    static member ``<*>`` (struct (f: ('T->'U) ResizeArray, x: 'T ResizeArray), _output: 'U ResizeArray, [<Optional>]_mthd: Apply) = ResizeArray.apply f x : 'U ResizeArray
 
     static member inline Invoke (f: '``Applicative<'T -> 'U>``) (x: '``Applicative<'T>``) : '``Applicative<'U>`` =
         let inline call (mthd : ^M, input1: ^I1, input2: ^I2, output: ^R) =
