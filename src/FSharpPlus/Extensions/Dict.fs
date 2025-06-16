@@ -1,10 +1,73 @@
 namespace FSharpPlus
 
+[<AutoOpen>]
+module Auto =
+    open System
+    open System.Collections
+    open System.Collections.Generic
+
+    let icollection (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) =
+        {
+            new  ICollection<'TValue> with
+                member _.Contains item = source.Values.Contains item || obj.ReferenceEquals (item, konst)
+                member _.GetEnumerator () = source.Values.GetEnumerator () :> System.Collections.IEnumerator
+                member _.GetEnumerator () = source.Values.GetEnumerator () : IEnumerator<'TValue>
+                member _.IsReadOnly = true
+                member _.Add (_item: 'TValue) : unit                          = raise (NotImplementedException ())
+                member _.Clear () : unit                                      = raise (NotImplementedException ())
+                member _.CopyTo (_array: 'TValue [], _arrayIndex: int) : unit = raise (NotImplementedException ())
+                member _.Count : int                                          = source.Count
+                member _.Remove (_item: 'TValue): bool                        = raise (NotImplementedException ())
+        }
+
+    type DefaultableDict<'TKey, 'TValue> (konst: 'TValue, source: IDictionary<'TKey,'TValue>) =
+
+        interface IDictionary<'TKey, 'TValue> with
+            member _.TryGetValue (key: 'TKey, value: byref<'TValue>) =
+                match source.TryGetValue key with
+                | true, v  -> value <- v
+                | _        -> value <- konst
+                true
+            member _.Count = source.Count
+            member _.ContainsKey (_key: 'TKey) = true
+            member _.Contains (item: KeyValuePair<'TKey,'TValue>) =
+                match source.TryGetValue item.Key with
+                | true, v -> obj.ReferenceEquals (item.Value, v)
+                | _       -> obj.ReferenceEquals (item.Value, konst)
+            member _.GetEnumerator () = source.GetEnumerator () : System.Collections.IEnumerator
+            member _.GetEnumerator () = source.GetEnumerator () : IEnumerator<KeyValuePair<'TKey,'TValue>>
+            member _.IsReadOnly = true
+            member _.Values = icollection konst source
+            member _.Item
+                with get (key: 'TKey)   : 'TValue = match source.TryGetValue key with (true, v) -> v | _ -> konst
+                and set  (_key: 'TKey) (_: 'TValue) : unit = raise (System.NotImplementedException())
+
+            member _.Add (_key: 'TKey, _value: 'TValue) : unit                              = raise (NotImplementedException ())
+            member _.Add (_item: KeyValuePair<'TKey,'TValue>) : unit                        = raise (NotImplementedException ())
+            member _.Clear () : unit                                                        = raise (NotImplementedException ())
+            member _.CopyTo (_arr: KeyValuePair<'TKey,'TValue> [], _arrayIndex: int) : unit = raise (NotImplementedException ())
+            member _.Keys : ICollection<'TKey>                                              = raise (NotImplementedException ())
+            member _.Remove (_key: 'TKey) : bool                                            = raise (NotImplementedException ())
+            member _.Remove (_item: KeyValuePair<'TKey,'TValue>) : bool                     = raise (NotImplementedException ())
+    
+        member _.DefaultValue = konst
+
 /// Additional operations on IDictionary<'Key, 'Value>
 [<RequireQualifiedAccess>]
 module Dict =
     open System.Collections.Generic
     open System.Collections.ObjectModel
+    open Auto
+
+    /// <summary>Creates a defaultable dictionary.</summary>
+    /// <param name="konst">The value for all missing keys.</param>
+    /// <param name="source">The source dictionary.</param>
+    let emptyWithDefault<'TKey,'TValue when 'TKey : equality> (konst: 'TValue) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, dict [])
+
+    /// <summary>Creates a defaultable dictionary.</summary>
+    /// <param name="konst">The value for all missing keys.</param>
+    /// <param name="source">The source dictionary.</param>
+    let initWithDefault<'TKey,'TValue> (konst: 'TValue) (source: IDictionary<'TKey,'TValue>) : IDictionary<'TKey,'TValue> = new DefaultableDict<'TKey,'TValue>(konst, source)
 
     #if !FABLE_COMPILER
     open System.Linq      
@@ -66,10 +129,13 @@ module Dict =
     ///
     /// <returns>The mapped dictionary.</returns>
     let map mapper (source: IDictionary<'Key, 'T>) =
-        let dct = Dictionary<'Key, 'U> ()
+        let dct = 
+            match source with
+            | :? DefaultableDict<'Key, 'T> as s -> emptyWithDefault (mapper s.DefaultValue)
+            | _                                 -> Dictionary<'Key, 'U> () :> IDictionary<'Key, 'U>
         for KeyValue(k, v) in source do
             dct.Add (k, mapper v)
-        dct :> IDictionary<'Key, 'U>
+        dct
 
     /// <summary>Applies each function in the dictionary of functions to the corresponding value in the dictionary of values,
     /// producing a new dictionary of values.</summary>
@@ -88,13 +154,17 @@ module Dict =
     /// This function is useful for applying a set of transformations to a dictionary of values,
     /// where each transformation is defined by a function in a dictionary of functions.
     /// </remarks>
-    let apply (f: IDictionary<'Key, _>) (x: IDictionary<'Key, 'T>) : IDictionary<'Key, 'U> =
-        let dct = Dictionary ()
-        for KeyValue (k, vf) in f do
-            match x.TryGetValue k with
-            | true, vx -> dct.Add (k, vf vx)
-            | _        -> ()
-        dct :> IDictionary<'Key, 'U>
+    let apply (f: IDictionary<'Key, 'T -> 'U>) (x: IDictionary<'Key, 'T>) : IDictionary<'Key, 'U> =
+        let apply () =
+            let dct = Dictionary ()
+            for KeyValue (k, vf) in f do
+                match x.TryGetValue k with
+                | true, vx -> dct.Add (k, vf vx)
+                | _        -> ()
+            dct :> IDictionary<'Key, 'U>
+        match f, x with
+        | (:? DefaultableDict<'Key, 'T -> 'U> as s1), (:? DefaultableDict<'Key, 'T> as s2) -> initWithDefault (s1.DefaultValue s2.DefaultValue) (apply ())
+        | _, _  -> apply ()
 
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
@@ -104,30 +174,41 @@ module Dict =
     ///
     /// <returns>The combined dictionary.</returns>
     let map2 mapper (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let dct = Dictionary<'Key, 'U> ()
-        let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2 with
-            | Some vy -> dct.Add (k, f.Invoke (vx, vy))
-            | None    -> ()
-        dct :> IDictionary<'Key, 'U>
+        let map () =
+            let dct = Dictionary<'Key, 'U> ()
+            let f = OptimizedClosures.FSharpFunc<_, _, _>.Adapt mapper
+            let keys = Seq.append source1.Keys source2.Keys |> Seq.distinct
+            for k in keys do
+                match tryGetValue k source1, tryGetValue k source2 with
+                | Some vx, Some vy -> dct.Add (k, f.Invoke (vx, vy))
+                | _      , _       -> ()
+            dct :> IDictionary<'Key, 'U>
+        match source1, source2 with
+        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2) -> initWithDefault (mapper s1.DefaultValue s2.DefaultValue) (map ())
+        | _, _  -> map ()
 
     /// <summary>Combines values from three dictionaries using mapping function.</summary>
     /// <remarks>Keys that are not present on every dictionary are dropped.</remarks>
-    /// <param name="mapping">The mapping function.</param>
+    /// <param name="mapper">The mapping function.</param>
     /// <param name="source1">First input dictionary.</param>
     /// <param name="source2">Second input dictionary.</param>
     /// <param name="source3">Third input dictionary.</param>
     ///
     /// <returns>The mapped dictionary.</returns>
-    let map3 mapping (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
-        let dct = Dictionary<'Key, 'U> ()
-        let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapping
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2, tryGetValue k source3 with
-            | Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
-            | _      , _       -> ()
-        dct :> IDictionary<'Key, 'U>
+    let map3 mapper (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) (source3: IDictionary<'Key, 'T3>) =
+        let map () =
+            let dct = Dictionary<'Key, 'U> ()
+            let f = OptimizedClosures.FSharpFunc<_,_,_,_>.Adapt mapper
+            let keys = source1.Keys |> Seq.append source2.Keys |> Seq.append source3.Keys |> Seq.distinct
+            for k in keys do
+                match tryGetValue k source1, tryGetValue k source2, tryGetValue k source3 with
+                | Some vx, Some vy, Some vz -> dct.Add (k, f.Invoke (vx, vy, vz))
+                | _      , _      , _       -> ()
+            dct :> IDictionary<'Key, 'U>
+        match source1, source2, source3 with
+        | (:? DefaultableDict<'Key,'T1> as s1), (:? DefaultableDict<'Key,'T2> as s2), (:? DefaultableDict<'Key,'T3> as s3) ->
+            initWithDefault (mapper s1.DefaultValue s2.DefaultValue s3.DefaultValue) (map ())
+        | _, _, _  -> map ()
 
     /// <summary>Applies given function to each value of the given dictionary.</summary>
     /// <param name="chooser">The mapping function.</param>
@@ -148,13 +229,7 @@ module Dict =
     /// <param name="source2">The second input dictionary.</param>
     ///
     /// <returns>The tupled dictionary.</returns>
-    let zip (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) =
-        let dct = Dictionary<'Key, 'T1 * 'T2> ()
-        for KeyValue(k, vx) in source1 do
-            match tryGetValue k source2 with
-            | Some vy -> dct.Add (k, (vx, vy))
-            | None    -> ()
-        dct :> IDictionary<'Key, 'T1 * 'T2>
+    let zip (source1: IDictionary<'Key, 'T1>) (source2: IDictionary<'Key, 'T2>) = map2 (fun x y -> (x, y)) source1 source2
 
     /// <summary>Tuples values of three dictionaries.</summary>
     /// <remarks>Keys that are not present on all three dictionaries are dropped.</remarks>
@@ -225,11 +300,18 @@ module Dict =
 
     /// Returns the union of two dictionaries, using the combiner function for duplicate keys.
     let unionWith combiner (source1: IDictionary<'Key, 'Value>) (source2: IDictionary<'Key, 'Value>) =
-        let d = Dictionary<'Key,'Value> ()
-        let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
-        for KeyValue(k, v ) in source1 do d.[k] <- v
-        for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
-        d :> IDictionary<'Key,'Value>
+        let combine () =
+            let d = Dictionary<'Key,'Value> ()
+            let f = OptimizedClosures.FSharpFunc<_,_,_>.Adapt combiner
+            for KeyValue(k, v ) in source1 do d.[k] <- v
+            for KeyValue(k, v') in source2 do d.[k] <- match d.TryGetValue k with true, v -> f.Invoke (v, v') | _ -> v'
+            d :> IDictionary<'Key,'Value>
+        match source1, source2 with
+        | (:? DefaultableDict<'Key,'Value> as s1)   ,   (:? DefaultableDict<'Key,'Value> as s2) -> initWithDefault (combiner s1.DefaultValue s2.DefaultValue) (combine())
+        | (:? DefaultableDict<'Key,'Value> as s), _ | _, (:? DefaultableDict<'Key,'Value> as s) -> initWithDefault s.DefaultValue (combine())
+        | s, empty | empty, s when empty.Count = 0 -> s
+        | _, _  -> combine()
+            
 
     #if !FABLE_COMPILER
    ///Returns the union of two maps, preferring values from the first in case of duplicate keys.

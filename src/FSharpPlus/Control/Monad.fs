@@ -111,8 +111,12 @@ type Return =
     
     
 
-    static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
-    static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
+    static member        Return (_: seq<'a>        , _: Default4) = fun  x      -> Seq.singleton x : seq<'a>
+    static member        Return (_: IEnumerator<'a>, _: Default3) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
+    static member        Return (_: IDictionary<'k,'t>        , _: Default2) = fun x -> Dict.emptyWithDefault x                 : IDictionary<'k,'t>
+    #if (!FABLE_COMPILER_3) // TODO Dummy overload for now
+    static member        Return (_: IReadOnlyDictionary<'k,'t>, _: Default3) = fun x -> readOnlyDict [Unchecked.defaultof<'k>, x] :  IReadOnlyDictionary<'k,'t>
+    #endif
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
     #if !FABLE_COMPILER
@@ -132,9 +136,11 @@ type Return =
     static member        Return (_: 'a Async       , _: Return  ) = fun (x: 'a) -> async.Return x
     static member        Return (_: Result<'a,'e>  , _: Return  ) = fun x -> Ok x                                 : Result<'a,'e>
     static member        Return (_: Choice<'a,'e>  , _: Return  ) = fun x -> Choice1Of2 x                         : Choice<'a,'e>
+
     #if !FABLE_COMPILER
     static member        Return (_: Expr<'a>       , _: Return  ) = fun x -> Expr.Cast<'a> (Expr.Value (x: 'a))
     #endif
+    
     static member        Return (_: ResizeArray<'a>, _: Return  ) = fun x -> ResizeArray<'a> (Seq.singleton x)
 
     //Restricted

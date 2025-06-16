@@ -29,8 +29,12 @@ type Pure =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Pure : _*_ -> _) output, mthd)
         call (Unchecked.defaultof<Pure>, Unchecked.defaultof<'``ZipApplicative<'T>``>) x
 
-    static member        Pure (_: seq<'a>         , _: Default2 ) = fun x -> Seq.initInfinite (fun _ -> x)         : seq<'a>    
-    static member        Pure (_: IEnumerator<'a> , _: Default2 ) = fun x -> Enumerator.upto None (fun _ -> x)     : IEnumerator<'a>
+    static member        Pure (_: seq<'a>         , _: Default4 ) = fun x -> Seq.initInfinite (fun _ -> x)         : seq<'a>
+    static member        Pure (_: IEnumerator<'a> , _: Default3 ) = fun x -> Enumerator.upto None (fun _ -> x)     : IEnumerator<'a>
+    static member        Pure (_: IDictionary<'k,'t>, _: Default2) = fun x -> Dict.emptyWithDefault x: IDictionary<'k,'t>
+    #if (!FABLE_COMPILER_3) // TODO Dummy overload for now
+    static member        Pure (_: IReadOnlyDictionary<'k,'t>, _: Default3) = fun x -> readOnlyDict [Unchecked.defaultof<'k>, x] :  IReadOnlyDictionary<'k,'t>
+    #endif
     static member inline Pure (_: 'R              , _: Default1 ) = fun (x: 'T) -> Pure.InvokeOnInstance x    : 'R
     static member        Pure (x: Lazy<'a>        , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>) : _ -> Lazy<'a>
     #if !FABLE_COMPILER
