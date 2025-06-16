@@ -70,6 +70,31 @@ module IReadOnlyDictionary =
             dct.Add (k, mapper v)
         dct :> IReadOnlyDictionary<'Key, 'U>
 
+    /// <summary>Applies each function in the read-only dictionary of functions to the corresponding value in the read-only dictionary of values,
+    /// producing a new read-only dictionary of values.</summary>
+    /// <remarks>
+    /// If a key is present in the function dictionary but not in the value dictionary, that key is simply ignored.
+    /// If a key is present in the value dictionary but not in the function dictionary, that key is also ignored.
+    /// </remarks>
+    /// <param name="f">The read-only dictionary of functions.</param>
+    /// <param name="x">The read-only dictionary of values.</param>
+    /// <returns>The resulting read-only dictionary of values.</returns>
+    /// <typeparam name="'Key">The type of the keys in the read-only dictionaries.</typeparam>
+    /// <typeparam name="'T">The type of the values in the read-only dictionary of values.</typeparam>
+    /// <typeparam name="'U">The type of the values in the resulting read-only dictionary.</typeparam>    
+    /// <returns>A read-only dictionary of values.</returns>
+    /// <remarks>
+    /// This function is useful for applying a set of transformations to a read-only dictionary of values,
+    /// where each transformation is defined by a function in a read-only dictionary of functions.
+    /// </remarks>
+    let apply (f: IReadOnlyDictionary<'Key, _>) (x: IReadOnlyDictionary<'Key, 'T>) : IReadOnlyDictionary<'Key, 'U> =
+        let dct = Dictionary ()
+        for KeyValue (k, vf) in f do
+            match x.TryGetValue k with
+            | true, vx -> dct.Add (k, vf vx)
+            | _        -> ()
+        dct :> IReadOnlyDictionary<'Key, 'U>
+    
     /// <summary>Creates a read-only dictionary value from a pair of read-only dictionaries,
     /// using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both read-only dictionaries are dropped.</remarks>

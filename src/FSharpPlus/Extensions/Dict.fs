@@ -67,6 +67,31 @@ module Dict =
             dct.Add (k, mapper v)
         dct :> IDictionary<'Key, 'U>
 
+    /// <summary>Applies each function in the dictionary of functions to the corresponding value in the dictionary of values,
+    /// producing a new dictionary of values.</summary>
+    /// <remarks>
+    /// If a key is present in the function dictionary but not in the value dictionary, that key is simply ignored.
+    /// If a key is present in the value dictionary but not in the function dictionary, that key is also ignored.
+    /// </remarks>
+    /// <param name="f">The dictionary of functions.</param>
+    /// <param name="x">The dictionary of values.</param>
+    /// <returns>The resulting dictionary of values.</returns>
+    /// <typeparam name="'Key">The type of the keys in the dictionaries.</typeparam>
+    /// <typeparam name="'T">The type of the values in the dictionary of values.</typeparam>
+    /// <typeparam name="'U">The type of the values in the resulting dictionary.</typeparam>    
+    /// <returns>A dictionary of values.</returns>
+    /// <remarks>
+    /// This function is useful for applying a set of transformations to a dictionary of values,
+    /// where each transformation is defined by a function in a dictionary of functions.
+    /// </remarks>
+    let apply (f: IDictionary<'Key, _>) (x: IDictionary<'Key, 'T>) : IDictionary<'Key, 'U> =
+        let dct = Dictionary ()
+        for KeyValue (k, vf) in f do
+            match x.TryGetValue k with
+            | true, vx -> dct.Add (k, vf vx)
+            | _        -> ()
+        dct :> IDictionary<'Key, 'U>
+
     /// <summary>Creates a Dictionary value from a pair of Dictionaries, using a function to combine them.</summary>
     /// <remarks>Keys that are not present on both dictionaries are dropped.</remarks>
     /// <param name="mapper">The mapping function.</param>

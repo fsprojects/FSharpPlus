@@ -49,6 +49,29 @@ module Map =
     /// <returns>The mapped Map.</returns>
     let mapValues f (x: Map<'Key, 'T>) = Map.map (fun _ -> f) x
 
+    /// <summary>Applies each function in the Map of functions to the corresponding value in the Map of values,
+    /// producing a new Map of values.</summary>
+    /// <remarks>
+    /// If a key is present in the function Map but not in the value Map, that key is simply ignored.
+    /// If a key is present in the value Map but not in the function Map, that key is also ignored.
+    /// </remarks>
+    /// <param name="f">The Map of functions.</param>
+    /// <param name="x">The Map of values.</param>
+    /// <returns>The resulting Map of values.</returns>
+    /// <typeparam name="'Key">The type of the keys in the dictionaries.</typeparam>
+    /// <typeparam name="'T">The type of the values in the Map of values.</typeparam>
+    /// <typeparam name="'U">The type of the values in the resulting Map.</typeparam>    
+    /// <returns>A Map of values.</returns>
+    /// <remarks>
+    /// This function is useful for applying a set of transformations to a Map of values,
+    /// where each transformation is defined by a function in a Map of functions.
+    /// </remarks>
+    let apply (f: Map<'Key, _>) (x: Map<'Key, 'T>) : Map<'Key, 'U> = Map (seq {
+       for KeyValue (k, vf) in f do
+           match Map.tryFind k x with
+           | Some vx -> yield k, vf vx
+           | _       -> () })
+
     /// <summary>Maps values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
     /// <param name="f">The mapping function.</param>
