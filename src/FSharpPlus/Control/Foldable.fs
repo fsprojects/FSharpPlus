@@ -148,7 +148,6 @@ type FoldMap =
     static member inline FoldMap (x: _ []        , f, [<Optional>]_impl: FoldMap) = Array.fold (fun x y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
 
     static member inline FoldMap (x: Map<_, _>                , f, [<Optional>]_impl: FoldMap) = Map.fold                 (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
-    static member inline FoldMap (x: Dictionary<_, _>         , f, [<Optional>]_impl: FoldMap) = Dictionary.fold          (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
     static member inline FoldMap (x: IDictionary<_, _>        , f, [<Optional>]_impl: FoldMap) = Dict.fold                (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
     static member inline FoldMap (x: IReadOnlyDictionary<_, _>, f, [<Optional>]_impl: FoldMap) = IReadOnlyDictionary.fold (fun x _ y -> Plus.Invoke x (f y)) (Zero.Invoke ()) x
 
@@ -191,7 +190,6 @@ type Fold =
     static member        Fold (x: Set<_>      , f,             z    , [<Optional>]_impl: Fold    ) = Set.fold               f z x
     static member        Fold (x:  _ []       , f,             z    , [<Optional>]_impl: Fold    ) = Array.fold             f z x
     static member        Fold (x: Map<_,_>    , f,             z    , [<Optional>]_impl: Fold    ) = Map.fold                 (fun s _ -> f s) z x
-    static member        Fold (x: Dictionary<_,_>         , f, z    , [<Optional>]_impl: Fold    ) = Dictionary.fold          (fun s _ -> f s) z x
     static member        Fold (x: IDictionary<_,_>        , f, z    , [<Optional>]_impl: Fold    ) = Dict.fold                (fun s _ -> f s) z x
     static member        Fold (x: IReadOnlyDictionary<_,_>, f, z    , [<Optional>]_impl: Fold    ) = IReadOnlyDictionary.fold (fun s _ -> f s) z x
 
