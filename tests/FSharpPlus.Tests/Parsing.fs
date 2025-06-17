@@ -88,6 +88,7 @@ module Parsing =
         
         let _t = sscanf "(%i-%i-%f-%i-%i-%i-%i-%i-%i)" "(32-66-888-4-5-6-7-8-9)"
         let (_a,_b) = sscanf "(%%%s,%M)" "(%hello,4.53)"
+        let (_a',_b') = sscanf "(%%%s,%M)" "(%hello, 4.53)"
         let (_a1,_b1) = sscanf "(%%%s,% M)" "(%hello, 4.53)"
         let (_a2,_b2) = sscanf "(%%%s,%-M)" "(%hello,4.53 )"
         let (_a3,_b3) = sscanf "(%%%s,% -M)" "(%hello, 4.53 )"
