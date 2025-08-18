@@ -59,3 +59,22 @@ module HashSet =
         for item in source do
             result.Add (mapping item) |> ignore
         result
+
+    /// <summary>Determines whether a HashSet contains a specific value.</summary>
+    /// <param name="value">The value to look for in the set.</param>
+    /// <param name="source">The set to look in.</param>
+    /// <returns><c>true</c> if the set contains <c>value</c>; otherwise, <c>false</c>.</returns>
+    [<CompiledName("Contains")>]
+    let contains (value: 'T) (source: HashSet<'T>) : bool =
+        raiseIfNull (nameof source) source
+        source.Contains value
+
+    /// <summary>Determines whether the first set is a subset of the second set.</summary>
+    /// <param name="source1">The first input set.</param>
+    /// <param name="source2">The second input set.</param>
+    /// <returns><c>true</c> if <c>source1</c> is a subset of <c>source2</c>; otherwise, <c>false</c>.</returns>
+    [<CompiledName("IsSubset")>]
+    let isSubset (source1: HashSet<'T>) (source2: HashSet<'T>) : bool =
+        raiseIfNull (nameof source1) source1
+        raiseIfNull (nameof source2) source2
+        source1.IsSubsetOf source2
