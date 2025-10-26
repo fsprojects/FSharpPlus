@@ -8,7 +8,9 @@ open FSharpPlus.Control
 
 
 /// A type-safe list that contains at least one element.
+#if !FABLE_COMPILER
 [<StructuredFormatDisplay("{StructuredFormatDisplay}")>]
+#endif
 type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface IEnumerable<'t> with member x.GetEnumerator () = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator ()
     interface System.Collections.IEnumerable with member x.GetEnumerator () = (let {Head = x; Tail = xs} = x in seq (x::xs)).GetEnumerator () :> System.Collections.IEnumerator
@@ -16,7 +18,9 @@ type NonEmptyList<'t> = {Head: 't; Tail: 't list} with
     interface IReadOnlyList<'t>              with member s.Item with get index = s.Item index
     interface NonEmptySeq<'t>                with member s.First = s.Head
 
+#if !FABLE_COMPILER
     member private this.StructuredFormatDisplay = "nelist {" + (sprintf "%A" (this.Head::this.Tail)).[1..^1] + "}"
+#endif
 
     member this.Item = function 0 -> this.Head | n -> this.Tail.[n-1]
     member this.GetSlice = function
