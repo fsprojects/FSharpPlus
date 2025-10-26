@@ -8,7 +8,6 @@ open System.Threading.Tasks
 open Microsoft.FSharp.Quotations
 
 open FSharpPlus
-open FSharpPlus.Data
 open FSharpPlus.Internals
 open FSharpPlus.Internals.Prelude
 
@@ -22,7 +21,7 @@ type Bind =
     static member        (>>=) (source: Task<'T>        , f: 'T -> Task<'U>    ) = Task.bind f source                      : Task<'U>
     static member        (>>=) (source                  , f: 'T -> _           ) = Nullable.bind f source                  : Nullable<'U>
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        (>>=) (source: ValueTask<'T>   , f: 'T -> ValueTask<'U>    ) = ValueTask.bind f source            : ValueTask<'U>
     #endif
 
@@ -40,29 +39,17 @@ type Bind =
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)           : 'Monoid*'U
     static member inline (>>=) (struct (w: 'Monoid, a: 'T), k: 'T -> struct ('Monoid * 'U)) = let struct (m, b) = k a in struct (w + m, b) : struct ('Monoid * 'U)
     #endif
-    static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
-    static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
-    static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                   : Choice<'U,'E>
-
-    static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
-                   for KeyValue(k, v) in source do
-                       match Map.tryFind k (f v) with
-                       | Some v -> yield k, v
-                       | _      -> () })
-
-    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) = 
-                   let dct = Dictionary ()
-                   for KeyValue(k, v) in source do
-                       match (f v).TryGetValue (k) with
-                       | true, v -> dct.Add (k, v)
-                       | _       -> ()
-                   dct
+    static member        (>>=) (source              , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
+    static member        (>>=) (source              , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
+    static member        (>>=) (source              , k: 'T -> _           ) = Choice.bind k source                   : Choice<'U,'E>
+    static member        (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map.bind f source
+    static member        (>>=) (source: Dictionary<'Key, 'T>         , f: 'T -> Dictionary<'Key, 'U>)          = Dictionary.bind f source
+    static member        (>>=) (source: IDictionary<'Key, 'T>        , f: 'T -> IDictionary<'Key, 'U>)         = Dict.bind f source
+    static member        (>>=) (source: IReadOnlyDictionary<'Key, 'T>, f: 'T -> IReadOnlyDictionary<'Key, 'U>) = IReadOnlyDictionary.bind f source
 
     static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray (Seq.bind (f >> seq<_>) source) : ResizeArray<'U>
 
-    static member (>>=) (source: NonEmptySeq<'T>, f: 'T -> NonEmptySeq<'U>) = NonEmptySeq.collect f source : NonEmptySeq<'U>
-
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
     static member inline Invoke (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         let inline call (_mthd: 'M, input: 'I, _output: 'R, f) = ((^M or ^I or ^R) : (static member (>>=) : _*_ -> _) input, f)
         call (Unchecked.defaultof<Bind>, source, Unchecked.defaultof<'``Monad<'U>``>, binder)
@@ -71,7 +58,7 @@ type Bind =
     static member inline InvokeOnInstance (source: '``Monad<'T>``) (binder: 'T -> '``Monad<'U>``) : '``Monad<'U>`` =
         ((^``Monad<'T>`` or ^``Monad<'U>``) : (static member (>>=) : _*_ -> _) source, binder)
 
-#if !FABLE_COMPILER || FABLE_COMPILER_3
+#if !FABLE_COMPILER
 
 type Join =
     inherit Default1
@@ -83,7 +70,7 @@ type Join =
     #if !FABLE_COMPILER  
     static member        Join (x: Task<Task<_>>           , [<Optional>]_output: Task<'T>        , [<Optional>]_mthd: Join    ) = Task.join x                : Task<'T>
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Join (x: ValueTask<ValueTask<_>> , [<Optional>]_output: ValueTask<'T>   , [<Optional>]_mthd: Join    ) = ValueTask.join x           : ValueTask<'T>
     #endif
     static member        Join (x                        , [<Optional>]_output: option<'T>      , [<Optional>]_mthd: Join    ) = Option.flatten x           : option<'T>
@@ -98,25 +85,13 @@ type Join =
     static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
     static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
     static member        Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x           : Choice<'T,'E>
-
-    static member        Join (x: Map<_,_>              , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    )                              : Map<'Key,'Value> =
-                    Map (seq {
-                        for KeyValue(k, v) in x do
-                            match Map.tryFind k v with
-                            | Some v -> yield k, v
-                            | _      -> () })
-
-    static member        Join (x: Dictionary<_,Dictionary<_,_>>, [<Optional>]_output: Dictionary<'Key,'Value>, [<Optional>]_mthd: Join)                   : Dictionary<'Key,'Value> =
-                    let dct = Dictionary ()
-                    for KeyValue(k, v) in x do
-                        match v.TryGetValue (k)  with
-                        | true, v -> dct.Add (k, v)
-                        | _       -> ()
-                    dct
+    static member        Join (x: Map<_, _>             , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    ) = Map.flatten x              : Map<'Key, 'Value>
+    
+    static member Join (x: Dictionary<_, Dictionary<_, _>>                  , [<Optional>]_output: Dictionary<'Key, 'Value>         , [<Optional>]_mthd: Join) : Dictionary<'Key,'Value>           = Dictionary.flatten x
+    static member Join (x: IDictionary<_, IDictionary<_, _>>                , [<Optional>]_output: IDictionary<'Key, 'Value>        , [<Optional>]_mthd: Join) : IDictionary<'Key, 'Value>         = Dict.flatten x
+    static member Join (x: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>, [<Optional>]_output: IReadOnlyDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IReadOnlyDictionary<'Key, 'Value> = IReadOnlyDictionary.flatten x
 
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
-    
-    static member        Join (x: NonEmptySeq<NonEmptySeq<'T>> , [<Optional>]_output: NonEmptySeq<'T>        , [<Optional>]_mthd: Join) = NonEmptySeq.concat x : NonEmptySeq<'T> 
 
     static member inline Invoke (source: '``Monad<Monad<'T>>``) : '``Monad<'T>`` =
         let inline call (mthd: 'M, input: 'I, output: 'R) = ((^M or ^I or ^R) : (static member Join : _*_*_ -> _) input, output, mthd)
@@ -128,7 +103,7 @@ type Return =
     inherit Default1
     static member inline InvokeOnInstance (x: 'T) = (^``Applicative<'T>`` : (static member Return : ^T -> ^``Applicative<'T>``) x)
 
-#if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
+#if !FABLE_COMPILER
 
     static member inline Invoke (x: 'T) : '``Applicative<'T>`` =
         let inline call (mthd: ^M, output: ^R) = ((^M or ^R) : (static member Return : _*_ -> _) output, mthd)
@@ -137,15 +112,15 @@ type Return =
     
 
     static member        Return (_: seq<'a>        , _: Default2) = fun  x      -> Seq.singleton x : seq<'a>
-    static member        Return (_: NonEmptySeq<'a>, _: Default2) = fun  x      -> NonEmptySeq.singleton x : NonEmptySeq<'a>
     static member        Return (_: IEnumerator<'a>, _: Default2) = fun  x      -> Enumerator.upto None (fun _ -> x) : IEnumerator<'a>
     static member inline Return (_: 'R             , _: Default1) = fun (x: 'T) -> Return.InvokeOnInstance x         : 'R
     static member        Return (_: Lazy<'a>       , _: Return  ) = fun x -> Lazy<_>.CreateFromValue x : Lazy<'a>
     #if !FABLE_COMPILER
     static member        Return (_: 'T Task        , _: Return  ) = fun x -> Task.FromResult x                    : 'T Task
     #endif
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Return (_: 'T ValueTask   , _: Return  ) = fun (x: 'T) -> ValueTask<'T> x                : 'T ValueTask
+    static member        Return (_: 'T DmStruct1   , _: Return  ) = fun (_: 'T) -> Unchecked.defaultof<_>         : 'T DmStruct1
     #endif
     static member        Return (_: option<'a>     , _: Return  ) = fun x -> Some x                               : option<'a>
     static member        Return (_  : voption<'a>  , _: Return  ) = fun x -> ValueSome x                          : voption<'a>
@@ -166,7 +141,7 @@ type Return =
     static member        Return (_: string         , _: Return  ) = fun (x: char) -> string x : string
     static member        Return (_: StringBuilder  , _: Return  ) = fun (x: char) -> new StringBuilder (string x) : StringBuilder
     static member        Return (_: 'a Set         , _: Return  ) = fun (x: 'a  ) -> Set.singleton x
-    static member        Return (_: 'a Set2        , _: Return  ) = fun (_: 'a  ) -> Set2() : 'a Set2
+    static member        Return (_: 'a HashSet     , _: Return  ) = fun (x: 'a  ) -> HashSet.singleton x
 
 
 type Delay =
@@ -179,7 +154,6 @@ type Delay =
     static member inline Delay (_mthd: Default1, _: unit-> ^t when  ^t : null and ^t  : struct            , _          ) = ()
 
     static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = Seq.delay x      : seq<'T>
-    static member        Delay (_mthd: Default2, x: unit-> _                                              , _          ) = NonEmptySeq.delay x : NonEmptySeq<'T>
     static member        Delay (_mthd: Default2, x: unit-> 'R -> _                                        , _          ) = (fun s -> x () s): 'R -> _
     static member        Delay (_mthd: Delay   , x: unit-> _                                              , _          ) = async.Delay x    : Async<'T>
     static member        Delay (_mthd: Delay   , x: unit-> Task<_>                                        , _          ) = x () : Task<'T>
@@ -195,7 +169,7 @@ type Delay =
     
     #endif
     
-    #if NETSTANDARD2_1 && !FABLE_COMPILER
+    #if !FABLE_COMPILER
     static member        Delay (_mthd: Delay   , x: unit-> ValueTask<_>                                   , _          ) = x () : ValueTask<'T>
     #endif
 
@@ -239,7 +213,6 @@ type TryWith =
     static member inline TryWith (_: unit -> ^t when ^t: null and ^t: struct, _    : exn -> 't            , _: Default1, _) = ()
     
     static member        TryWith (computation: unit -> seq<_>        , catchHandler: exn -> seq<_>        , _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e))
-    static member        TryWith (computation: unit -> NonEmptySeq<_>, catchHandler: exn -> NonEmptySeq<_>, _: Default2, _) = seq (try (Seq.toArray (computation ())) with e -> Seq.toArray (catchHandler e)) |> NonEmptySeq.unsafeOfSeq
     static member        TryWith (computation: unit -> 'R -> _       , catchHandler: exn -> 'R -> _       , _: Default2, _) = (fun s -> try (computation ()) s with e -> catchHandler e s) : 'R ->_
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
     #if !FABLE_COMPILER
@@ -264,7 +237,6 @@ type TryFinally =
     inherit Default1
 
     static member        TryFinally ((computation: unit -> seq<_>        , compensation: unit -> unit), _: Default2, _, _) = seq { try for e in computation () do yield e finally compensation () }
-    static member        TryFinally ((computation: unit -> NonEmptySeq<_>, compensation: unit -> unit), _: Default2, _, _) = seq { try for e in computation () do yield e finally compensation () } |> NonEmptySeq.unsafeOfSeq
 
     [<CompilerMessage(MessageTryFinally, CodeTryFinally, IsError = true)>]
     static member        TryFinally ((_:           unit -> 'R -> _            , _: unit -> unit), _: Default2  , _, _defaults: False) = raise Internals.Errors.exnUnreachable
@@ -306,7 +278,6 @@ type Using =
     inherit Default1
     
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> seq<'U>        , _: Using) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } : seq<'U>
-    static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> NonEmptySeq<'U>, _: Using) = seq { try for e in body resource do yield e finally if not (isNull (box resource)) then resource.Dispose () } |> NonEmptySeq.unsafeOfSeq : NonEmptySeq<'U>
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> 'R -> 'U , _: Using   ) = (fun s -> try body resource s finally if not (isNull (box resource)) then resource.Dispose ()) : 'R->'U
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     #if !FABLE_COMPILER

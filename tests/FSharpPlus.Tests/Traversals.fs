@@ -12,6 +12,9 @@ open Helpers
 open FSharpPlus.Math.Applicative
 open CSharpLib
 open System.Threading.Tasks
+#if TEST_TRACE
+open FSharpPlus.Internals
+#endif
 
 module Traversable =
 
@@ -112,7 +115,7 @@ module Traversable =
         // It hangs if we try to share this value between tests
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
@@ -177,7 +180,7 @@ module Traversable =
         // It hangs if we try to share this value between tests
         let expectedEffects =
             [
-                """f(x) <*> Right 0"""
+                // map does this  -> """f(x) <*> Right 0"""
                 """f(x) <*> Right 1"""
                 """f(x) <*> Right 2"""
                 """f(x) <*> Right 3"""
@@ -250,10 +253,70 @@ module Traversable =
         CollectionAssert.AreEqual ([0;1;2;3;4;5;6;7;8;9], l)
 
     [<Test>]
+    let traverseInfiniteAsyncNonEmptySequences =
+        let s = NonEmptySeq.initInfinite async.Return
+        let s' = sequence s
+        let l = s' |> Async.RunSynchronously |> Seq.take 10 |> Seq.toList
+        CollectionAssert.AreEqual ([0;1;2;3;4;5;6;7;8;9], l)
+
+    [<Test>]
+    let traverseNonEmptySeqs () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r1 = traverse async.Return (NonEmptySeq.unsafeOfSeq (Seq.initInfinite id))
+        CollectionAssert.AreEqual ([0; 1], r1 |> map (NonEmptySeq.take 2) |> Async.RunSynchronously)
+        Assert.IsInstanceOf<Option<Async<int NonEmptySeq>>> (Some r1)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse ^a"; "Traverse NonEmptySeq: 'T NonEmptySeq, 'T -> Async<'U>"], Traces.get())
+        #endif
+
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r2 = NonEmptySeq<_>.Traverse (NonEmptySeq.unsafeOfSeq (Seq.initInfinite id), async.Return)
+        CollectionAssert.AreEqual ([0; 1], r2 |> map (NonEmptySeq.take 2) |> Async.RunSynchronously)
+        Assert.IsInstanceOf<Option<Async<int NonEmptySeq>>> (Some r2)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse NonEmptySeq: 'T NonEmptySeq, 'T -> Async<'U>"], Traces.get())
+        #endif
+
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r3 = traverse (fun x -> if x <> 10 then Some x else None) (NonEmptySeq.initInfinite id)
+        Assert.AreEqual(None, r3)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int> option>> (Some r3)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"], Traces.get())
+        #endif
+
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
+
+        let r4 = NonEmptySeq<_>.Traverse (NonEmptySeq.initInfinite id, fun x -> if x <> 10 then Some x else None)
+        Assert.AreEqual(None, r4)
+        Assert.IsInstanceOf<Option<NonEmptySeq<int> option>> (Some r4)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse NonEmptySeq: NonEmptySeq, 'T -> Functor<'U>"], Traces.get())
+        #endif
+
+
+    [<Test>]
     let traverseTask () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
         let a = traverse Task.FromResult [1;2]
         CollectionAssert.AreEqual ([1;2], a.Result)
         Assert.IsInstanceOf<Option<list<int>>> (Some a.Result)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse list"], Traces.get())
+        #endif
         let b = map Task.FromResult [1;2] |> sequence
         CollectionAssert.AreEqual ([1;2], b.Result)
         Assert.IsInstanceOf<Option<list<int>>> (Some b.Result)
@@ -266,6 +329,9 @@ module Traversable =
 
     [<Test>]
     let traverseMap () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
         let m = Map.ofList [("a", 1); ("b", 2); ("c", 3)]
         let r1 = traverse (fun i -> if i = 2 then None else Some i) m
         let r2 = traverse Some m
@@ -278,14 +344,23 @@ module Traversable =
                         Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]; Map.ofList [(1, 1); (2, 2)]]
         let actual = sequence m1
         CollectionAssert.AreEqual (expected, actual)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse Map";"Traverse Map"], Traces.get())
+        #endif
 
     [<Test>]
     let traverseResults () =
+        #if TEST_TRACE
+        Traces.reset()
+        #endif
         let a = sequence (if true then Ok [1] else Error "no")
         let b = traverse id (if true then Ok [1] else Error "no")
         let expected: Result<int, string> list = [Ok 1]
         CollectionAssert.AreEqual (expected, a)
         CollectionAssert.AreEqual (expected, b)
+        #if TEST_TRACE
+        CollectionAssert.AreEqual (["Traverse Result, 'T -> Functor<'U>"], Traces.get())
+        #endif
 
 
 module Bitraversable =
@@ -313,3 +388,39 @@ module Bitraversable =
     let _Const3 = bitraverse NonEmptyList.singleton NonEmptyList.singleton e
 
     ()
+
+module ZipApplicatives =
+
+    [<Test>]
+    let transposeOptions () =
+        let a1 = nelist { Some 1; Some 2; Some 3 }
+        let a2 = transpose a1
+        let a3 = transpose a2
+        let b1 = [ Some 1; Some 2; Some 3 ]
+        let b2 = transpose b1
+        let b3 = transpose b2
+        let c1 = [| Some 1; Some 2; Some 3 |]
+        let c2 = transpose c1
+        CollectionAssert.AreEqual (a1, a3)
+        CollectionAssert.AreEqual (b1, b3)
+        Assert.AreEqual (Some [|1; 2; 3|], c2)
+
+    [<Test>]
+    let transposeCollections () =
+        let a1 = nelist { [1; 2]; [3; 4; 0]; [5; 6] }
+        let a2 = transpose a1
+        let a3 = transpose a2
+        let a4 = transpose a3
+        let b1 = [ [1; 2]; [3; 4; 0]; [5; 6] ]
+        let b2 = transpose b1
+        let b3 = transpose b2
+        let b4 = transpose b3
+        let c1 = [| Some 1; Some 2; Some 3 |]
+        let c2 = transpose c1
+        let d1 = List.empty<int list>
+        let d2 = transpose d1
+        let d3 = transpose d2
+        CollectionAssert.AreEqual (a2, a4)
+        CollectionAssert.AreEqual (b2, b4)
+        Assert.AreEqual (Some [|1; 2; 3|], c2)
+        CollectionAssert.AreEqual (d1, d3)

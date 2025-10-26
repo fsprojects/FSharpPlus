@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);TYPELEVEL_DEBUG</DefineConstants>
     <Configurations>Debug;Release;Fable</Configurations>
     <Platforms>AnyCPU</Platforms>
     <LangVersion Condition=" '$(Configuration)' == 'Fable'">5.0</LangVersion>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
+    <OtherFlags>--nowarn:0044 $(OtherFlags)</OtherFlags>
   </PropertyGroup>
 
   <ItemGroup>

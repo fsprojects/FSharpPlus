@@ -1,7 +1,10 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
+#nowarn "0040" // This and other recursive references to the object(s) being defined will be checked for initialization-soundness at runtime through the use of a delayed reference.
+               // This is because you are defining one or more recursive objects, rather than recursive functions.
+
 (**
 Free<'Functor<'T>, 'T>
 ======================
@@ -89,7 +92,7 @@ type Reservation = {
     Name : string
     Email : string
     Quantity : int }
-    with static member Create (Quantity, Date, Name, Email) = { Date = Date; Name = Name; Email = Email; Quantity = Quantity }
+    with static member Create (quantity, date, name, email) = { Date = date; Name = name; Email = email; Quantity = quantity }
 
 let readReservationRequest =
     curryN Reservation.Create

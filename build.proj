@@ -15,7 +15,7 @@
 
   <Target Name="Test">
     <Exec Command='dotnet build src/FSharpPlus.TypeLevel' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
-    <Exec Command='dotnet test --blame-hang-timeout 30s tests/FSharpPlus.Tests -c Release --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
+    <Exec Command='dotnet test --blame-hang-timeout 30s tests/FSharpPlus.Tests -c Test --logger:trx' WorkingDirectory="$(RepoRootDir)" IgnoreStandardErrorWarningFormat="true" />
   </Target>
 
   <!-- dotnet msbuild -target:AllDocs build.proj -->

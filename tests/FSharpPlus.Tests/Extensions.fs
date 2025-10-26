@@ -236,6 +236,25 @@ module Extensions =
     areEquivalent r1 r2
 
   [<Test>]
+  let ``HashSet.union gives the same set when joined with an empty set (identity)`` () =
+    let m1 = HashSet.singleton "42"
+    let m2 = HashSet.empty
+
+    let r1 = HashSet.union m1 m2
+
+    areEquivalent r1 m1
+
+  [<Test>]
+  let ``HashSet.union returns same results independent of the order (commutative)`` () =
+    let m1 = HashSet [1..4]
+    let m2 = HashSet [3..6]
+
+    let r1 = HashSet.union m1 m2
+    let r2 = HashSet.union m2 m1
+
+    areEquivalent r1 r2
+
+  [<Test>]
   let ``String.toCodePoints >> String.ofCodePoints should preserve the original string`` () =
     // some naughty strings adopted from https://github.com/minimaxir/big-list-of-naughty-strings
     // The MIT License (MIT), Copyright (c) 2015 Max Woolf
@@ -385,10 +404,10 @@ module Extensions =
     Choice.map3 (fun x y z -> x + y + z) (result 1: Choice<int, int>) (result 3) (throw 5) |> areEqual (throw 5: Choice<int, int>)
     
     // Async
-    Async.map3 (fun x y z -> x + y + z) (async {return 1}) (async {return 3}) (async {return 5}) |> Async.RunSynchronously |> areEqual 9
+    Async.lift3 (fun x y z -> x + y + z) (async {return 1}) (async {return 3}) (async {return 5}) |> Async.RunSynchronously |> areEqual 9
     
     // Task
-    Task.map3 (fun x y z -> x + y + z) (async {return 1} |> Async.StartAsTask) (async {return 3} |> Async.StartAsTask) (async {return 5} |> Async.StartAsTask) 
+    Task.lift3 (fun x y z -> x + y + z) (async {return 1} |> Async.StartAsTask) (async {return 3} |> Async.StartAsTask) (async {return 5} |> Async.StartAsTask) 
      |> Async.AwaitTask |> Async.RunSynchronously |> areEqual 9
 
     // List
@@ -443,30 +462,30 @@ module Extensions =
     areEquivalent [1;2;3] ([1;2;3] |> List.setAt 3 4)
 
   [<Test>]
-  let ``List.removeAt works with good indices`` () =
-    areEquivalent [1;3] ([1;2;3] |> List.removeAt 1)
+  let ``List.deleteAt works with good indices`` () =
+    areEquivalent [1;3] ([1;2;3] |> List.deleteAt 1)
 
   [<Test>]
-  let ``List.removeAt tolerates bad indices`` () =
-    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt -1)
-    areEquivalent [1;2;3] ([1;2;3] |> List.removeAt 3)
+  let ``List.deleteAt tolerates bad indices`` () =
+    areEquivalent [1;2;3] ([1;2;3] |> List.deleteAt -1)
+    areEquivalent [1;2;3] ([1;2;3] |> List.deleteAt 3)
 
   [<Test>]
-  let ``Seq.drop returns seq unaltered with a negative count`` ()=
+  let ``Seq.drop returns seq unaltered with a negative count`` () =
     areEquivalent (seq {1; 2; 3}) (seq {1; 2; 3} |> Seq.drop -1)
 
   [<Test>]
-  let ``Seq.drop returns seq unaltered with a 0 count`` ()=
+  let ``Seq.drop returns seq unaltered with a 0 count`` () =
     areEquivalent (seq {1; 2; 3}) (seq {1; 2; 3} |> Seq.drop 0)
 
   [<Test>]
-  let ``Seq.drop returns empty when seq is empty and count is positive`` ()=
+  let ``Seq.drop returns empty when seq is empty and count is positive`` () =
     areEquivalent Seq.empty (Seq.empty |> Seq.drop 1)
 
   [<Test>]
-  let ``Seq.drop returns empty when count is larger than seq length`` ()=
+  let ``Seq.drop returns empty when count is larger than seq length`` () =
     areEquivalent Seq.empty (seq {1; 2; 3} |> Seq.drop 4)
 
   [<Test>]
-  let ``Seq.drop returns seq with count items dropped when count is positive and less than length`` ()=
+  let ``Seq.drop returns seq with count items dropped when count is positive and less than length`` () =
     areEquivalent (seq {2; 3}) (seq {1; 2; 3} |> Seq.drop 1)

@@ -33,6 +33,11 @@ module Map =
     /// </remarks>
     let values (source: Map<'Key, 'T>) = Seq.map (fun (KeyValue(_, v)) -> v) source
 
+    /// <summary>Applies the given function to each value of the Map.</summary>
+    /// <param name="action">The function to apply to each value of the input Map.</param>
+    /// <param name="source">The input Map.</param>
+    let iterValues action (source: Map<'Key, 'T>) = Map.iter (fun _ v -> action v) source
+
     /// <summary>Maps the values of the original Map.</summary>
     /// <remarks>
     /// The core `Map.map` function maps over values too, but it passes both
@@ -43,6 +48,29 @@ module Map =
     ///
     /// <returns>The mapped Map.</returns>
     let mapValues f (x: Map<'Key, 'T>) = Map.map (fun _ -> f) x
+
+    /// <summary>Applies each function in the Map of functions to the corresponding value in the Map of values,
+    /// producing a new Map of values.</summary>
+    /// <remarks>
+    /// If a key is present in the function Map but not in the value Map, that key is simply ignored.
+    /// If a key is present in the value Map but not in the function Map, that key is also ignored.
+    /// </remarks>
+    /// <param name="f">The Map of functions.</param>
+    /// <param name="x">The Map of values.</param>
+    /// <returns>The resulting Map of values.</returns>
+    /// <typeparam name="'Key">The type of the keys in the dictionaries.</typeparam>
+    /// <typeparam name="'T">The type of the values in the Map of values.</typeparam>
+    /// <typeparam name="'U">The type of the values in the resulting Map.</typeparam>    
+    /// <returns>A Map of values.</returns>
+    /// <remarks>
+    /// This function is useful for applying a set of transformations to a Map of values,
+    /// where each transformation is defined by a function in a Map of functions.
+    /// </remarks>
+    let apply (f: Map<'Key, _>) (x: Map<'Key, 'T>) : Map<'Key, 'U> = Map (seq {
+       for KeyValue (k, vf) in f do
+           match Map.tryFind k x with
+           | Some vx -> yield k, vf vx
+           | _       -> () })
 
     /// <summary>Maps values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
@@ -86,21 +114,72 @@ module Map =
 
     /// <summary>Tuples values of two Maps.</summary>
     /// <remarks>Keys that are not present on both Maps are dropped.</remarks>
-    /// <param name="x">The first input Map.</param>
-    /// <param name="y">The second input Map.</param>
+    /// <param name="source1">The first input Map.</param>
+    /// <param name="source2">The second input Map.</param>
     ///
     /// <returns>The tupled Map.</returns>
-    let zip (x: Map<'Key, 'T1>) (y: Map<'Key, 'T2>) = Map <| seq {
-        for KeyValue(k, vx) in x do
-            match Map.tryFind k y with
-            | Some vy -> yield (k, (vx, vy))
+    let zip (source1: Map<'Key, 'T1>) (source2: Map<'Key, 'T2>) = Map <| seq {
+        for KeyValue(k, v1) in source1 do
+            match Map.tryFind k source2 with
+            | Some v2 -> yield (k, (v1, v2))
             | None    -> () }
+
+    /// <summary>Tuples values of three Maps.</summary>
+    /// <remarks>Keys that are not present on all three Maps are dropped.</remarks>
+    /// <param name="source1">The first input Map.</param>
+    /// <param name="source2">The second input Map.</param>
+    /// <param name="source3">The third input Map.</param>
+    ///
+    /// <returns>The tupled Map.</returns>
+    let zip3 (source1: Map<'Key, 'T1>) (source2: Map<'Key, 'T2>) (source3: Map<'Key, 'T3>) = Map <| seq {
+        for KeyValue(k, v1) in source1 do
+            match Map.tryFind k source2, Map.tryFind k source3 with
+            | Some v2, Some v3 -> yield (k, (v1, v2, v3))
+            | _    -> () }
 
     /// <summary>Splits a Map with tuple pair values to two separate Maps.</summary>
     /// <param name="source">The source Map.</param>
     ///
     /// <returns>A tuple of each untupled Map.</returns>
     let unzip (source: Map<'Key, 'T1 * 'T2>) = mapValues fst source, mapValues snd source
+
+    /// <summary>Splits a Map with tuple of 3 values to three separate Maps.</summary>
+    /// <param name="source">The source Map.</param>
+    ///
+    /// <returns>A tuple of each untupled Map.</returns>
+    let unzip3 (source: Map<'Key, 'T1 * 'T2 * 'T3>) =
+        mapValues (fun (x, _, _) -> x) source, mapValues (fun (_, x, _) -> x) source, mapValues (fun (_, _, x) -> x) source
+
+    /// <summary>Flattens a Map of Maps to a single Map.</summary>
+    /// <remarks>
+    /// This function takes a Map where each value is another Map, and combines them into a single Map.
+    /// If a key appears in multiple inner Maps, the value from the last Map is used.
+    /// </remarks>
+    /// <param name="source">The source Map of Maps.</param>
+    ///
+    /// <returns>A single Map with all keys and values from the inner Maps.</returns>
+    let flatten (source: Map<_, _>) : Map<'Key, 'Value> =
+        Map (seq {
+            for KeyValue (k, v) in source do
+                match Map.tryFind k v with
+                | Some v -> yield k, v
+                | _      -> () })
+
+    /// <summary>Maps the values of the original Map using a function that returns a Map.</summary>
+    /// <remarks>
+    /// This function applies a mapping function to each value of the Map, where the mapping function returns a Map.
+    /// The resulting Maps are then combined into a single Map.
+    /// If a key appears in multiple Maps, the value from the last Map is used.
+    /// </remarks>
+    /// <param name="mapper">The mapping function that takes a value and returns a Map.</param>
+    /// <param name="source">The input Map.</param>
+    ///
+    /// <returns>A single Map with all keys and values from the mapped Maps.</returns>
+    let bind (mapper: 'T -> Map<'Key, 'U>) (source: Map<'Key, 'T>) = Map (seq {
+        for KeyValue(k, v) in source do
+            match Map.tryFind k (mapper v) with
+            | Some v -> yield k, v
+            | _      -> () })
 
     /// Returns the union of two maps, using the combiner function for duplicate keys.
     let unionWith combiner (source1: Map<'Key, 'Value>) (source2: Map<'Key, 'Value>) =

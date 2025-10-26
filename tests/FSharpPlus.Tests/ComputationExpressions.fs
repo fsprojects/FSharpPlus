@@ -1,5 +1,7 @@
 ﻿namespace FSharpPlus.Tests
 
+#nowarn "10710" // This monad doesn't seem to be lazy ...
+
 open System
 open System.Threading.Tasks
 open NUnit.Framework
@@ -13,6 +15,17 @@ module ComputationExpressions =
     
     let task<'t> = monad'<Task<'t>>
 
+    [<Test>]
+    let oneLayerApplicativeWithoutReturn () =
+        // dictionaries don't support Return
+        let testVal14 = applicative {
+            let! x1 = dict [1,1]
+            and! x2 = dict [1,1]
+            and! x3 = dict [1,1]
+            and! x4 = dict [1,1]
+            return x1 + x2 + x3 + x4 }
+        CollectionAssert.AreEqual (dict [1, 4], testVal14)
+    
     [<Test>]
     let twoLayersApplicatives () =
         let id   : Task<Validation<_, string>>   = Failure (Map.ofList ["Id",   ["Negative number"]]) |> Task.FromResult
@@ -169,8 +182,8 @@ module ComputationExpressions =
             yield (failwith "error !!!"; 2)
             yield 3
         }
-        let x:seq<int> = monad.plus { for x in source do yield x }
-        x.GetEnumerator ()
+        let x: seq<int> = monad.plus { for x in source do yield x }
+        x.GetEnumerator () |> ignore
         ()
 
     open FsCheck

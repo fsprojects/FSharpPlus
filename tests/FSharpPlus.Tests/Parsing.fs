@@ -20,18 +20,33 @@ module Parsing =
 
     [<Test>]
     let parseDateTime () =
-#if MONO
-        let v1 : DateTime = parse "2011-03-04T15:42:19+03:00"
-        Assert.IsTrue((v1 = DateTime(2011,3,4,12,42,19)))
-#else
-        Assert.Ignore ("Depends on how it's executed...")
-#endif
+
+        let t  = DateTime(2011,3,14,12,42,19)
+        let u  = DateTimeOffset(2011,3,14,15,42,19, TimeSpan.FromHours 3.)
+        let u0 = DateTimeOffset(2011,3,14,15,42,19, TimeSpan.FromHours 0.)
+
+        let t1 = parse<DateTime>    "2011-03-14T15:42:19+03:00" in Assert.AreEqual(     t, t1, nameof t1)
+        let t2 = tryParse<DateTime> "2011-03-14T15:42:19+03:00" in Assert.AreEqual(Some t, t2, nameof t2)
+
+        let u1 = parse<DateTimeOffset>    "2011-03-14T15:42:19+03:00" in Assert.AreEqual(     u, u1, nameof u1)
+        let u2 = tryParse<DateTimeOffset> "2011-03-14T15:42:19+03:00" in Assert.AreEqual(Some u, u2, nameof u2)
+
+        let t3  = parse<DateTime>    "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(     t, t3, nameof t3)
+        let t4  = tryParse<DateTime> "Mon, 14 Mar 2011 12:42:19 GMT" in Assert.AreEqual(Some t, t4, nameof t4)
+
+        let u3  = parse<DateTimeOffset>    "Mon, 14 Mar 2011 15:42:19 GMT" in Assert.AreEqual(     u0, u3, nameof u3)
+        let u4  = tryParse<DateTimeOffset> "Mon, 14 Mar 2011 15:42:19 GMT" in Assert.AreEqual(Some u0, u4, nameof u4)
+
+        let u5 = parse<DateTimeOffset>    "2011-03-14T15:42:19" in Assert.AreEqual(     u0, u5, nameof u5)
+        let u6 = tryParse<DateTimeOffset> "2011-03-14T15:42:19" in Assert.AreEqual(Some u0, u6, nameof u6)
+
+        let u7 = parse<DateTimeOffset>    "2011-03-14T15:42:19Z" in Assert.AreEqual(     u0, u7, nameof u7)
+        let u8 = tryParse<DateTimeOffset> "2011-03-14T15:42:19Z" in Assert.AreEqual(Some u0, u8, nameof u8)
+
+
 
     [<Test>]
     let parse () = 
-        let v2 : DateTimeOffset = parse "2011-03-04T15:42:19+03:00"
-
-        Assert.IsTrue((v2 = DateTimeOffset(2011,3,4,15,42,19, TimeSpan.FromHours 3.)))
 
         let _101 = tryParse "10.1.0.1" : Net.IPAddress option
         let _102 = tryParse "102" : string option
@@ -50,7 +65,7 @@ module Parsing =
         areStEqual r66 (Some 66.0)
 
         let r123: WrappedListA<int> option = tryParse "[1;2;3]"
-        areStEqual r123 (Some (WrappedListA [1; 2; 3]))
+        areStEqual r123 (Some (WrappedListA [1; 2; 3]))    
 
     [<Test>]
     let parseCustomType () = 
@@ -62,19 +77,21 @@ module Parsing =
         Assert.IsTrue((v3.Value.Value = 1))
         let v4 : ProductId option = tryParse "P_X"
         Assert.IsTrue(Option.isNone v4)
-#if NETSTANDARD3_0
         let v5 : ICustomerId option = tryParse "C_1"
         Assert.IsTrue((v5.Value.Value = 1L))
         let v6 : ICustomerId option = tryParse "C_X"
         Assert.IsTrue(Option.isNone v6)
-#endif
 
     [<Test>]
     let scanfParsing () =
         let _ccx: int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int * uint32 * float * float32 * int = parseArray [|"34"; "24"; "34"; "4"; "5"; "6"; "7"; "8"; "9"; "10"; "11"; "12"; "13"; "14"; "15"; "16"; "17"|]
         
         let _t = sscanf "(%i-%i-%f-%i-%i-%i-%i-%i-%i)" "(32-66-888-4-5-6-7-8-9)"
-        let (_a,_b) = sscanf "(%%%s,%M)" "(%hello, 4.53)"
+        let (_a,_b) = sscanf "(%%%s,%M)" "(%hello,4.53)"
+        let (_a1,_b1) = sscanf "(%%%s,% M)" "(%hello, 4.53)"
+        let (_a2,_b2) = sscanf "(%%%s,%-M)" "(%hello,4.53 )"
+        let (_a3,_b3) = sscanf "(%%%s,% -M)" "(%hello, 4.53 )"
+        let (_a4,_b4,_ab) = sscanf "(%%%s,% d%-M)" "(%hello, 4.53 )"
         let (_x,_y,_z) = sscanf "%s-%s-%s" "test-this-string"
         let (_j,_k,_l,_m,_n,_o,_p) = sscanf "%f %F %g %G %e %E %c" "1 2.1 3.4 .3 43.2e32 0 f"
         
@@ -87,19 +104,69 @@ module Parsing =
         
         
         let _zzz = sscanf "(%%%s)" "(%hello)"
+        let _zzz1 = sscanf "%%(%s)" "%(hello)"
         let (_x1,_y1,_z1) = sscanf "%s--%s-%s" "test--this-string"
         
-        
-        let _f1 = trySscanf "(%%%s)" "(%hello)"
-        let _f2 = trySscanf "%s--%s-%s" "test--this-gg"
-        let _f3 = trySscanf "%f %F %g %G %e %E %c %c"    "1 2.1 3.4 .3 43.2e32 0 f f"
-        let _f4 = trySscanf "%f %F %g %G %e %E %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f"
-        let _f5 = trySscanf "%f %F %g %G %e %E %c %c %c %c" "1 2.1 3.4 .3 43.2e32 0 f f f f"
-        let _f6 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c"       "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f"
-        let _f7 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i"    "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16"
-        let _f8 = trySscanf "%f %F %g %G %e %E %c %c %c %c %c %c %c %c %c %i %f" "1 2.1 3.4 .3 43.2e32 0 f f f f f f f f f 16 17"
-        
+        match "ab" with Scanned "%c" _ -> failwith "wrong match" | Scanned "%c%c" ('a', 'b') -> () | _ -> failwith "didn't match"
+        match "abc" with Scanned "%c%c" ('a', 'b') -> failwith "wrong match" | Scanned "%c%c%c%s" ('a', 'b', 'c', "") -> () | _ -> failwith "didn't match"
+        match "(%hello)" with
+        | Scanned "%d" _ | Scanned "%f" _ | Scanned "%x" _ -> failwith "wrong match"
+        | Scanned "%%(%%%s)" _ | Scanned "(%%%sa" _ | Scanned "(%%hel%c" _ | Scanned "%%h%cllo)" _ -> failwith "wrong match"
+        | Scanned "(%%%s)" "hello" -> ()
+        | _ -> failwith "didn't match"
+        match " 3" with Scanned "% d" 3 -> () | _ -> failwith "didn't match"
+        match "  3" with Scanned "% d" 3 -> () | _ -> failwith "didn't match"
+        match " 3" with Scanned "% d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "3 " with Scanned "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3  " with Scanned "%-d" 3 -> () | _ -> failwith "didn't match"
+        match "3 " with Scanned "%-d" 3 -> () | _ -> failwith "didn't match" // em space
+        match " 3 " with Scanned "% -d" 3 -> () | _ -> failwith "didn't match"
+        match "  3  " with Scanned "% -d" 3 -> () | _ -> failwith "didn't match"
+        match " 3 " with Scanned "% -d" 3 -> () | _ -> failwith "didn't match" // em space
+        match "test--this-gg" with Scanned "%s--%s-%s" ("test", "this", "gg") -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f" with Scanned "%f %F %g %G %e %E %c %c" (1f, 2.1, 3.4m, 0.3, 43.2e32, 0., 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4 .3 43.2e32 0 f f f" with Scanned "%f% F %g %G %e %E %c %c %c" (1m, 2.1, 3.4, 0.3m, 43.2e32, 0., 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f ff" with Scanned "%B %F %-g%G %e %E %c %c %c%c" (1, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f fff" with Scanned "%o %F % g%-G %e %E %c %c %c%c%c" (1y, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f') -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f fff16" with Scanned "%x %F %- g%- G %e %E %c %c %c%c%c%i" (1us, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16) -> () | _ -> failwith "didn't match"
+        match "1 2.1 3.4.3 43.2e32 0 f f fff16 17" with Scanned "%X %F %g% G %e %E %c %c %c%c%c%i %f" (1s, 2.1, 3.4, 0.3, 43.2e32, 0., 'f', 'f', 'f', 'f', 'f', 16L, 17.) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Scanned "%x %X %x %o%X" (0x13, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "13 43 AA 77A" with Scanned "%B%x %X %x %o%X" (0b1, 0x3, 0x43, 0xAA, 0o77, 0xA) -> () | _ -> failwith "didn't match"
+        match "111AAA" with Scanned "%B%s" (0b111, "AAA") -> () | _ -> failwith "didn't match"
+        match "100700 100 100" with Scanned "%B%o %x %X" (0b100, 0o700, 0x100, 0x100) -> () | _ -> failwith "didn't match"
+
+        match "1+1-2+2-8+8" with
+        | Scanned "%s%o" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%+u%+u" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%+d%o" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%-d%u" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%u%+d" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%+o%+u" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%+B%+u" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%+x%+X" _ -> failwith "wrong match"
+        | Scanned "%+u%+u%+d%+u%+d%+X" (a, b, c, d, e, f) ->
+            areEqual (a |> box |> unbox<int>) 1
+            areEqual (b |> box |> unbox<int>) 1
+            areEqual (c |> box |> unbox<int>) -2
+            areEqual (d |> box |> unbox<int>) 2
+            areEqual (e |> box |> unbox<int>) -8
+            areEqual (f |> box |> unbox<int>) 8
+        | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Scanned "%+-d%+d%+-d%+d%+-d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Scanned "%d+%d%d%+d%d%+d" (1,1,-2,2,-8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8" with Scanned "%+B%+B-%+o%+o-%+X%+X" (1,1,2,2,8,8) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e" with Scanned "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,8M,0xE) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e1a" with Scanned "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,80M,0xA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8e-1a" with Scanned "%+f%+F%+e%+E%+g%+G%+X" (1f,1.,-2m,2f,-8.,0.8M,0xA) -> () | _ -> failwith "didn't match"
+        match "1+1-2+2-8+8ea" with Scanned "%+-f%+-F%+-e%+-E%+-g%+-G%+-X" (1f,1.,-2m,2f,-8.,8M,0xEA) -> () | _ -> failwith "didn't match"
+
         let _date: (DayOfWeek * string * uint16 * int) option = trySscanf "%A %A %A %A" "Saturday March 25 1989"
+        let _date1: DateTime option = trySscanf "%A" "Saturday March 25 1989"
+        
+        match "12:34" with Scanned "%A" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 0)) x | _ -> failwith "Pattern match failed"
+        match "12:34:56" with Scanned "%O" (x: TimeSpan) -> areEqual (TimeSpan(12, 34, 56)) x | _ -> failwith "Pattern match failed"
+        match "9876-5-4 3:2:1" with Scanned "%A" (x: DateTime) -> areEqual (DateTime(9876,5,4,3,2,1)) x | _ -> failwith "Pattern match failed"
+        match "9876-5-4 3:2:1 a" with Scanned "%O %x" (x: DateTime, y) -> areEqual (DateTime(9876,5,4,3,2,1)) x; areEqual 0xA y | _ -> failwith "Pattern match failed"
         
         let x = trySscanf "%X %x" "13 43"
         let o = trySscanf "%o" "10"

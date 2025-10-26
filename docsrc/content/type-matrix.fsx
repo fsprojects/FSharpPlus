@@ -1,8 +1,8 @@
 (*** hide ***)
 // This block of code is omitted in the generated HTML documentation. Use 
 // it to define helpers that you do not want to show in the documentation.
-#r @"../../src/FSharpPlus/bin/Release/netstandard2.0/FSharpPlus.dll"
-#r @"../../src/FSharpPlus.TypeLevel/bin/Release/netstandard2.0/FSharpPlus.TypeLevel.dll"
+#r @"../../src/FSharpPlus/bin/Release/net8.0/FSharpPlus.dll"
+#r @"../../src/FSharpPlus.TypeLevel/bin/Release/net8.0/FSharpPlus.TypeLevel.dll"
 
 (**
 Matrix<'NumType,'Rows,'Cols>
@@ -72,3 +72,6 @@ let matrix3x4_3 = matrix3x4_1 + result 5
 open FSharpPlus.Math.Generic
 
 let vector3d_4 = matrix3x4_1 + 5G
+
+
+// More docs for type-level stuff here: https://gist.github.com/cannorin/75328a2abdef2c3a397cc71058ce4864

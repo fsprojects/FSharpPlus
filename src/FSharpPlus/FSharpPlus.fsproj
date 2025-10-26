@@ -19,13 +19,15 @@
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Configurations>Debug;Release;Fable;Fable3</Configurations>
+    <Configurations>Debug;Release;Fable;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion>6.0</LangVersion>
+    <LangVersion>8.0</LangVersion>
+    <LangVersion Condition=" '$(Configuration)' == 'Fable' ">6.0</LangVersion>
+
+    <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable'">$(DefineConstants);FABLE_COMPILER</DefineConstants>
-    <DefineConstants Condition=" '$(Configuration)' == 'Fable3'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_3</DefineConstants>
     <DefineConstants Condition=" '$(Configuration)' == 'Fable4'">$(DefineConstants);FABLE_COMPILER;FABLE_COMPILER_4</DefineConstants>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <!--<OutputPath>..\..\bin</OutputPath>-->
   </PropertyGroup>
   <ItemGroup>
@@ -35,6 +37,7 @@
     <Compile Include="Extensions/Nullable.fs" />
     <Compile Include="Extensions/Result.fs" />
     <Compile Include="Extensions/Choice.fs" />
+    <Compile Include="Extensions/Exception.fs" />
     <Compile Include="Extensions/Seq.fs" />
     <Compile Include="Extensions/IList.fs" />
     <Compile Include="Extensions/List.fs" />
@@ -47,15 +50,15 @@
     <Compile Include="Extensions/Map.fs" />
     <Compile Include="Extensions/Dictionary.fs" />
     <Compile Include="Extensions/Dict.fs" />
+    <Compile Include="Extensions/HashSet.fs" />
     <Compile Include="Extensions/IReadOnlyDictionary.fs" />
     <Compile Include="Extensions/Enumerator.fs" />
     <Compile Include="Extensions/Task.fs" />
     <Compile Include="Extensions/ValueTask.fs" />
-    <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Extensions.fs" />
+    <Compile Include="Extensions/Async.fs" />
     <Compile Include="Extensions/Tuple.fs" />
     <Compile Include="Extensions/ValueTuple.fs" />
-    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -63,6 +66,7 @@
     <Compile Include="Control/Foldable.fs" />
     <Compile Include="Control/Alternative.fs" />
     <Compile Include="Control/Applicative.fs" />
+    <Compile Include="Control/ZipApplicative.fs" />
     <Compile Include="Control/Functor.fs" />
     <Compile Include="Control/MonadOps.fs" />
     <Compile Include="Control/Comonad.fs" />
@@ -92,9 +96,12 @@
     <Compile Include="Data/Reader.fs" />
     <Compile Include="Data/Writer.fs" />
     <Compile Include="Data/State.fs" />
+    <Compile Include="Data/Const.fs" />
+    <Compile Include="Data/Compose.fs" />
     <Compile Include="Data/Monoids.fs" />
     <Compile Include="Data/MultiMap.fs" />
     <Compile Include="Lens.fs" />
+    <Compile Include="Data/NonEmptySeq.fs" />
     <Compile Include="Data/NonEmptyList.fs" />
     <Compile Include="Data/NonEmptySet.fs" />
     <Compile Include="Data/NonEmptyMap.fs" />
@@ -105,20 +112,22 @@
     <Compile Include="Data/Kleisli.fs" />
     <Compile Include="Data/Free.fs" />
     <Compile Include="Data/Coproduct.fs" />
+    <Compile Include="Extensions/Observable.fs" />
+    <Compile Include="Extensions/AsyncEnumerable.fs" />
     <Compile Include="Memoization.fs" />
     <Compile Include="Parsing.fs" />
   </ItemGroup>
 
-  <!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
-  <ItemGroup>
-    <Content Include="*.fsproj; *.fs" PackagePath="fable/" />
-    <Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
-    <Content Include="Control/*.fs" PackagePath="fable/Control" />
-    <Content Include="Math/*.fs" PackagePath="fable/Math" />
-    <Content Include="Data/*.fs" PackagePath="fable/Data" />
-  </ItemGroup>
+	<!-- Add source files to "fable" folder in Nuget package - required for the library to be consumable by Fable -->
+	<ItemGroup>
+		<Content Include="*.fsproj; *.fs" PackagePath="fable/" />
+		<Content Include="Extensions/*.fs" PackagePath="fable/Extensions" />
+		<Content Include="Control/*.fs" PackagePath="fable/Control" />
+		<Content Include="Math/*.fs" PackagePath="fable/Math" />
+		<Content Include="Data/*.fs" PackagePath="fable/Data" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.6" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Update="FSharp.Core" Version="6.0.6" />
+	</ItemGroup>
 </Project>

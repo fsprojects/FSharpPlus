@@ -1,8 +1,10 @@
-Release Notes for FSharpPlus 1.4.0  - February 22 2023
+Release Notes for FSharpPlus 1.7.0  - December 15 2024
 ------------------------------------------------------
 
-Additional Alternatives available (functions, error monads)
-More IReadOnlyDictionary functions
-Bug fixes in Map as FoldIndexable and missing <*> for IDictionary and IReadOnlyDictionary
-Deprecate IReadOnlyDictionary.map
-Guid to/from bytes conversion
+ZipApplicative docs
+Add missing iter functions to Extensions
+Fix issue with iteration of dictionaries
+String.startsWith available now from Fable
+Add NonEmptyList and NonEmptySeq Helper Functions
+Add pick related functions to SeqT
+Monad instance for Vector and Matrix
