@@ -39,39 +39,13 @@ type Bind =
     static member inline (>>=) ((w: 'Monoid, a: 'T), k: 'T -> 'Monoid * 'U) = let m, b = k a in (w + m, b)           : 'Monoid*'U
     static member inline (>>=) (struct (w: 'Monoid, a: 'T), k: 'T -> struct ('Monoid * 'U)) = let struct (m, b) = k a in struct (w + m, b) : struct ('Monoid * 'U)
     #endif
-    static member        (>>=) (source             , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
-    static member        (>>=) (source             , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
-    static member        (>>=) (source             , k: 'T -> _           ) = Choice.bind k source                   : Choice<'U,'E>
-
-    static member (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map (seq {
-                   for KeyValue(k, v) in source do
-                       match Map.tryFind k (f v) with
-                       | Some v -> yield k, v
-                       | _      -> () })
-
-    static member (>>=) (source: Dictionary<'Key,'T>, f: 'T -> Dictionary<'Key,'U>) = 
-               let dct = Dictionary ()
-               for KeyValue(k, v) in source do
-                   match (f v).TryGetValue (k) with
-                   | true, v -> dct.Add (k, v)
-                   | _       -> ()
-               dct
-
-    static member (>>=) (source: IDictionary<'Key,'T>, f: 'T -> IDictionary<'Key,'U>) =
-               let dct = Dictionary ()
-               for KeyValue(k, v) in source do
-                   match (f v).TryGetValue (k) with
-                   | true, v -> dct.Add (k, v)
-                   | _       -> ()
-               dct :> IDictionary<'Key,'U>
-
-    static member (>>=) (source: IReadOnlyDictionary<'Key,'T>, f: 'T -> IReadOnlyDictionary<'Key,'U>) =
-               let dct = Dictionary ()
-               for KeyValue(k, v) in source do
-                   match (f v).TryGetValue (k) with
-                   | true, v -> dct.Add (k, v)
-                   | _       -> ()
-               dct :> IReadOnlyDictionary<'Key,'U>
+    static member        (>>=) (source              , f: 'T -> _           ) = async.Bind (source, f)                 : Async<'U>
+    static member        (>>=) (source              , k: 'T -> _           ) = Result.bind k source                   : Result<'U,'E>
+    static member        (>>=) (source              , k: 'T -> _           ) = Choice.bind k source                   : Choice<'U,'E>
+    static member        (>>=) (source: Map<'Key,'T>, f: 'T -> Map<'Key,'U>) = Map.bind f source
+    static member        (>>=) (source: Dictionary<'Key, 'T>         , f: 'T -> Dictionary<'Key, 'U>)          = Dictionary.bind f source
+    static member        (>>=) (source: IDictionary<'Key, 'T>        , f: 'T -> IDictionary<'Key, 'U>)         = Dict.bind f source
+    static member        (>>=) (source: IReadOnlyDictionary<'Key, 'T>, f: 'T -> IReadOnlyDictionary<'Key, 'U>) = IReadOnlyDictionary.bind f source
 
     static member (>>=) (source: ResizeArray<'T>, f: 'T -> ResizeArray<'U>) = ResizeArray (Seq.bind (f >> seq<_>) source) : ResizeArray<'U>
 
@@ -111,37 +85,11 @@ type Join =
     static member        Join (x                        , [<Optional>]_output: Async<'T>       , [<Optional>]_mthd: Join    ) = async.Bind (x, id)         : Async<'T>
     static member        Join (x                        , [<Optional>]_output: Result<'T,'E>   , [<Optional>]_mthd: Join    ) = Result.flatten x           : Result<'T,'E>
     static member        Join (x                        , [<Optional>]_output: Choice<'T,'E>   , [<Optional>]_mthd: Join    ) = Choice.flatten x           : Choice<'T,'E>
-
-    static member        Join (x: Map<_,_>              , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    )                              : Map<'Key,'Value> =
-                    Map (seq {
-                        for KeyValue(k, v) in x do
-                            match Map.tryFind k v with
-                            | Some v -> yield k, v
-                            | _      -> () })
-
-    static member        Join (x: Dictionary<_,Dictionary<_,_>>, [<Optional>]_output: Dictionary<'Key,'Value>, [<Optional>]_mthd: Join)                   : Dictionary<'Key,'Value> =
-                    let dct = Dictionary ()
-                    for KeyValue(k, v) in x do
-                        match v.TryGetValue (k)  with
-                        | true, v -> dct.Add (k, v)
-                        | _       -> ()
-                    dct
-
-    static member Join (x: IDictionary<_, IDictionary<_, _>>, [<Optional>]_output: IDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IDictionary<'Key, 'Value> =
-        let dct = Dictionary ()
-        for KeyValue(k, v) in x do
-            match v.TryGetValue (k)  with
-            | true, v -> dct.Add (k, v)
-            | _       -> ()
-        dct :> IDictionary<'Key, 'Value>
-
-    static member Join (x: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>, [<Optional>]_output: IReadOnlyDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IReadOnlyDictionary<'Key, 'Value> =
-        let dct = Dictionary ()
-        for KeyValue(k, v) in x do
-            match v.TryGetValue (k)  with
-            | true, v -> dct.Add (k, v)
-            | _       -> ()
-        dct :> IReadOnlyDictionary<'Key, 'Value>
+    static member        Join (x: Map<_, _>             , [<Optional>]_output: Map<'Key,'Value>, [<Optional>]_mthd: Join    ) = Map.flatten x              : Map<'Key, 'Value>
+    
+    static member Join (x: Dictionary<_, Dictionary<_, _>>                  , [<Optional>]_output: Dictionary<'Key, 'Value>         , [<Optional>]_mthd: Join) : Dictionary<'Key,'Value>           = Dictionary.flatten x
+    static member Join (x: IDictionary<_, IDictionary<_, _>>                , [<Optional>]_output: IDictionary<'Key, 'Value>        , [<Optional>]_mthd: Join) : IDictionary<'Key, 'Value>         = Dict.flatten x
+    static member Join (x: IReadOnlyDictionary<_, IReadOnlyDictionary<_, _>>, [<Optional>]_output: IReadOnlyDictionary<'Key, 'Value>, [<Optional>]_mthd: Join) : IReadOnlyDictionary<'Key, 'Value> = IReadOnlyDictionary.flatten x
 
     static member        Join (x: ResizeArray<ResizeArray<'T>> , [<Optional>]_output: ResizeArray<'T>        , [<Optional>]_mthd: Join) = ResizeArray (Seq.bind seq<_> x) : ResizeArray<'T> 
 

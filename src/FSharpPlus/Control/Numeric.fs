@@ -209,6 +209,8 @@ type Zero with
     #endif
     static member inline Zero (_: 'T->'Monoid               , _: Zero) = (fun _ -> Zero.Invoke ()) : 'T->'Monoid
     static member inline Zero (_: Async<'a>                 , _: Zero) = let (v: 'a) = Zero.Invoke () in async.Return v
+    static member inline Zero (_: Result<'T, 'Error>        , _: Zero) = let (v: 'Error) = Zero.Invoke () in Error v
+    static member inline Zero (_: Choice<'T1, 'T2>          , _: Zero) = let (v: 'T2) = Zero.Invoke () in Choice2Of2 v
     #if !FABLE_COMPILER
     static member inline Zero (_: Expr<'a>                  , _: Zero) = let (v: 'a) = Zero.Invoke () in Expr.Cast<'a>(Expr.Value (v))
     #endif

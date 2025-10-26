@@ -87,3 +87,12 @@ module Monoid =
         let t2 = zero
         Assert.AreEqual (t1, t2)
     #endif
+
+    [<Test>]
+    let resultAndChoice () =
+        let r1 = sum [Ok 1; Error "This is an error"; Ok 3]
+        let r2 = sum [Choice1Of2 1; Choice2Of2 "This is an error"; Choice1Of2 3]
+        Assert.IsInstanceOf<Option<Result<int, string>>> (Some r1)
+        Assert.IsInstanceOf<Option<Choice<int, string>>> (Some r2)
+        Assert.AreEqual (Result<int, string>.Ok 4, r1)
+        Assert.AreEqual (Choice<int, string>.Choice1Of2 4, r2)

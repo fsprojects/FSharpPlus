@@ -72,3 +72,6 @@ let matrix3x4_3 = matrix3x4_1 + result 5
 open FSharpPlus.Math.Generic
 
 let vector3d_4 = matrix3x4_1 + 5G
+
+
+// More docs for type-level stuff here: https://gist.github.com/cannorin/75328a2abdef2c3a397cc71058ce4864
