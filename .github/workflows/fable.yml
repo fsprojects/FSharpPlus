@@ -82,6 +82,9 @@ jobs:
       run: git submodule update --init --recursive
     - name: Remove global json
       run: rm global.json
+    - name: Create global.json
+      working-directory: tests/FSharpPlusFable.Tests
+      run: mv fable3-global.json ../../global.json
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v3
       with:
