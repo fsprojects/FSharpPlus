@@ -1,3 +1,15 @@
+#### 1.8.0  - October 28 2025
+ - Add Operators for map2 (||>>) and map3 (|||>>) and flipped versions
+ - Add generic sumBy function
+ - Add missing fold, cons and uncons functions on some collections
+ - Add SeqT.head, SeqT.tryHead and Choice,Sequential
+ - Add HashSet operations
+ - Bind and Join for dictionary interfaces
+ - Zero for Result and Choice
+ - Add missing dictionary utility functions
+ - Result.isOk now available from Fable
+ - Small type inference improvements
+
 #### 1.7.0  - December 15 2024
  - ZipApplicative docs
  - Add missing iter functions to Extensions
