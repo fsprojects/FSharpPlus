@@ -224,10 +224,10 @@ module NonEmptySeq =
     let create x xs = seq { yield x; yield! xs } |> unsafeOfSeq
     
     /// Creates a NonEmptySeq range, containing at least the first element of the range
-    let (|..) starting ending = (if starting < ending then { starting .. ending } else Seq.singleton starting) |> unsafeOfSeq
+    let (|..) starting ending = (if starting < ending then seq { starting .. ending } else Seq.singleton starting) |> unsafeOfSeq
 
     /// Creates a NonEmptySeq range, containing at least the last element of the range
-    let (..|) starting ending = (if starting < ending then { starting .. ending } else Seq.singleton ending)   |> unsafeOfSeq
+    let (..|) starting ending = (if starting < ending then seq { starting .. ending } else Seq.singleton ending)   |> unsafeOfSeq
     
     
     /// <summary>Returns a new sequence that contains all pairings of elements from the first and second sequences.</summary>
