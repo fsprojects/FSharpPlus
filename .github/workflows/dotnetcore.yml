@@ -22,6 +22,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
+          10.0.x
+          9.0.x
           8.0.x
           7.0.x
     - name: Restore
@@ -46,6 +48,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
+          10.0.x
+          9.0.x
           8.0.x
           7.0.x
           6.0.x
@@ -90,6 +94,8 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: |
+          10.0.x
+          9.0.x
           8.0.x
           7.0.x
           6.0.x
