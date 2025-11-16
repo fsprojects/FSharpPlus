@@ -26,12 +26,6 @@ jobs:
           6.0.x
     - name: Restore tools
       run: dotnet tool restore
-    - name: Install jq
-      uses: dcarbone/install-jq-action@v1.0.1
-    - name: Install fable
-      run: |
-        version=`cat ./.config/dotnet-tools.json | jq --raw-output '.tools.fable.version'`
-        dotnet tool install --global Fable --version $version
     - name: Setup Node.js environment
       uses: actions/setup-node@v5
     - name: Install npm dependencies
