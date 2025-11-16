@@ -39,5 +39,5 @@ jobs:
       run: npm install
     - name: Run Fable tests
       working-directory: tests/FSharpPlusFable.Tests
-      run: fable . --outDir bin --runScript ./bin --test:MSBuildCracker
+      run: dotnet fable . --outDir bin --runScript ./bin /d
 
