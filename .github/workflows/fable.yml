@@ -41,7 +41,7 @@ jobs:
       run: fable . --outDir bin --runScript ./bin
 
   testfable4:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -56,22 +56,14 @@ jobs:
           6.0.x
     - name: Restore tools
       run: dotnet tool restore
-    - name: Install jq
-      uses: dcarbone/install-jq-action@v1.0.1
-    - name: Install fable
-      run: |
-        version=`cat ./.config/dotnet-tools.json | jq --raw-output '.tools.fable.version'`
-        dotnet tool install --global Fable --version $version
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '18.x'
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v5
     - name: Install npm dependencies
       working-directory: tests/FSharpPlusFable.Tests
       run: npm install
     - name: Run Fable tests
       working-directory: tests/FSharpPlusFable.Tests
-      run: fable . --outDir bin --runScript ./bin
+      run: dotnet fable . --outDir bin --runScript ./bin /d
 
   testFable3SubsetOnCore:
     runs-on: ubuntu-latest
