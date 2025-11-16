@@ -7,7 +7,7 @@ open System.Threading.Tasks
 open FSharpPlus
 open FSharpPlus.Extensions
 open FSharpPlus.Internals
-#if !FABLE_COMPILER4
+#if !FABLE_COMPILER_4
 
 // Comonad class ----------------------------------------------------------
 
