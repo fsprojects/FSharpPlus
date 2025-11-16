@@ -32,10 +32,8 @@ jobs:
       run: |
         version=`cat ./.config/dotnet-tools.json | jq --raw-output '.tools.fable.version'`
         dotnet tool install --global Fable --version $version
-    - name: Use Node.js
-      uses: actions/setup-node@v1
-      with:
-        node-version: '24.x'
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v5
     - name: Install npm dependencies
       working-directory: tests/FSharpPlusFable.Tests
       run: npm install
