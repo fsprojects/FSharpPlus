@@ -13,6 +13,34 @@ open Helpers
 
 module Indexables =
 
+    type NdXable1 = NdXable1 with static member    TryItem (x, NdXable1) = if x = 1 then Some "Item retrieved" else None
+    type NdXable3 = NdXable3 with        member _.get_Item  x            = if x = 1 then      "Item retrieved" else invalidArg "item" (string x)
+
+    [<Test>]
+    let testTryItem () =
+        let a1 = tryItem 0 NdXable1
+        Assert.AreEqual (None, a1)
+        let b1 = tryItem 1 NdXable1
+        Assert.AreEqual (Some "Item retrieved", b1)
+
+        let dct = dict [1, "one"; 2, "two"]
+        let a2 = tryItem 0 dct
+        Assert.AreEqual (None, a2)
+        let b2 = tryItem 1 dct
+        Assert.AreEqual (Some "one", b2)
+
+        let a3 = tryItem 0 NdXable3
+        Assert.AreEqual (None, a3)
+        let b3 = tryItem 1 NdXable3
+        Assert.AreEqual (Some "Item retrieved", b3)
+
+        let lst = ["zero"; "one"; "two"]
+        let a4 = tryItem 10 lst
+        Assert.AreEqual (None, a4)
+        let b4 = tryItem 1 lst
+        Assert.AreEqual (Some "one", b4)
+
+
     [<Test>]
     let testCompileAndExecuteItem () =
 
@@ -52,6 +80,7 @@ module Indexables =
         // This doesn't intentionally compile: seq is not Indexable. Not all foldables are Indexable, for example a Set is foldable but not Indexable. For seq use nth instead.
         // let f = seq [1, "one"; 2, "two"]
         // let _ = item 1 f
+
 
         ()
 
