@@ -33,8 +33,7 @@ let res15 = (+) <!> (ZipList <| seq { 1..3 }) <*> (ZipList <| Seq.init 3 (fun _ 
 let res16 = (fun x -> [x]) <!> (Some 4)                               // Some [4]
 let res17 = lift2 (fun x xs -> x::xs) (Some 3) (Some [4])            // [3; 4]
 
-// Possible F# regression
-// let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3; 2; 1]
+let res18 = List.sequence [Some 3; Some 2; Some 1]                    // Some [3; 2; 1]
 
 
 (* --------------------------------------------------
