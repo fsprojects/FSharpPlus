@@ -254,13 +254,22 @@ module GenericBuilders =
     /// Creates a (sequential) applicative computation expression which compose effects of three Applicatives.
     let applicative3<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
 
-    /// Creates a (non sequential) applicative computation expression.
+    [<ObsoleteAttribute("This value is obsolete. Use zapp instead.", false)>]
     let applicative'<'``ZipApplicative<'T>``> = ZipApplicativeBuilder<'``ZipApplicative<'T>``> ()
 
-    /// Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
+    [<ObsoleteAttribute("This value is obsolete. Use zapp2 instead.", false)>]
     let applicative2'<'``ZipApplicative1<ZipApplicative2<'T>>``> = ZipApplicativeBuilder2<'``ZipApplicative1<ZipApplicative2<'T>>``> ()
 
-    /// Creates a (non sequential) applicative computation expression which compose effects of three Applicatives.
+    [<ObsoleteAttribute("This value is obsolete. Use zapp3 instead.", false)>]
     let applicative3'<'``Applicative1<Applicative2<Applicative3<'T>>>``> = ZipApplicativeBuilder3<'``Applicative1<Applicative2<Applicative3<'T>>>``> ()
+
+    /// Creates a (non sequential) applicative computation expression.
+    let zapp<'``ZipApplicative<'T>``> = ZipApplicativeBuilder<'``ZipApplicative<'T>``> ()
+
+    /// Creates a (non sequential) applicative computation expression which compose effects of two Applicatives.
+    let zapp2<'``ZipApplicative1<ZipApplicative2<'T>>``> = ZipApplicativeBuilder2<'``ZipApplicative1<ZipApplicative2<'T>>``> ()
+
+    /// Creates a (non sequential) applicative computation expression which compose effects of three Applicatives.
+    let zapp3<'``ZipApplicative1<ZipApplicative2<ZipApplicative3<'T>>>``> = ZipApplicativeBuilder3<'``ZipApplicative1<ZipApplicative2<ZipApplicative3<'T>>>``> ()
 
 #endif
