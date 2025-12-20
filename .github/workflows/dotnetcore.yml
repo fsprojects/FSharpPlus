@@ -14,7 +14,7 @@ on:
 jobs:
   build:
 
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -25,7 +25,6 @@ jobs:
           10.0.x
           9.0.x
           8.0.x
-          7.0.x
     - name: Restore
       run: git submodule update --init --recursive
     - name: Build with dotnet
@@ -38,7 +37,7 @@ jobs:
       run: dotnet test build.proj -v n
 
   package:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
@@ -51,7 +50,6 @@ jobs:
           10.0.x
           9.0.x
           8.0.x
-          7.0.x
           6.0.x
     - name: Restore
       run: git submodule update --init --recursive

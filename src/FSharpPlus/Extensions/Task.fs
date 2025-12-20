@@ -398,8 +398,8 @@ module Task =
     let result value = Task.FromResult value
     
     /// Raises an exception in the Task
-    let raise (e: exn) =
-        let tcs = TaskCompletionSource<'U> ()
+    let raise<'T> (e: exn) =
+        let tcs = TaskCompletionSource<'T> ()
         tcs.SetException e
         tcs.Task
 #endif
