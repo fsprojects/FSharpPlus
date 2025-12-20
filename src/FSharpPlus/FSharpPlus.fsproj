@@ -32,33 +32,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Internals.fs" />
-    <Compile Include="Extensions/Option.fs" />
-    <Compile Include="Extensions/ValueOption.fs" />
-    <Compile Include="Extensions/Nullable.fs" />
-    <Compile Include="Extensions/Result.fs" />
-    <Compile Include="Extensions/Choice.fs" />
-    <Compile Include="Extensions/Exception.fs" />
-    <Compile Include="Extensions/Seq.fs" />
-    <Compile Include="Extensions/IList.fs" />
-    <Compile Include="Extensions/List.fs" />
-    <Compile Include="Extensions/Array.fs" />
-    <Compile Include="Extensions/ResizeArray.fs" />
-    <Compile Include="Extensions/String.fs" />
-    <Compile Include="Extensions/IReadOnlyCollection.fs" />
-    <Compile Include="Extensions/IReadOnlyList.fs" />
-    <Compile Include="Extensions/Lazy.fs" />
-    <Compile Include="Extensions/Map.fs" />
-    <Compile Include="Extensions/Dictionary.fs" />
-    <Compile Include="Extensions/Dict.fs" />
-    <Compile Include="Extensions/HashSet.fs" />
-    <Compile Include="Extensions/IReadOnlyDictionary.fs" />
-    <Compile Include="Extensions/Enumerator.fs" />
-    <Compile Include="Extensions/Task.fs" />
-    <Compile Include="Extensions/ValueTask.fs" />
-    <Compile Include="Extensions/Extensions.fs" />
-    <Compile Include="Extensions/Async.fs" />
-    <Compile Include="Extensions/Tuple.fs" />
-    <Compile Include="Extensions/ValueTuple.fs" />
     <Compile Include="Control/Converter.fs" />
     <Compile Include="Control/Numeric.fs" />
     <Compile Include="Control/Monoid.fs" />
@@ -129,5 +102,9 @@
 
 	<ItemGroup>
 		<PackageReference Update="FSharp.Core" Version="6.0.6" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\FSharpPlus.Core\FSharpPlus.Core.fsproj" />
 	</ItemGroup>
 </Project>
