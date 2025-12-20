@@ -11,7 +11,7 @@ on:
     tags: ['v**']
 jobs:
   package:
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     permissions:
       packages: write
       contents: read
@@ -22,7 +22,6 @@ jobs:
       with:
         dotnet-version: |
           8.0.x
-          7.0.x
           6.0.x
     - name: Restore
       run: git submodule update --init --recursive
