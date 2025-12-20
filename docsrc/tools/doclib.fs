@@ -4,7 +4,7 @@ module DocLib
 // Copyright 2010 Steffen Forkmann
 // Apache license
 
-
+#nowarn "49"
 open System.IO
 
 module String =

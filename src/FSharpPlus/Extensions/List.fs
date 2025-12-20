@@ -475,7 +475,7 @@ module List =
     open System.Reflection
 
     /// Creates an infinite list which cycles the element of the source.
-    let cycle lst =
+    let cycle (lst: 'T list) =
         let last = ref lst
         let rec copy = function
             | [] -> failwith "empty list"
@@ -486,7 +486,7 @@ module List =
             | x::xs ->  x::copy xs
         let cycled = copy lst
         let strs = last.Value.GetType().GetFields(BindingFlags.NonPublic ||| BindingFlags.Instance) |> Array.map (fun field -> field.Name)
-        let tailField = last.Value.GetType().GetField(Array.find(fun (s:string) -> s.ToLower().Contains("tail")) strs, BindingFlags.NonPublic ||| BindingFlags.Instance)
+        let tailField = last.Value.GetType().GetField(Array.find(fun (s:string) -> s.ToLower().Contains("tail")) strs, BindingFlags.NonPublic ||| BindingFlags.Instance) |> Unchecked.nonNull
         tailField.SetValue(last.Value, cycled)
         cycled
     #else

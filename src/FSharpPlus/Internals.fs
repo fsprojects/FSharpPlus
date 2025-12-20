@@ -49,10 +49,6 @@ module Errors =
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
 
-    let inline raiseIfNull paramName paramValue =
-        if isNull paramValue then
-            nullArg paramName
-
 module Decimal =
     let inline trySqrt x =
         match sign x with
@@ -227,7 +223,7 @@ type BitConverter =
 
     /// Converts an array of bytes into a short.
     static member ToInt16 (value: byte[], startIndex: int, isLittleEndian: bool) =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         if startIndex >= value.Length     then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_Index")
         if startIndex >  value.Length - 2 then raise <| new ArgumentException "Arg_ArrayPlusOffTooSmall"
         use pbyte = fixed &value.[startIndex]
@@ -239,7 +235,7 @@ type BitConverter =
 
     /// Converts an array of bytes into an int.
     static member ToInt32 (value: byte[], startIndex: int, isLittleEndian: bool) : int =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         if startIndex >= value.Length     then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_Index")
         if startIndex >  value.Length - 4 then raise <| new ArgumentException "Arg_ArrayPlusOffTooSmall"
         use pbyte = fixed &value.[startIndex]
@@ -251,7 +247,7 @@ type BitConverter =
 
     /// Converts an array of bytes into a long.
     static member ToInt64 (value: byte[], startIndex: int, isLittleEndian: bool) =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         if startIndex >= value.Length     then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_Index")
         if startIndex >  value.Length - 8 then raise <| new ArgumentException "Arg_ArrayPlusOffTooSmall"
         use pbyte = fixed &value.[startIndex]
@@ -268,7 +264,7 @@ type BitConverter =
             i2 ||| (i1 <<< 32)
 
     static member ToGuid (value: byte[], startIndex: int, isLittleEndian: bool) =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         if startIndex >= value.Length      then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_Index")
         if startIndex >  value.Length - 16 then raise <| new ArgumentException "Arg_ArrayPlusOffTooSmall"
         if isLittleEndian then
@@ -311,7 +307,7 @@ type BitConverter =
 
     /// Converts an array of bytes into a String.
     static member ToString (value: byte [], startIndex, length) =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         let arrayLen = value.Length
         if startIndex >= value.Length then raise <| new ArgumentOutOfRangeException ("startIndex", "ArgumentOutOfRange_StartIndex")        
         let realLength = length
@@ -333,12 +329,12 @@ type BitConverter =
 
     /// Converts an array of bytes into a String.
     static member ToString (value: byte []) =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         BitConverter.ToString (value, 0, value.Length)
 
     /// Converts an array of bytes into a String.
     static member ToString (value: byte [], startIndex) =
-        if isNull value then nullArg "value"
+        let value = nullArgCheck (nameof value) value
         BitConverter.ToString (value, startIndex, value.Length - startIndex)
 
 #if !FABLE_COMPILER

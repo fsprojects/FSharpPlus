@@ -10,12 +10,12 @@ module ValueTask =
     open System.Threading
     open System.Threading.Tasks
 
-    let inline internal (|Succeeded|Canceled|Faulted|) (t: ValueTask<'T>) =
+    let inline (|Succeeded|Canceled|Faulted|) (t: ValueTask<'T>) =
         if t.IsCompletedSuccessfully then Succeeded t.Result
         elif t.IsCanceled then Canceled
-        else Faulted (t.AsTask().Exception)    
+        else Faulted (t.AsTask().Exception |> Unchecked.nonNull)
     
-    let inline internal continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
+    let inline continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
         let f = function
         | Succeeded r -> k r
         | Canceled  -> tcs.SetCanceled ()
@@ -23,7 +23,7 @@ module ValueTask =
         if x.IsCompleted then f x
         else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
-    let inline internal continueWith (x: ValueTask<'t>) f =
+    let inline continueWith (x: ValueTask<'t>) f =
         if x.IsCompleted then f x
         else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 

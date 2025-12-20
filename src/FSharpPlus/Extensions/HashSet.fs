@@ -4,7 +4,6 @@
 [<RequireQualifiedAccess>]
 module HashSet =
     open System.Collections.Generic
-    open FSharpPlus.Internals.Errors
 
     /// <summary>The empty set for the type 'T.</summary>
     [<GeneralizableValue>]
@@ -31,8 +30,8 @@ module HashSet =
     /// <returns>The union of <c>set1</c> and <c>set2</c>.</returns>
     [<CompiledName("Union")>]
     let union (source1: HashSet<'T>) (source2: HashSet<'T>) : HashSet<'T> =
-        raiseIfNull (nameof source1) source1
-        raiseIfNull (nameof source2) source2
+        let source1 = nullArgCheck (nameof source1) source1
+        let source2 = nullArgCheck (nameof source2) source2
         let union =
             #if FABLE_COMPILER
             HashSet<'T> ()
@@ -50,7 +49,7 @@ module HashSet =
     /// <returns>A set containing the transformed elements.</returns>
     [<CompiledName("Map")>]
     let map (mapping: 'T -> 'U) (source: HashSet<'T>) : HashSet<'U> =
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
         let result = empty<'U>
         for item in source do
             result.Add (mapping item) |> ignore
@@ -62,7 +61,7 @@ module HashSet =
     /// <returns><c>true</c> if the set contains <c>value</c>; otherwise, <c>false</c>.</returns>
     [<CompiledName("Contains")>]
     let contains (value: 'T) (source: HashSet<'T>) : bool =
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
         source.Contains value
 
     /// <summary>Determines whether the first set is a subset of the second set.</summary>
@@ -71,6 +70,6 @@ module HashSet =
     /// <returns><c>true</c> if <c>source1</c> is a subset of <c>source2</c>; otherwise, <c>false</c>.</returns>
     [<CompiledName("IsSubset")>]
     let isSubset (source1: HashSet<'T>) (source2: HashSet<'T>) : bool =
-        raiseIfNull (nameof source1) source1
-        raiseIfNull (nameof source2) source2
+        let source1 = nullArgCheck (nameof source1) source1
+        let source2 = nullArgCheck (nameof source2) source2
         source1.IsSubsetOf source2
