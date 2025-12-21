@@ -63,13 +63,13 @@ module String =
         
         Seq.contains char source
 
-    /// Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
+    /// Converts to uppercase -- function wrapper for String.ToUpperInvariant method.
     let toUpper (source: string) = 
         raiseIfNull (nameof source) source
         
         if isNull source then source else source.ToUpperInvariant ()
 
-    /// Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.
+    /// Converts to lowercase -- function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) =
         raiseIfNull (nameof source) source
         
