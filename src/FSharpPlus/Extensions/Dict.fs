@@ -15,7 +15,7 @@ module Dict =
 
     /// <summary>Creates an empty dictionary.</summary>
     [<GeneralizableValue>]
-    let empty<'Key, 'U when 'Key : equality and 'Key : not null> = printfn "creating"; Dictionary<'Key, 'U> () :> IDictionary<_,_>
+    let empty<'Key, 'U when 'Key : equality> = printfn "creating"; Dictionary<'Key, 'U> () :> IDictionary<_,_>
 
     /// <summary>Tries to get the value of the given key.</summary>
     /// <remarks>This is a function wrapper for the IDictionary.TryGetValue method,

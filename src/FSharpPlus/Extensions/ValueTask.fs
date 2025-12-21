@@ -9,6 +9,7 @@ module ValueTask =
     open System
     open System.Threading
     open System.Threading.Tasks
+    open FSharpPlus.Internals.Errors
 
     let inline (|Succeeded|Canceled|Faulted|) (t: ValueTask<'T>) =
         if t.IsCompletedSuccessfully then Succeeded t.Result

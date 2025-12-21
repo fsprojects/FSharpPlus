@@ -4,6 +4,7 @@
 [<RequireQualifiedAccess>]
 module HashSet =
     open System.Collections.Generic
+    open FSharpPlus.Internals.Errors
 
     /// <summary>The empty set for the type 'T.</summary>
     [<GeneralizableValue>]

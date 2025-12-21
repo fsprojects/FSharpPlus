@@ -6,6 +6,7 @@ module String =
     open System
     open System.Text
     open System.Globalization
+    open FSharpPlus.Internals.Errors
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: string) (source: seq<string>) =

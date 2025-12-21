@@ -12,7 +12,7 @@ module IReadOnlyDictionary =
 
     /// <summary>Creates an empty read-only dictionary.</summary>
     [<GeneralizableValue>]
-    let empty<'Key, 'U when 'Key : equality and 'Key : not null> = Dictionary<'Key, 'U> () :> IReadOnlyDictionary<_,_>
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> () :> IReadOnlyDictionary<_,_>
 
     /// Replaces or sets the item associated with a specified key with the specified value.
     let add key value (source: IReadOnlyDictionary<'Key, 'Value>) = source |> Seq.map (|KeyValue|) |> Map |> Map.add key value :> IReadOnlyDictionary<_,_>

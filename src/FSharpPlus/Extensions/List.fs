@@ -8,6 +8,7 @@ module List =
 
     open System
     open FSharp.Core.CompilerServices
+    open FSharpPlus.Internals.Errors
 
     /// <summary>Returns a list that contains one item only.</summary>
     ///

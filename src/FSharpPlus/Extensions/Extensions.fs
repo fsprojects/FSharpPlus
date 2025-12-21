@@ -4,6 +4,7 @@ namespace FSharpPlus
 module Extensions =
 
     open System
+    open FSharpPlus.Internals.Errors
 
     type Collections.Generic.IEnumerable<'T> with
         member this.GetSlice = function

@@ -8,6 +8,7 @@ module Array =
 
     open System
     open FSharp.Core.CompilerServices
+    open FSharpPlus.Internals.Errors
 
     /// <summary>Adds an element to the beginning of the given array</summary>
     /// <param name="value">The element to add</param>

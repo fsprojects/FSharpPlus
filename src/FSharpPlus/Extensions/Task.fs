@@ -9,6 +9,7 @@ module Task =
     open System
     open System.Threading
     open System.Threading.Tasks
+    open FSharpPlus.Internals.Errors
     
     let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
         if t.IsCanceled then Canceled

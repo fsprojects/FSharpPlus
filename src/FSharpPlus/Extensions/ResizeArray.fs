@@ -4,6 +4,8 @@
 [<RequireQualifiedAccess>]
 module ResizeArray =
 
+    open FSharpPlus.Internals.Errors
+
     /// <summary>Builds a new ResizeArray whose elements are the results of applying the given function
     /// to each of the elements of the ResizeArray.</summary>
     ///

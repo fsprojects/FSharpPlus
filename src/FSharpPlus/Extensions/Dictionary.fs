@@ -16,7 +16,7 @@ module Dictionary =
 
     /// <summary>Creates an empty dictionary.</summary>
     [<GeneralizableValue>]
-    let empty<'Key, 'U when 'Key : equality and 'Key : not null> = Dictionary<'Key, 'U> ()
+    let empty<'Key, 'U when 'Key : equality> = Dictionary<'Key, 'U> ()
 
     /// <summary>Tries to get the value of the given key.</summary>
     /// <remarks>Note: this is a function wrapper for the Dictionary.TryGetValue method,

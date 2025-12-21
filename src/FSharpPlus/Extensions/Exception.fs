@@ -5,6 +5,7 @@
 module Exception =
     open System
     open System.Runtime.ExceptionServices
+    open FSharpPlus.Internals.Errors
     
     #if !FABLE_COMPILER
 

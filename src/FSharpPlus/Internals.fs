@@ -49,6 +49,13 @@ module Errors =
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
 
+    // Functions to remove when compiling with F#9 or higher
+    let inline nullArgCheck paramName paramValue =
+        if isNull paramValue then nullArg paramName
+        else paramValue
+
+    module Unchecked = let nonNull = id
+
 module Decimal =
     let inline trySqrt x =
         match sign x with
@@ -141,6 +148,7 @@ type NonEmptySeq2<'T> =
 #nowarn "51"
 open System
 open Microsoft.FSharp.NativeInterop
+open Errors // TODO: see if it makes sense to move checks to calling site
 
 type BitConverter =
     /// Converts a byte into an array of bytes with length one.

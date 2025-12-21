@@ -4,6 +4,7 @@ namespace FSharpPlus
 [<RequireQualifiedAccess>]
 module Seq =
     open System
+    open FSharpPlus.Internals.Errors
 
     /// <summary>Adds an element to the beginning of the given sequence</summary>
     /// <param name="value">The element to add</param>
