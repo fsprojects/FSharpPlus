@@ -49,10 +49,10 @@ module Seq =
     /// <param name="x3">Third seq.</param>
     ///
     /// <returns>Seq with values returned from mapping function.</returns>
-    let lift3 f x1 x2 x3 =
+    let lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: seq<'T1>) (x2: seq<'T2>) (x3: seq<'T3>) : seq<'U> =
         Seq.allPairs x2 x3
         |> Seq.allPairs x1
-        |> Seq.map (fun x -> (fst (snd x), snd (snd x), fst x))
+        |> Seq.map (fun x -> (fst x, fst (snd x), snd (snd x)))
         |> Seq.map (fun (x, y, z) -> f x y z)
 
     /// <summary>Applies a function to each element of the collection, starting from the end, threading an accumulator argument
