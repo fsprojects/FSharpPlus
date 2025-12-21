@@ -4,6 +4,7 @@ namespace FSharpPlus
 module Extensions =
 
     open System
+    open FSharpPlus.Internals.Errors
 
     type Collections.Generic.IEnumerable<'T> with
         member this.GetSlice = function
@@ -39,7 +40,7 @@ module Extensions =
 
     let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
         if t.IsCanceled then Canceled
-        else if t.IsFaulted then Faulted t.Exception
+        else if t.IsFaulted then Faulted (Unchecked.nonNull t.Exception) 
         else Completed t.Result
 
     type Task<'t> with
@@ -158,7 +159,7 @@ module Extensions =
             Async.FromContinuations (fun (sc, ec, cc) ->
                 task.ContinueWith (fun (task: Task<'T>) ->
                     if task.IsFaulted then
-                        let e = task.Exception
+                        let e = Unchecked.nonNull task.Exception
                         if e.InnerExceptions.Count = 1 then ec e.InnerExceptions[0]
                         else ec e
                     elif task.IsCanceled then cc (TaskCanceledException ())
@@ -185,7 +186,7 @@ module Extensions =
             Async.FromContinuations (fun (sc, ec, cc) ->
                 task.ContinueWith (fun (task: Task) ->
                     if task.IsFaulted then
-                        let e = task.Exception
+                        let e = Unchecked.nonNull task.Exception
                         if e.InnerExceptions.Count = 1 then ec e.InnerExceptions[0]
                         else ec e
                     elif task.IsCanceled then cc (TaskCanceledException ())
