@@ -1,9 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
-    <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
-    <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
-  </PropertyGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <LangVersion Condition=" '$(Configuration)' == 'Fable' ">6.0</LangVersion>

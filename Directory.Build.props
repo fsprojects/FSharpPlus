@@ -1,5 +1,8 @@
 <Project ToolsVersion="15.0">
-
+  <PropertyGroup Condition="'$(CompilerTest)' == 'true'">
+    <FscToolPath>$(FSC_ToolPathCompilerBuild)</FscToolPath>
+    <FscToolExe>$(FSC_ExePathCompilerBuild)</FscToolExe>
+  </PropertyGroup>
   <PropertyGroup>
     <RepositoryUrl>https://github.com/fsprojects/FSharpPlus</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
