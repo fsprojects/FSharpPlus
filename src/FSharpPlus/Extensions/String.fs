@@ -11,8 +11,11 @@ module String =
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: string) (source: seq<string>) =
         #if !NET45
-        raiseIfNull (nameof separator) separator
-        raiseIfNull (nameof source) source
+        let separator = nullArgCheck (nameof separator) separator
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "separator" separator
+        raiseIfNull "source" source
         #endif
         
         String.Join (separator, source)
@@ -20,7 +23,9 @@ module String =
     /// Inserts a separator char between each char in the source string.
     let intersperse (element: char) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         String.Join ("", Array.ofSeq (source |> Seq.intersperse element))
@@ -28,8 +33,11 @@ module String =
     /// Creates a sequence of strings by splitting the source string on any of the given separators.
     let split (separators: seq<string>) (source: string) =
         #if !NET45
-        raiseIfNull (nameof separators) separators
-        raiseIfNull (nameof source) source
+        let separators = nullArgCheck (nameof separators) separators
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "separators" separators
+        raiseIfNull "source" source
         #endif
         
         source.Split (Seq.toArray separators, StringSplitOptions.None) :> seq<_>
@@ -37,8 +45,11 @@ module String =
     /// Replaces a substring with the given replacement string.
     let replace (oldValue: string) newValue (source: string) =
         #if !NET45
-        raiseIfNull (nameof oldValue) oldValue
-        raiseIfNull (nameof source) source
+        let oldValue = nullArgCheck (nameof oldValue) oldValue
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "oldValue" oldValue
+        raiseIfNull "source" source
         #endif
         
         if oldValue.Length = 0 then source else source.Replace (oldValue, newValue)
@@ -46,8 +57,11 @@ module String =
     /// Does the source string contain the given subString? -- function wrapper for String.Contains method.
     let isSubString (subString: string) (source: string) =
         #if !NET45
-        raiseIfNull (nameof subString) subString
-        raiseIfNull (nameof source) source
+        let subString = nullArgCheck (nameof subString) subString
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "subString" subString
+        raiseIfNull "source" source
         #endif
         
         source.Contains subString
@@ -57,18 +71,24 @@ module String =
     /// Does the source string start with the given subString? -- function wrapper for String.StartsWith method using InvariantCulture.
     let startsWith (subString: string) (source: string) =
         #if !NET45
-        raiseIfNull (nameof subString) subString
-        raiseIfNull (nameof source) source
+        let subString = nullArgCheck (nameof subString) subString
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "subString" subString
+        raiseIfNull "source" source
         #endif
         
         source.StartsWith (subString, false, CultureInfo.InvariantCulture)
     #endif
 
     /// Does the source string end with the given subString? -- function wrapper for String.EndsWith method using InvariantCulture.
-    let endsWith subString (source: string) =
+    let endsWith (subString: string) (source: string) =
         #if !NET45
-        raiseIfNull (nameof subString) subString
-        raiseIfNull (nameof source) source
+        let subString = nullArgCheck (nameof subString) subString
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "subString" subString
+        raiseIfNull "source" source
         #endif
         
         source.EndsWith (subString, false, CultureInfo.InvariantCulture)
@@ -77,7 +97,9 @@ module String =
     /// Use `String.isSubstring` to check for strings.
     let contains char      (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         Seq.contains char source
@@ -85,26 +107,32 @@ module String =
     /// Converts to uppercase -- function wrapper for String.ToUpperInvariant method.
     let toUpper (source: string) = 
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
-        if isNull source then source else source.ToUpperInvariant ()
+        source.ToUpperInvariant ()
 
     /// Converts to lowercase -- function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
-        
-        if isNull source then source else source.ToLowerInvariant ()
+
+        source.ToLowerInvariant ()
 
     /// Trims leading and trailing white spaces -- function wrapper for String.Trim method.
     /// 
     /// Note this is distinct from trim which trims the given characters,
     /// not white spaces.
-    let trimWhiteSpaces (source: string) =
+    let trim (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.Trim ()
@@ -115,7 +143,9 @@ module String =
     /// not white spaces.
     let trimStartWhiteSpaces (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.TrimStart ()
@@ -126,7 +156,9 @@ module String =
     /// not white spaces.
     let trimEndWhiteSpaces (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.TrimEnd ()
@@ -135,8 +167,15 @@ module String =
        
     /// Returns a new string whose textual value is the same as this string, but whose binary representation is in the specified Unicode normalization form.
     /// 
-    /// This is a null safe function wrapper of the String.Normalize method.
-    let normalize normalizationForm (source: string) = if isNull source then source else source.Normalize normalizationForm
+    /// This is a function wrapper of the String.Normalize method.
+    let normalize normalizationForm (source: string) =
+        #if !NET45
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
+        #endif
+
+        source.Normalize normalizationForm
 
     /// Removes diacritics (accents) from the given source string.
     /// 
@@ -144,18 +183,24 @@ module String =
     /// (basically separating the "base" characters from the diacritics) and then scans
     /// the result and retains only the base characters. 
     let removeDiacritics (source: string) =
-        if isNull source then source
-        else
-            source
-            |> normalize NormalizationForm.FormD
-            |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
-            |> normalize NormalizationForm.FormC
+        #if !NET45
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
+        #endif
+
+        source
+        |> normalize NormalizationForm.FormD
+        |> String.filter (fun ch -> CharUnicodeInfo.GetUnicodeCategory ch <> UnicodeCategory.NonSpacingMark)
+        |> normalize NormalizationForm.FormC
     #endif
 
     /// Pads the beginning of the given string with spaces so that it has a specified total length.
     let padLeft totalLength (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.PadLeft totalLength
@@ -163,7 +208,9 @@ module String =
     /// Pads the beginning of the given string with a specified character so that it has a specified total length.
     let padLeftWith totalLength paddingChar (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.PadLeft (totalLength, paddingChar)
@@ -171,7 +218,9 @@ module String =
     /// Pads the end of the given string with spaces so that it has a specified total length.
     let padRight totalLength (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.PadRight totalLength
@@ -179,15 +228,19 @@ module String =
     /// Pads the end of the given string with a specified character so that it has a specified total length.
     let padRightWith totalLength paddingChar (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.PadRight (totalLength, paddingChar)
 
     /// Removes all leading and trailing occurrences of specified characters from the given string.
-    let trim      (trimChars: char seq) (source: string) =
+    let trimBoth  (trimChars: char seq) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.Trim (Seq.toArray trimChars)
@@ -195,7 +248,9 @@ module String =
     /// Removes all leading occurrences of specified characters from the given string.
     let trimStart (trimChars: char seq) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.TrimStart (Seq.toArray trimChars)
@@ -203,7 +258,9 @@ module String =
     /// Removes all trailing occurrences of specified characters from the given string.
     let trimEnd   (trimChars: char seq) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.TrimEnd (Seq.toArray trimChars)
@@ -211,7 +268,9 @@ module String =
     /// Converts the given string to an array of chars.
     let toArray (source: string)    =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.ToCharArray ()
@@ -219,7 +278,9 @@ module String =
     /// Converts an array of chars to a String.
     let ofArray (source: char [])   =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         String (source)
@@ -227,7 +288,9 @@ module String =
     /// Converts the given string to a list of chars.
     let toList  (source: string)    =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         toArray source |> List.ofArray
@@ -238,7 +301,9 @@ module String =
     /// Converts the given string to a seq of chars.
     let toSeq   (source: string)    =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source :> seq<char>
@@ -246,7 +311,9 @@ module String =
     /// Converts a seq of chars to a String.
     let ofSeq   (source: seq<char>) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         String.Join (String.Empty, source)
@@ -259,7 +326,9 @@ module String =
     /// the given index is out of bounds.
     let item    (index: int) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source.[index]
@@ -268,7 +337,9 @@ module String =
     /// returning `None` if out of bounds.
     let tryItem (index: int) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         if index >= 0 && index < source.Length then Some source.[index] else None
@@ -276,7 +347,9 @@ module String =
     /// Reverses the given string.
     let rev (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         String (source.ToCharArray () |> Array.rev)
@@ -288,7 +361,9 @@ module String =
     /// number of chars in the string.
     let take count (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source[..count-1]
@@ -300,7 +375,9 @@ module String =
     /// number of chars in the string.
     let skip count (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source[count..]
@@ -308,7 +385,9 @@ module String =
     /// Takes chars from the source string while the given predicate is true.
     let takeWhile (predicate: char -> bool) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         if String.IsNullOrEmpty source then
@@ -324,7 +403,9 @@ module String =
     /// Skips over chars from the source string while the given predicate is true.
     let skipWhile (predicate: char -> bool) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         if String.IsNullOrEmpty source then
@@ -341,7 +422,9 @@ module String =
     /// <c>None</c> if the string is empty.</summary>
     let tryHead (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         if String.length source = 0 then None else Some source.[0]
@@ -350,7 +433,9 @@ module String =
     /// <c>None</c> if the string is empty.</summary>
     let tryLast (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         let length = String.length source
@@ -360,7 +445,9 @@ module String =
     /// It returns the original string if it is shorter than count.
     let truncate count (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         if count < 1 then String.Empty
@@ -371,7 +458,9 @@ module String =
     /// When count exceeds the length of the string it returns an empty string.
     let drop count (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         if count < 1 then source
@@ -383,7 +472,9 @@ module String =
     /// Note: throws an ArgumentException when not found.
     let findIndex (predicate: char -> bool) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         let rec go index =
@@ -396,7 +487,9 @@ module String =
     /// Tries to find the first index of the char in the substring which satisfies the given predicate.
     let tryFindIndex (predicate: char -> bool) (source: string) =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         let rec go index =
@@ -416,8 +509,11 @@ module String =
     /// </returns>
     let findSliceIndex (slice: string) (source: string) =
         #if !NET45
-        raiseIfNull (nameof slice) slice
-        raiseIfNull (nameof source) source
+        let slice = nullArgCheck (nameof slice) slice
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "slice" slice
+        raiseIfNull "source" source
         #endif
         
         let index = source.IndexOf slice
@@ -451,8 +547,11 @@ module String =
     /// </returns>
     let tryFindSliceIndex (slice: string) (source: string) =
         #if !NET45
-        raiseIfNull (nameof slice) slice
-        raiseIfNull (nameof source) source
+        let slice = nullArgCheck (nameof slice) slice
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "slice" slice
+        raiseIfNull "source" source
         #endif
         
         let index = source.IndexOf slice
@@ -474,7 +573,9 @@ module String =
     /// Converts the given string to an array of Int32 code-points (the actual Unicode Code Point number).
     let toCodePoints (source : string) : seq<int> =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         let mapper i c =
@@ -486,7 +587,9 @@ module String =
     /// Converts the array of Int32 code-points (the actual Unicode Code Point number) to a string.
     let ofCodePoints (source: seq<int>) : string =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         
         source |> Seq.map Char.ConvertFromUtf32 |> String.concat String.Empty
@@ -495,8 +598,11 @@ module String =
     /// Converts a string to a byte-array using the specified encoding.
     let getBytes (encoding: Encoding) (source: string) : byte [] =
         #if !NET45
-        raiseIfNull (nameof encoding) encoding
-        raiseIfNull (nameof source) source
+        let encoding = nullArgCheck (nameof encoding) encoding
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "encoding" encoding
+        raiseIfNull "source" source
         #endif
         
         encoding.GetBytes source

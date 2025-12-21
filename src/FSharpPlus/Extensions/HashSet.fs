@@ -32,8 +32,11 @@ module HashSet =
     [<CompiledName("Union")>]
     let union (source1: HashSet<'T>) (source2: HashSet<'T>) : HashSet<'T> =
         #if !NET45
-        raiseIfNull (nameof source1) source1
-        raiseIfNull (nameof source2) source2
+        let source1 = nullArgCheck (nameof source1) source1
+        let source2 = nullArgCheck (nameof source2) source2
+        #else
+        raiseIfNull "source1" source1
+        raiseIfNull "source2" source2
         #endif
         let union =
             #if FABLE_COMPILER || NET45 || NETSTANDARD2_0
@@ -53,7 +56,9 @@ module HashSet =
     [<CompiledName("Map")>]
     let map (mapping: 'T -> 'U) (source: HashSet<'T>) : HashSet<'U> =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         let result = empty<'U>
         for item in source do
@@ -67,7 +72,9 @@ module HashSet =
     [<CompiledName("Contains")>]
     let contains (value: 'T) (source: HashSet<'T>) : bool =
         #if !NET45
-        raiseIfNull (nameof source) source
+        let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
         #endif
         source.Contains value
 
@@ -78,7 +85,10 @@ module HashSet =
     [<CompiledName("IsSubset")>]
     let isSubset (source1: HashSet<'T>) (source2: HashSet<'T>) : bool =
         #if !NET45
-        raiseIfNull (nameof source1) source1
-        raiseIfNull (nameof source2) source2
+        let source1 = nullArgCheck (nameof source1) source1
+        let source2 = nullArgCheck (nameof source2) source2
+        #else
+        raiseIfNull "source1" source1
+        raiseIfNull "source2" source2
         #endif
         source1.IsSubsetOf source2

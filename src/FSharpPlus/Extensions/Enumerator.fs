@@ -1,5 +1,6 @@
 namespace FSharpPlus
 
+#nowarn "3261" // nullness checks
 #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
 
 /// Additional operations on IEnumerator
