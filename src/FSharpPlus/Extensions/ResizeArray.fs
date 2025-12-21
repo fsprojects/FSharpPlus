@@ -24,10 +24,10 @@ module ResizeArray =
     /// <summary>Applies the given function to each element of the collection.</summary>
     /// <param name="action">The function to apply to elements from the input ResizeArray.</param>
     /// <param name="source">The input ResizeArray.</param>
-    let iter (action: 'T -> 'U) (source: ResizeArray<'T>) =
+    let iter (action: 'T -> unit) (source: ResizeArray<'T>) : unit =
         raiseIfNull (nameof source) source
         
-        ResizeArray (Seq.map action source)
+        Seq.iter action source
 
     /// <summary>Applies a ResizeArray of functions to a ResizeArray of values and concatenates them.</summary>
     /// <param name="f">The functions.</param>
@@ -81,16 +81,16 @@ module ResizeArray =
         source |> Array.toSeq |> Seq.intersperse element |> Seq.toArray : 'T []
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
-    let split (separators: seq<_ []>) (source: _ []) =
+    let split (separators: seq<ResizeArray<'T>>) (source: ResizeArray<'T>) : seq<ResizeArray<'T>> =
         raiseIfNull (nameof separators) separators
         raiseIfNull (nameof source) source
-        source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
+        source |> Seq.split separators |> Seq.map ResizeArray
 
     /// Replaces a subsequence of the source array with the given replacement array.
-    let replace (oldValue: _ []) (newValue: _ []) source =
+    let replace (oldValue: ResizeArray<'T>) (newValue: ResizeArray<'T>) (source: ResizeArray<'T>) : ResizeArray<'T> =
         raiseIfNull (nameof oldValue) oldValue
         raiseIfNull (nameof source) source
-        source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray : 'T []
+        source |> Seq.replace oldValue newValue |> ResizeArray
 
     #if !FABLE_COMPILER
 
@@ -103,13 +103,13 @@ module ResizeArray =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    let findSliceIndex (slice: _ []) (source: _ []) =
+    let findSliceIndex (slice: ResizeArray<'T>) (source: ResizeArray<'T>) : int =
         raiseIfNull (nameof slice) slice
         raiseIfNull (nameof source) source
         
-        let index = Internals.FindSliceIndex.arrayImpl slice source
+        let index = Internals.FindSliceIndex.seqImpl slice source
         if index = -1 then
-            ArgumentException("The specified slice was not found in the sequence.") |> raise
+            invalidArg (nameof slice) "The specified slice was not found in the sequence."
         else
             index
 
@@ -120,11 +120,11 @@ module ResizeArray =
     /// <returns>
     /// The index of the slice or <c>None</c>.
     /// </returns>
-    let tryFindSliceIndex (slice: _ []) (source: _ []) =
+    let tryFindSliceIndex (slice: ResizeArray<'T>) (source: ResizeArray<'T>) : int option =
         raiseIfNull (nameof slice) slice
         raiseIfNull (nameof source) source
         
-        let index = Internals.FindSliceIndex.arrayImpl slice source
+        let index = Internals.FindSliceIndex.seqImpl slice source
         if index = -1 then None else Some index
 
     /// <summary>
@@ -136,10 +136,10 @@ module ResizeArray =
     /// <returns>
     /// The index of the slice.
     /// </returns>
-    let findLastSliceIndex (slice: _ []) (source: _ []) =
-        let index = Internals.FindLastSliceIndex.arrayImpl slice source
+    let findLastSliceIndex (slice: ResizeArray<'T>) (source: ResizeArray<'T>) : int =
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
         if index = -1 then
-            ArgumentException("The specified slice was not found in the sequence.") |> raise
+            invalidArg (nameof slice) "The specified slice was not found in the sequence."
         else
             index
 
@@ -150,8 +150,8 @@ module ResizeArray =
     /// <returns>
     /// The index of the slice or <c>None</c>.
     /// </returns>
-    let tryFindLastSliceIndex (slice: _ []) (source: _ []) =
-        let index = Internals.FindLastSliceIndex.arrayImpl slice source
+    let tryFindLastSliceIndex (slice: ResizeArray<'T>) (source: ResizeArray<'T>) : int option =
+        let index = Internals.FindLastSliceIndex.seqImpl slice source
         if index = -1 then None else Some index
     #endif
 
@@ -162,12 +162,12 @@ module ResizeArray =
     /// <returns>
     /// A tuple with both resulting arrays.
     /// </returns>
-    let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: array<'T>) =
+    let partitionMap (mapper: 'T -> Choice<'T1,'T2>) (source: ResizeArray<'T>) : ResizeArray<'T1> * ResizeArray<'T2> =
         raiseIfNull (nameof source) source
         
         let (x, y) = ResizeArray (), ResizeArray ()
-        Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
-        x.ToArray (), y.ToArray ()
+        iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
+        x, y
         
     /// <summary>Safely build a new ResizeArray whose elements are the results of applying the given function
     /// to each of the elements of the two ResizeArrays pairwise.</summary>
