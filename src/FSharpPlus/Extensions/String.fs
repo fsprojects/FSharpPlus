@@ -82,7 +82,7 @@ module String =
         
         Seq.contains char source
 
-    /// Converts to uppercase -- nullsafe function wrapper for String.ToUpperInvariant method.
+    /// Converts to uppercase -- function wrapper for String.ToUpperInvariant method.
     let toUpper (source: string) = 
         #if !NET45
         raiseIfNull (nameof source) source
@@ -90,7 +90,7 @@ module String =
         
         if isNull source then source else source.ToUpperInvariant ()
 
-    /// Converts to lowercase -- nullsafe function wrapper for String.ToLowerInvariant method.
+    /// Converts to lowercase -- function wrapper for String.ToLowerInvariant method.
     let toLower (source: string) =
         #if !NET45
         raiseIfNull (nameof source) source
