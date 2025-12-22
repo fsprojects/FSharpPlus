@@ -28,7 +28,21 @@ module GenericBuilders =
         static member        ($) (Idiomatic, Ii) = id
     let inline idiomatic a b = (Idiomatic $ b) a
     
+    /// <summary>
+    /// Marks the beginning of an idiom bracket (applicative style).
+    /// </summary>
+    /// <Remarks>
+    /// Use Ii to mark the end of the idiom bracket.
+    /// </Remarks>
     let inline iI x = (idiomatic << result) x
+
+    /// <summary>
+    /// Marks the end of an idiom bracket (applicative style).
+    /// </summary>
+    /// <Remarks>
+    /// Use iI to mark the beginning of the idiom bracket.
+    /// </Remarks>
+    let Ii = Ii
     type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
     type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idiomatic $ x) (join fii)
 
