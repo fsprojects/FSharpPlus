@@ -235,6 +235,6 @@ module ValueTask =
 
 
     /// Raises an exception in the ValueTask
-    let raise (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
+    let raise<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
 
 #endif
