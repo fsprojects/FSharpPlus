@@ -226,12 +226,20 @@ module ValueTask =
             
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
-    let ignore (source: ValueTask<'T>) =
-        if source.IsCompletedSuccessfully then
-            source.GetAwaiter().GetResult() |> ignore
-            Unchecked.defaultof<_>
+    let ignore (source: ValueTask) : ValueTask<unit> =
+        if source.IsCompletedSuccessfully then Unchecked.defaultof<_>
         else
-            new ValueTask (source.AsTask ())
+            let tcs = TaskCompletionSource<unit> ()
+            if source.IsFaulted then tcs.SetException (Unchecked.nonNull (source.AsTask().Exception)).InnerExceptions
+            elif source.IsCanceled then tcs.SetCanceled ()
+            else
+                let k (t: ValueTask) : unit =
+                    if t.IsCanceled  then tcs.SetCanceled ()
+                    elif t.IsFaulted then tcs.SetException (Unchecked.nonNull (source.AsTask().Exception)).InnerExceptions
+                    else tcs.SetResult ()
+                if source.IsCompleted then k source
+                else source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
+            tcs.Task |> ValueTask<unit>
 
 
     /// Raises an exception in the ValueTask
