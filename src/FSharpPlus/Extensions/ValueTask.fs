@@ -11,10 +11,12 @@ module ValueTask =
     open System.Threading.Tasks
     open FSharpPlus.Internals.Errors
 
+    /// Active pattern to match the state of a completed ValueTask
     let inline (|Succeeded|Canceled|Faulted|) (t: ValueTask<'T>) =
         if t.IsCompletedSuccessfully then Succeeded t.Result
+        elif t.IsFaulted then Faulted (Unchecked.nonNull (t.AsTask().Exception))
         elif t.IsCanceled then Canceled
-        else Faulted (t.AsTask().Exception |> Unchecked.nonNull)
+        else invalidOp "Internal error: The task is not yet completed."
     
     let inline continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
         let f = function
