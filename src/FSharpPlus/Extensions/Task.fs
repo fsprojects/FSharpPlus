@@ -19,33 +19,47 @@ module Task =
         elif t.IsCanceled then Canceled
         else invalidOp "Internal error: The task is not yet completed."
 
+    
+    /// Creates a Task from a value
+    let result (value: 'T) = Task.FromResult value
+    
+    /// <summary>
+    /// Raises an exception in the Task
+    /// </summary>
+    /// <param name="exn"></param>
+    let raise<'T> (exn: exn) : Task<'T> =
+        match exn with
+        // AggregateException with multiple exceptions - use TCS
+        | :? AggregateException as agg when agg.InnerExceptions.Count > 1 ->
+            let tcs = TaskCompletionSource<'T>()
+            tcs.SetException(agg.InnerExceptions)
+            tcs.Task
+        // Single non-aggregate exception - use optimized path
+        // Single exception - use the optimized path
+        | :? AggregateException as agg -> Task.FromException<'T> agg.InnerExceptions[0]
+        | ex                           -> Task.FromException<'T> ex
+
+    let private canceledTokenSingleton = CancellationToken true    
+    let private canceled<'T> : Task<'T> = Task.FromCanceled<'T> canceledTokenSingleton
+    
+    
     /// <summary>Creates a task workflow from 'source' another, mapping its result with 'f'.</summary>
-    let map (f: 'T -> 'U) (source: Task<'T>) : Task<'U> =
+    let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
         let source = nullArgCheck (nameof source) source
 
-        if source.Status = TaskStatus.RanToCompletion then
-            try Task.FromResult (f source.Result)
-            with e ->
-                let tcs = TaskCompletionSource<'U> ()
-                tcs.SetException e
-                tcs.Task
+        if source.IsCompleted then
+            match source with
+            | Succeeded r -> try result (mapper r) with e -> raise<'U> e
+            | Faulted exn -> raise<'U> exn
+            | Canceled    -> canceled<'U>
         else
             let tcs = TaskCompletionSource<'U> ()
-            if source.Status = TaskStatus.Faulted then
-                tcs.SetException (Unchecked.nonNull source.Exception).InnerExceptions
-                tcs.Task
-            elif source.Status = TaskStatus.Canceled then
-                tcs.SetCanceled ()
-                tcs.Task
-            else
-                let k = function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        try tcs.SetResult (f r)
-                        with e -> tcs.SetException e
-                source.ContinueWith k |> ignore
-                tcs.Task
+            let k = function
+                | Canceled    -> tcs.SetCanceled ()
+                | Faulted e   -> tcs.SetException e.InnerExceptions
+                | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e
+            source.ContinueWith k |> ignore
+            tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
@@ -408,13 +422,8 @@ module Task =
                 ran <- true
         try
             let task = body ()
-            let rec loop (task: Task<'T>) (compensation : unit -> unit) =
-                match task.Status with
-                | TaskStatus.RanToCompletion -> compensation (); task
-                | TaskStatus.Faulted         -> task.ContinueWith((fun (x:Task<'T>) -> compensation (); x)).Unwrap ()
-                | TaskStatus.Canceled        -> task
-                | _                          -> task.ContinueWith((fun (x:Task<'T>) -> (loop x compensation: Task<_>))).Unwrap ()
-            loop task compensation
+            if task.IsCompleted then compensation (); task
+            else task.ContinueWith(fun (_: Task<'T>) -> compensation (); task).Unwrap ()
         with _ ->
             compensation ()
             reraise ()
@@ -447,15 +456,8 @@ module Task =
         let fallbackTask = nullArgCheck (nameof fallbackTask) fallbackTask
         let source = nullArgCheck (nameof source) source
         orElseWith (fun _ -> fallbackTask) source
-
-    /// Creates a Task from a value
-    let result (value: 'T) = Task.FromResult value
     
-    /// Raises an exception in the Task
-    let raise<'T> (e: exn) =
-        let tcs = TaskCompletionSource<'T> ()
-        tcs.SetException e
-        tcs.Task
+    
 
 
 /// Workaround to fix signatures without breaking binary compatibility.
