@@ -1,5 +1,6 @@
 namespace FSharpPlus
 
+#nowarn "44" // Suppress obsolete warning for tryWith and tryFinally
 #if !FABLE_COMPILER
 
 /// Additional operations on Task<'T>
@@ -382,7 +383,7 @@ module Task =
                 task.ContinueWith k |> ignore
             tcs.Task
 
-    /// Used to de-sugar try .. with .. blocks in Computation Expressions.
+    [<ObsoleteAttribute("Swap parameters")>]
     let rec tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> =
         let unwrapException (agg: AggregateException) =
             if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
@@ -398,7 +399,7 @@ module Task =
         | :? AggregateException as exn -> compensation (unwrapException exn)
         | exn                          -> compensation exn
     
-    /// Used to de-sugar try .. finally .. blocks in Computation Expressions.
+    [<ObsoleteAttribute("Swap parameters")>]
     let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> =
         let mutable ran = false
         let compensation () =
@@ -455,4 +456,25 @@ module Task =
         let tcs = TaskCompletionSource<'T> ()
         tcs.SetException e
         tcs.Task
+
+
+/// Workaround to fix signatures without breaking binary compatibility.
+[<AutoOpen>]
+module Task_v2 =
+    open System.Threading.Tasks
+    module Task =
+
+        /// <summary>Runs a if the body throws an exception, if the returned task faults or if the returned task is canceled.</summary>
+        /// <param name="compensation">The compensation function to run on exception.</param>
+        /// <param name="body">The body function to run.</param>
+        /// <returns>The resulting task.</returns>
+        /// <remarks>This function is used to de-sugar try .. with .. blocks in Computation Expressions.</remarks>
+        let inline tryWith ([<InlineIfLambda>] compensation: exn -> Task<'T>) ([<InlineIfLambda>] body: unit -> Task<'T>) = Task.tryWith body compensation
+
+        /// <summary>Runs a compensation function after the body completes, regardless of whether the body completed successfully, faulted, or was canceled.</summary>
+        /// <param name="compensation">The compensation function to run after the body completes.</param>
+        /// <param name="body">The body function to run.</param>
+        /// <returns>The resulting task.</returns>
+        /// <remarks>This function is used to de-sugar try .. finally .. blocks in Computation Expressions.</remarks>
+        let inline tryFinally ([<InlineIfLambda>] compensation: unit -> unit) ([<InlineIfLambda>] body: unit -> Task<'T>) = Task.tryFinally body compensation    
 #endif
