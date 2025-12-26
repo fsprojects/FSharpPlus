@@ -11,10 +11,12 @@ module Task =
     open System.Threading.Tasks
     open FSharpPlus.Internals.Errors
     
-    let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
-        if t.IsCanceled then Canceled
-        else if t.IsFaulted then Faulted (Unchecked.nonNull t.Exception)
-        else Completed t.Result
+    /// Active pattern to match the state of a completed Task
+    let inline private (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
+        if t.IsCompletedSuccessfully then Succeeded t.Result
+        elif t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
+        elif t.IsCanceled then Canceled
+        else invalidOp "Internal error: The task is not yet completed."
 
     /// <summary>Creates a task workflow from 'source' another, mapping its result with 'f'.</summary>
     let map (f: 'T -> 'U) (source: Task<'T>) : Task<'U> =
@@ -38,7 +40,7 @@ module Task =
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         try tcs.SetResult (f r)
                         with e -> tcs.SetException e
                 source.ContinueWith k |> ignore
@@ -70,7 +72,7 @@ module Task =
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         try tcs.SetResult (f x.Result r)
                         with e -> tcs.SetException e
                 y.ContinueWith k |> ignore
@@ -78,7 +80,7 @@ module Task =
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         try tcs.SetResult (f r y.Result)
                         with e -> tcs.SetException e
                 x.ContinueWith k |> ignore
@@ -87,12 +89,12 @@ module Task =
                     function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         y.ContinueWith (
                             function
                             | Canceled     -> tcs.SetCanceled ()
                             | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Completed r' ->
+                            | Succeeded r' ->
                                 try tcs.SetResult (f r r')
                                 with e -> tcs.SetException e
                         ) |> ignore) |> ignore
@@ -129,17 +131,17 @@ module Task =
                     function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         y.ContinueWith (
                             function
                             | Canceled     -> tcs.SetCanceled ()
                             | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Completed r' ->
+                            | Succeeded r' ->
                                 z.ContinueWith (
                                     function
                                     | Canceled      -> tcs.SetCanceled ()
                                     | Faulted e     -> tcs.SetException e.InnerExceptions
-                                    | Completed r'' ->
+                                    | Succeeded r'' ->
                                         try tcs.SetResult (f r r' r'')
                                         with e -> tcs.SetException e
                                 ) |> ignore) |> ignore) |> ignore
@@ -183,7 +185,7 @@ module Task =
             match t with
             | Canceled    -> cancelled <- true
             | Faulted e   -> failures[i] <- e.InnerExceptions
-            | Completed r -> v.Value <- r
+            | Succeeded r -> v.Value <- r
             trySet ()
 
         if task1.IsCompleted && task2.IsCompleted then
@@ -235,7 +237,7 @@ module Task =
             match t with
             | Canceled    -> cancelled <- true
             | Faulted e   -> failures[i] <- e.InnerExceptions
-            | Completed r -> v.Value <- r
+            | Succeeded r -> v.Value <- r
             trySet ()
 
         if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
@@ -273,7 +275,7 @@ module Task =
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         try tcs.SetResult (f.Result r)
                         with e -> tcs.SetException e
                 x.ContinueWith k |> ignore
@@ -281,7 +283,7 @@ module Task =
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         try tcs.SetResult (r x.Result)
                         with e -> tcs.SetException e
                 f.ContinueWith k |> ignore
@@ -290,12 +292,12 @@ module Task =
                     function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         x.ContinueWith (
                             function
                             | Canceled     -> tcs.SetCanceled ()
                             | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Completed r' ->
+                            | Succeeded r' ->
                                 try tcs.SetResult (r r')
                                 with e -> tcs.SetException e
                         ) |> ignore) |> ignore
@@ -319,24 +321,24 @@ module Task =
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r -> tcs.SetResult (x.Result, r)
+                    | Succeeded r -> tcs.SetResult (x.Result, r)
                 y.ContinueWith k |> ignore
             | _, TaskStatus.RanToCompletion ->
                 let k = function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r -> tcs.SetResult (r, y.Result)
+                    | Succeeded r -> tcs.SetResult (r, y.Result)
                 x.ContinueWith k |> ignore
             | _, _ ->
                 x.ContinueWith (
                     function
                     | Canceled    -> tcs.SetCanceled ()
                     | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Completed r ->
+                    | Succeeded r ->
                         y.ContinueWith (function
                             | Canceled     -> tcs.SetCanceled ()
                             | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Completed r' -> tcs.SetResult (r, r')) |> ignore) |> ignore
+                            | Succeeded r' -> tcs.SetResult (r, r')) |> ignore) |> ignore
             tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', tupling its results.</summary>
