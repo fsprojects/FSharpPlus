@@ -295,6 +295,23 @@ module ValueTask =
             (fun () -> if not (isNull (box disp)) then disp.Dispose ())
             (fun () -> body disp)
 
+    /// <summary>Returns <paramref name="source"/> if it is not faulted, otherwise evaluates <paramref name="fallbackThunk"/> and returns the result.</summary>
+    ///
+    /// <param name="fallbackThunk">A thunk that provides an alternate task computation when evaluated.</param>
+    /// <param name="source">The input task.</param>
+    ///
+    /// <returns>The task if it is not faulted, else the result of evaluating <paramref name="fallbackThunk"/>.</returns>
+    /// <remarks><paramref name="fallbackThunk"/> is not evaluated unless <paramref name="source"/> is faulted.</remarks>
+    ///
+    let inline orElseWith ([<InlineIfLambda>]fallbackThunk: exn -> ValueTask<'T>) (source: ValueTask<'T>) : ValueTask<'T> = tryWith fallbackThunk (fun () -> source)
+
+    /// <summary>Returns <paramref name="source"/> if it is not faulted, otherwise e<paramref name="fallbackValueTask"/>.</summary>
+    ///
+    /// <param name="fallbackValueTask">The alternative ValueTask to use if <paramref name="source"/> is faulted.</param>
+    /// <param name="source">The input task.</param>
+    ///
+    /// <returns>The option if the option is Some, else the alternate option.</returns>
+    let orElse (fallbackValueTask: ValueTask<'T>) (source: ValueTask<'T>) : ValueTask<'T> = orElseWith (fun _ -> fallbackValueTask) source
 
     /// Raises an exception in the ValueTask
     let raise<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
