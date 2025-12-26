@@ -203,6 +203,30 @@ module ValueTask =
             CollectionAssert.AreEquivalent (t123.Exception.InnerExceptions, t123'.Exception.InnerExceptions, "ValueTask.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "ValueTask.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
+
+    // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
+    module ComputationExpressionTests =
+        open System
+        open System.Threading.Tasks
+        open NUnit.Framework
+        open FSharpPlus
+        open FSharpPlus.Tests.Helpers
+
+        [<Test>]
+        let testTryFinally () =
+            let mutable ran = false
+            let t = monad' {
+                try
+                    do! ValueTask.FromException<unit> (exn "This is a failed task")
+                finally
+                    ran <- true
+                return 1
+            }
+            require (t.IsCompleted) "task didn't complete synchronously"
+            require (t.IsFaulted) "task didn't fail"
+            require (not (isNull t.Exception)) "didn't capture exception"
+            require ran "never ran"
+    
     module ValueTaskBuilderTests =
         
         // Same tests, same note as in Task.fs about these tests
