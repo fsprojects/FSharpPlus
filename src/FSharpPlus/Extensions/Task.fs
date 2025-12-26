@@ -424,6 +424,29 @@ module Task =
             (fun () -> body disp)
             (fun () -> if not (isNull (box disp)) then disp.Dispose ())
 
+    /// <summary>Returns <paramref name="source"/> if it is not faulted, otherwise evaluates <paramref name="fallbackThunk"/> and returns the result.</summary>
+    ///
+    /// <param name="fallbackThunk">A thunk that provides an alternate task computation when evaluated.</param>
+    /// <param name="source">The input task.</param>
+    ///
+    /// <returns>The task if it is not faulted, else the result of evaluating <paramref name="fallbackThunk"/>.</returns>
+    /// <remarks><paramref name="fallbackThunk"/> is not evaluated unless <paramref name="source"/> is faulted.</remarks>
+    ///
+    let inline orElseWith ([<InlineIfLambda>]fallbackThunk: exn -> Task<'T>) (source: Task<'T>) : Task<'T> =
+        let source = nullArgCheck (nameof source) source
+        tryWith (fun () -> source) fallbackThunk
+
+    /// <summary>Returns <paramref name="source"/> if it is not faulted, otherwise e<paramref name="fallbackTask"/>.</summary>
+    ///
+    /// <param name="fallbackTask">The alternative Task to use if <paramref name="source"/> is faulted.</param>
+    /// <param name="source">The input task.</param>
+    ///
+    /// <returns>The option if the option is Some, else the alternate option.</returns>
+    let orElse (fallbackTask: Task<'T>) (source: Task<'T>) : Task<'T> =
+        let fallbackTask = nullArgCheck (nameof fallbackTask) fallbackTask
+        let source = nullArgCheck (nameof source) source
+        orElseWith (fun _ -> fallbackTask) source
+
     /// Creates a Task from a value
     let result (value: 'T) = Task.FromResult value
     
