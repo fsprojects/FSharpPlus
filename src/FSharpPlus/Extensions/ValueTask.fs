@@ -243,6 +243,58 @@ module ValueTask =
                 else source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
             tcs.Task |> ValueTask<unit>
 
+    /// Used to de-sugar try .. with .. blocks in Computation Expressions.
+    let inline tryWith ([<InlineIfLambda>]compensation: exn -> ValueTask<'T>) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
+        let unwrapException (agg: AggregateException) =
+            if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
+            else agg :> Exception
+        try
+            let task = body ()
+            if task.IsCompleted then
+                match task with
+                | Succeeded _ -> task
+                | Faulted exn -> compensation (unwrapException exn)
+                | Canceled    -> compensation (TaskCanceledException ())
+            else
+                let tcs = TaskCompletionSource<'T> ()
+                let f = function
+                    | Succeeded r -> tcs.SetResult r
+                    | Faulted exn -> continueTask tcs (compensation (unwrapException exn))      (fun r -> try tcs.SetResult r with e -> tcs.SetException e)
+                    | Canceled    -> continueTask tcs (compensation (TaskCanceledException ())) (fun r -> try tcs.SetResult r with e -> tcs.SetException e)
+                task.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f task)
+                ValueTask<'T> tcs.Task
+        with
+        | :? AggregateException as exn -> compensation (unwrapException exn)
+        | exn                          -> compensation exn
+    
+    /// Used to de-sugar try .. finally .. blocks in Computation Expressions.
+    let inline tryFinally ([<InlineIfLambda>]compensation : unit -> unit) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
+        let mutable ran = false
+        let compensation () =
+            if not ran then
+                compensation ()
+                ran <- true
+        try
+            let task = body ()
+            if task.IsCompleted then compensation (); task
+            else
+                let tcs = TaskCompletionSource<'T> ()
+                let f = function
+                | Succeeded r -> tcs.SetResult r
+                | Faulted exn -> tcs.SetException exn.InnerExceptions
+                | Canceled    -> tcs.SetCanceled ()
+                task.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> compensation (); f task)
+                ValueTask<'T> tcs.Task
+        with _ ->
+            compensation ()
+            reraise ()
+
+    /// Used to de-sugar use .. blocks in Computation Expressions.
+    let inline using (disp: 'T when 'T :> IDisposable) ([<InlineIfLambda>]body: 'T -> ValueTask<'U>) =
+        tryFinally
+            (fun () -> if not (isNull (box disp)) then disp.Dispose ())
+            (fun () -> body disp)
+
 
     /// Raises an exception in the ValueTask
     let raise<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
