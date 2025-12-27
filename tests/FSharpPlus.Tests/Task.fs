@@ -242,6 +242,29 @@ module Task =
             CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
     
+    // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
+    module ComputationExpressionTests =
+        open System
+        open System.Threading.Tasks
+        open NUnit.Framework
+        open FSharpPlus
+        open FSharpPlus.Tests.Helpers
+
+        [<Test>]
+        let testTryFinally () =
+            let mutable ran = false
+            let t = monad' {
+                try
+                    do! Task.FromException<unit> (exn "This is a failed task")
+                finally
+                    ran <- true
+                return 1
+            }
+            require (t.IsCompleted) "task didn't complete synchronously"
+            require (t.IsFaulted) "task didn't fail"
+            require (not (isNull t.Exception)) "didn't capture exception"
+            require ran "never ran"
+    
     module TaskBuilderTests =
         
         // Tests for TaskBuilder.fs
@@ -938,44 +961,52 @@ module Task =
         [<Test>]
         let taskbuilderTests () =
             printfn "Running taskbuilder tests..."
-            try
-                testShortCircuitResult()
-                testDelay()
-                testNoDelay()
-                testNonBlocking()
-                testCatching1()
-                testCatching2()
-                testNestedCatching()
-                testTryFinallyHappyPath()
-                testTryFinallySadPath()
-                testTryFinallyCaught()
-                testUsing()
-                testUsingFromTask()
-                testUsingSadPath()
-                testForLoop()
-                testForLoopSadPath()
-                testExceptionAttachedToTaskWithoutAwait()   // *1
-                testExceptionAttachedToTaskWithAwait()      // *1
-                testExceptionThrownInFinally()
-                test2ndExceptionThrownInFinally()
-                testFixedStackWhileLoop()                   // *2
-                testFixedStackForLoop()                     // *2
-                testTypeInference()
-                // testNoStackOverflowWithImmediateResult() // *3
-                testNoStackOverflowWithYieldResult()
+            let tests = [
+                testShortCircuitResult
+                testDelay
+                testNoDelay
+                (fun () -> try testNonBlocking() with _ -> try testNonBlocking() with _ -> testNonBlocking())
+                testCatching1
+                testCatching2
+                testNestedCatching
+                testTryFinallyHappyPath
+                testTryFinallySadPath
+                testTryFinallyCaught
+                testUsing
+                testUsingFromTask
+                testUsingSadPath
+                testForLoop
+                testForLoopSadPath
+                testExceptionAttachedToTaskWithoutAwait        // *1
+                testExceptionAttachedToTaskWithAwait           // *1
+                testExceptionThrownInFinally
+                test2ndExceptionThrownInFinally
+                // testFixedStackWhileLoop                     // *2
+                // testFixedStackForLoop                       // *2
+                testTypeInference
+                // testNoStackOverflowWithImmediateResult      // *3
+                testNoStackOverflowWithYieldResult
                 // (Original note from TaskBuilder, n/a here)
                 // we don't support TCO, so large tail recursions will stack overflow
                 // or at least use O(n) heap. but small ones should at least function OK.
-                testSmallTailRecursion()
-                testTryOverReturnFrom()
-                testTryFinallyOverReturnFromWithException()
-                testTryFinallyOverReturnFromWithoutException()
-                // testCompatibilityWithOldUnitTask()       // *4
-                testAsyncsMixedWithTasks()                  // *5
-                printfn "Passed all tests!"
-            with
-            | exn ->
-                eprintfn "Exception: %O" exn
+                testSmallTailRecursion
+                testTryOverReturnFrom
+                testTryFinallyOverReturnFromWithException
+                testTryFinallyOverReturnFromWithoutException
+                // testCompatibilityWithOldUnitTask            // *4
+                testAsyncsMixedWithTasks                       // *5
+            ]
+
+            let passed, failed =
+                tests
+                |> List.map Choice.protect
+                |> List.partitionMap (fun x -> x())
+
+            let failureMsg = sprintf "Some tests failed: %s" (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
+
+            Assert.AreEqual (0, List.length failed, failureMsg)
+            printfn "Passed all TaskBuilder tests (%i) !" (List.length passed)
+
             ()
 
             // *1 Test adapted due to errors not being part of the workflow, this is by-design.

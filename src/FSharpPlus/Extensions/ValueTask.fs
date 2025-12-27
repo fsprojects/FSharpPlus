@@ -26,29 +26,63 @@ module ValueTask =
         if x.IsCompleted then f x
         else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
-    let inline continueWith (x: ValueTask<'t>) f =
+    let inline continueWith f (x: ValueTask<'t>) =
         if x.IsCompleted then f x
         else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
-    /// Creates a ValueTask from a value
+
+    /// <summary>Creates a ValueTask that's completed successfully with the specified value.</summary>
+    /// <param name="value"></param>
+    /// <returns>A ValueTask that is completed successfully with the specified value.</returns>
     let result (value: 'T) : ValueTask<'T> =
     #if NET5_0_OR_GREATER
         ValueTask.FromResult value
     #else
         let tcs = TaskCompletionSource<'T> ()
         tcs.SetResult value
-        tcs.Task |> ValueTask<'T>
+        ValueTask<'T> tcs.Task
     #endif
+    
+    /// <summary>Creates a ValueTask that's completed unsuccessfully with the specified exception.</summary>
+    /// <param name="exn">The exception to be raised.</param>
+    /// <returns>A ValueTask that is completed unsuccessfully with the specified exception.</returns>
+    /// <remarks>
+    /// If the exception is not an AggregateException it is wrapped into one.
+    /// Prefer this function over ValueTask.FromException as it handles AggregateExceptions correctly.
+    /// </remarks>
+    let raise<'T> (exn: exn) : ValueTask<'T> =
+        match exn with
+        | :? AggregateException as agg when agg.InnerExceptions.Count > 1 ->
+            let tcs = TaskCompletionSource<'T> ()
+            tcs.SetException agg.InnerExceptions
+            ValueTask<'T> tcs.Task
+        | :? AggregateException as agg -> ValueTask.FromException<'T> agg.InnerExceptions[0]
+        | exn                          -> ValueTask.FromException<'T> exn
 
-    /// <summary>Creates a ValueTask workflow from 'source' another, mapping its result with 'f'.</summary>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="source">ValueTask workflow.</param>
-    let map (f: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
-        let tcs = TaskCompletionSource<'U> ()
-        continueTask tcs source (fun x ->
-            try tcs.SetResult (f x)
-            with e -> tcs.SetException e)
-        tcs.Task |> ValueTask<'U>
+    let private cancellationTokenSingleton = CancellationToken true
+
+    /// <summary>Creates a ValueTask that's canceled.</summary>
+    /// <returns>A ValueTask that's canceled.</returns>
+    let canceled<'T> : ValueTask<'T> = ValueTask.FromCanceled<'T> cancellationTokenSingleton
+
+    /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping its result with 'mapper'.</summary>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source">The source ValueTask workflow.</param>
+    /// <returns>The resulting ValueTask workflow.</returns>
+    let map (mapper: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
+        if source.IsCompleted then
+            match source with
+            | Succeeded r -> try result (mapper r) with e -> raise e
+            | Faulted exn -> raise exn
+            | Canceled    -> canceled
+        else
+            let tcs = TaskCompletionSource<'U> ()
+            let k = function
+                | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e
+                | Faulted exn -> tcs.SetException exn.InnerExceptions
+                | Canceled    -> tcs.SetCanceled ()
+            continueWith k source
+            ValueTask<'U> tcs.Task
 
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
@@ -121,9 +155,9 @@ module ValueTask =
             task1 |> k r1 0
             task2 |> k r2 1
         else
-            continueWith task1 (k r1 0)
-            continueWith task2 (k r2 1)
-        tcs.Task |> ValueTask<'U>
+            continueWith (k r1 0) task1
+            continueWith (k r2 1) task2
+        ValueTask<'U> tcs.Task
 
     /// <summary>Creates a ValueTask workflow from three workflows, mapping its results with a specified function.</summary>
     /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order
@@ -170,10 +204,10 @@ module ValueTask =
             task2 |> k r2 1
             task3 |> k r3 2
         else
-            continueWith task1 (k r1 0)
-            continueWith task2 (k r2 1)
-            continueWith task3 (k r3 2)
-        tcs.Task |> ValueTask<'U>
+            continueWith (k r1 0) task1
+            continueWith (k r2 1) task2
+            continueWith (k r3 2) task3
+        ValueTask<'U> tcs.Task
 
     /// <summary>Creates a ValueTask workflow that is the result of applying the resulting function of a ValueTask workflow
     /// to the resulting value of another ValueTask workflow</summary>
@@ -312,8 +346,5 @@ module ValueTask =
     ///
     /// <returns>The option if the option is Some, else the alternate option.</returns>
     let orElse (fallbackValueTask: ValueTask<'T>) (source: ValueTask<'T>) : ValueTask<'T> = orElseWith (fun _ -> fallbackValueTask) source
-
-    /// Raises an exception in the ValueTask
-    let raise<'TResult> (``exception``: exn) = ValueTask<'TResult> (Task.FromException<'TResult> ``exception``)
 
 #endif
