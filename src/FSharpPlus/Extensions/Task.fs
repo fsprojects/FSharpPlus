@@ -19,6 +19,10 @@ module Task =
         elif t.IsCanceled then Canceled
         else invalidOp "Internal error: The task is not yet completed."
 
+    let inline private continueWith ([<InlineIfLambda>]f) (x: Task<'t>) =
+        if x.IsCompleted then f x
+        else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
+
     
     /// Creates a Task from a value
     let result (value: 'T) = Task.FromResult value
@@ -43,22 +47,25 @@ module Task =
     let private canceled<'T> : Task<'T> = Task.FromCanceled<'T> canceledTokenSingleton
     
     
-    /// <summary>Creates a task workflow from 'source' another, mapping its result with 'f'.</summary>
+    /// <summary>Creates a task workflow from 'source' workflow, mapping its result with 'mapper'.</summary>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source">The source task workflow.</param>
+    /// <returns>The resulting task workflow.</returns>
     let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
         let source = nullArgCheck (nameof source) source
 
         if source.IsCompleted then
             match source with
-            | Succeeded r -> try result (mapper r) with e -> raise<'U> e
-            | Faulted exn -> raise<'U> exn
-            | Canceled    -> canceled<'U>
+            | Succeeded r -> try result (mapper r) with e -> raise e
+            | Faulted exn -> raise exn
+            | Canceled    -> canceled
         else
             let tcs = TaskCompletionSource<'U> ()
             let k = function
-                | Canceled    -> tcs.SetCanceled ()
-                | Faulted e   -> tcs.SetException e.InnerExceptions
                 | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e
-            source.ContinueWith k |> ignore
+                | Faulted exn -> tcs.SetException exn.InnerExceptions
+                | Canceled    -> tcs.SetCanceled ()
+            continueWith k source
             tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
