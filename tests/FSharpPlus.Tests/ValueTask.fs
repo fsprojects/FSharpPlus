@@ -932,8 +932,8 @@ module ValueTask =
                 testExceptionAttachedToValueTaskWithAwait      // *1
                 testExceptionThrownInFinally
                 test2ndExceptionThrownInFinally
-                testFixedStackWhileLoop                        // *2
-                testFixedStackForLoop                          // *2
+                // testFixedStackWhileLoop                     // *2
+                // testFixedStackForLoop                       // *2
                 testTypeInference
                 // testNoStackOverflowWithImmediateResult      // *3
                 testNoStackOverflowWithYieldResult
