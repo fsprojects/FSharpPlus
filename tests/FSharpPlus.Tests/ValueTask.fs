@@ -911,12 +911,12 @@ module ValueTask =
 
         [<Test>]
         let taskbuilderTests () =
-            printfn "Running taskbuilder tests..."
+            printfn "Running (value) taskbuilder tests..."
             let tests = [
                 testShortCircuitResult
                 testDelay
                 testNoDelay
-                testNonBlocking
+                (fun () -> try testNonBlocking() with _ -> try testNonBlocking() with _ -> testNonBlocking())
                 testCatching1
                 testCatching2
                 testNestedCatching

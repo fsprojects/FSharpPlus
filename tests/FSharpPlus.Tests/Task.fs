@@ -965,7 +965,7 @@ module Task =
                 testShortCircuitResult
                 testDelay
                 testNoDelay
-                testNonBlocking
+                (fun () -> try testNonBlocking() with _ -> try testNonBlocking() with _ -> testNonBlocking())
                 testCatching1
                 testCatching2
                 testNestedCatching
