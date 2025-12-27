@@ -961,44 +961,52 @@ module Task =
         [<Test>]
         let taskbuilderTests () =
             printfn "Running taskbuilder tests..."
-            try
-                testShortCircuitResult()
-                testDelay()
-                testNoDelay()
-                testNonBlocking()
-                testCatching1()
-                testCatching2()
-                testNestedCatching()
-                testTryFinallyHappyPath()
-                testTryFinallySadPath()
-                testTryFinallyCaught()
-                testUsing()
-                testUsingFromTask()
-                testUsingSadPath()
-                testForLoop()
-                testForLoopSadPath()
-                testExceptionAttachedToTaskWithoutAwait()   // *1
-                testExceptionAttachedToTaskWithAwait()      // *1
-                testExceptionThrownInFinally()
-                test2ndExceptionThrownInFinally()
-                testFixedStackWhileLoop()                   // *2
-                testFixedStackForLoop()                     // *2
-                testTypeInference()
-                // testNoStackOverflowWithImmediateResult() // *3
-                testNoStackOverflowWithYieldResult()
+            let tests = [
+                testShortCircuitResult
+                testDelay
+                testNoDelay
+                testNonBlocking
+                testCatching1
+                testCatching2
+                testNestedCatching
+                testTryFinallyHappyPath
+                testTryFinallySadPath
+                testTryFinallyCaught
+                testUsing
+                testUsingFromTask
+                testUsingSadPath
+                testForLoop
+                testForLoopSadPath
+                testExceptionAttachedToTaskWithoutAwait        // *1
+                testExceptionAttachedToTaskWithAwait           // *1
+                testExceptionThrownInFinally
+                test2ndExceptionThrownInFinally
+                testFixedStackWhileLoop                        // *2
+                testFixedStackForLoop                          // *2
+                testTypeInference
+                // testNoStackOverflowWithImmediateResult      // *3
+                testNoStackOverflowWithYieldResult
                 // (Original note from TaskBuilder, n/a here)
                 // we don't support TCO, so large tail recursions will stack overflow
                 // or at least use O(n) heap. but small ones should at least function OK.
-                testSmallTailRecursion()
-                testTryOverReturnFrom()
-                testTryFinallyOverReturnFromWithException()
-                testTryFinallyOverReturnFromWithoutException()
-                // testCompatibilityWithOldUnitTask()       // *4
-                testAsyncsMixedWithTasks()                  // *5
-                printfn "Passed all tests!"
-            with
-            | exn ->
-                eprintfn "Exception: %O" exn
+                testSmallTailRecursion
+                testTryOverReturnFrom
+                testTryFinallyOverReturnFromWithException
+                testTryFinallyOverReturnFromWithoutException
+                // testCompatibilityWithOldUnitTask            // *4
+                testAsyncsMixedWithTasks                       // *5
+            ]
+
+            let passed, failed =
+                tests
+                |> List.map Choice.protect
+                |> List.partitionMap (fun x -> x())
+
+            let failureMsg = sprintf "Some tests failed: %s" (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
+
+            Assert.AreEqual (0, List.length failed, failureMsg)
+            printfn "Passed all TaskBuilder tests (%i) !" (List.length passed)
+
             ()
 
             // *1 Test adapted due to errors not being part of the workflow, this is by-design.
