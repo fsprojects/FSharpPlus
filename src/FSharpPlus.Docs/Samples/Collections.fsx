@@ -77,6 +77,6 @@ type WrappedListB'<'s> = WrappedListB' of 's list with // Same as B but without 
 
 let five   = filter ((=) 5) (WrappedListB [1;2;3;4;5;6])   // <- Uses the default method for filter.
 
-#nowarn // interrupt compilation
+#nowarn 3873 // interrupt compilation
 
 let five'   = filter ((=) 5) (WrappedListB' [1;2;3;4;5;6])   // <- Uses the default method for filter.

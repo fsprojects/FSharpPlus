@@ -448,7 +448,7 @@ type Split =
         let inline call (a: 'a, b: 'b, s) = call_2 (a, b, s)
         call (Unchecked.defaultof<Split>, source, sep) : '``'Collection<'OrderedCollection>``
 
- type Split with
+type Split with
     static member inline Split ((e: '``'Collection<'OrderedCollection>``, x: '``'OrderedCollection``), [<Optional>]_impl: Default2) = x |> ToSeq.Invoke |> Seq.split (ToSeq.Invoke e) |> Seq.map OfSeq.Invoke |> OfSeq.Invoke : '``'Collection<'OrderedCollection>``
 
     static member inline Split ((e: '``'Collection<'OrderedCollection>``, x: '``'OrderedCollection``), [<Optional>]_impl: Default1) = (^``'OrderedCollection`` : (static member Split : _*_->_) e, x)                          : '``'Collection<'OrderedCollection>``
