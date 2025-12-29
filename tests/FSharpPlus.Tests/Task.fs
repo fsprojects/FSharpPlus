@@ -292,7 +292,7 @@ module Task =
         module Task =
             let Yield () =
                 let ya = Task.Yield().GetAwaiter ()
-                let tcs = TaskCompletionSource<unit> TaskCreationOptions.RunContinuationsAsynchronously
+                let tcs = TaskCompletionSource<unit> ()
                 let k () = tcs.SetResult ()
                 ya.UnsafeOnCompleted (Action k) |> ignore
                 tcs.Task
