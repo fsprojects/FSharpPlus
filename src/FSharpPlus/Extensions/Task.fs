@@ -68,20 +68,11 @@ module Task =
     /// <returns>The resulting task workflow.</returns>
     let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
         let source = nullArgCheck (nameof source) source
-        
-        if source.IsCompleted then
-            match source with
-            | Succeeded r -> try result (mapper r) with e -> raise e
-            | Faulted aex -> raise aex
-            | Canceled    -> canceled
-        else
-            let tcs = TaskCompletionSource<'U> ()
-            let k = function
-                | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e
-                | Faulted exn -> tcs.SetException exn.InnerExceptions
-                | Canceled    -> tcs.SetCanceled ()
-            continueWith k source
-            tcs.Task
+
+        task {
+            let! r = source
+            return mapper r
+        }
 
     /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', mapping its results with 'mapper'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
@@ -386,16 +377,19 @@ module Task =
     let join (source: Task<Task<'T>>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
 
-        if source.IsCompleted then
-            match source with
-            | Succeeded inner -> inner
-            | Faulted aex -> raise aex
-            | Canceled -> canceled
-        else
-            source.Unwrap()
+        task {
+            let! inner = source
+            return! inner
+        }
     
     /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
-    let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> = source |> Unchecked.nonNull |> map f |> join
+    let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> =
+        let source = nullArgCheck (nameof source) source
+
+        task {
+            let! r = source
+            return! f r
+        }
     
     /// <summary>Creates a task that ignores the result of the source task.</summary>
     /// <remarks>It can be used to convert non-generic Task to unit Task.</remarks>
@@ -418,37 +412,14 @@ module Task =
             tcs.Task
 
     [<ObsoleteAttribute("Swap parameters")>]
-    let tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> =
-        let unwrapException (agg: AggregateException) =
-            if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
-            else agg :> Exception
-        let task = 
-            try body ()
-            with
-            | :? AggregateException as exn -> compensation (unwrapException exn)
-            | exn                          -> compensation exn
-
-        let k = function
-            | Succeeded _ -> task
-            | Faulted exn -> task.ContinueWith(fun (_: Task<'T>) -> compensation (unwrapException exn)).Unwrap ()
-            | Canceled    -> task.ContinueWith(fun (_: Task<'T>) -> compensation (TaskCanceledException())).Unwrap ()
-        if task.IsCompleted then k task
-        else (task.ContinueWith k).Unwrap ()
+    let tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> = task {
+        try return! body ()
+        with e -> return! compensation e }
     
     [<ObsoleteAttribute("Swap parameters")>]
-    let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> =
-        let mutable ran = false
-        let compensation () =
-            if not ran then
-                ran <- true
-                compensation ()
-        try
-            let task = body ()
-            if task.IsCompleted then compensation (); task
-            else task.ContinueWith(fun (_: Task<'T>) -> compensation (); task).Unwrap ()
-        with _ ->
-            compensation ()
-            reraise ()
+    let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> = task {
+        try return! body ()
+        finally compensation () }
 
     /// Used to de-sugar use .. blocks in Computation Expressions.
     let using (disp: 'T when 'T :> IDisposable) (body: 'T -> Task<'U>) =

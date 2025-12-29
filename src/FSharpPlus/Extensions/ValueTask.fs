@@ -21,8 +21,8 @@ module ValueTask =
     let inline continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
         let f = function
         | Succeeded r -> k r
-        | Canceled  -> tcs.SetCanceled ()
-        | Faulted e -> tcs.SetException e.InnerExceptions
+        | Faulted axn -> tcs.SetException axn.InnerExceptions
+        | Canceled    -> tcs.SetCanceled ()
         if x.IsCompleted then f x
         else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
@@ -70,19 +70,10 @@ module ValueTask =
     /// <param name="source">The source ValueTask workflow.</param>
     /// <returns>The resulting ValueTask workflow.</returns>
     let map (mapper: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
-        if source.IsCompleted then
-            match source with
-            | Succeeded r -> try result (mapper r) with e -> raise e
-            | Faulted exn -> raise exn
-            | Canceled    -> canceled
-        else
-            let tcs = TaskCompletionSource<'U> ()
-            let k = function
-                | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e
-                | Faulted exn -> tcs.SetException exn.InnerExceptions
-                | Canceled    -> tcs.SetCanceled ()
-            continueWith k source
-            ValueTask<'U> tcs.Task
+        task {
+            let! r = source
+            return mapper r
+        } |> ValueTask<'U>
 
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
@@ -143,8 +134,8 @@ module ValueTask =
         let k (v: ref<_>) i t =
             match t with
             | Succeeded r -> v.Value <- r
+            | Faulted aex -> failures[i] <- aex.InnerExceptions
             | Canceled    -> cancelled <- true
-            | Faulted e   -> failures[i] <- e.InnerExceptions
             trySet ()
 
         if task1.IsCompleted && task2.IsCompleted then
@@ -191,8 +182,8 @@ module ValueTask =
         let k (v: ref<_>) i t =
             match t with
             | Succeeded r -> v.Value <- r
+            | Faulted aex -> failures[i] <- aex.InnerExceptions
             | Canceled    -> cancelled <- true
-            | Faulted e   -> failures[i] <- e.InnerExceptions
             trySet ()
 
         if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
@@ -236,20 +227,18 @@ module ValueTask =
     
     /// Flattens two nested ValueTask into one.
     let join (source: ValueTask<ValueTask<'T>>) : ValueTask<'T> =
-        if source.IsCompleted then
-            match source with
-            | Succeeded inner -> inner
-            | Faulted aex -> raise aex
-            | Canceled -> canceled
-        else
-            let tcs = TaskCompletionSource<'T> ()
-            continueTask tcs source (fun inner ->
-                continueTask tcs inner tcs.SetResult)
-            ValueTask<'T> tcs.Task
+        task {
+            let! inner = source
+            return! inner
+        } |> ValueTask<'T>
     
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
-    let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> = source |> Unchecked.nonNull |> map f |> join
+    let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
+        task {
+            let! r = source
+            return! f r
+        } |> ValueTask<'U>
             
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
@@ -272,53 +261,17 @@ module ValueTask =
 
     /// Used to de-sugar try .. with .. blocks in Computation Expressions.
     let inline tryWith ([<InlineIfLambda>]compensation: exn -> ValueTask<'T>) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
-        let unwrapException (agg: AggregateException) =
-            if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
-            else agg :> Exception
-        
-        let mutable ran = false
-        
-        let compensation exn =
-            if not ran then ran <- true
-            try compensation exn
-            with e -> raise e
-
-        let task = 
-            try body ()
-            with
-            | :? AggregateException as aex -> compensation (unwrapException aex)
-            | exn                          -> compensation exn
-        if ran then task
-        elif task.IsCompleted then
-            match task with
-            | Succeeded _ -> task
-            | Faulted aex -> compensation (unwrapException aex)
-            | Canceled    -> compensation (TaskCanceledException ())
-        else
-            let tcs = TaskCompletionSource<'T> ()
-            let f = function
-                | Succeeded r -> tcs.SetResult r
-                | Faulted aex -> continueTask tcs (compensation (unwrapException aex))      (fun r -> try tcs.SetResult r with e -> tcs.SetException e)
-                | Canceled    -> continueTask tcs (compensation (TaskCanceledException ())) (fun r -> try tcs.SetResult r with e -> tcs.SetException e)
-            task.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f task)
-            ValueTask<'T> tcs.Task
+        task {
+            try return! body ()
+            with e -> return! compensation e
+        } |> ValueTask<'T>
     
     /// Used to de-sugar try .. finally .. blocks in Computation Expressions.
     let inline tryFinally ([<InlineIfLambda>]compensation : unit -> unit) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
-        let mutable ran = false
-        let compensation () =
-            if not ran then
-                ran <- true
-                compensation ()
-        try
-            let task = body ()
-            if task.IsCompleted then compensation (); task
-            else
-                let t = task.AsTask()
-                t.ContinueWith(fun (_: Task<'T>) -> compensation (); t).Unwrap () |> ValueTask<'T>
-        with _ ->
-            compensation ()
-            reraise ()
+        task {
+            try return! body ()
+            finally compensation ()
+        } |> ValueTask<'T>
 
     /// Used to de-sugar use .. blocks in Computation Expressions.
     let inline using (disp: 'T when 'T :> IDisposable) ([<InlineIfLambda>]body: 'T -> ValueTask<'U>) =
