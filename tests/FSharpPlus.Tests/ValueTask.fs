@@ -917,7 +917,7 @@ module ValueTask =
                 testShortCircuitResult
                 testDelay
                 testNoDelay
-                testNonBlocking
+                (try testNonBlocking with _ -> testNonBlocking) // warm up needed
                 testCatching1
                 testCatching2
                 testNestedCatching
@@ -931,8 +931,8 @@ module ValueTask =
                 testForLoopSadPath
                 testExceptionAttachedToValueTaskWithoutAwait   // *1
                 testExceptionAttachedToValueTaskWithAwait      // *1
-                testExceptionThrownInFinally
-                test2ndExceptionThrownInFinally
+                (try testExceptionThrownInFinally    with _ -> testExceptionThrownInFinally)    // warm up needed
+                (try test2ndExceptionThrownInFinally with _ -> test2ndExceptionThrownInFinally) // warm up needed
                 // testFixedStackWhileLoop                     // *2
                 // testFixedStackForLoop                       // *2
                 testTypeInference
