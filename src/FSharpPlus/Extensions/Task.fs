@@ -69,7 +69,7 @@ module Task =
     let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
         let source = nullArgCheck (nameof source) source
 
-        task {
+        backgroundTask {
             let! r = source
             return mapper r
         }
@@ -377,7 +377,7 @@ module Task =
     let join (source: Task<Task<'T>>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
 
-        task {
+        backgroundTask {
             let! inner = source
             return! inner
         }
@@ -386,7 +386,7 @@ module Task =
     let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> =
         let source = nullArgCheck (nameof source) source
 
-        task {
+        backgroundTask {
             let! r = source
             return! f r
         }
@@ -412,12 +412,12 @@ module Task =
             tcs.Task
 
     [<ObsoleteAttribute("Swap parameters")>]
-    let tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> = task {
+    let tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> = backgroundTask {
         try return! body ()
         with e -> return! compensation e }
     
     [<ObsoleteAttribute("Swap parameters")>]
-    let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> = task {
+    let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> = backgroundTask {
         try return! body ()
         finally compensation () }
 

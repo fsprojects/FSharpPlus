@@ -70,7 +70,7 @@ module ValueTask =
     /// <param name="source">The source ValueTask workflow.</param>
     /// <returns>The resulting ValueTask workflow.</returns>
     let map (mapper: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
-        task {
+        backgroundTask {
             let! r = source
             return mapper r
         } |> ValueTask<'U>
@@ -227,7 +227,7 @@ module ValueTask =
     
     /// Flattens two nested ValueTask into one.
     let join (source: ValueTask<ValueTask<'T>>) : ValueTask<'T> =
-        task {
+        backgroundTask {
             let! inner = source
             return! inner
         } |> ValueTask<'T>
@@ -235,7 +235,7 @@ module ValueTask =
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
-        task {
+        backgroundTask {
             let! r = source
             return! f r
         } |> ValueTask<'U>
@@ -261,14 +261,14 @@ module ValueTask =
 
     /// Used to de-sugar try .. with .. blocks in Computation Expressions.
     let inline tryWith ([<InlineIfLambda>]compensation: exn -> ValueTask<'T>) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
-        task {
+        backgroundTask {
             try return! body ()
             with e -> return! compensation e
         } |> ValueTask<'T>
     
     /// Used to de-sugar try .. finally .. blocks in Computation Expressions.
     let inline tryFinally ([<InlineIfLambda>]compensation : unit -> unit) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
-        task {
+        backgroundTask {
             try return! body ()
             finally compensation ()
         } |> ValueTask<'T>
