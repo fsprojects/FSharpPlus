@@ -206,11 +206,6 @@ module ValueTask =
 
     // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
     module ComputationExpressionTests =
-        open System
-        open System.Threading.Tasks
-        open NUnit.Framework
-        open FSharpPlus
-        open FSharpPlus.Tests.Helpers
 
         [<Test>]
         let testTryFinally () =
@@ -222,8 +217,8 @@ module ValueTask =
                     ran <- true
                 return 1
             }
-            require (t.IsCompleted) "task didn't complete synchronously"
-            require (t.IsFaulted) "task didn't fail"
+            require t.IsCompleted "task didn't complete synchronously"
+            require t.IsFaulted "task didn't fail"
             require (not (isNull t.Exception)) "didn't capture exception"
             require ran "never ran"
     
@@ -959,7 +954,7 @@ module ValueTask =
                 |> List.map Choice.protect
                 |> List.partitionMap (fun x -> x())
 
-            let failureMsg = sprintf "Some tests failed: %s" (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
+            let failureMsg = sprintf "Some tests failed: %s %s" Environment.NewLine (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
 
             Assert.AreEqual (0, List.length failed, failureMsg)
             printfn "Passed all TaskBuilder tests (%i) !" (List.length passed)

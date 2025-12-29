@@ -3,16 +3,15 @@
 module Task =
 
     open System
+    open System.Threading
     open System.Threading.Tasks
     open NUnit.Framework
     open FSharpPlus
-    open FSharpPlus.Data
     open FSharpPlus.Tests.Helpers
     
     exception TestException of string
     
     module TaskTests =
-        open System.Threading
 
         let createTask isFailed delay value =
             if not isFailed && delay = 0 then Task.FromResult value
@@ -244,11 +243,6 @@ module Task =
     
     // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
     module ComputationExpressionTests =
-        open System
-        open System.Threading.Tasks
-        open NUnit.Framework
-        open FSharpPlus
-        open FSharpPlus.Tests.Helpers
 
         [<Test>]
         let testTryFinally () =
@@ -260,8 +254,8 @@ module Task =
                     ran <- true
                 return 1
             }
-            require (t.IsCompleted) "task didn't complete synchronously"
-            require (t.IsFaulted) "task didn't fail"
+            require t.IsCompleted "task didn't complete synchronously"
+            require t.IsFaulted "task didn't fail"
             require (not (isNull t.Exception)) "didn't capture exception"
             require ran "never ran"
     
@@ -277,11 +271,9 @@ module Task =
         // You should have received a copy of the CC0 Public Domain Dedication along with this software.
         // If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
-        open System
         open System.Collections
         open System.Collections.Generic
         open System.Diagnostics
-        open System.Threading
 
         // TaskBuilder uses a strict monad builder with delayed Run method
         // Therefore we need to use a lazy run to avoid eager execution
@@ -1007,7 +999,7 @@ module Task =
                 |> List.map Choice.protect
                 |> List.partitionMap (fun x -> x())
 
-            let failureMsg = sprintf "Some tests failed: %s" (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
+            let failureMsg = sprintf "Some tests failed: %s %s" Environment.NewLine (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
 
             Assert.AreEqual (0, List.length failed, failureMsg)
             printfn "Passed all TaskBuilder tests (%i) !" (List.length passed)
