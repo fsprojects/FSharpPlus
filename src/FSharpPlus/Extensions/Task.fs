@@ -52,14 +52,14 @@ module Task =
     /// <param name="source">The source task workflow.</param>
     /// <returns>The resulting task workflow.</returns>
     let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
-        // let source = nullArgCheck (nameof source) source
-        // 
-        // if source.IsCompleted then
-        //     match source with
-        //     | Succeeded r -> try result (mapper r) with e -> raise e
-        //     | Faulted exn -> raise exn
-        //     | Canceled    -> canceled
-        // else
+        let source = nullArgCheck (nameof source) source
+        
+        if source.IsCompleted then
+            match source with
+            | Succeeded r -> try result (mapper r) with e -> raise e
+            | Faulted exn -> raise exn
+            | Canceled    -> canceled
+        else
             let tcs = TaskCompletionSource<'U> ()
             let k = function
                 | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e
@@ -379,7 +379,13 @@ module Task =
     let join (source: Task<Task<'T>>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
 
-        source.Unwrap()
+        if source.IsCompleted then
+            match source with
+            | Succeeded inner -> inner
+            | Faulted aex -> raise aex
+            | Canceled -> canceled
+        else
+            source.Unwrap()
     
     /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> = source |> Unchecked.nonNull |> map f |> join
