@@ -52,14 +52,14 @@ module Task =
     /// <param name="source">The source task workflow.</param>
     /// <returns>The resulting task workflow.</returns>
     let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
-        let source = nullArgCheck (nameof source) source
-
-        if source.IsCompleted then
-            match source with
-            | Succeeded r -> try result (mapper r) with e -> raise e
-            | Faulted exn -> raise exn
-            | Canceled    -> canceled
-        else
+        // let source = nullArgCheck (nameof source) source
+        // 
+        // if source.IsCompleted then
+        //     match source with
+        //     | Succeeded r -> try result (mapper r) with e -> raise e
+        //     | Faulted exn -> raise exn
+        //     | Canceled    -> canceled
+        // else
             let tcs = TaskCompletionSource<'U> ()
             let k = function
                 | Succeeded r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e

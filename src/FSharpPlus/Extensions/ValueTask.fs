@@ -217,14 +217,7 @@ module ValueTask =
     
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
-    let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
-        let tcs = TaskCompletionSource<'U> ()
-        continueTask tcs source (fun x ->
-            try 
-                continueTask tcs (f x) (fun fx ->
-                    tcs.SetResult fx)
-            with e -> tcs.SetException e)
-        tcs.Task |> ValueTask<'U>
+    let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> = source |> Unchecked.nonNull |> map f |> join
             
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
