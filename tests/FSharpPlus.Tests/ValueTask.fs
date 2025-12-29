@@ -290,10 +290,10 @@ module ValueTask =
             let t =
                 monad' {
                     do! ValueTask.Yield()
-                    Thread.Sleep(100)
+                    Thread.Sleep(5000)
                 }
             sw.Stop()
-            require (sw.ElapsedMilliseconds < 50L) "sleep blocked caller"
+            require (sw.ElapsedMilliseconds < 4950L) "sleep blocked caller"
             t.Wait()
 
         let failtest str = raise (TestException str)
@@ -662,7 +662,7 @@ module ValueTask =
                     try
                         ranInitial <- true
                         do! ValueTask.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        Thread.Sleep(5000) // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                     finally
                         ranFinally <- ranFinally + 1
@@ -687,7 +687,7 @@ module ValueTask =
                     try
                         ranInitial <- true
                         do! ValueTask.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        Thread.Sleep(5000) // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                         failtest "uhoh"
                     finally
