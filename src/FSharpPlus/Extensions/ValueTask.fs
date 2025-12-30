@@ -235,10 +235,28 @@ module ValueTask =
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
-        backgroundTask {
-            let! r = source
-            return! f r
-        } |> ValueTask<'U>
+        let tcs = TaskCompletionSource<'U>()
+        source.AsTask().ContinueWith(fun (t: Task<'T>) ->
+            if t.IsFaulted then
+                tcs.SetException(t.Exception.InnerExceptions)
+            elif t.IsCanceled then
+                tcs.SetCanceled()
+            else
+                let nextTask = f t.Result
+                nextTask.AsTask().ContinueWith(fun (nt: Task<'U>) ->
+                    if nt.IsFaulted then
+                        tcs.SetException(nt.Exception.InnerExceptions)
+                    elif nt.IsCanceled then
+                        tcs.SetCanceled()
+                    else
+                        tcs.SetResult(nt.Result)
+                ) |> ignore
+        ) |> ignore
+        ValueTask<'U> tcs.Task
+        // backgroundTask {
+        //     let! r = source
+        //     return! f r
+        // } |> ValueTask<'U>
             
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
