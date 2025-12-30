@@ -365,7 +365,7 @@ module Task =
             let t =
                 monad' {
                     do! Task.Yield()
-                    Thread.Sleep(100)
+                    do! Task.Delay(100) |> Task.ignore
                 }
             sw.Stop()
             require (sw.ElapsedMilliseconds < 50L) "sleep blocked caller"
@@ -737,7 +737,7 @@ module Task =
                     try
                         ranInitial <- true
                         do! Task.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! Task.Delay(100) |> Task.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                     finally
                         ranFinally <- ranFinally + 1
@@ -762,7 +762,7 @@ module Task =
                     try
                         ranInitial <- true
                         do! Task.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! Task.Delay(100) |> Task.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                         failtest "uhoh"
                     finally
@@ -997,7 +997,7 @@ module Task =
                 testShortCircuitResult
                 testDelay
                 testNoDelay
-                (fun () -> try testNonBlocking() with _ -> try testNonBlocking() with _ -> testNonBlocking())
+                testNonBlocking                                // *0
                 testCatching1
                 testCatching2
                 testNestedCatching
@@ -1011,8 +1011,8 @@ module Task =
                 testForLoopSadPath
                 testExceptionAttachedToTaskWithoutAwait        // *1
                 testExceptionAttachedToTaskWithAwait           // *1
-                testExceptionThrownInFinally
-                test2ndExceptionThrownInFinally
+                testExceptionThrownInFinally                   // *0
+                test2ndExceptionThrownInFinally                // *0
                 // testFixedStackWhileLoop                     // *2
                 // testFixedStackForLoop                       // *2
                 testTypeInference
@@ -1041,6 +1041,7 @@ module Task =
 
             ()
 
+            // *0 Changed Thread.Sleep to Task.Delay to avoid blocking. These tests seems to have been designed te measure performance of the CE machinery
             // *1 Test adapted due to errors not being part of the workflow, this is by-design.
             // *2 Fails if run multiple times with System.Exception: Stack depth increased!
             // *3 Fails with Stack Overflow.

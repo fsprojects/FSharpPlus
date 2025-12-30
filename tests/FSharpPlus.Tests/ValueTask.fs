@@ -320,7 +320,7 @@ module ValueTask =
             let t =
                 monad' {
                     do! ValueTask.Yield()
-                    Thread.Sleep(100)
+                    do! ValueTask.Delay(100) |> ValueTask.ignore
                 }
             sw.Stop()
             require (sw.ElapsedMilliseconds < 50L) "sleep blocked caller"
@@ -692,7 +692,7 @@ module ValueTask =
                     try
                         ranInitial <- true
                         do! ValueTask.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! ValueTask.Delay(100) |> ValueTask.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                     finally
                         ranFinally <- ranFinally + 1
@@ -717,7 +717,7 @@ module ValueTask =
                     try
                         ranInitial <- true
                         do! ValueTask.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! ValueTask.Delay(100) |> ValueTask.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                         failtest "uhoh"
                     finally
@@ -952,7 +952,7 @@ module ValueTask =
                 testShortCircuitResult
                 testDelay
                 testNoDelay
-                testNonBlocking
+                testNonBlocking                                // *0
                 testCatching1
                 testCatching2
                 testNestedCatching
@@ -966,8 +966,8 @@ module ValueTask =
                 testForLoopSadPath
                 testExceptionAttachedToValueTaskWithoutAwait   // *1
                 testExceptionAttachedToValueTaskWithAwait      // *1
-                testExceptionThrownInFinally
-                test2ndExceptionThrownInFinally
+                testExceptionThrownInFinally                   // *0
+                test2ndExceptionThrownInFinally                // *0
                 // testFixedStackWhileLoop                     // *2
                 // testFixedStackForLoop                       // *2
                 testTypeInference
@@ -996,6 +996,7 @@ module ValueTask =
 
             ()
 
+            // *0 Changed Thread.Sleep to ValueTask.Delay to avoid blocking. These tests seems to have been designed te measure performance of the CE machinery
             // *1 Test adapted due to errors not being part of the workflow, this is by-design.
             // *2 Fails if run multiple times with System.Exception: Stack depth increased!
             // *3 Fails with Stack Overflow.
