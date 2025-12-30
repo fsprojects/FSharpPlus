@@ -234,7 +234,7 @@ module ValueTask =
         // Therefore we need to use a lazy run to avoid eager execution
         // of the first instructions in the computation expression before
         // the first bind, which in some tests include a Thread.Sleep operation
-        let monad'<'``monad<'t>``> = drMonad<'``monad<'t>``>
+        // let monad'<'``monad<'t>``> = drMonad<'``monad<'t>``>
 
         module ValueTask =
             let Yield () =
