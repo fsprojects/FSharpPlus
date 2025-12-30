@@ -271,12 +271,6 @@ module ValueTask =
         open System.Collections.Generic
         open System.Diagnostics
 
-        // TaskBuilder uses a strict monad builder with a delayed Run method
-        // Therefore we need to use a lazy run to avoid eager execution
-        // of the first instructions in the computation expression before
-        // the first bind, which in some tests include a Thread.Sleep operation
-        let monad'<'``monad<'t>``> = drMonad<'``monad<'t>``>
-
         module ValueTask =
             let Yield () =
                 let ya = Task.Yield().GetAwaiter ()
