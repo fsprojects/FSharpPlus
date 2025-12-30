@@ -235,24 +235,12 @@ module ValueTask =
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
-        let tcs = TaskCompletionSource<'U>()
         source.AsTask().ContinueWith(fun (t: Task<'T>) ->
-            if t.IsFaulted then
-                tcs.SetException(t.Exception.InnerExceptions)
-            elif t.IsCanceled then
-                tcs.SetCanceled()
-            else
-                let nextTask = f t.Result
-                nextTask.AsTask().ContinueWith(fun (nt: Task<'U>) ->
-                    if nt.IsFaulted then
-                        tcs.SetException(nt.Exception.InnerExceptions)
-                    elif nt.IsCanceled then
-                        tcs.SetCanceled()
-                    else
-                        tcs.SetResult(nt.Result)
-                ) |> ignore
-        ) |> ignore
-        ValueTask<'U> tcs.Task
+            if t.IsCompletedSuccessfully then try (f t.Result).AsTask() with e -> Task.raise e
+            elif t.IsFaulted then Task.raise t.Exception
+            elif t.IsCanceled then Task.canceled
+            else failwithf "Unreachable"
+        ).Unwrap () |> ValueTask<'U>
         // backgroundTask {
         //     let! r = source
         //     return! f r
