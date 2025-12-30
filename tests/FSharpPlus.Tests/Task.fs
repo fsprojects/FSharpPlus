@@ -11,6 +11,11 @@ module Task =
     
     exception TestException of string
     
+    let (|AggregateException|_|) (x: exn) =
+        match x with
+        | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
+        | _ -> None
+
     module TaskTests =
 
         let createTask isFailed delay value =
@@ -23,11 +28,6 @@ module Task =
                 else (Task.Delay delay).ContinueWith (fun _ ->
                     if isFailed then tcs.SetException (excn) else tcs.SetResult value) |> ignore
                 tcs.Task
-
-        let (|AggregateException|_|) (x: exn) =
-            match x with
-            | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
-            | _ -> None
 
         [<Test>]
         let shortCircuits () =
@@ -258,6 +258,47 @@ module Task =
             require t.IsFaulted "task didn't fail"
             require (not (isNull t.Exception)) "didn't capture exception"
             require ran "never ran"
+
+        [<Test>]
+        let testExcInCompensationSync () =
+           let t = monad' {
+               try
+                   let! x = Task.result 1
+                   raise (TestException "task failed")
+                   return x
+               finally
+                   raise (TestException "compensation failed")
+           }
+           try
+               t.Wait()
+               failwith "Didn't fail"
+           with
+           | AggregateException [TestException "compensation failed"] -> ()
+           | AggregateException [TestException x] -> failwithf "Expected 'compensation failed', got %s" x
+           | AggregateException [exn] -> failwithf "Expected TestException, got %A" exn
+           | AggregateException lst -> failwithf "Expected single TestException, got %A" lst
+           | exn -> failwithf "Expected AggregateException, got %A" exn
+
+        [<Test>]
+        let testExcInCompensationAsync () =
+            let t = monad' {
+                try
+                    do! Task.Delay 20 |> Task.ignore
+                    let! x = Task.result 1
+                    raise (TestException "task failed")
+                    return x
+                finally
+                    raise (TestException "compensation failed")
+            }
+            try
+                t.Wait()
+                failwith "Didn't fail"
+            with
+            | AggregateException [TestException "compensation failed"] -> ()
+            | AggregateException [TestException x] -> failwithf "Expected 'compensation failed', got %s" x
+            | AggregateException [exn] -> failwithf "Expected TestException, got %A" exn
+            | AggregateException lst -> failwithf "Expected single TestException, got %A" lst
+            | exn -> failwithf "Expected AggregateException, got %A" exn
     
     module TaskBuilderTests =
         
