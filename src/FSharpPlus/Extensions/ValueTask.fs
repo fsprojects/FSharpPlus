@@ -43,21 +43,19 @@ module ValueTask =
         ValueTask<'T> tcs.Task
     #endif
     
-    /// <summary>Creates a ValueTask that's completed unsuccessfully with the specified exception.</summary>
-    /// <param name="exn">The exception to be raised.</param>
-    /// <returns>A ValueTask that is completed unsuccessfully with the specified exception.</returns>
+    /// <summary>Creates a Task that's completed unsuccessfully with the specified exceptions.</summary>
+    /// <param name="exn">The AggregateException to be raised.</param>
+    /// <returns>A Task that is completed unsuccessfully with the specified exceptions.</returns>
     /// <remarks>
-    /// If the exception is not an AggregateException it is wrapped into one.
-    /// Prefer this function over ValueTask.FromException as it handles AggregateExceptions correctly.
+    /// Prefer this function to handle AggregateExceptions over Task.FromException as it handles them correctly.
     /// </remarks>
-    let raise<'T> (exn: exn) : ValueTask<'T> =
-        match exn with
-        | :? AggregateException as agg when agg.InnerExceptions.Count > 1 ->
+    let internal FromExceptions<'T> (aex: AggregateException) : ValueTask<'T> =
+        match aex with
+        | agg when agg.InnerExceptions.Count = 1 -> ValueTask.FromException<'T> agg.InnerExceptions[0]
+        | agg ->
             let tcs = TaskCompletionSource<'T> ()
             tcs.SetException agg.InnerExceptions
             ValueTask<'T> tcs.Task
-        | :? AggregateException as agg -> ValueTask.FromException<'T> agg.InnerExceptions[0]
-        | exn                          -> ValueTask.FromException<'T> exn
 
     let private cancellationTokenSingleton = CancellationToken true
 
@@ -241,22 +239,20 @@ module ValueTask =
         } |> ValueTask<'U>
             
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
+    /// <param name="source">The source ValueTask.</param>
+    /// <returns>A ValueTask that completes when the source completes.</returns>
     /// <remarks>It can be used to convert non-generic ValueTask to unit ValueTask.</remarks>
     let ignore (source: ValueTask) : ValueTask<unit> =
         if source.IsCompleted  then Unchecked.defaultof<_>
-        elif source.IsFaulted  then raise (Unchecked.nonNull (source.AsTask().Exception))
+        elif source.IsFaulted  then FromExceptions (Unchecked.nonNull (source.AsTask().Exception))
         elif source.IsCanceled then canceled
         else
             let tcs = TaskCompletionSource<unit> ()
-            if source.IsFaulted then tcs.SetException (Unchecked.nonNull (source.AsTask().Exception)).InnerExceptions
-            elif source.IsCanceled then tcs.SetCanceled ()
-            else
-                let k (t: ValueTask) : unit =
-                    if t.IsCanceled  then tcs.SetCanceled ()
-                    elif t.IsFaulted then tcs.SetException (Unchecked.nonNull (source.AsTask().Exception)).InnerExceptions
-                    else tcs.SetResult ()
-                if source.IsCompleted then k source
-                else source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
+            let k (t: ValueTask) : unit =
+                if t.IsCanceled  then tcs.SetCanceled ()
+                elif t.IsFaulted then tcs.SetException (Unchecked.nonNull (source.AsTask().Exception)).InnerExceptions
+                else tcs.SetResult ()
+            source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
             ValueTask<unit> tcs.Task
 
     /// Used to de-sugar try .. with .. blocks in Computation Expressions.
@@ -296,5 +292,10 @@ module ValueTask =
     ///
     /// <returns>The option if the option is Some, else the alternate option.</returns>
     let orElse (fallbackValueTask: ValueTask<'T>) (source: ValueTask<'T>) : ValueTask<'T> = orElseWith (fun _ -> fallbackValueTask) source
+
+    /// <summary>Creates a ValueTask that's completed unsuccessfully with the specified exception.</summary>
+    /// <param name="exn">The exception to be raised.</param>
+    /// <returns>A ValueTask that is completed unsuccessfully with the specified exception.</returns>
+    let raise<'T> (exn: exn) : ValueTask<'T> = ValueTask.FromException<'T> exn
 
 #endif

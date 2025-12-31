@@ -11,14 +11,6 @@ module Task =
     open System.Threading
     open System.Threading.Tasks
     open FSharpPlus.Internals.Errors
-
-    module private Unit =
-        /// Active pattern to match the state of a completed Task
-        let (|Succeeded|Canceled|Faulted|) (t: Task) =
-            if t.IsCompletedSuccessfully then Succeeded
-            elif t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
-            elif t.IsCanceled then Canceled
-            else invalidOp "The task is not yet completed."
     
     /// Active pattern to match the state of a completed Task
     let inline internal (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
@@ -37,23 +29,19 @@ module Task =
     /// <returns>A Task that is completed successfully with the specified value.</returns>
     let result (value: 'T) : Task<'T> = Task.FromResult value
     
-    /// <summary>Creates a Task that's completed unsuccessfully with the specified exception.</summary>
-    /// <param name="exn">The exception to be raised.</param>
-    /// <returns>A Task that is completed unsuccessfully with the specified exception.</returns>
+    /// <summary>Creates a Task that's completed unsuccessfully with the specified exceptions.</summary>
+    /// <param name="exn">The AggregateException to be raised.</param>
+    /// <returns>A Task that is completed unsuccessfully with the specified exceptions.</returns>
     /// <remarks>
-    /// If the exception is not an AggregateException it is wrapped into one.
-    /// Prefer this function over Task.FromException as it handles AggregateExceptions correctly.
+    /// Prefer this function to handle AggregateExceptions over Task.FromException as it handles them correctly.
     /// </remarks>
-    let raise<'T> (exn: exn) : Task<'T> =
-        match exn with
-        // AggregateException with multiple exceptions - use TCS
-        | :? AggregateException as agg when agg.InnerExceptions.Count > 1 ->
+    let internal FromExceptions<'T> (aex: AggregateException) : Task<'T> =
+        match aex with
+        | agg when agg.InnerExceptions.Count = 1 -> Task.FromException<'T> agg.InnerExceptions[0]
+        | agg ->
             let tcs = TaskCompletionSource<'T> ()
             tcs.SetException agg.InnerExceptions
             tcs.Task
-        // Single exception / Single non-aggregate exception -> use optimized path
-        | :? AggregateException as agg -> Task.FromException<'T> agg.InnerExceptions[0]
-        | exn                          -> Task.FromException<'T> exn
 
     let private cancellationTokenSingleton = CancellationToken true
 
@@ -85,10 +73,10 @@ module Task =
 
         if x.IsCompleted && y.IsCompleted then
             match x, y with
-            | Succeeded r1, Succeeded r2 -> try result (mapper r1 r2) with e -> raise e
-            | Succeeded _ , Faulted exn  -> raise exn
+            | Succeeded r1, Succeeded r2 -> try result (mapper r1 r2) with e -> Task.FromException<_> e
+            | Succeeded _ , Faulted exn  -> FromExceptions exn
             | Succeeded _ , Canceled     -> canceled
-            | Faulted exn  , _           -> raise exn
+            | Faulted exn  , _           -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'U> ()
@@ -392,23 +380,22 @@ module Task =
         }
     
     /// <summary>Creates a task that ignores the result of the source task.</summary>
+    /// <param name="source">The source Task.</param>
+    /// <returns>A Task that completes when the source completes.</returns>
     /// <remarks>It can be used to convert non-generic Task to unit Task.</remarks>
-    let ignore (task: Task) =
-        let task = nullArgCheck (nameof task) task
+    let ignore (source: Task) =
+        let source = nullArgCheck (nameof source) source
 
-        if task.IsCompleted then
-            let t = result ()
-            match task with
-            | Unit.Succeeded -> t
-            | Unit.Faulted e -> raise<unit> e
-            | Unit.Canceled  -> canceled<unit>
+        if source.IsCompletedSuccessfully then result ()
+        elif source.IsFaulted  then FromExceptions (Unchecked.nonNull source.Exception)
+        elif source.IsCanceled then canceled
         else
             let tcs = TaskCompletionSource<unit> ()
-            let k = function
-                | Unit.Succeeded -> tcs.SetResult ()
-                | Unit.Faulted e -> tcs.SetException e.InnerExceptions
-                | Unit.Canceled  -> tcs.SetCanceled ()
-            task.ContinueWith k |> ignore
+            let k (t: Task) : unit =
+                if t.IsCanceled  then tcs.SetCanceled ()
+                elif t.IsFaulted then tcs.SetException (Unchecked.nonNull source.Exception).InnerExceptions
+                else tcs.SetResult ()
+            source.ContinueWith k |> ignore
             tcs.Task
 
     [<ObsoleteAttribute("Swap parameters")>]
@@ -452,7 +439,10 @@ module Task =
 
         orElseWith (fun _ -> fallbackTask) source
     
-    
+    /// <summary>Creates a Task that's completed unsuccessfully with the specified exception.</summary>
+    /// <param name="exn">The exception to be raised.</param>
+    /// <returns>A Task that is completed unsuccessfully with the specified exception.</returns>
+    let raise<'T> (exn: exn) : Task<'T> = Task.FromException<'T> exn
 
 
 /// Workaround to fix signatures without breaking binary compatibility.
