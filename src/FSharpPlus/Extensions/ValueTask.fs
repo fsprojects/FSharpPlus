@@ -81,7 +81,7 @@ module ValueTask =
             try result (f task1.Result task2.Result)
             with e -> ValueTask.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             continueTask tcs task1 (fun x ->
                 continueTask tcs task2 (fun y -> try tcs.SetResult (f x y) with e -> tcs.SetException e))
             ValueTask<'U> tcs.Task
@@ -97,7 +97,7 @@ module ValueTask =
             try result (f task1.Result task2.Result task3.Result)
             with e -> ValueTask.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             continueTask tcs task1 (fun x ->
                 continueTask tcs task2 (fun y ->
                     continueTask tcs task3 (fun z -> try tcs.SetResult (f x y z) with e -> tcs.SetException e)))
@@ -115,7 +115,7 @@ module ValueTask =
             try result (mapper task1.Result task2.Result)
             with e -> ValueTask.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<_> ()
+            let tcs = TaskCompletionSource<_> TaskCreationOptions.RunContinuationsAsynchronously
             let r1 = ref Unchecked.defaultof<_>
             let r2 = ref Unchecked.defaultof<_>
             let mutable cancelled = false
@@ -159,7 +159,7 @@ module ValueTask =
             try result (mapper task1.Result task2.Result task3.Result)
             with e -> ValueTask.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<_> ()
+            let tcs = TaskCompletionSource<_> TaskCreationOptions.RunContinuationsAsynchronously
             let r1 = ref Unchecked.defaultof<_>
             let r2 = ref Unchecked.defaultof<_>
             let r3 = ref Unchecked.defaultof<_>
@@ -202,7 +202,7 @@ module ValueTask =
             try ValueTask<'U> (f.Result x.Result)
             with e -> ValueTask.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             continueTask tcs f (fun f ->
                 continueTask tcs x (fun x -> try tcs.SetResult (f x) with e -> tcs.SetException e))
             ValueTask<'U> tcs.Task
@@ -212,7 +212,7 @@ module ValueTask =
         if task1.IsCompletedSuccessfully && task2.IsCompletedSuccessfully then
             result (task1.Result, task2.Result)
         else
-            let tcs = TaskCompletionSource<'T1 * 'T2> ()
+            let tcs = TaskCompletionSource<'T1 * 'T2> TaskCreationOptions.RunContinuationsAsynchronously
             continueTask tcs task1 (fun x ->
                 continueTask tcs task2 (fun y -> tcs.SetResult (x, y)))
             ValueTask<'T1 * 'T2> tcs.Task
@@ -253,7 +253,7 @@ module ValueTask =
         elif source.IsFaulted  then FromExceptions (Unchecked.nonNull (source.AsTask().Exception))
         elif source.IsCanceled then canceled
         else
-            let tcs = TaskCompletionSource<unit> ()
+            let tcs = TaskCompletionSource<unit> TaskCreationOptions.RunContinuationsAsynchronously
             let k (t: ValueTask) : unit =
                 if t.IsCanceled  then tcs.SetCanceled ()
                 elif t.IsFaulted then tcs.SetException (Unchecked.nonNull (source.AsTask().Exception)).InnerExceptions
