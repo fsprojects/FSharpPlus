@@ -15,13 +15,11 @@ module Task =
     /// Active pattern to match the state of a completed Task
     let inline internal (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
         if t.IsCompletedSuccessfully then Succeeded t.Result
-        elif t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
+        elif t.IsFaulted then Faulted (Unchecked.nonNull t.Exception)
         elif t.IsCanceled then Canceled
         else invalidOp "Internal error: The task is not yet completed."
 
-    let inline private continueWith ([<InlineIfLambda>]f) (x: Task<'t>) =
-        if x.IsCompleted then f x
-        else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
+    let inline private continueWith ([<InlineIfLambda>]f) (x: Task<'t>) = x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
 
     /// <summary>Creates a Task that's completed successfully with the specified value.</summary>
@@ -312,14 +310,14 @@ module Task =
             tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'x' and 'y', tupling its results.</summary>
-    let zipSequentially (x: Task<'T>) (y: Task<'U>) : Task<'T * 'U> =
-        let x = nullArgCheck (nameof x) x
-        let y = nullArgCheck (nameof y) y
+    let zipSequentially (task1: Task<'T1>) (task2: Task<'T2>) : Task<'T1 * 'T2> =
+        let x = nullArgCheck (nameof task1) task1
+        let y = nullArgCheck (nameof task2) task2
 
         if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion then
             result (x.Result, y.Result)
         else
-            let tcs = TaskCompletionSource<'T * 'U> ()
+            let tcs = TaskCompletionSource<'T1 * 'T2> ()
             match x.Status, y.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull x.Exception).InnerExceptions
