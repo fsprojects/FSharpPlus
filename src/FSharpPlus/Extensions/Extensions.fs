@@ -198,7 +198,7 @@ module Extensions =
         /// Similar to Async.Sequential but the returned Async contains a sequence, which is lazily evaluated.
         static member SequentialLazy (t: seq<Async<'T>>) : Async<seq<_>> = async {
             let! ct = Async.CancellationToken
-            return Seq.map (fun t -> Async.AsTask(t, ct).Result) t }
+            return Seq.map (fun t -> Async.AsTask(t, ct).GetAwaiter().GetResult ()) t }
         
         #endif
 

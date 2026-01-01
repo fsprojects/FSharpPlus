@@ -16,7 +16,7 @@ type Extract =
     #if FABLE_COMPILER
         Async.RunSynchronously x
     #else
-        Async.AsTask(x).Result
+        Async.AsTask(x).GetAwaiter().GetResult ()
     #endif
     static member        Extract (x: Lazy<'T>     ) = x.Value
     static member        Extract ((_: 'W, a: 'T)  ) = a
@@ -28,10 +28,8 @@ type Extract =
     static member inline Extract (f: 'Monoid -> 'T) = f (LanguagePrimitives.GenericZero)
     #endif
     #if !FABLE_COMPILER
-    static member        Extract (f: Task<'T>     ) = f.Result
-    #endif
-    #if !FABLE_COMPILER
-    static member        Extract (f: ValueTask<'T>     ) = f.Result
+    static member        Extract (f: Task<'T>     ) = f.GetAwaiter().GetResult ()
+    static member        Extract (f: ValueTask<'T>) = f.GetAwaiter().GetResult ()
     #endif
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
         let inline call_2 (_mthd: ^M, x: ^I) = ((^M or ^I) : (static member Extract : _ -> _) x)
