@@ -23,8 +23,7 @@ module ValueTask =
             | Succeeded r -> k r
             | Faulted axn -> tcs.SetException axn.InnerExceptions
             | Canceled    -> tcs.SetCanceled ()
-        if x.IsCompleted then f x
-        else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
+        x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
 
     /// <summary>Creates a ValueTask that's completed successfully with the specified value.</summary>
