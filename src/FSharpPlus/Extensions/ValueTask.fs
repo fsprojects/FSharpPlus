@@ -274,8 +274,7 @@ module ValueTask =
         backgroundTask {
             let! inner = source
             return! inner
-        } |> ValueTask<'T>
-    
+        } |> ValueTask<'T>    
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =

@@ -243,7 +243,6 @@ module Task =
             | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
-
             match f.Status, x.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull f.Exception).InnerExceptions
@@ -268,7 +267,6 @@ module Task =
             | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'T1 * 'T2> TaskCreationOptions.RunContinuationsAsynchronously
-
             match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
