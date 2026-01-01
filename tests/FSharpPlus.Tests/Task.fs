@@ -264,13 +264,19 @@ module Task =
         let roundTripSingleExn () =
             let (e0, e1, e2) = exnRoundtrips (TestException "one")
             Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
-            Assert.AreEqual (e1, e2, "The exception extracted from the Task is not the same as that extracted from the Task")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
+
+        [<Test>]
+        let roundTripAggExn () =
+            let (e0, e1, e2) = exnRoundtrips (TestException "one" ++ TestException "two")
+            Assert.AreNotEqual (e0, e1, "Original exception can't be the same as that extracted from the Async, as Async uses the first exception.")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
 
         [<Test>]
         let roundTripEmptyAggExn () =
             let (e0, e1, e2) = exnRoundtrips (AggregateException "zero")
             Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
-            Assert.AreEqual (e1, e2, "The exception extracted from the Task is not the same as that extracted from the Task")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
 
     
     // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
