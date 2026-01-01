@@ -20,10 +20,11 @@ module ValueTask =
     
     let inline continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
         let f = function
-        | Succeeded r -> k r
-        | Faulted axn -> tcs.SetException axn.InnerExceptions
-        | Canceled    -> tcs.SetCanceled ()
-        x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
+            | Succeeded r -> k r
+            | Faulted axn -> tcs.SetException axn.InnerExceptions
+            | Canceled    -> tcs.SetCanceled ()
+        if x.IsCompleted then f x
+        else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
     let inline continueWith f (x: ValueTask<'t>) = x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
