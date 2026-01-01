@@ -247,26 +247,30 @@ module Task =
         let exnRoundtrips failure =
             let mutable exn1: exn = null
             let mutable exn2: exn = null
-            let mutable exn3: exn = null
 
             let runFailure () =
-                exn1 <- failure
                 Task.raise<unit> failure
 
-            let r1 = try runFailure () |> Async.Await                 |> extract with | ex -> exn2 <- ex
-            let r2 = try runFailure () |> Async.Await |> Async.AsTask |> extract with | ex -> exn3 <- ex
+            let r1 = try runFailure () |> Async.Await                 |> extract with | ex -> exn1 <- ex
+            let r2 = try runFailure () |> Async.Await |> Async.AsTask |> extract with | ex -> exn2 <- ex
 
+            let e0 = cleanUp (string failure)
             let e1 = cleanUp (string exn1)
             let e2 = cleanUp (string exn2)
-            let e3 = cleanUp (string exn3)
 
-            e1, e2, e3
+            e0, e1, e2
 
         [<Test>]
         let roundTripSingleExn () =
-            let (e1, e2, e3) = exnRoundtrips (TestException "1")
-            Assert.AreEqual (e1, e2, "Original exception is not the same as exception extracted from the Task")
-            Assert.AreEqual (e2, e3, "The exception extracted from the Task is not the same as that extracted from the Async")
+            let (e0, e1, e2) = exnRoundtrips (TestException "one")
+            Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Task is not the same as that extracted from the Task")
+
+        [<Test>]
+        let roundTripEmptyAggExn () =
+            let (e0, e1, e2) = exnRoundtrips (AggregateException "zero")
+            Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Task is not the same as that extracted from the Task")
 
     
     // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
