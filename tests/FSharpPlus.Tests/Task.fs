@@ -18,6 +18,8 @@ module Task =
 
     module TaskTests =
 
+        open FSharpPlus.Extensions
+
         let createTask isFailed delay value =
             if not isFailed && delay = 0 then Task.FromResult value
             else
@@ -239,6 +241,32 @@ module Task =
             let t123'' = sequence [t1; t2; t3]
             CollectionAssert.AreEquivalent (t123.Exception.InnerExceptions, t123'.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
+
+        let cleanUp str = [0..9] |> List.fold (fun s i -> String.replace (string i) "" s) str
+
+        let exnRoundtrips failure =
+            let mutable exn1: exn = null
+            let mutable exn2: exn = null
+            let mutable exn3: exn = null
+
+            let runFailure () =
+                exn1 <- failure
+                Task.raise<unit> failure
+
+            let r1 = try runFailure () |> Async.Await                 |> extract with | ex -> exn2 <- ex
+            let r2 = try runFailure () |> Async.Await |> Async.AsTask |> extract with | ex -> exn3 <- ex
+
+            let e1 = cleanUp (string exn1)
+            let e2 = cleanUp (string exn2)
+            let e3 = cleanUp (string exn3)
+
+            e1, e2, e3
+
+        [<Test>]
+        let roundTripSingleExn () =
+            let (e1, e2, e3) = exnRoundtrips (TestException "1")
+            Assert.AreEqual (e1, e2, "Original exception is not the same as exception extracted from the Task")
+            Assert.AreEqual (e2, e3, "The exception extracted from the Task is not the same as that extracted from the Async")
 
     
     // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
