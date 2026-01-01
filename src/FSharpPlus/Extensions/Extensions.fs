@@ -132,7 +132,7 @@ module Extensions =
                 computation,
                 ts.SetResult,
                 (function
-                    | :? AggregateException as agg -> ts.SetException agg.InnerExceptions
+                    | :? AggregateException as aex when aex.InnerExceptions.Count > 0 -> ts.SetException aex.InnerExceptions
                     | exn -> ts.SetException exn),
                 (fun _ -> ts.SetCanceled ()),
                 cancellationToken)
