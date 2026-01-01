@@ -19,7 +19,13 @@ module Task =
         elif t.IsCanceled then Canceled
         else invalidOp "Internal error: The task is not yet completed."
 
-    let inline private continueWith ([<InlineIfLambda>]f) (x: Task<'t>) = x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
+    let inline internal continueTask (tcs: TaskCompletionSource<'Result>) (k: 't -> unit) (x: Task<'t>) =
+        let f = function
+            | Succeeded r -> k r
+            | Faulted axn -> tcs.SetException axn.InnerExceptions
+            | Canceled    -> tcs.SetCanceled ()
+        if x.IsCompleted then f x
+        else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
 
     /// <summary>Creates a Task that's completed successfully with the specified value.</summary>
@@ -66,87 +72,63 @@ module Task =
     /// <param name="task1">First task workflow.</param>
     /// <param name="task2">Second task workflow.</param>
     let lift2 (mapper: 'T1 -> 'T2 -> 'U) (task1: Task<'T1>) (task2: Task<'T2>) : Task<'U> =
-        let x = nullArgCheck (nameof task1) task1
-        let y = nullArgCheck (nameof task2) task2
+        let task1 = nullArgCheck (nameof task1) task1
+        let task2 = nullArgCheck (nameof task2) task2
 
-        if x.IsCompleted && y.IsCompleted then
-            match x, y with
+        if task1.IsCompleted && task2.IsCompleted then
+            match task1, task2 with
             | Succeeded r1, Succeeded r2 -> try result (mapper r1 r2) with e -> Task.FromException<_> e
             | Succeeded _ , Faulted exn  -> FromExceptions exn
             | Succeeded _ , Canceled     -> canceled
-            | Faulted exn  , _           -> FromExceptions exn
+            | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
 
-            match x.Status, y.Status with
+            match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
-            | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull x.Exception).InnerExceptions
+            | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
             | _, TaskStatus.Canceled -> tcs.SetCanceled ()
-            | _, TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull y.Exception).InnerExceptions
-            | TaskStatus.RanToCompletion, _ ->
-                y |> continueWith (function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r -> try tcs.SetResult (mapper x.Result r) with e -> tcs.SetException e)
-            | _, TaskStatus.RanToCompletion ->
-                x |> continueWith (function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r -> try tcs.SetResult (mapper r y.Result) with e -> tcs.SetException e)
-            | _, _ ->
-                x |> continueWith (function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        y |> continueWith (function
-                            | Canceled     -> tcs.SetCanceled ()
-                            | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Succeeded r' -> try tcs.SetResult (mapper r r') with e -> tcs.SetException e
-                        ))
+            | _, TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull task2.Exception).InnerExceptions
+            | TaskStatus.RanToCompletion, _ -> task2 |> continueTask tcs (fun r -> try tcs.SetResult (mapper task1.Result r) with e -> tcs.SetException e)
+            | _, TaskStatus.RanToCompletion -> task1 |> continueTask tcs (fun r -> try tcs.SetResult (mapper r task2.Result) with e -> tcs.SetException e)
+            | _, _ -> task1 |> continueTask tcs (fun r -> task2 |> continueTask tcs (fun r' -> try tcs.SetResult (mapper r r') with e -> tcs.SetException e))
             tcs.Task
 
     /// <summary>Creates a task workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">First task workflow.</param>
-    /// <param name="y">Second task workflow.</param>
-    /// <param name="z">Third task workflow.</param>
-    let lift3 (f : 'T1 -> 'T2 -> 'T3 -> 'U) (x : Task<'T1>) (y : Task<'T2>) (z: Task<'T3>) : Task<'U> =
-        let x = nullArgCheck (nameof x) x
-        let y = nullArgCheck (nameof y) y
-        let z = nullArgCheck (nameof z) z
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="task1">First task workflow.</param>
+    /// <param name="task2">Second task workflow.</param>
+    /// <param name="task3">Third task workflow.</param>
+    let lift3 (mapper : 'T1 -> 'T2 -> 'T3 -> 'U) (task1 : Task<'T1>) (task2 : Task<'T2>) (task3 : Task<'T3>) : Task<'U> =
+        let task1 = nullArgCheck (nameof task1) task1
+        let task2 = nullArgCheck (nameof task2) task2
+        let task3 = nullArgCheck (nameof task3) task3
 
-        if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion && z.Status = TaskStatus.RanToCompletion then
-            try result (f x.Result y.Result z.Result) with e -> Task.FromException<'U> e
+        if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
+            match task1, task2, task3 with
+            | Succeeded r1, Succeeded r2, Succeeded r3 -> try result (mapper r1 r2 r3) with e -> Task.FromException<_> e
+            | Faulted exn , _            , _           -> FromExceptions exn
+            | Canceled    , _            , _           -> canceled
+            | _           , Faulted exn  , _           -> FromExceptions exn
+            | _           , Canceled     , _           -> canceled
+            | _           , _           , Faulted exn  -> FromExceptions exn
+            | _           , _           , Canceled     -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
-            match x.Status, y.Status, z.Status with
+            match task1.Status, task2.Status, task3.Status with
             | TaskStatus.Canceled, _                  , _                   -> tcs.SetCanceled ()
-            | TaskStatus.Faulted , _                  , _                   -> tcs.SetException (Unchecked.nonNull x.Exception).InnerExceptions
+            | TaskStatus.Faulted , _                  , _                   -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
             | _                  , TaskStatus.Canceled, _                   -> tcs.SetCanceled ()
-            | _                  , TaskStatus.Faulted , _                   -> tcs.SetException (Unchecked.nonNull y.Exception).InnerExceptions
+            | _                  , TaskStatus.Faulted , _                   -> tcs.SetException (Unchecked.nonNull task2.Exception).InnerExceptions
             | _                  , _                  , TaskStatus.Canceled -> tcs.SetCanceled ()
-            | _                  , _                  , TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull z.Exception).InnerExceptions
+            | _                  , _                  , TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull task3.Exception).InnerExceptions
             | _                  , _                  , _                   ->
-                x |> continueWith (
-                    function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        y |> continueWith (
-                            function
-                            | Canceled     -> tcs.SetCanceled ()
-                            | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Succeeded r' ->
-                                z |> continueWith (
-                                    function
-                                    | Canceled      -> tcs.SetCanceled ()
-                                    | Faulted e     -> tcs.SetException e.InnerExceptions
-                                    | Succeeded r'' ->
-                                        try tcs.SetResult (f r r' r'')
-                                        with e -> tcs.SetException e
-                                )))
+                task1 |> continueTask tcs (fun r1 ->
+                    task2 |> continueTask tcs (fun r2 ->
+                        task3 |> continueTask tcs (fun r3 ->
+                            try tcs.SetResult (mapper r1 r2 r3) with e -> tcs.SetException e)))
             tcs.Task
 
     /// <summary>Creates a Task workflow from two workflows, mapping its results with a specified function.</summary>
@@ -163,36 +145,36 @@ module Task =
         if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion then
             try result (mapper task1.Result task2.Result) with e -> Task.FromException<'U> e
         else
-        let tcs = TaskCompletionSource<_> TaskCreationOptions.RunContinuationsAsynchronously
-        let r1 = ref Unchecked.defaultof<_>
-        let r2 = ref Unchecked.defaultof<_>
-        let mutable cancelled = false
-        let failures = [|IReadOnlyCollection.empty; IReadOnlyCollection.empty|]
-        let pending = ref 2
+            let tcs = TaskCompletionSource<_> TaskCreationOptions.RunContinuationsAsynchronously
+            let r1 = ref Unchecked.defaultof<_>
+            let r2 = ref Unchecked.defaultof<_>
+            let mutable cancelled = false
+            let failures = [|IReadOnlyCollection.empty; IReadOnlyCollection.empty|]
+            let pending = ref 2
 
-        let trySet () =
-            if Interlocked.Decrement pending = 0 then
-                let noFailures = Array.forall IReadOnlyCollection.isEmpty failures
-                if noFailures && not cancelled then
-                    try tcs.TrySetResult (mapper r1.Value r2.Value) |> ignore
-                    with e -> tcs.TrySetException e |> ignore
-                elif noFailures then tcs.TrySetCanceled () |> ignore
-                else tcs.TrySetException (failures |> Seq.map AggregateException |> Seq.reduce Exception.add).InnerExceptions |> ignore
+            let trySet () =
+                if Interlocked.Decrement pending = 0 then
+                    let noFailures = Array.forall IReadOnlyCollection.isEmpty failures
+                    if noFailures && not cancelled then
+                        try tcs.TrySetResult (mapper r1.Value r2.Value) |> ignore
+                        with e -> tcs.TrySetException e |> ignore
+                    elif noFailures then tcs.TrySetCanceled () |> ignore
+                    else tcs.TrySetException (failures |> Seq.map AggregateException |> Seq.reduce Exception.add).InnerExceptions |> ignore
 
-        let k (v: ref<_>) i t =
-            match t with
-            | Succeeded r -> v.Value <- r
-            | Faulted aex -> failures[i] <- aex.InnerExceptions
-            | Canceled    -> cancelled <- true
-            trySet ()
+            let k (v: ref<_>) i t =
+                match t with
+                | Succeeded r -> v.Value <- r
+                | Faulted aex -> failures[i] <- aex.InnerExceptions
+                | Canceled    -> cancelled <- true
+                trySet ()
 
-        if task1.IsCompleted && task2.IsCompleted then
-            k r1 0 task1
-            k r2 1 task2
-        else
-            continueWith (k r1 0) task1
-            continueWith (k r2 1) task2
-        tcs.Task
+            if task1.IsCompleted && task2.IsCompleted then
+                k r1 0 task1
+                k r2 1 task2
+            else
+                task1.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r1 0) task1)
+                task2.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r2 1) task2)
+            tcs.Task
 
     /// <summary>Creates a Task workflow from three workflows, mapping its results with a specified function.</summary>
     /// <remarks>Similar to lift3 but although workflows are started in sequence they might end independently in different order
@@ -240,96 +222,62 @@ module Task =
                 k r2 1 task2
                 k r3 2 task3
             else
-                continueWith (k r1 0) task1
-                continueWith (k r2 1) task2
-                continueWith (k r3 2) task3
+                task1.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r1 0) task1)
+                task2.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r2 1) task2)
+                task3.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r3 2) task3)
             tcs.Task
 
     /// <summary>Creates a task workflow that is the result of applying the resulting function of a task workflow
     /// to the resulting value of another task workflow</summary>
     /// <param name="f">Task workflow returning a function</param>
     /// <param name="x">Task workflow returning a value</param>
-    let apply (f: Task<'T->'U>) (x: Task<'T>) : Task<'U> =
+    let apply (f: Task<'T -> 'U>) (x: Task<'T>) : Task<'U> =
         let f = nullArgCheck (nameof f) f
         let x = nullArgCheck (nameof x) x
 
-        if f.Status = TaskStatus.RanToCompletion && x.Status = TaskStatus.RanToCompletion then
-            try result (f.Result x.Result) with e -> Task.FromException<'U> e
+        if f.IsCompleted && x.IsCompleted then
+            match f, x with
+            | Succeeded r1, Succeeded r2 -> try result (r1 r2) with e -> Task.FromException<_> e
+            | Succeeded _ , Faulted exn  -> FromExceptions exn
+            | Succeeded _ , Canceled     -> canceled
+            | Faulted exn , _            -> FromExceptions exn
+            | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+
             match f.Status, x.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull f.Exception).InnerExceptions
             | _, TaskStatus.Canceled -> tcs.SetCanceled ()
             | _, TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull x.Exception).InnerExceptions
-            | TaskStatus.RanToCompletion, _ ->
-                let k = function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        try tcs.SetResult (f.Result r)
-                        with e -> tcs.SetException e
-                continueWith k x
-            | _, TaskStatus.RanToCompletion ->
-                let k = function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        try tcs.SetResult (r x.Result)
-                        with e -> tcs.SetException e
-                continueWith k f
-            | _, _ ->
-                f |> continueWith (
-                    function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        x |> continueWith (
-                            function
-                            | Canceled     -> tcs.SetCanceled ()
-                            | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Succeeded r' ->
-                                try tcs.SetResult (r r')
-                                with e -> tcs.SetException e
-                        ))
+            | TaskStatus.RanToCompletion, _ -> x |> continueTask tcs (fun r -> try tcs.SetResult (f.Result r) with e -> tcs.SetException e)
+            | _, TaskStatus.RanToCompletion -> f |> continueTask tcs (fun r -> try tcs.SetResult (r x.Result) with e -> tcs.SetException e)
+            | _, _ -> f |> continueTask tcs (fun r -> x |> continueTask tcs (fun r' -> try tcs.SetResult (r r') with e -> tcs.SetException e))
             tcs.Task
 
-    /// <summary>Creates a task workflow from two workflows 'x' and 'y', tupling its results.</summary>
+    /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', tupling its results.</summary>
     let zipSequentially (task1: Task<'T1>) (task2: Task<'T2>) : Task<'T1 * 'T2> =
-        let x = nullArgCheck (nameof task1) task1
-        let y = nullArgCheck (nameof task2) task2
+        let task1 = nullArgCheck (nameof task1) task1
+        let task2 = nullArgCheck (nameof task2) task2
 
-        if x.Status = TaskStatus.RanToCompletion && y.Status = TaskStatus.RanToCompletion then
-            result (x.Result, y.Result)
+        if task1.IsCompleted && task2.IsCompleted then
+            match task1, task2 with
+            | Succeeded r1, Succeeded r2 -> result (r1, r2)
+            | Succeeded _ , Faulted exn  -> FromExceptions exn
+            | Succeeded _ , Canceled     -> canceled
+            | Faulted exn , _            -> FromExceptions exn
+            | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'T1 * 'T2> TaskCreationOptions.RunContinuationsAsynchronously
-            match x.Status, y.Status with
+
+            match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
-            | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull x.Exception).InnerExceptions
+            | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
             | _, TaskStatus.Canceled -> tcs.SetCanceled ()
-            | _, TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull y.Exception).InnerExceptions
-            | TaskStatus.RanToCompletion, _ ->
-                let k = function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r -> tcs.SetResult (x.Result, r)
-                continueWith k y
-            | _, TaskStatus.RanToCompletion ->
-                let k = function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r -> tcs.SetResult (r, y.Result)
-                continueWith k x
-            | _, _ ->
-                x |> continueWith (
-                    function
-                    | Canceled    -> tcs.SetCanceled ()
-                    | Faulted e   -> tcs.SetException e.InnerExceptions
-                    | Succeeded r ->
-                        y |> continueWith (function
-                            | Canceled     -> tcs.SetCanceled ()
-                            | Faulted e    -> tcs.SetException e.InnerExceptions
-                            | Succeeded r' -> tcs.SetResult (r, r')))
+            | _, TaskStatus.Faulted  -> tcs.SetException (Unchecked.nonNull task2.Exception).InnerExceptions
+            | TaskStatus.RanToCompletion, _ -> task2 |> continueTask tcs (fun r -> tcs.SetResult (task1.Result, r))
+            | _, TaskStatus.RanToCompletion -> task1 |> continueTask tcs (fun r -> tcs.SetResult (r, task2.Result))
+            | _, _ -> task1 |> continueTask tcs (fun r -> task2 |> continueTask tcs (fun r' -> tcs.SetResult (r, r')))
             tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', tupling its results.</summary>

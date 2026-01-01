@@ -82,10 +82,10 @@ type Extend =
                 | ValueTask.Canceled  -> tcs.SetCanceled ()
                 // nowarn here, this case has been handled already if g.IsCompleted
             else
-                ValueTask.continueTask tcs g (fun _ ->
+                g |> ValueTask.continueTask tcs (fun _ ->
                     try tcs.SetResult (f g)
                     with e -> tcs.SetException e)
-            tcs.Task |> ValueTask<'U>
+            ValueTask<'U> tcs.Task
             
     #endif
 

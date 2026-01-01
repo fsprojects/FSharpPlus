@@ -17,16 +17,14 @@ module ValueTask =
         elif t.IsFaulted then Faulted (Unchecked.nonNull (t.AsTask().Exception))
         elif t.IsCanceled then Canceled
         else invalidOp "Internal error: The task is not yet completed."
-    
-    let inline continueTask (tcs: TaskCompletionSource<'Result>) (x: ValueTask<'t>) (k: 't -> unit) =
+
+    let inline internal continueTask (tcs: TaskCompletionSource<'Result>) (k: 't -> unit) (x: ValueTask<'t>) =
         let f = function
             | Succeeded r -> k r
             | Faulted axn -> tcs.SetException axn.InnerExceptions
             | Canceled    -> tcs.SetCanceled ()
         if x.IsCompleted then f x
         else x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
-
-    let inline continueWith f (x: ValueTask<'t>) = x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
 
     /// <summary>Creates a ValueTask that's completed successfully with the specified value.</summary>
@@ -74,34 +72,57 @@ module ValueTask =
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">First ValueTask workflow.</param>
-    /// <param name="y">Second ValueTask workflow.</param>
-    let lift2 (f: 'T1 -> 'T2 -> 'U) (task1: ValueTask<'T1>) (task2: ValueTask<'T2>) : ValueTask<'U> =
-        if task1.IsCompletedSuccessfully && task2.IsCompletedSuccessfully then
-            try result (f task1.Result task2.Result)
-            with e -> ValueTask.FromException<'U> e
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="task1">First ValueTask workflow.</param>
+    /// <param name="task2">Second ValueTask workflow.</param>
+    let lift2 (mapper: 'T1 -> 'T2 -> 'U) (task1: ValueTask<'T1>) (task2: ValueTask<'T2>) : ValueTask<'U> =
+        if task1.IsCompleted && task2.IsCompleted then
+            match task1, task2 with
+            | Succeeded r1, Succeeded r2 -> try result (mapper r1 r2) with e -> ValueTask.FromException<_> e
+            | Succeeded _ , Faulted exn  -> FromExceptions exn
+            | Succeeded _ , Canceled     -> canceled
+            | Faulted exn , _            -> FromExceptions exn
+            | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
-            continueTask tcs task1 (fun x ->
-                continueTask tcs task2 (fun y -> try tcs.SetResult (f x y) with e -> tcs.SetException e))
+            if   task1.IsCanceled then tcs.SetCanceled ()
+            elif task1.IsFaulted  then tcs.SetException (Unchecked.nonNull (task1.AsTask().Exception)).InnerExceptions
+            elif task2.IsCanceled then tcs.SetCanceled ()
+            elif task2.IsFaulted  then tcs.SetException (Unchecked.nonNull (task2.AsTask().Exception)).InnerExceptions
+            elif task1.IsCompletedSuccessfully then  task2 |> continueTask tcs (fun y -> try tcs.SetResult (mapper task1.Result y) with e -> tcs.SetException e)
+            elif task2.IsCompletedSuccessfully then  task1 |> continueTask tcs (fun x -> try tcs.SetResult (mapper x task2.Result) with e -> tcs.SetException e)
+            else task1 |> continueTask tcs (fun x -> task2 |> continueTask tcs (fun y -> try tcs.SetResult (mapper x y) with e -> tcs.SetException e))
             ValueTask<'U> tcs.Task
 
     /// <summary>Creates a ValueTask workflow from three workflows 'x', 'y' and z, mapping its results with 'f'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">First ValueTask workflow.</param>
-    /// <param name="y">Second ValueTask workflow.</param>
-    /// <param name="z">Third ValueTask workflow.</param>
-    let lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U) (task1: ValueTask<'T1>) (task2: ValueTask<'T2>) (task3: ValueTask<'T3>) : ValueTask<'U> =
-        if task1.IsCompletedSuccessfully && task2.IsCompletedSuccessfully && task3.IsCompletedSuccessfully then
-            try result (f task1.Result task2.Result task3.Result)
-            with e -> ValueTask.FromException<'U> e
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="task1">First ValueTask workflow.</param>
+    /// <param name="task2">Second ValueTask workflow.</param>
+    /// <param name="task3">Third ValueTask workflow.</param>
+    let lift3 (mapper: 'T1 -> 'T2 -> 'T3 -> 'U) (task1: ValueTask<'T1>) (task2: ValueTask<'T2>) (task3: ValueTask<'T3>) : ValueTask<'U> =
+        if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
+            match task1, task2, task3 with
+            | Succeeded r1, Succeeded r2, Succeeded r3 -> try result (mapper r1 r2 r3) with e -> ValueTask.FromException<_> e
+            | Faulted exn , _            , _           -> FromExceptions exn
+            | Canceled    , _            , _           -> canceled
+            | _           , Faulted exn  , _           -> FromExceptions exn
+            | _           , Canceled     , _           -> canceled
+            | _           , _           , Faulted exn  -> FromExceptions exn
+            | _           , _           , Canceled     -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
-            continueTask tcs task1 (fun x ->
-                continueTask tcs task2 (fun y ->
-                    continueTask tcs task3 (fun z -> try tcs.SetResult (f x y z) with e -> tcs.SetException e)))
+            if   task1.IsCanceled then tcs.SetCanceled ()
+            elif task1.IsFaulted  then tcs.SetException (Unchecked.nonNull (task1.AsTask().Exception)).InnerExceptions
+            elif task2.IsCanceled then tcs.SetCanceled ()
+            elif task2.IsFaulted  then tcs.SetException (Unchecked.nonNull (task2.AsTask().Exception)).InnerExceptions
+            elif task3.IsCanceled then tcs.SetCanceled ()
+            elif task3.IsFaulted  then tcs.SetException (Unchecked.nonNull (task3.AsTask().Exception)).InnerExceptions
+            else
+                task1 |> continueTask tcs (fun r1 ->
+                    task2 |> continueTask tcs (fun r2 ->
+                        task3 |> continueTask tcs (fun r3 ->
+                            try tcs.SetResult (mapper r1 r2 r3) with e -> tcs.SetException e)))
             ValueTask<'U> tcs.Task
 
     /// <summary>Creates a ValueTask workflow from two workflows, mapping its results with a specified function.</summary>
@@ -143,8 +164,8 @@ module ValueTask =
                 task1 |> k r1 0
                 task2 |> k r2 1
             else
-                continueWith (k r1 0) task1
-                continueWith (k r2 1) task2
+                task1.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r1 0) task1)
+                task2.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r2 1) task2)
             ValueTask<'U> tcs.Task
 
     /// <summary>Creates a ValueTask workflow from three workflows, mapping its results with a specified function.</summary>
@@ -189,33 +210,52 @@ module ValueTask =
                 task2 |> k r2 1
                 task3 |> k r3 2
             else
-                continueWith (k r1 0) task1
-                continueWith (k r2 1) task2
-                continueWith (k r3 2) task3
+                task1.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r1 0) task1)
+                task2.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r2 1) task2)
+                task3.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> (k r3 2) task3)
             ValueTask<'U> tcs.Task
 
     /// <summary>Creates a ValueTask workflow that is the result of applying the resulting function of a ValueTask workflow
     /// to the resulting value of another ValueTask workflow</summary>
     /// <param name="f">ValueTask workflow returning a function</param>
     /// <param name="x">ValueTask workflow returning a value</param>
-    let apply (f: ValueTask<'T->'U>) (x: ValueTask<'T>) : ValueTask<'U> =
-        if f.IsCompletedSuccessfully && x.IsCompletedSuccessfully then
-            try ValueTask<'U> (f.Result x.Result)
-            with e -> ValueTask.FromException<'U> e
+    let apply (f: ValueTask<'T -> 'U>) (x: ValueTask<'T>) : ValueTask<'U> =
+        if f.IsCompleted && x.IsCompleted then
+            match f, x with
+            | Succeeded r1, Succeeded r2 -> try result (r1 r2) with e -> ValueTask.FromException<_> e
+            | Succeeded _ , Faulted exn  -> FromExceptions exn
+            | Succeeded _ , Canceled     -> canceled
+            | Faulted exn , _            -> FromExceptions exn
+            | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
-            continueTask tcs f (fun f ->
-                continueTask tcs x (fun x -> try tcs.SetResult (f x) with e -> tcs.SetException e))
+            if   f.IsCanceled then tcs.SetCanceled ()
+            elif f.IsFaulted  then tcs.SetException (Unchecked.nonNull (f.AsTask().Exception)).InnerExceptions
+            elif x.IsCanceled then tcs.SetCanceled ()
+            elif x.IsFaulted  then tcs.SetException (Unchecked.nonNull (x.AsTask().Exception)).InnerExceptions
+            elif f.IsCompletedSuccessfully then x |> continueTask tcs (fun r -> try tcs.SetResult (f.Result r) with e -> tcs.SetException e)
+            elif x.IsCompletedSuccessfully then f |> continueTask tcs (fun r -> try tcs.SetResult (r x.Result) with e -> tcs.SetException e)
+            else f |> continueTask tcs (fun r -> x |> continueTask tcs (fun r' -> try tcs.SetResult (r r') with e -> tcs.SetException e))
             ValueTask<'U> tcs.Task
 
-    /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', tupling its results.</summary>
+    /// <summary>Creates a ValueTask workflow from two workflows 'task1' and 'task2', tupling its results.</summary>
     let zipSequentially (task1: ValueTask<'T1>) (task2: ValueTask<'T2>) : ValueTask<'T1 * 'T2> =
-        if task1.IsCompletedSuccessfully && task2.IsCompletedSuccessfully then
-            result (task1.Result, task2.Result)
+        if task1.IsCompleted && task2.IsCompleted then
+            match task1, task2 with
+            | Succeeded r1, Succeeded r2 -> result (r1, r2)
+            | Succeeded _ , Faulted exn  -> FromExceptions exn
+            | Succeeded _ , Canceled     -> canceled
+            | Faulted exn , _            -> FromExceptions exn
+            | Canceled    , _            -> canceled
         else
             let tcs = TaskCompletionSource<'T1 * 'T2> TaskCreationOptions.RunContinuationsAsynchronously
-            continueTask tcs task1 (fun x ->
-                continueTask tcs task2 (fun y -> tcs.SetResult (x, y)))
+            if   task1.IsCanceled then tcs.SetCanceled ()
+            elif task1.IsFaulted  then tcs.SetException (Unchecked.nonNull (task1.AsTask().Exception)).InnerExceptions
+            elif task2.IsCanceled then tcs.SetCanceled ()
+            elif task2.IsFaulted  then tcs.SetException (Unchecked.nonNull (task2.AsTask().Exception)).InnerExceptions
+            elif task1.IsCompletedSuccessfully then  task2 |> continueTask tcs (fun y -> tcs.SetResult (task1.Result, y))
+            elif task2.IsCompletedSuccessfully then  task1 |> continueTask tcs (fun x -> tcs.SetResult (x, task2.Result))
+            else task1 |> continueTask tcs (fun x -> task2 |> continueTask tcs (fun y -> tcs.SetResult (x, y)))
             ValueTask<'T1 * 'T2> tcs.Task
 
     /// <summary>Creates a ValueTask workflow from two workflows, tupling its results.</summary>
