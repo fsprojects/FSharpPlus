@@ -82,7 +82,7 @@ module Task =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<'U> ()
 
             match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
@@ -115,7 +115,7 @@ module Task =
             | _           , _           , Faulted exn  -> FromExceptions exn
             | _           , _           , Canceled     -> canceled
         else
-            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<'U> ()
             match task1.Status, task2.Status, task3.Status with
             | TaskStatus.Canceled, _                  , _                   -> tcs.SetCanceled ()
             | TaskStatus.Faulted , _                  , _                   -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
@@ -144,7 +144,7 @@ module Task =
         if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion then
             try result (mapper task1.Result task2.Result) with e -> Task.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<_> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<_> ()
             let r1 = ref Unchecked.defaultof<_>
             let r2 = ref Unchecked.defaultof<_>
             let mutable cancelled = false
@@ -192,7 +192,7 @@ module Task =
             try result (mapper task1.Result task2.Result task3.Result)
             with e -> Task.FromException<'U> e
         else
-            let tcs = TaskCompletionSource<_> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<_> ()
             let r1 = ref Unchecked.defaultof<_>
             let r2 = ref Unchecked.defaultof<_>
             let r3 = ref Unchecked.defaultof<_>
@@ -242,7 +242,7 @@ module Task =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<'U> ()
             match f.Status, x.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull f.Exception).InnerExceptions
@@ -266,7 +266,7 @@ module Task =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'T1 * 'T2> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<'T1 * 'T2> ()
             match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
@@ -318,7 +318,7 @@ module Task =
         elif source.IsFaulted  then FromExceptions (Unchecked.nonNull source.Exception)
         elif source.IsCanceled then canceled
         else
-            let tcs = TaskCompletionSource<unit> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<unit> ()
             let k (t: Task) : unit =
                 if t.IsCanceled  then tcs.SetCanceled ()
                 elif t.IsFaulted then tcs.SetException (Unchecked.nonNull source.Exception).InnerExceptions
