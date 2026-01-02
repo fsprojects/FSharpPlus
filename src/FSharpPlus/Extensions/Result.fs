@@ -176,3 +176,11 @@ module Result =
         | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
         | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
         | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)
+
+    /// <summary>Ignores the value inside the result, if any.</summary>
+    /// <param name="source">The result value.</param>
+    /// <returns><c>Ok ()</c> if the result is <c>Ok</c>, <c>Error e</c> otherwise.</returns>
+    let ignore (source: Result<'T, 'Error>) =
+        match source with
+        | Ok _ -> Ok ()
+        | Error e -> Error e

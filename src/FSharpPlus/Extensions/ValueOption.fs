@@ -82,3 +82,11 @@ module ValueOption =
         match source with
         | Some x -> ValueSome x
         | None   -> ValueNone
+
+    /// <summary>Ignores the value inside the option, if any.</summary>
+    /// <param name="source">The option value.</param>
+    /// <returns><c>ValueSome ()</c> if the option is <c>ValueSome</c>, <c>ValueNone</c> otherwise.</returns>
+    let ignore (source: ValueOption<'T>) =
+        match source with
+        | ValueSome _ -> ValueSome ()
+        | ValueNone   -> ValueNone
