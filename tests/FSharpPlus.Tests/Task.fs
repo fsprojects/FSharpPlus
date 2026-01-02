@@ -3,16 +3,22 @@
 module Task =
 
     open System
+    open System.Threading
     open System.Threading.Tasks
     open NUnit.Framework
     open FSharpPlus
-    open FSharpPlus.Data
     open FSharpPlus.Tests.Helpers
     
     exception TestException of string
     
+    let (|AggregateException|_|) (x: exn) =
+        match x with
+        | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
+        | _ -> None
+
     module TaskTests =
-        open System.Threading
+
+        open FSharpPlus.Extensions
 
         let createTask isFailed delay value =
             if not isFailed && delay = 0 then Task.FromResult value
@@ -24,11 +30,6 @@ module Task =
                 else (Task.Delay delay).ContinueWith (fun _ ->
                     if isFailed then tcs.SetException (excn) else tcs.SetResult value) |> ignore
                 tcs.Task
-
-        let (|AggregateException|_|) (x: exn) =
-            match x with
-            | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
-            | _ -> None
 
         [<Test>]
         let shortCircuits () =
@@ -241,6 +242,101 @@ module Task =
             CollectionAssert.AreEquivalent (t123.Exception.InnerExceptions, t123'.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "Task.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
+        let cleanUp str = [0..9] |> List.fold (fun s i -> String.replace (string i) "" s) str
+
+        let exnRoundtrips failure =
+            let mutable exn1: exn = null
+            let mutable exn2: exn = null
+
+            let runFailure () =
+                Task.raise<unit> failure
+
+            let r1 = try runFailure () |> Async.Await                 |> extract with | ex -> exn1 <- ex
+            let r2 = try runFailure () |> Async.Await |> Async.AsTask |> extract with | ex -> exn2 <- ex
+
+            let e0 = cleanUp (string failure)
+            let e1 = cleanUp (string exn1)
+            let e2 = cleanUp (string exn2)
+
+            e0, e1, e2
+
+        [<Test>]
+        let roundTripSingleExn () =
+            let (e0, e1, e2) = exnRoundtrips (TestException "one")
+            Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
+
+        [<Test>]
+        let roundTripAggExn () =
+            let (e0, e1, e2) = exnRoundtrips (TestException "one" ++ TestException "two")
+            Assert.AreNotEqual (e0, e1, "Original exception can't be the same as that extracted from the Async, as Async uses the first exception.")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
+
+        [<Test>]
+        let roundTripEmptyAggExn () =
+            let (e0, e1, e2) = exnRoundtrips (AggregateException "zero")
+            Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
+            Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
+
+    
+    // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
+    module ComputationExpressionTests =
+
+        [<Test>]
+        let testTryFinally () =
+            let mutable ran = false
+            let t = monad' {
+                try
+                    do! Task.FromException<unit> (exn "This is a failed task")
+                finally
+                    ran <- true
+                return 1
+            }
+            require t.IsCompleted "task didn't complete synchronously"
+            require t.IsFaulted "task didn't fail"
+            require (not (isNull t.Exception)) "didn't capture exception"
+            require ran "never ran"
+
+        [<Test>]
+        let testExcInCompensationSync () =
+           let t = monad' {
+               try
+                   let! x = Task.result 1
+                   raise (TestException "task failed")
+                   return x
+               finally
+                   raise (TestException "compensation failed")
+           }
+           try
+               t.Wait()
+               failwith "Didn't fail"
+           with
+           | AggregateException [TestException "compensation failed"] -> ()
+           | AggregateException [TestException x] -> failwithf "Expected 'compensation failed', got %s" x
+           | AggregateException [exn] -> failwithf "Expected TestException, got %A" exn
+           | AggregateException lst -> failwithf "Expected single TestException, got %A" lst
+           | exn -> failwithf "Expected AggregateException, got %A" exn
+
+        [<Test>]
+        let testExcInCompensationAsync () =
+            let t = monad' {
+                try
+                    do! Task.Delay 20 |> Task.ignore
+                    let! x = Task.result 1
+                    raise (TestException "task failed")
+                    return x
+                finally
+                    raise (TestException "compensation failed")
+            }
+            try
+                t.Wait()
+                failwith "Didn't fail"
+            with
+            | AggregateException [TestException "compensation failed"] -> ()
+            | AggregateException [TestException x] -> failwithf "Expected 'compensation failed', got %s" x
+            | AggregateException [exn] -> failwithf "Expected TestException, got %A" exn
+            | AggregateException lst -> failwithf "Expected single TestException, got %A" lst
+            | exn -> failwithf "Expected AggregateException, got %A" exn
     
     module TaskBuilderTests =
         
@@ -254,12 +350,9 @@ module Task =
         // You should have received a copy of the CC0 Public Domain Dedication along with this software.
         // If not, see <http://creativecommons.org/publicdomain/zero/1.0/>.
 
-        open System
         open System.Collections
         open System.Collections.Generic
         open System.Diagnostics
-        open System.Threading
-        open System.Threading.Tasks
 
         module Task =
             let Yield () =
@@ -310,7 +403,7 @@ module Task =
             let t =
                 monad' {
                     do! Task.Yield()
-                    Thread.Sleep(100)
+                    do! Task.Delay(100) |> Task.ignore
                 }
             sw.Stop()
             require (sw.ElapsedMilliseconds < 50L) "sleep blocked caller"
@@ -682,7 +775,7 @@ module Task =
                     try
                         ranInitial <- true
                         do! Task.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! Task.Delay(100) |> Task.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                     finally
                         ranFinally <- ranFinally + 1
@@ -707,7 +800,7 @@ module Task =
                     try
                         ranInitial <- true
                         do! Task.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! Task.Delay(100) |> Task.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                         failtest "uhoh"
                     finally
@@ -938,46 +1031,55 @@ module Task =
         [<Test>]
         let taskbuilderTests () =
             printfn "Running taskbuilder tests..."
-            try
-                testShortCircuitResult()
-                testDelay()
-                testNoDelay()
-                testNonBlocking()
-                testCatching1()
-                testCatching2()
-                testNestedCatching()
-                testTryFinallyHappyPath()
-                testTryFinallySadPath()
-                testTryFinallyCaught()
-                testUsing()
-                testUsingFromTask()
-                testUsingSadPath()
-                testForLoop()
-                testForLoopSadPath()
-                testExceptionAttachedToTaskWithoutAwait()   // *1
-                testExceptionAttachedToTaskWithAwait()      // *1
-                testExceptionThrownInFinally()
-                test2ndExceptionThrownInFinally()
-                testFixedStackWhileLoop()                   // *2
-                testFixedStackForLoop()                     // *2
-                testTypeInference()
-                // testNoStackOverflowWithImmediateResult() // *3
-                testNoStackOverflowWithYieldResult()
+            let tests = [
+                testShortCircuitResult
+                testDelay
+                testNoDelay
+                testNonBlocking                                // *0
+                testCatching1
+                testCatching2
+                testNestedCatching
+                testTryFinallyHappyPath
+                testTryFinallySadPath
+                testTryFinallyCaught
+                testUsing
+                testUsingFromTask
+                testUsingSadPath
+                testForLoop
+                testForLoopSadPath
+                testExceptionAttachedToTaskWithoutAwait        // *1
+                testExceptionAttachedToTaskWithAwait           // *1
+                testExceptionThrownInFinally                   // *0
+                test2ndExceptionThrownInFinally                // *0
+                // testFixedStackWhileLoop                     // *2
+                // testFixedStackForLoop                       // *2
+                testTypeInference
+                // testNoStackOverflowWithImmediateResult      // *3
+                testNoStackOverflowWithYieldResult
                 // (Original note from TaskBuilder, n/a here)
                 // we don't support TCO, so large tail recursions will stack overflow
                 // or at least use O(n) heap. but small ones should at least function OK.
-                testSmallTailRecursion()
-                testTryOverReturnFrom()
-                testTryFinallyOverReturnFromWithException()
-                testTryFinallyOverReturnFromWithoutException()
-                // testCompatibilityWithOldUnitTask()       // *4
-                testAsyncsMixedWithTasks()                  // *5
-                printfn "Passed all tests!"
-            with
-            | exn ->
-                eprintfn "Exception: %O" exn
+                testSmallTailRecursion
+                testTryOverReturnFrom
+                testTryFinallyOverReturnFromWithException
+                testTryFinallyOverReturnFromWithoutException
+                // testCompatibilityWithOldUnitTask            // *4
+                testAsyncsMixedWithTasks                       // *5
+            ]
+
+            let passed, failed =
+                tests
+                |> List.map Choice.protect
+                |> List.partitionMap (fun x -> x())
+
+            let failureMsg = sprintf "Some tests failed: %s %s" Environment.NewLine (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
+
+            Assert.AreEqual (0, List.length failed, failureMsg)
+            printfn "Passed all TaskBuilder tests (%i) !" (List.length passed)
+
             ()
 
+            // *0 Changed Thread.Sleep to Task.Delay to avoid blocking. These tests seems to have been designed te measure performance of the CE machinery
             // *1 Test adapted due to errors not being part of the workflow, this is by-design.
             // *2 Fails if run multiple times with System.Exception: Stack depth increased!
             // *3 Fails with Stack Overflow.

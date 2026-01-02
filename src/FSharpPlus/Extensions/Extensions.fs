@@ -38,11 +38,6 @@ module Extensions =
     open System.Threading.Tasks
     open FSharp.Core.CompilerServices
 
-    let private (|Canceled|Faulted|Completed|) (t: Task<'a>) =
-        if t.IsCanceled then Canceled
-        else if t.IsFaulted then Faulted (Unchecked.nonNull t.Exception) 
-        else Completed t.Result
-
     type Task<'t> with
         static member WhenAll (tasks: Task<'a>[], ?cancellationToken: CancellationToken) =
             let tcs = TaskCompletionSource<'a[]> ()
@@ -53,9 +48,9 @@ module Extensions =
             tasks 
             |> Seq.iteri (fun i t ->
                 let continuation = function
-                | Canceled    -> tcs.TrySetCanceled () |> ignore
-                | Faulted e   -> tcs.TrySetException e |> ignore
-                | Completed r -> 
+                | Task.Canceled    -> tcs.TrySetCanceled () |> ignore
+                | Task.Faulted e   -> tcs.TrySetException e |> ignore
+                | Task.Succeeded r -> 
                     results.[i] <- r
                     if Interlocked.Decrement pending = 0 then 
                         tcs.SetResult results
@@ -132,7 +127,7 @@ module Extensions =
                 computation,
                 ts.SetResult,
                 (function
-                    | :? AggregateException as agg -> ts.SetException agg.InnerExceptions
+                    | :? AggregateException as aex when aex.InnerExceptions.Count > 0 -> ts.SetException aex.InnerExceptions
                     | exn -> ts.SetException exn),
                 (fun _ -> ts.SetCanceled ()),
                 cancellationToken)
@@ -198,7 +193,7 @@ module Extensions =
         /// Similar to Async.Sequential but the returned Async contains a sequence, which is lazily evaluated.
         static member SequentialLazy (t: seq<Async<'T>>) : Async<seq<_>> = async {
             let! ct = Async.CancellationToken
-            return Seq.map (fun t -> Async.AsTask(t, ct).Result) t }
+            return Seq.map (fun t -> Async.AsTask(t, ct).GetAwaiter().GetResult ()) t }
         
         #endif
 
