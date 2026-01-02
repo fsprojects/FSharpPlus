@@ -16,7 +16,7 @@ type Extract =
     #if FABLE_COMPILER_3 || FABLE_COMPILER_4
         Async.RunSynchronously x
     #else
-        Async.AsTask(x).Result
+        Async.AsTask(x).GetAwaiter().GetResult ()
     #endif
     static member        Extract (x: Lazy<'T>     ) = x.Value
     static member        Extract ((_: 'W, a: 'T)  ) = a
@@ -28,10 +28,10 @@ type Extract =
     static member inline Extract (f: 'Monoid -> 'T) = f (LanguagePrimitives.GenericZero)
     #endif
     #if !FABLE_COMPILER
-    static member        Extract (f: Task<'T>     ) = f.Result
+    static member        Extract (f: Task<'T>     ) = f.GetAwaiter().GetResult ()
     #endif
     #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
-    static member        Extract (f: ValueTask<'T>     ) = f.Result
+    static member        Extract (f: ValueTask<'T>) = f.GetAwaiter().GetResult ()
     #endif
     static member inline Invoke (x: '``Comonad<'T>``) : 'T =
         let inline call_2 (_mthd: ^M, x: ^I) = ((^M or ^I) : (static member Extract : _ -> _) x)
@@ -82,10 +82,10 @@ type Extend =
                 | ValueTask.Canceled  -> tcs.SetCanceled ()
                 // nowarn here, this case has been handled already if g.IsCompleted
             else
-                ValueTask.continueTask tcs g (fun _ ->
+                g |> ValueTask.continueTask tcs (fun _ ->
                     try tcs.SetResult (f g)
                     with e -> tcs.SetException e)
-            tcs.Task |> ValueTask<'U>
+            ValueTask<'U> tcs.Task
             
     #endif
 
