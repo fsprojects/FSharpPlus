@@ -12,6 +12,11 @@ module ValueTask =
     open FSharpPlus.Tests.Helpers
     
     exception TestException of string
+
+    let (|AggregateException|_|) (x: exn) =
+        match x with
+        | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
+        | _ -> None
     
     type ValueTask<'T> with
         static member WhenAll (source: ValueTask<'T> seq) = source |> Seq.map (fun x -> x.AsTask ()) |> Task.WhenAll |> ValueTask<'T []>
@@ -52,11 +57,6 @@ module ValueTask =
                 else (Task.Delay delay).ContinueWith (fun _ ->
                     if isFailed then tcs.SetException (excn) else tcs.SetResult value) |> ignore
                 tcs.Task |> ValueTask<'T>
-
-        let (|AggregateException|_|) (x: exn) =
-            match x with
-            | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
-            | _ -> None
             
         let require x msg = if not x then failwith msg
         
@@ -205,6 +205,66 @@ module ValueTask =
             CollectionAssert.AreEquivalent (t123.Exception.InnerExceptions, t123'.Exception.InnerExceptions, "ValueTask.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is the same as transpose [t1; t2; t3]")
             CollectionAssert.AreNotEquivalent (t123.Exception.InnerExceptions, t123''.Exception.InnerExceptions, "ValueTask.map3 (fun x y z -> [x; y; z]) t1 t2 t3 is not the same as sequence [t1; t2; t3]")
 
+
+    // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
+    module ComputationExpressionTests =
+
+        [<Test>]
+        let testTryFinally () =
+            let mutable ran = false
+            let t = monad' {
+                try
+                    do! ValueTask.FromException<unit> (exn "This is a failed task")
+                finally
+                    ran <- true
+                return 1
+            }
+            require t.IsCompleted "task didn't complete synchronously"
+            require t.IsFaulted "task didn't fail"
+            require (not (isNull t.Exception)) "didn't capture exception"
+            require ran "never ran"
+
+        [<Test>]
+        let testExcInCompensationSync () =
+           let t = monad' {
+               try
+                   let! x = ValueTask.result 1
+                   raise (TestException "task failed")
+                   return x
+               finally
+                   raise (TestException "compensation failed")
+           }
+           try
+               t.Wait()
+               failwith "Didn't fail"
+           with
+           | AggregateException [TestException "compensation failed"] -> ()
+           | AggregateException [TestException x] -> failwithf "Expected 'compensation failed', got %s" x
+           | AggregateException [exn] -> failwithf "Expected TestException, got %A" exn
+           | AggregateException lst -> failwithf "Expected single TestException, got %A" lst
+           | exn -> failwithf "Expected AggregateException, got %A" exn
+
+        [<Test>]
+        let testExcInCompensationAsync () =
+            let t = monad' {
+                try
+                    do! ValueTask.Delay 20 |> ValueTask.ignore
+                    let! x = ValueTask.result 1
+                    raise (TestException "task failed")
+                    return x
+                finally
+                    raise (TestException "compensation failed")
+            }
+            try
+                t.Wait()
+                failwith "Didn't fail"
+            with
+            | AggregateException [TestException "compensation failed"] -> ()
+            | AggregateException [TestException x] -> failwithf "Expected 'compensation failed', got %s" x
+            | AggregateException [exn] -> failwithf "Expected TestException, got %A" exn
+            | AggregateException lst -> failwithf "Expected single TestException, got %A" lst
+            | exn -> failwithf "Expected AggregateException, got %A" exn
+    
     module ValueTaskBuilderTests =
         
         // Same tests, same note as in Task.fs about these tests
@@ -262,7 +322,7 @@ module ValueTask =
             let t =
                 monad' {
                     do! ValueTask.Yield()
-                    Thread.Sleep(100)
+                    do! ValueTask.Delay(100) |> ValueTask.ignore
                 }
             sw.Stop()
             require (sw.ElapsedMilliseconds < 50L) "sleep blocked caller"
@@ -634,7 +694,7 @@ module ValueTask =
                     try
                         ranInitial <- true
                         do! ValueTask.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! ValueTask.Delay(100) |> ValueTask.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                     finally
                         ranFinally <- ranFinally + 1
@@ -659,7 +719,7 @@ module ValueTask =
                     try
                         ranInitial <- true
                         do! ValueTask.Yield()
-                        Thread.Sleep(100) // shouldn't be blocking so we should get through to requires before this finishes
+                        do! ValueTask.Delay(100) |> ValueTask.ignore // shouldn't be blocking so we should get through to requires before this finishes
                         ranNext <- true
                         failtest "uhoh"
                     finally
@@ -889,47 +949,56 @@ module ValueTask =
 
         [<Test>]
         let taskbuilderTests () =
-            printfn "Running taskbuilder tests..."
-            try
-                testShortCircuitResult()
-                testDelay()
-                testNoDelay()
-                testNonBlocking()
-                testCatching1()
-                testCatching2()
-                testNestedCatching()
-                testTryFinallyHappyPath()
-                testTryFinallySadPath()
-                testTryFinallyCaught()
-                testUsing()
-                testUsingFromValueTask()
-                testUsingSadPath()
-                testForLoop()
-                testForLoopSadPath()
-                testExceptionAttachedToValueTaskWithoutAwait()   // *1
-                testExceptionAttachedToValueTaskWithAwait()      // *1
-                testExceptionThrownInFinally()
-                test2ndExceptionThrownInFinally()
-                testFixedStackWhileLoop()                   // *2
-                testFixedStackForLoop()                     // *2
-                testTypeInference()
-                // testNoStackOverflowWithImmediateResult() // *3
-                testNoStackOverflowWithYieldResult()
+            printfn "Running (value) taskbuilder tests..."
+            let tests = [
+                testShortCircuitResult
+                testDelay
+                testNoDelay
+                testNonBlocking                                // *0
+                testCatching1
+                testCatching2
+                testNestedCatching
+                testTryFinallyHappyPath
+                testTryFinallySadPath
+                testTryFinallyCaught
+                testUsing
+                testUsingFromValueTask
+                testUsingSadPath
+                testForLoop
+                testForLoopSadPath
+                testExceptionAttachedToValueTaskWithoutAwait   // *1
+                testExceptionAttachedToValueTaskWithAwait      // *1
+                testExceptionThrownInFinally                   // *0
+                test2ndExceptionThrownInFinally                // *0
+                // testFixedStackWhileLoop                     // *2
+                // testFixedStackForLoop                       // *2
+                testTypeInference
+                // testNoStackOverflowWithImmediateResult      // *3
+                testNoStackOverflowWithYieldResult
                 // (Original note from ValueTaskBuilder, n/a here)
                 // we don't support TCO, so large tail recursions will stack overflow
                 // or at least use O(n) heap. but small ones should at least function OK.
-                testSmallTailRecursion()
-                testTryOverReturnFrom()
-                testTryFinallyOverReturnFromWithException()
-                testTryFinallyOverReturnFromWithoutException()
-                // testCompatibilityWithOldUnitValueTask()       // *4
-                testAsyncsMixedWithValueTasks()                  // *5
-                printfn "Passed all tests!"
-            with
-            | exn ->
-                eprintfn "Exception: %O" exn
+                testSmallTailRecursion
+                testTryOverReturnFrom
+                testTryFinallyOverReturnFromWithException
+                testTryFinallyOverReturnFromWithoutException
+                // testCompatibilityWithOldUnitValueTask       // *4
+                testAsyncsMixedWithValueTasks                  // *5
+            ]
+
+            let passed, failed =
+                tests
+                |> List.map Choice.protect
+                |> List.partitionMap (fun x -> x())
+
+            let failureMsg = sprintf "Some tests failed: %s %s" Environment.NewLine (failed |> List.map (sprintf "Test Failure -> %O") |> String.concat Environment.NewLine)
+
+            Assert.AreEqual (0, List.length failed, failureMsg)
+            printfn "Passed all TaskBuilder tests (%i) !" (List.length passed)
+
             ()
 
+            // *0 Changed Thread.Sleep to ValueTask.Delay to avoid blocking. These tests seems to have been designed te measure performance of the CE machinery
             // *1 Test adapted due to errors not being part of the workflow, this is by-design.
             // *2 Fails if run multiple times with System.Exception: Stack depth increased!
             // *3 Fails with Stack Overflow.
