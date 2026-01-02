@@ -361,3 +361,12 @@ module Seq =
         |> nullArgCheck (nameof source)
         |> Seq.indexed
         |> Seq.choose (fun (a, b) -> mapping a b)
+
+    /// <summary>Ignores the values resulting from each iteration inside the sequence.</summary>
+    /// <param name="source">The sequence value.</param>
+    /// <returns> A sequence of unit values.</returns>
+    /// <remarks>It can be used to convert a non-generic IEnumerable to a unit seq.</remarks>
+    let ignore (source: Collections.IEnumerable) =
+        let source = nullArgCheck (nameof source) source
+
+        seq { for _ in source do yield () }

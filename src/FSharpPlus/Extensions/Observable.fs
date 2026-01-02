@@ -6,6 +6,7 @@ open System
 open System.Threading
 open System.Threading.Tasks
 open System.Runtime.ExceptionServices
+open FSharpPlus.Internals.Errors
 open FSharpPlus.Data
 
 /// Additional operations on Observable<'T>
@@ -33,6 +34,14 @@ module Observable =
                     member _.OnError e = observer.OnNext (Error (ExceptionDispatchInfo.Capture e)) }}
 
 
+    /// Ignores the values resulting from each OnNext call.
+    /// Only the side-effects of the observable are preserved.
+    /// <param name="source">The source observable.</param>
+    /// <returns>An observable that ignores the values of the source observable.</returns>
+    let ignore (source: IObservable<'T>) : IObservable<unit> =
+        let source = nullArgCheck (nameof source) source
+
+        Observable.map ignore source
 
 
     let toAsyncSeq (source: System.IObservable<'T>) : SeqT<Async<bool>, 'T> = monad.plus {
