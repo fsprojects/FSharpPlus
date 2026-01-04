@@ -487,7 +487,7 @@ module Task =
     let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
 
-        tryWith (fun () -> source) (mapper >> Task.FromResult)
+        tryWith (fun () -> source) (mapper >> Task.FromResult)    
     #else
     let inline recover (mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
         raiseIfNull "source" source
@@ -500,6 +500,7 @@ module Task =
     /// <param name="source">The source task.</param>
     /// <returns>The resulting task.</returns>
     let mapError (mapper: exn -> exn) (source: Task<'T>) : Task<'T> =
+
         #if !NET45
         let source = nullArgCheck (nameof source) source
         #else

@@ -401,13 +401,19 @@ module ValueTask =
     /// <param name="mapper">Mapping function from exception to exception.</param>
     /// <param name="source">The source task.</param>
     /// <returns>The resulting task.</returns>
-    let inline mapError ([<InlineIfLambda>]mapper: exn -> exn) (source: ValueTask<'T>) : ValueTask<'T> =
+    let mapError (mapper: exn -> exn) (source: ValueTask<'T>) : ValueTask<'T> =
         if source.IsCompleted then
             match source with
             | Faulted exn -> FromExceptions (AggregateException (mapper exn))
             | _           -> source
         else
-            let tcs = TaskCompletionSource<'T> tcsOptions
+            #if NET5_0_OR_GREATER
+            let tcsOptions' = TaskCreationOptions.RunContinuationsAsynchronously
+            #else
+            let tcsOptions' = ()
+            #endif
+
+            let tcs = TaskCompletionSource<'T> tcsOptions'
             let k = function
                 | Succeeded r -> tcs.SetResult r
                 | Faulted aex -> tcs.SetException (AggregateException (mapper aex)).InnerExceptions
