@@ -83,7 +83,7 @@ module ValueTask =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             if   task1.IsCanceled then tcs.SetCanceled ()
             elif task1.IsFaulted  then tcs.SetException (Unchecked.nonNull (task1.AsTask().Exception)).InnerExceptions
             elif task2.IsCanceled then tcs.SetCanceled ()
@@ -110,7 +110,7 @@ module ValueTask =
             | _           , _           , Faulted exn  -> FromExceptions exn
             | _           , _           , Canceled     -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             if   task1.IsCanceled then tcs.SetCanceled ()
             elif task1.IsFaulted  then tcs.SetException (Unchecked.nonNull (task1.AsTask().Exception)).InnerExceptions
             elif task2.IsCanceled then tcs.SetCanceled ()
@@ -227,7 +227,7 @@ module ValueTask =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             if   f.IsCanceled then tcs.SetCanceled ()
             elif f.IsFaulted  then tcs.SetException (Unchecked.nonNull (f.AsTask().Exception)).InnerExceptions
             elif x.IsCanceled then tcs.SetCanceled ()
