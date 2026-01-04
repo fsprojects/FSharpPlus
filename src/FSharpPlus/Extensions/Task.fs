@@ -367,6 +367,16 @@ module Task =
 
         orElseWith (fun _ -> fallbackTask) source
     
+    /// <summary>Attempts to recover from a potentially failed task by mapping the exception to a successful result.</summary>
+    /// <param name="mapper">Mapping function from exception to result.</param>
+    /// <param name="source">The source task.</param>
+    /// <returns>A successful resulting task.</returns>
+    /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
+    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
+        let source = nullArgCheck (nameof source) source
+
+        tryWith (fun () -> source) (mapper >> Task.FromResult)
+    
     /// <summary>Creates a Task that's completed unsuccessfully with the specified exception.</summary>
     /// <param name="exn">The exception to be raised.</param>
     /// <returns>A Task that is completed unsuccessfully with the specified exception.</returns>
