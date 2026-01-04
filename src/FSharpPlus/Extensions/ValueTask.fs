@@ -338,6 +338,14 @@ module ValueTask =
     /// <returns>The option if the option is Some, else the alternate option.</returns>
     let orElse (fallbackValueTask: ValueTask<'T>) (source: ValueTask<'T>) : ValueTask<'T> = orElseWith (fun _ -> fallbackValueTask) source
 
+    /// <summary>Attempts to recover from a potentially failed task by mapping the exception to a successful result.</summary>
+    /// <param name="mapper">Mapping function from exception to result.</param>
+    /// <param name="source">The source task.</param>
+    /// <returns>A successful resulting task.</returns>
+    /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
+    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: ValueTask<'T>) : ValueTask<'T> =
+        tryWith (mapper >> ValueTask.FromResult) (fun () -> source)
+
     /// <summary>Creates a ValueTask that's completed unsuccessfully with the specified exception.</summary>
     /// <param name="exn">The exception to be raised.</param>
     /// <returns>A ValueTask that is completed unsuccessfully with the specified exception.</returns>
