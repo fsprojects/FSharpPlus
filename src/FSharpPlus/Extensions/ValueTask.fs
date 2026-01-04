@@ -391,7 +391,11 @@ module ValueTask =
     /// <returns>A successful resulting task.</returns>
     /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
     let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: ValueTask<'T>) : ValueTask<'T> =
+        #if NET5_0_OR_GREATER
+        tryWith (mapper >> ValueTask.FromResult) (fun () -> source)
+        #else
         tryWith (mapper >> result) (fun () -> source)
+        #endif
 
     /// <summary>Maps the exception of a faulted task to another exception.</summary>
     /// <param name="mapper">Mapping function from exception to exception.</param>

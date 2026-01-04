@@ -483,14 +483,17 @@ module Task =
     /// <param name="source">The source task.</param>
     /// <returns>A successful resulting task.</returns>
     /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
-    let inline recover (mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
-        #if !NET45
+    #if !NET45
+    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
-        #else
+
+        tryWith (fun () -> source) (mapper >> Task.FromResult)
+    #else
+    let inline recover (mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
         raiseIfNull "source" source
-        #endif
 
         tryWith (fun () -> source) (mapper >> result)
+    #endif
 
     /// <summary>Maps the exception of a faulted task to another exception.</summary>
     /// <param name="mapper">Mapping function from exception to exception.</param>
