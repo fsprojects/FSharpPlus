@@ -38,7 +38,7 @@ module Task =
     /// <remarks>
     /// Prefer this function to handle AggregateExceptions over Task.FromException as it handles them correctly.
     /// </remarks>
-    let internal FromExceptions<'T> (aex: AggregateException) : Task<'T> =
+    let inline internal FromExceptions<'T> (aex: AggregateException) : Task<'T> =
         match aex with
         | agg when agg.InnerExceptions.Count = 1 -> Task.FromException<'T> agg.InnerExceptions[0]
         | agg ->
@@ -376,6 +376,26 @@ module Task =
         let source = nullArgCheck (nameof source) source
 
         tryWith (fun () -> source) (mapper >> Task.FromResult)
+
+    /// <summary>Maps the exception of a faulted task to another exception.</summary>
+    /// <param name="mapper">Mapping function from exception to exception.</param>
+    /// <param name="source">The source task.</param>
+    /// <returns>The resulting task.</returns>
+    let inline mapError ([<InlineIfLambda>]mapper: exn -> exn) (source: Task<'T>) : Task<'T> =
+        let source = nullArgCheck (nameof source) source
+
+        if source.IsCompleted then
+            match source with
+            | Faulted exn -> FromExceptions (AggregateException (mapper exn))
+            | _           -> source
+        else
+            let tcs = TaskCompletionSource<'T> TaskCreationOptions.RunContinuationsAsynchronously
+            let k = function
+                | Succeeded r -> tcs.SetResult r
+                | Faulted aex -> tcs.SetException (AggregateException (mapper aex)).InnerExceptions
+                | Canceled    -> tcs.SetCanceled ()
+            source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
+            tcs.Task
     
     /// <summary>Creates a Task that's completed unsuccessfully with the specified exception.</summary>
     /// <param name="exn">The exception to be raised.</param>
