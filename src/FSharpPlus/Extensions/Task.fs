@@ -82,7 +82,7 @@ module Task =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
 
             match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
@@ -115,7 +115,7 @@ module Task =
             | _           , _           , Faulted exn  -> FromExceptions exn
             | _           , _           , Canceled     -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             match task1.Status, task2.Status, task3.Status with
             | TaskStatus.Canceled, _                  , _                   -> tcs.SetCanceled ()
             | TaskStatus.Faulted , _                  , _                   -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
@@ -242,7 +242,7 @@ module Task =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
             match f.Status, x.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull f.Exception).InnerExceptions
