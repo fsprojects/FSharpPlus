@@ -78,3 +78,11 @@ module Option =
         match source with
         | Some _ -> Some ()
         | None   -> None
+    /// <summary>
+    /// Extracts a value from either side of an Option.
+    /// </summary>
+    /// <param name="fSome">The function to apply if the option is Some.</param>
+    /// <param name="fNone">The function to apply if the option is None.</param>
+    /// <param name="source">The option to extract the value from.</param>
+    let inline either ([<InlineIfLambda>]fSome: 'T -> 'U) ([<InlineIfLambda>]fNone: unit -> 'U) (source: option<'T>) : 'U =
+        match source with Some v -> fSome v | None -> fNone ()
