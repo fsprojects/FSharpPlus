@@ -364,6 +364,16 @@ module ValueTask =
             source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
             ValueTask<'T> tcs.Task
 
+    /// Creates a Task from a Result value.
+    /// If the Result is Ok, the Task will complete successfully with the value.
+    /// If the Result is Error, the Task will complete unsuccessfully with the exception.
+    /// <param name="source">The source Result.</param>
+    /// <returns>The resulting Task.</returns>
+    let ofResult (source: Result<'T, exn>) : ValueTask<'T> =
+        match source with
+        | Ok x -> ValueTask.FromResult x
+        | Error exn -> ValueTask.FromException<'T> exn
+
     /// <summary>Creates a ValueTask that's completed unsuccessfully with the specified exception.</summary>
     /// <param name="exn">The exception to be raised.</param>
     /// <returns>A ValueTask that is completed unsuccessfully with the specified exception.</returns>
