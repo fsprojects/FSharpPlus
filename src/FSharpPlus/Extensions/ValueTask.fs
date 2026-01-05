@@ -428,7 +428,12 @@ module ValueTask =
     /// <returns>The resulting Task.</returns>
     let ofResult (source: Result<'T, exn>) : ValueTask<'T> =
         match source with
+        #if NET5_0_OR_GREATER
+        | Ok x -> ValueTask.FromResult x
+        | Error exn -> ValueTask.FromException<'T> exn
+        #else
         | Ok x -> result x
         | Error exn -> raise exn
+        #endif
 
 #endif

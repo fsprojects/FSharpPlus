@@ -527,8 +527,13 @@ module Task =
     /// <returns>The resulting Task.</returns>
     let ofResult (source: Result<'T, exn>) : Task<'T> =
         match source with
+        #if !NET45
+        | Ok x -> Task.FromResult x
+        | Error exn -> Task.FromException<'T> exn
+        #else
         | Ok x -> result x
         | Error exn -> raise exn
+        #endif
 
 
 /// Workaround to fix signatures without breaking binary compatibility.
