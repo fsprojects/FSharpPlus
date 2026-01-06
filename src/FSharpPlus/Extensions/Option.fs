@@ -78,6 +78,7 @@ module Option =
         match source with
         | Some _ -> Some ()
         | None   -> None
+
     /// <summary>
     /// Extracts a value from either side of an Option.
     /// </summary>
