@@ -81,7 +81,15 @@ module ValueOption =
     let ofOption (source: option<'T>) =
         match source with
         | Some x -> ValueSome x
-        | None   -> ValueNone  
+        | None   -> ValueNone
+
+    /// <summary>Ignores the value inside the option, if any.</summary>
+    /// <param name="source">The option value.</param>
+    /// <returns><c>ValueSome ()</c> if the option is <c>ValueSome</c>, <c>ValueNone</c> otherwise.</returns>
+    let ignore (source: ValueOption<'T>) =
+        match source with
+        | ValueSome _ -> ValueSome ()
+        | ValueNone   -> ValueNone
 
     /// <summary>
     /// Extracts a value from either side of a ValueOption.
@@ -90,4 +98,6 @@ module ValueOption =
     /// <param name="fNone">The function to apply if the option is ValueNone.</param>
     /// <param name="source">The option to extract the value from.</param>
     let inline either ([<InlineIfLambda>]fSome: 'T -> 'U) ([<InlineIfLambda>]fNone: unit -> 'U) (source: ValueOption<'T>) : 'U =
-        match source with ValueSome v -> fSome v | ValueNone -> fNone ()
+        match source with
+        | ValueSome v -> fSome v
+        | ValueNone -> fNone ()
