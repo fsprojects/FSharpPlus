@@ -111,8 +111,25 @@ module GenericBuilders =
         static member inline ($) (Idiomatic, si) = fun sfi x -> (Idiomatic $ x) (sfi <*> si)
         static member        ($) (Idiomatic, Ii) = id
     let inline idiomatic a b = (Idiomatic $ b) a
-    
+    #if !FABLE_COMPILER
+    /// <summary>
+    /// Marks the beginning of an idiom bracket (applicative style).
+    /// </summary>
+    /// <Remarks>
+    /// Use Ii to mark the end of the idiom bracket.
+    /// </Remarks>
+    #endif
     let inline iI x = (idiomatic << result) x
+
+    #if !FABLE_COMPILER
+    /// <summary>
+    /// Marks the end of an idiom bracket (applicative style).
+    /// </summary>
+    /// <Remarks>
+    /// Use iI to mark the beginning of the idiom bracket.
+    /// </Remarks>
+    let Ii = Ii
+    #endif
     type Idiomatic with static member inline ($) (Idiomatic, Ji) = fun xii -> join xii
     type Idiomatic with static member inline ($) (Idiomatic, J ) = fun fii x -> (Idiomatic $ x) (join fii)
 
