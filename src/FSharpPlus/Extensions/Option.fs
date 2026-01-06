@@ -71,6 +71,14 @@ module Option =
         | (true,  x) -> Some x
         | (false, _) -> None
 
+    /// <summary>Ignores the value inside the option, if any.</summary>
+    /// <param name="source">The option value.</param>
+    /// <returns><c>Some ()</c> if the option is <c>Some</c>, <c>None</c> otherwise.</returns>
+    let ignore (source: option<'T>) =
+        match source with
+        | Some _ -> Some ()
+        | None   -> None
+
     /// <summary>
     /// Extracts a value from either side of an Option.
     /// </summary>
