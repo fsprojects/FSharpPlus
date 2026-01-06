@@ -11,7 +11,30 @@ open FSharpPlus.Control
 /// Additional operations on Result
 [<RequireQualifiedAccess>]
 module Result =
+
+    open System.Threading.Tasks
+
     let inline traverse f = function Ok x -> Map.Invoke Ok (f x) | Error x -> result (Error x)
+    
+    /// <summary>
+    /// Binds a result into a generic monad (e.g., Option, List, Async, etc.)
+    /// </summary>
+    /// <param name="binder">The function to bind if the result is Ok.</param>
+    /// <param name="source">The result to bind from.</param>
+    /// <returns>The resulting monad containing a result.</returns>
+    let inline bindInto ([<InlineIfLambda>]binder: 'T -> '``Monad<Result<'U, 'Error>>``) (source: Result<'T, 'Error>) : '``Monad<Result<'U, 'Error>>`` =
+        source |> Result.either binder (Error >> result)
+
+    /// <summary>
+    /// Binds a result into a Task.
+    /// </summary>
+    /// <param name="binder">The function to bind if the result is Ok.</param>
+    /// <param name="source">The result to bind from.</param>
+    /// <returns>The resulting Task containing a result.</returns>
+    /// <remarks>This is a specialized version of bindInto for Task monad.</remarks>
+    let inline bindTask ([<InlineIfLambda>]binder: 'T -> Task<Result<'U, 'Error>>) (source: Result<'T, 'Error>) : Task<Result<'U, 'Error>> =
+        source |> Result.either binder (Error >> Task.result)
+
 #endif
 
 /// Result<'TSuccess,'TFailure> specialized in 'TFailure = Exception 
@@ -49,7 +72,7 @@ module ResultT =
     /// Transform a Result<'T,'Error> to a ResultT<'Monad<Result<'T,'Error>>>
     let inline hoist (x: Result<'T,'TError>) = ResultT (result x) : ResultT<'``Monad<Result<'T,'TError>>``>
 
-    let inline bind (f: 'T->ResultT<'``Monad<Result<'U,'E>>``>) (ResultT m: ResultT<'``Monad<Result<'T,'E>>``>) = (ResultT (m >>= (fun a -> match a with Error l -> result (Error l) | Ok r -> run (f r))))    
+    let inline bind (f: 'T->ResultT<'``Monad<Result<'U,'E>>``>) (ResultT m: ResultT<'``Monad<Result<'T,'E>>``>) = m >>= Result.bindInto (f >> run) |> ResultT
 
     let inline apply (ResultT f:ResultT<'``Monad<Result<('T -> 'U),'E>>``>) (ResultT x: ResultT<'``Monad<Result<'T,'E>>``>) = ResultT (map Result.apply f <*> x) : ResultT<'``Monad<Result<'U,'E>>``>
     let inline map (f: 'T->'U) (ResultT m: ResultT<'``Monad<Result<'T,'E>>``>) = ResultT (map (Result.map f) m) : ResultT<'``Monad<Result<('T -> 'U),'E>>``>
