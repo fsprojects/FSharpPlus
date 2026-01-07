@@ -3,6 +3,7 @@ namespace FSharpPlus
 #nowarn "44" // Suppress obsolete warning for tryWith and tryFinally
 #if !FABLE_COMPILER
 
+
 /// Additional operations on Task<'T>
 [<RequireQualifiedAccess>]
 module Task =
@@ -11,12 +12,12 @@ module Task =
     open System.Threading
     open System.Threading.Tasks
     open FSharpPlus.Internals.Errors
-    
+
     /// Active pattern to match the state of a completed Task
     let inline private (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
-        if t.IsCompletedSuccessfully then Succeeded t.Result
-        elif t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
+        if t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
         elif t.IsCanceled then Canceled
+        elif t.IsCompleted then Succeeded t.Result
         else invalidOp "Internal error: The task is not yet completed."
 
     /// <summary>Creates a task workflow from 'source' another, mapping its result with 'f'.</summary>
@@ -477,8 +478,16 @@ module Task =
     /// <returns>The task if it is not faulted, else the result of evaluating <paramref name="fallbackThunk"/>.</returns>
     /// <remarks><paramref name="fallbackThunk"/> is not evaluated unless <paramref name="source"/> is faulted.</remarks>
     ///
+    #if !NET45
     let inline orElseWith ([<InlineIfLambda>]fallbackThunk: exn -> Task<'T>) (source: Task<'T>) : Task<'T> =
+    #else
+    let inline orElseWith (fallbackThunk: exn -> Task<'T>) (source: Task<'T>) : Task<'T> =
+    #endif
+        #if !NET45
         let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
+        #endif
         tryWith (fun () -> source) fallbackThunk
 
     /// <summary>Returns <paramref name="source"/> if it is not faulted, otherwise e<paramref name="fallbackTask"/>.</summary>
@@ -488,8 +497,13 @@ module Task =
     ///
     /// <returns>The option if the option is Some, else the alternate option.</returns>
     let orElse (fallbackTask: Task<'T>) (source: Task<'T>) : Task<'T> =
+        #if !NET45
         let fallbackTask = nullArgCheck (nameof fallbackTask) fallbackTask
         let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "fallbackTask" fallbackTask
+        raiseIfNull "source" source
+        #endif
         orElseWith (fun _ -> fallbackTask) source
 
     /// Creates a Task from a value
@@ -513,12 +527,20 @@ module Task_v2 =
         /// <param name="body">The body function to run.</param>
         /// <returns>The resulting task.</returns>
         /// <remarks>This function is used to de-sugar try .. with .. blocks in Computation Expressions.</remarks>
+        #if !NET45
         let inline tryWith ([<InlineIfLambda>] compensation: exn -> Task<'T>) ([<InlineIfLambda>] body: unit -> Task<'T>) = Task.tryWith body compensation
+        #else
+        let inline tryWith (compensation: exn -> Task<'T>) (body: unit -> Task<'T>) = Task.tryWith body compensation
+        #endif
 
         /// <summary>Runs a compensation function after the body completes, regardless of whether the body completed successfully, faulted, or was canceled.</summary>
         /// <param name="compensation">The compensation function to run after the body completes.</param>
         /// <param name="body">The body function to run.</param>
         /// <returns>The resulting task.</returns>
         /// <remarks>This function is used to de-sugar try .. finally .. blocks in Computation Expressions.</remarks>
+        #if !NET45
         let inline tryFinally ([<InlineIfLambda>] compensation: unit -> unit) ([<InlineIfLambda>] body: unit -> Task<'T>) = Task.tryFinally body compensation    
+        #else
+        let inline tryFinally (compensation: unit -> unit) (body: unit -> Task<'T>) = Task.tryFinally body compensation    
+        #endif
 #endif

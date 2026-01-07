@@ -232,6 +232,8 @@ type TryWith =
     static member        TryWith (computation: unit -> Async<_>      , catchHandler: exn -> Async<_>      , _: TryWith , _) = async.TryWith ((computation ()), catchHandler)
     #if !FABLE_COMPILER
     static member        TryWith (computation: unit -> Task<_>       , catchHandler: exn -> Task<_>       , _: TryWith, True) = Task.tryWith catchHandler computation
+    #endif
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        TryWith (computation: unit -> ValueTask<_>  , catchHandler: exn -> ValueTask<_>  , _: TryWith, True) = ValueTask.tryWith catchHandler computation
     #endif
     static member        TryWith (computation: unit -> Lazy<_>       , catchHandler: exn -> Lazy<_>       , _: TryWith , _) = lazy (try (computation ()).Force () with e -> (catchHandler e).Force ()) : Lazy<_>
@@ -272,6 +274,8 @@ type TryFinally =
     static member        TryFinally ((computation: unit -> Async<_>, compensation: unit -> unit), _: TryFinally, _, _) = async.TryFinally (computation (), compensation) : Async<_>
     #if !FABLE_COMPILER
     static member        TryFinally ((computation: unit -> Task<_>     , compensation: unit -> unit), _: TryFinally, _, True) = Task.tryFinally compensation computation : Task<_>
+    #endif
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        TryFinally ((computation: unit -> ValueTask<_>, compensation: unit -> unit), _: TryFinally, _, True) = ValueTask.tryFinally compensation computation : ValueTask<_>
     #endif
     static member        TryFinally ((computation: unit -> Lazy<_> , compensation: unit -> unit), _: TryFinally, _, _) = lazy (try (computation ()).Force () finally compensation ()) : Lazy<_>
@@ -310,6 +314,8 @@ type Using =
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Async<'U>, _: Using   ) = async.Using (resource, body)
     #if !FABLE_COMPILER
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Task<'U>     , _: Using) = Task.using resource body
+    #endif
+    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> ValueTask<'U>, _: Using) = ValueTask.using resource body
     #endif
     static member        Using (resource: 'T when 'T :> IDisposable, body: 'T -> Lazy<'U> , _: Using   ) = lazy (try (body resource).Force () finally if not (isNull (box resource)) then resource.Dispose ()) : Lazy<'U>
