@@ -49,12 +49,13 @@ module Errors =
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
 
-    // Functions to remove when compiling with F#9 or higher
+#if NET9_0_OR_GREATER && !FABLE_COMPILER
     let inline nullArgCheck paramName paramValue =
         if isNull paramValue then nullArg paramName
         else paramValue
 
     module Unchecked = let nonNull = id
+#endif
 
 module Decimal =
     let inline trySqrt x =
