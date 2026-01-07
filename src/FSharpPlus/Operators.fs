@@ -1659,7 +1659,7 @@ module Operators =
     /// <category index="23">Additional Functions</category>
     let inline (|Parsed|_|) str : 'T option = tryParse str
 
-    #endif
+#endif
 
     /// <summary>
     /// An active pattern to match strings in a case-insensitive way.
@@ -1673,6 +1673,21 @@ module Operators =
         | s when s.Equals(ciString, StringComparison.OrdinalIgnoreCase) -> Some ()
         | _ -> None
 
+#if !FABLE_COMPILER
+    
+    /// <summary>
+    /// An active pattern to match AggregateException and extract its inner exceptions as a list.
+    /// </summary>
+    /// <category index="23">Additional Functions</category>
+    let (|AggregateException|_|) (exn: exn) : exn list option =
+        let exn = nullArgCheck (nameof exn) exn
+
+        match exn with
+        | :? AggregateException as aex -> aex.InnerExceptions |> Seq.toList |> Some
+        | _ -> None
+
+#endif
+
     /// <summary>
     /// Safely dispose a resource (includes null-checking).
     /// </summary>
@@ -1680,7 +1695,7 @@ module Operators =
     let dispose (resource: System.IDisposable) = match resource with null -> () | x -> x.Dispose ()
 
     
-    #if !FABLE_COMPILER
+#if !FABLE_COMPILER
 
     /// <summary>Additional operators for Arrows related functions which shadows some F# operators for bitwise functions.</summary>
     module Arrows =
@@ -1701,4 +1716,4 @@ module Operators =
         /// <category index="24">Arrow Functions</category>
         let inline (|||) (f: '``ArrowChoice<'T,'V>``) (g: '``ArrowChoice<'U,'V>``) : '``ArrowChoice<Choice<'U,'T>,'V>`` = Fanin.Invoke f g
 
-    #endif
+#endif
