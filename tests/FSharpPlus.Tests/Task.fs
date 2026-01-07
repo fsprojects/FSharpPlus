@@ -10,11 +10,6 @@ module Task =
     open FSharpPlus.Tests.Helpers
     
     exception TestException of string
-    
-    let (|AggregateException|_|) (x: exn) =
-        match x with
-        | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
-        | _ -> None
 
     module TaskTests =
 
