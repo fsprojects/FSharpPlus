@@ -12,11 +12,6 @@ module ValueTask =
     open FSharpPlus.Tests.Helpers
     
     exception TestException of string
-
-    let (|AggregateException|_|) (x: exn) =
-        match x with
-        | :? AggregateException as e -> e.InnerExceptions |> Seq.toList |> Some
-        | _ -> None
     
     type ValueTask<'T> with
         static member WhenAll (source: ValueTask<'T> seq) = source |> Seq.map (fun x -> x.AsTask ()) |> Task.WhenAll |> ValueTask<'T []>
