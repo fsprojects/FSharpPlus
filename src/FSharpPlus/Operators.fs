@@ -8,6 +8,8 @@ open FSharpPlus.Internals
 [<AutoOpenAttribute>]
 module Operators =
 
+    open FSharpPlus.Internals.Errors
+
     // Common combinators
 
     /// <summary>Creates a new function with first two arguments flipped.</summary>
@@ -1676,6 +1678,17 @@ module Operators =
 
     #endif
 
+    /// <summary>
+    /// An active pattern to match strings in a case-insensitive way.
+    /// </summary>
+    /// <category index="23">Additional Functions</category>
+    let (|CiString|_|) (ciString: string) (source: string) : unit option =
+        let ciString = nullArgCheck (nameof ciString) ciString
+        let source   = nullArgCheck (nameof source)   source
+
+        match source with
+        | s when s.Equals(ciString, StringComparison.OrdinalIgnoreCase) -> Some ()
+        | _ -> None
 
     /// <summary>
     /// Safely dispose a resource (includes null-checking).
