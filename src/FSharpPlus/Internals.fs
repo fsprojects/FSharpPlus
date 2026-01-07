@@ -49,7 +49,7 @@ module Errors =
     let exnNoSubtraction  = new System.Exception "No subtraction defined for these values in this domain."
     let exnUnreachable    = new System.InvalidOperationException "This execution path is unreachable."
 
-#if NET9_0_OR_GREATER && !FABLE_COMPILER
+#if !NET9_0_OR_GREATER || FABLE_COMPILER
     let inline nullArgCheck paramName paramValue =
         if isNull paramValue then nullArg paramName
         else paramValue
