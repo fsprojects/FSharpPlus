@@ -56,6 +56,20 @@ type Compose<'``functorF<'functorG<'t>>``> = Compose of '``functorF<'functorG<'t
     static member inline (<.>) (Compose (f: '``ApplicativeF<'ApplicativeG<'T -> 'U>``), Compose (x: '``ApplicativeF<'ApplicativeG<'T>``)) =
         Compose ((((<.>) : '``ApplicativeG<'T -> 'U>`` -> '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>``) <!> f: '``ApplicativeF<'ApplicativeG<'T> -> 'ApplicativeG<'U>`` ) <.> x: '``ApplicativeF<'ApplicativeG<'U>``)
 
+    /// <summary>
+    /// Applies two composed applicatives left-to-right in a non-sequential way, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline ( .>) (Compose (x: '``FunctorF<'FunctorG<'T>>``), Compose (y: '``FunctorF<'FunctorG<'U>>``)) : Compose<'``FunctorF<'FunctorG<'U>>``> =
+        (ZipApply.Invoke << Map.Invoke (ZipApply.Invoke << Map.Invoke (fun _ k -> k))) x y |> Compose
+    
+    /// <summary>
+    /// Applies two composed applicatives left-to-right in a non-sequential way, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    static member inline (<.  ) (Compose (x: '``FunctorF<'FunctorG<'U>>``), Compose (y: '``FunctorF<'FunctorG<'T>>``)) : Compose<'``FunctorF<'FunctorG<'U>>``> =
+        (ZipApply.Invoke << Map.Invoke (ZipApply.Invoke << Map.Invoke (fun k _ -> k))) x y |> Compose
+
     static member inline Map2 (f: 'T -> 'U -> 'V, Compose (x: '``ApplicativeF<'ApplicativeG<'T>``), Compose (y: '``ApplicativeF<'ApplicativeG<'U>``)) =
         Compose (Map2.Invoke (Map2.Invoke f: '``ApplicativeG<'T>`` -> '``ApplicativeG<'U>`` -> '``ApplicativeG<'V>``) x y: '``ApplicativeF<'ApplicativeG<'V>``)
 
