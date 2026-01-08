@@ -259,6 +259,18 @@ module Operators =
     let inline map3 (f: 'T->'U->'V->'W) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) (z: '``ZipApplicative<'V>``) : '``ZipApplicative<'W>`` = Map3.Invoke f x y z
 
     /// <summary>
+    /// Applies two applicatives left-to-right in a non-sequential way, discarding the value of the first argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (.>) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) : '``ZipApplicative<'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``ZipApplicative<'U->'U>``) <.> y
+    
+    /// <summary>
+    /// Applies two applicatives left-to-right in a non-sequential way, discarding the value of the second argument.
+    /// </summary>
+    /// <category index="2">Applicative</category>
+    let inline (<.) (x: '``ZipApplicative<'U>``) (y: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``ZipApplicative<'T->'U>``) <.> y
+
+    /// <summary>
     /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
     /// Operator version of 'map2'.
     /// </summary>
