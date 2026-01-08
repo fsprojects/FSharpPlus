@@ -14,7 +14,7 @@ module Task =
     open FSharpPlus.Internals.Errors
 
     /// Active pattern to match the state of a completed Task
-    let inline private (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
+    let inline internal (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
         if t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
         elif t.IsCanceled then Canceled
         elif t.IsCompleted then Succeeded t.Result
