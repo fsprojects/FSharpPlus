@@ -217,13 +217,13 @@ module Operators =
     /// Sequences two applicatives left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline ( *>) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative<'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``Applicative<'U->'U>``) <*> y
+    let inline ( *>) (x: '``Applicative<'T>``) (y: '``Applicative<'U>``) : '``Applicative< 'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``Applicative<'U->'U>``) <*> y
     
     /// <summary>
     /// Sequences two applicatives left-to-right, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
+    let inline (<*  ) (x: '``Applicative<'U>``) (y: '``Applicative<'T>``) : '``Applicative< 'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``Applicative<'T->'U>``) <*> y
 
     /// <summary>
     /// Transforms an alternative value (which has the notion of success/failure) to an alternative
@@ -262,36 +262,36 @@ module Operators =
     /// Applies two applicatives left-to-right in a non-sequential way, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (.>) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) : '``ZipApplicative<'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``ZipApplicative<'U->'U>``) <.> y
+    let inline (.>) (x: '``ZipApplicative<'T>``) (y: '``ZipApplicative<'U>``) : '``ZipApplicative< 'U>`` = ((fun (_: 'T) (k: 'U) -> k) <!>  x : '``ZipApplicative<'U->'U>``) <.> y
     
     /// <summary>
     /// Applies two applicatives left-to-right in a non-sequential way, discarding the value of the second argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline (<.) (x: '``ZipApplicative<'U>``) (y: '``ZipApplicative<'T>``) : '``ZipApplicative<'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``ZipApplicative<'T->'U>``) <.> y
+    let inline (<.) (x: '``ZipApplicative<'U>``) (y: '``ZipApplicative<'T>``) : '``ZipApplicative< 'U>`` = ((fun (k: 'U) (_: 'T) -> k ) <!> x : '``ZipApplicative<'T->'U>``) <.> y
 
     /// <summary>
     /// Sequences two nested applicatives left-to-right, discarding the value of the first argument.
     /// </summary>
     /// <category index="2">Applicative</category>
-    let inline ( **>) (x: '``Applicative1<Applicative2<'T>>``)       (y: '``Applicative1<Applicative2<'U>>``)       : '``Applicative1<Applicative2<'U>>``       = (Map.Invoke ( *>) x) <*> y
+    let inline ( **>) (x: '``Applicative1<Applicative2<'T>>``)       (y: '``Applicative1<Applicative2<'U>>``)       : '``Applicative1<Applicative2< 'U>>``       = (Map.Invoke ( *>) x) <*> y
 
     /// <summary>
     /// Applies two nested applicatives left-to-right, discarding the value of the first argument.
     /// The outer applicative is non-sequential (zip-like), while the inner one is sequential.
     /// </summary>
-    let inline ( .*>) (x: '``ZipApplicative<Applicative<'T>>``)      (y: '``ZipApplicative<Applicative<'U>>``)      : '``ZipApplicative1<Applicative<'U>>``     = (Map.Invoke ( *>) x) <.> y
+    let inline ( .*>) (x: '``ZipApplicative<Applicative<'T>>``)      (y: '``ZipApplicative<Applicative<'U>>``)      : '``ZipApplicative1<Applicative< 'U>>``     = (Map.Invoke ( *>) x) <.> y
 
     /// <summary>
     /// Applies two nested applicatives left-to-right, discarding the value of the first argument.
     /// The outer applicative is sequential, while the inner one is non-sequential (zip-like).
     /// </summary>
-    let inline ( *.>) (x: '``Applicative<ZipApplicative<'T>>``)      (y: '``Applicative1<ZipApplicative<'U>>``)     : '``Applicative1<ZipApplicative<'U>>``     = (Map.Invoke ( .>) x) <*> y
+    let inline ( *.>) (x: '``Applicative<ZipApplicative<'T>>``)      (y: '``Applicative1<ZipApplicative<'U>>``)     : '``Applicative1<ZipApplicative< 'U>>``     = (Map.Invoke ( .>) x) <*> y
 
     /// <summary>
     /// Applies two nested applicatives left-to-right in a non-sequential way, discarding the value of the first argument.
     /// </summary>
-    let inline ( ..>) (x: '``ZipApplicative1<ZipApplicative2<'T>>``) (y: '``ZipApplicative1<ZipApplicative2<'U>>``) : '``ZipApplicative1<ZipApplicative2<'U>>`` = (Map.Invoke ( .>) x) <.> y
+    let inline ( ..>) (x: '``ZipApplicative1<ZipApplicative2<'T>>``) (y: '``ZipApplicative1<ZipApplicative2<'U>>``) : '``ZipApplicative1<ZipApplicative2< 'U>>`` = (Map.Invoke ( .>) x) <.> y
     
     /// <summary>
     /// Applies 2 lifted arguments to a non-lifted function with pointwise and/or parallel semantics.
