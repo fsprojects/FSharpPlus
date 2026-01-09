@@ -65,10 +65,15 @@ module Task =
         raiseIfNull "source" source
         #endif
 
-        backgroundTask {
-            let! r = source
-            return mapper r
-        }
+        if source.IsCompleted then
+            match source with
+            | Succeeded r -> try result (mapper r) with e -> Task.FromException<_> e
+            | Faulted exn -> FromExceptions exn
+            | Canceled    -> canceled
+        else
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            source |> continueTask tcs (fun r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e)
+            tcs.Task
 
     /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', mapping its results with 'mapper'.</summary>
     /// <remarks>Workflows are run in sequence.</remarks>
@@ -333,19 +338,13 @@ module Task =
         raiseIfNull "source" source
         #endif
 
-        backgroundTask {
-            let! inner = source
-            return! inner
-        }
+        source.Unwrap()
     
     /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> =
         let source = nullArgCheck (nameof source) source
 
-        backgroundTask {
-            let! r = source
-            return! f r
-        }
+        source |> Unchecked.nonNull |> map f |> join
     
     /// <summary>Creates a task that ignores the result of the source task.</summary>
     /// <param name="source">The source Task.</param>
@@ -371,14 +370,41 @@ module Task =
             tcs.Task
 
     [<ObsoleteAttribute("Swap parameters")>]
-    let tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> = backgroundTask {
-        try return! body ()
-        with e -> return! compensation e }
+    let rec tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> =
+        let runCompensation exn =
+            try compensation exn
+            with e -> Task.FromException<'T> e
+        let unwrapException (agg: AggregateException) =
+            if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
+            else agg :> Exception
+        try Ok (body ()) with e -> Error e
+        |> function
+        | Ok task ->
+            if task.IsCompleted then
+                match task with
+                | Succeeded _ -> task
+                | Faulted aex -> runCompensation (unwrapException aex)
+                | Canceled    -> canceled
+            else
+                task.ContinueWith(fun (x: Task<'T>) -> tryWith (fun () -> x) compensation).Unwrap ()
+        | Error exn -> runCompensation exn
     
     [<ObsoleteAttribute("Swap parameters")>]
-    let tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> = backgroundTask {
-        try return! body ()
-        finally compensation () }
+    let rec tryFinally (body: unit -> Task<'T>) (compensation : unit -> unit) : Task<'T> =
+        let task =
+            try body ()
+            with _ ->
+                try
+                    compensation ()
+                    reraise ()
+                with e -> Task.FromException<'T> e
+        if task.IsCompleted then
+            try
+                compensation ()
+                task
+            with e -> Task.FromException<'T> e
+        else
+            task.ContinueWith(fun (x: Task<'T>) -> tryFinally (fun () -> x) compensation).Unwrap ()
 
     /// Used to de-sugar use .. blocks in Computation Expressions.
     let using (disp: 'T when 'T :> IDisposable) (body: 'T -> Task<'U>) =

@@ -63,10 +63,15 @@ module ValueTask =
     /// <param name="source">The source ValueTask workflow.</param>
     /// <returns>The resulting ValueTask workflow.</returns>
     let map (mapper: 'T -> 'U) (source: ValueTask<'T>) : ValueTask<'U> =
-        backgroundTask {
-            let! r = source
-            return mapper r
-        } |> ValueTask<'U>
+        if source.IsCompleted then
+            match source with
+            | Succeeded r -> try result (mapper r) with e -> ValueTask.FromException<_> e
+            | Faulted exn -> FromExceptions exn
+            | Canceled    -> canceled
+        else
+            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            source |> continueTask tcs (fun r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e)
+            tcs.Task |> ValueTask<'U>
 
 
     /// <summary>Creates a ValueTask workflow from two workflows 'x' and 'y', mapping its results with 'f'.</summary>
@@ -271,17 +276,11 @@ module ValueTask =
     
     /// Flattens two nested ValueTask into one.
     let join (source: ValueTask<ValueTask<'T>>) : ValueTask<'T> =
-        backgroundTask {
-            let! inner = source
-            return! inner
-        } |> ValueTask<'T>    
+        (source |> map (fun x -> x.AsTask())).AsTask().Unwrap () |> ValueTask<'T>
     
     /// <summary>Creates a ValueTask workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> ValueTask<'U>) (source: ValueTask<'T>) : ValueTask<'U> =
-        backgroundTask {
-            let! r = source
-            return! f r
-        } |> ValueTask<'U>
+        source |> map f |> join
             
     /// <summary>Creates a ValueTask that ignores the result of the source ValueTask.</summary>
     /// <param name="source">The source ValueTask.</param>
@@ -302,17 +301,41 @@ module ValueTask =
 
     /// Used to de-sugar try .. with .. blocks in Computation Expressions.
     let inline tryWith ([<InlineIfLambda>]compensation: exn -> ValueTask<'T>) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
-        backgroundTask {
-            try return! body ()
-            with e -> return! compensation e
-        } |> ValueTask<'T>
+        let runCompensation exn =
+            try compensation exn
+            with e -> ValueTask.FromException<'T> e
+        let unwrapException (agg: AggregateException) =
+            if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
+            else agg :> Exception
+        try Ok (body ()) with e -> Error e
+        |> function
+        | Ok task ->
+            if task.IsCompleted then
+                match task with
+                | Succeeded _ -> task
+                | Faulted aex -> runCompensation (unwrapException aex)
+                | Canceled    -> canceled
+            else
+                task.AsTask().ContinueWith(fun (x: Task<'T>) -> Task.tryWith (compensation >> fun x -> x.AsTask()) (fun () -> x)).Unwrap () |> ValueTask<'T>
+        | Error exn -> runCompensation exn
+        
     
     /// Used to de-sugar try .. finally .. blocks in Computation Expressions.
     let inline tryFinally ([<InlineIfLambda>]compensation : unit -> unit) ([<InlineIfLambda>]body: unit -> ValueTask<'T>) : ValueTask<'T> =
-        backgroundTask {
-            try return! body ()
-            finally compensation ()
-        } |> ValueTask<'T>
+        let task =
+            try body ()
+            with _ ->
+                try
+                    compensation ()
+                    reraise ()
+                with e -> ValueTask.FromException<'T> e
+        if task.IsCompleted then
+            try
+                compensation ()
+                task
+            with e -> ValueTask.FromException<'T> e
+        else
+            task.AsTask().ContinueWith(fun (x: Task<'T>) -> Task.tryFinally compensation (fun () -> x)).Unwrap () |> ValueTask<'T>
 
     /// Used to de-sugar use .. blocks in Computation Expressions.
     let inline using (disp: 'T when 'T :> IDisposable) ([<InlineIfLambda>]body: 'T -> ValueTask<'U>) =
