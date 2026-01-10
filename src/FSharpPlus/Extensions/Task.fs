@@ -15,10 +15,11 @@ module Task =
 
     /// Active pattern to match the state of a completed Task
     let inline internal (|Succeeded|Canceled|Faulted|) (t: Task<'a>) =
-        if t.IsFaulted then Faulted (Unchecked.nonNull (t.Exception))
-        elif t.IsCanceled then Canceled
-        elif t.IsCompleted then Succeeded t.Result
-        else invalidOp "Internal error: The task is not yet completed."
+        match t.Status with
+        | TaskStatus.RanToCompletion -> Succeeded t.Result
+        | TaskStatus.Faulted         -> Faulted (Unchecked.nonNull t.Exception)
+        | TaskStatus.Canceled        -> Canceled
+        | _ -> invalidOp (sprintf "Internal error: The task is not yet in a final state. State = TaskStatus.%A" t.Status)
 
     let inline internal continueTask (tcs: TaskCompletionSource<'Result>) (k: 't -> unit) (x: Task<'t>) =
         let f = function
@@ -27,32 +28,56 @@ module Task =
             | Canceled    -> tcs.SetCanceled ()
         x.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> f x)
 
+  #if NET5_0_OR_GREATER
+    let [<Literal>] private tcsOptions = TaskCreationOptions.RunContinuationsAsynchronously
+  #else
+    let             private tcsOptions = ()
+  #endif
 
     /// <summary>Creates a Task that's completed successfully with the specified value.</summary>
     /// <param name="value"></param>
     /// <returns>A Task that is completed successfully with the specified value.</returns>
     let result (value: 'T) : Task<'T> = Task.FromResult value
-    
+
+        
+    /// <summary>Creates a Task that's completed unsuccessfully with the specified exception.</summary>
+    /// <param name="exn">The exception to be raised.</param>
+    /// <returns>A Task that is completed unsuccessfully with the specified exception.</returns>
+    let raise<'T> (exn: exn) : Task<'T> =
+      #if NET5_0_OR_GREATER  
+        Task.FromException<'T> exn
+      #else
+        let tcs = TaskCompletionSource<'T> tcsOptions
+        tcs.SetException exn
+        tcs.Task
+      #endif
+
     /// <summary>Creates a Task that's completed unsuccessfully with the specified exceptions.</summary>
-    /// <param name="exn">The AggregateException to be raised.</param>
+    /// <param name="aex">The AggregateException to be raised.</param>
     /// <returns>A Task that is completed unsuccessfully with the specified exceptions.</returns>
     /// <remarks>
     /// Prefer this function to handle AggregateExceptions over Task.FromException as it handles them correctly.
     /// </remarks>
-    let internal FromExceptions<'T> (aex: AggregateException) : Task<'T> =
+    let inline internal FromExceptions<'T> (aex: AggregateException) : Task<'T> =
+      #if NET5_0_OR_GREATER
         match aex with
         | agg when agg.InnerExceptions.Count = 1 -> Task.FromException<'T> agg.InnerExceptions[0]
-        | agg ->
-            let tcs = TaskCompletionSource<'T> ()
-            tcs.SetException agg.InnerExceptions
+        | _ ->
+      #endif
+            let tcs = TaskCompletionSource<'T> tcsOptions
+            tcs.SetException aex.InnerExceptions
             tcs.Task
-
-    let private cancellationTokenSingleton = CancellationToken true
 
     /// <summary>Creates a Task that's canceled.</summary>
     /// <returns>A Task that's canceled.</returns>
-    let canceled<'T> : Task<'T> = Task.FromCanceled<'T> cancellationTokenSingleton
-    
+    let canceled<'T> : Task<'T> =
+      #if NET5_0_OR_GREATER
+        Task.FromCanceled<'T> (CancellationToken true)
+      #else
+        let tcs = TaskCompletionSource<'T> tcsOptions
+        tcs.SetCanceled ()
+        tcs.Task
+      #endif
     
     /// <summary>Creates a task workflow from 'source' workflow, mapping its result with 'mapper'.</summary>
     /// <param name="mapper">The mapping function.</param>
@@ -67,11 +92,11 @@ module Task =
 
         if source.IsCompleted then
             match source with
-            | Succeeded r -> try result (mapper r) with e -> Task.FromException<_> e
+            | Succeeded r -> try result (mapper r) with e -> raise e
             | Faulted exn -> FromExceptions exn
             | Canceled    -> canceled
         else
-            let tcs = TaskCompletionSource<'U> TaskCreationOptions.RunContinuationsAsynchronously
+            let tcs = TaskCompletionSource<'U> tcsOptions
             source |> continueTask tcs (fun r -> try tcs.SetResult (mapper r) with e -> tcs.SetException e)
             tcs.Task
 
@@ -91,13 +116,13 @@ module Task =
 
         if task1.IsCompleted && task2.IsCompleted then
             match task1, task2 with
-            | Succeeded r1, Succeeded r2 -> try result (mapper r1 r2) with e -> Task.FromException<_> e
+            | Succeeded r1, Succeeded r2 -> try result (mapper r1 r2) with e -> raise e
             | Succeeded _ , Faulted exn  -> FromExceptions exn
             | Succeeded _ , Canceled     -> canceled
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> tcsOptions
 
             match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
@@ -128,7 +153,7 @@ module Task =
 
         if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
             match task1, task2, task3 with
-            | Succeeded r1, Succeeded r2, Succeeded r3 -> try result (mapper r1 r2 r3) with e -> Task.FromException<_> e
+            | Succeeded r1, Succeeded r2, Succeeded r3 -> try result (mapper r1 r2 r3) with e -> raise e
             | Faulted exn , _            , _           -> FromExceptions exn
             | Canceled    , _            , _           -> canceled
             | _           , Faulted exn  , _           -> FromExceptions exn
@@ -136,7 +161,7 @@ module Task =
             | _           , _           , Faulted exn  -> FromExceptions exn
             | _           , _           , Canceled     -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> tcsOptions
             match task1.Status, task2.Status, task3.Status with
             | TaskStatus.Canceled, _                  , _                   -> tcs.SetCanceled ()
             | TaskStatus.Faulted , _                  , _                   -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
@@ -168,9 +193,9 @@ module Task =
         #endif
 
         if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion then
-            try result (mapper task1.Result task2.Result) with e -> Task.FromException<'U> e
+            try result (mapper task1.Result task2.Result) with e -> raise e
         else
-            let tcs = TaskCompletionSource<_> ()
+            let tcs = TaskCompletionSource<_> tcsOptions
             let r1 = ref Unchecked.defaultof<_>
             let r2 = ref Unchecked.defaultof<_>
             let mutable cancelled = false
@@ -222,9 +247,9 @@ module Task =
 
         if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion && task3.Status = TaskStatus.RanToCompletion then
             try result (mapper task1.Result task2.Result task3.Result)
-            with e -> Task.FromException<'U> e
+            with e -> raise e
         else
-            let tcs = TaskCompletionSource<_> ()
+            let tcs = TaskCompletionSource<_> tcsOptions
             let r1 = ref Unchecked.defaultof<_>
             let r2 = ref Unchecked.defaultof<_>
             let r3 = ref Unchecked.defaultof<_>
@@ -273,13 +298,13 @@ module Task =
 
         if f.IsCompleted && x.IsCompleted then
             match f, x with
-            | Succeeded r1, Succeeded r2 -> try result (r1 r2) with e -> Task.FromException<_> e
+            | Succeeded r1, Succeeded r2 -> try result (r1 r2) with e -> raise e
             | Succeeded _ , Faulted exn  -> FromExceptions exn
             | Succeeded _ , Canceled     -> canceled
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'U> ()
+            let tcs = TaskCompletionSource<'U> tcsOptions
             match f.Status, x.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull f.Exception).InnerExceptions
@@ -307,7 +332,7 @@ module Task =
             | Faulted exn , _            -> FromExceptions exn
             | Canceled    , _            -> canceled
         else
-            let tcs = TaskCompletionSource<'T1 * 'T2> ()
+            let tcs = TaskCompletionSource<'T1 * 'T2> tcsOptions
             match task1.Status, task2.Status with
             | TaskStatus.Canceled, _ -> tcs.SetCanceled ()
             | TaskStatus.Faulted, _  -> tcs.SetException (Unchecked.nonNull task1.Exception).InnerExceptions
@@ -357,11 +382,12 @@ module Task =
         raiseIfNull "source" source
         #endif
 
-        if source.IsCompletedSuccessfully then result ()
-        elif source.IsFaulted  then FromExceptions (Unchecked.nonNull source.Exception)
-        elif source.IsCanceled then canceled
-        else
-            let tcs = TaskCompletionSource<unit> ()
+        match source.Status with
+        | TaskStatus.RanToCompletion -> result ()
+        | TaskStatus.Faulted         -> FromExceptions (Unchecked.nonNull source.Exception)
+        | TaskStatus.Canceled        -> canceled
+        | _ ->
+            let tcs = TaskCompletionSource<unit> tcsOptions
             let k (t: Task) : unit =
                 if t.IsCanceled  then tcs.SetCanceled ()
                 elif t.IsFaulted then tcs.SetException (Unchecked.nonNull source.Exception).InnerExceptions
@@ -373,7 +399,7 @@ module Task =
     let rec tryWith (body: unit -> Task<'T>) (compensation: exn -> Task<'T>) : Task<'T> =
         let runCompensation exn =
             try compensation exn
-            with e -> Task.FromException<'T> e
+            with e -> raise e
         let unwrapException (agg: AggregateException) =
             if agg.InnerExceptions.Count = 1 then agg.InnerExceptions.[0]
             else agg :> Exception
@@ -397,12 +423,12 @@ module Task =
                 try
                     compensation ()
                     reraise ()
-                with e -> Task.FromException<'T> e
+                with e -> raise e
         if task.IsCompleted then
             try
                 compensation ()
                 task
-            with e -> Task.FromException<'T> e
+            with e -> raise e
         else
             task.ContinueWith(fun (x: Task<'T>) -> tryFinally (fun () -> x) compensation).Unwrap ()
 
@@ -447,11 +473,46 @@ module Task =
         raiseIfNull "source" source
         #endif
         orElseWith (fun _ -> fallbackTask) source
+    
+    /// <summary>Attempts to recover from a potentially failed task by mapping the exception to a successful result.</summary>
+    /// <param name="mapper">Mapping function from exception to result.</param>
+    /// <param name="source">The source task.</param>
+    /// <returns>A successful resulting task.</returns>
+    /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
+    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
+        let source = nullArgCheck (nameof source) source
 
-    /// <summary>Creates a Task that's completed unsuccessfully with the specified exception.</summary>
-    /// <param name="exn">The exception to be raised.</param>
-    /// <returns>A Task that is completed unsuccessfully with the specified exception.</returns>
-    let raise<'T> (exn: exn) : Task<'T> = Task.FromException<'T> exn
+        tryWith (fun () -> source) (mapper >> result)
+
+    /// <summary>Maps the exception of a faulted task to another exception.</summary>
+    /// <param name="mapper">Mapping function from exception to exception.</param>
+    /// <param name="source">The source task.</param>
+    /// <returns>The resulting task.</returns>
+    let inline mapError ([<InlineIfLambda>]mapper: exn -> exn) (source: Task<'T>) : Task<'T> =
+        let source = nullArgCheck (nameof source) source
+
+        if source.IsCompleted then
+            match source with
+            | Faulted exn -> FromExceptions (AggregateException (mapper exn))
+            | _           -> source
+        else
+            let tcs = TaskCompletionSource<'T> tcsOptions
+            let k = function
+                | Succeeded r -> tcs.SetResult r
+                | Faulted aex -> tcs.SetException (AggregateException (mapper aex)).InnerExceptions
+                | Canceled    -> tcs.SetCanceled ()
+            source.ConfigureAwait(false).GetAwaiter().UnsafeOnCompleted (fun () -> k source)
+            tcs.Task
+
+    /// Creates a Task from a Result value.
+    /// If the Result is Ok, the Task will complete successfully with the value.
+    /// If the Result is Error, the Task will complete unsuccessfully with the exception.
+    /// <param name="source">The source Result.</param>
+    /// <returns>The resulting Task.</returns>
+    let ofResult (source: Result<'T, exn>) : Task<'T> =
+        match source with
+        | Ok x -> result x
+        | Error exn -> raise exn
 
 
 /// Workaround to fix signatures without breaking binary compatibility.
