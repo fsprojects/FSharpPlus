@@ -152,7 +152,7 @@ module NonEmptyList =
     /// <param name="value">The element to add</param>
     /// <param name="list">The list to add to</param>
     /// <returns>A new list with the element added to the beginning.</returns>
-    let cons e { Head = x; Tail = xs } = { Head = e ; Tail = x::xs }
+    let cons value ({ Head = x; Tail = xs } as list) = { Head = value ; Tail = x::xs }
 
     /// <summary>Splits the list in head and tail.</summary>
     /// <param name="list">The input list.</param>
@@ -160,7 +160,7 @@ module NonEmptyList =
     /// <exception cref="T:System.ArgumentException">Thrown when the input list tail is empty.</exception>
     let uncons ({ Head = x; Tail = xs } as list) =
         match xs with
-        | [] -> invalidArg (nameof(list)) "The input sequence has an empty tail"
+        | [] -> invalidArg (nameof list) "The input sequence has an empty tail"
         | _  -> x, ofList xs
 
     /// <summary>Splits the NonEmptyList in head and tail.</summary>
