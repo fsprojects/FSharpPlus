@@ -367,7 +367,11 @@ module Task =
     
     /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> =
+        #if !NET45
         let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
+        #endif
 
         source |> Unchecked.nonNull |> map f |> join
     
@@ -479,8 +483,12 @@ module Task =
     /// <param name="source">The source task.</param>
     /// <returns>A successful resulting task.</returns>
     /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
-    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
+    let inline recover (mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
+        #if !NET45
         let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
+        #endif
 
         tryWith (fun () -> source) (mapper >> result)
 
@@ -488,8 +496,12 @@ module Task =
     /// <param name="mapper">Mapping function from exception to exception.</param>
     /// <param name="source">The source task.</param>
     /// <returns>The resulting task.</returns>
-    let inline mapError ([<InlineIfLambda>]mapper: exn -> exn) (source: Task<'T>) : Task<'T> =
+    let mapError (mapper: exn -> exn) (source: Task<'T>) : Task<'T> =
+        #if !NET45
         let source = nullArgCheck (nameof source) source
+        #else
+        raiseIfNull "source" source
+        #endif
 
         if source.IsCompleted then
             match source with
