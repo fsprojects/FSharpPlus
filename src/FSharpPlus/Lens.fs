@@ -31,30 +31,28 @@ module Lens =
     /// <summary>Write to a lens.</summary>
     /// <param name="lens">The lens.</param>
     /// <param name="v">The value we want to write in the part targeted by the lens.</param>
-    /// <param name="source">The original object.</param>
-    /// <returns>The new object with the value modified.</returns>
+    /// <returns>A function taking the source paramenter and returning the new object with the value modified.</returns>
     let setl lens v = Identity.run << lens (fun _ -> Identity v)
 
     /// <summary>Update a value in a lens.</summary>
     /// <param name="lens">The lens.</param>
     /// <param name="f">A function that converts the value we want to write in the part targeted by the lens.</param>
-    /// <param name="source">The original object.</param>
-    /// <returns>The new object with the value modified.</returns>
+    /// <returns>A function taking the original object and returning the new object with the value modified.</returns>
     let over lens f = Identity.run << lens (Identity << f)
 
     /// <summary>Read from a lens.</summary>
     /// <param name="lens">The lens.</param>
-    /// <param name="source">The object.</param>
-    /// <returns>The part the lens is targeting.</returns>
+    /// <returns>A function taking the object and returning the part the lens is targeting.</returns>
     let view lens   = Const.run << lens Const
 
     /// <summary>Retrieve the first value targeted by a Prism, Fold or Traversal (or Some result from a Getter or Lens). See also (^?).</summary>
     /// <param name="prism">The prism.</param>
+    #if FABLE_COMPILER
     /// <param name="source">The object.</param>
     /// <returns>The value (if any) the prism is targeting.</returns>
-    #if FABLE_COMPILER
     let preview (optic: ('a -> Const<_,'b>) -> _ -> Const<_,'t>) (source: 's) : 'a option = source |> optic (fun x -> Const (First (Some x))) |> Const.run |> First.run
     #else
+    /// <returns>A function taking the object and returning the value (if any) the prism is targeting.</returns>
     let preview prism = First.run << Const.run << prism (fun x -> Const (FSharpPlus.Data.First (Some x)))
     #endif
 
