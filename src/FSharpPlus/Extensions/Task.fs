@@ -424,7 +424,7 @@ module Task =
     /// <param name="source">The source task.</param>
     /// <returns>A successful resulting task.</returns>
     /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
-    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
+    let inline recoverWith ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
 
         tryWith (fun () -> source) (mapper >> result)
