@@ -66,7 +66,7 @@ module Extensions =
 
     #endif
 
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
 
     type ValueTask<'t> with
 
@@ -199,7 +199,7 @@ module Extensions =
 
         /// Combine all asyncs in one, chaining them in sequence order.
         static member Sequential (t: list<Async<'T>>) : Async<list<'T>> =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let rec loop acc = function
                 | []    -> async.Return (List.rev acc)
                 | x::xs -> async.Bind (x, fun x -> loop (x::acc) xs)
@@ -262,7 +262,7 @@ module Extensions =
 
         /// Returns None if it contains a None element, otherwise a list of all elements.
         static member Sequential (t: seq<option<'t>>) =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let mutable ok = true
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -291,7 +291,7 @@ module Extensions =
 
         /// Returns None if it contains a None element, otherwise a list of all elements.
         static member Sequential (t: seq<voption<'t>>) =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let mutable ok = true
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -320,7 +320,7 @@ module Extensions =
 
         /// Returns the first Choice2Of2 if it contains a Choice2Of2 element, otherwise a list of all Choice1Of2 elements.
         static member Sequential (t: seq<Choice<'T1, 'T2>>) =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let mutable error = ValueNone
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -364,7 +364,7 @@ module Extensions =
 
         /// Returns the first Choice2Of2 if it contains a Choice2Of2 element, otherwise a list of all elements.
         static member Sequential (t: list<Choice<'T, 'Choice2Of2>>) =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let mutable error = ValueNone
             let res = Seq.toList (seq {
                 use e = (t :> seq<_>).GetEnumerator ()
@@ -408,7 +408,7 @@ module Extensions =
 
         /// Returns the first Error if it contains an Error element, otherwise a sequence of all elements.
         static member Sequential (t: seq<Result<'T, 'Error>>) =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let mutable error = ValueNone
             let res = Seq.toArray (seq {
                 use e = t.GetEnumerator ()
@@ -452,7 +452,7 @@ module Extensions =
 
         /// Returns the first Error if it contains an Error element, otherwise a list of all elements.
         static member Sequential (t: list<Result<'T, 'Error>>) =
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
             let mutable error = ValueNone
             let res = Seq.toList (seq {
                 use e = (t :> seq<_>).GetEnumerator ()

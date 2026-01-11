@@ -22,11 +22,7 @@ module Result =
     /// <param name="binder">The function to bind if the result is Ok.</param>
     /// <param name="source">The result to bind from.</param>
     /// <returns>The resulting monad containing a result.</returns>
-    #if !NET45
     let inline bindInto ([<InlineIfLambda>]binder: 'T -> '``Monad<Result<'U, 'Error>>``) (source: Result<'T, 'Error>) : '``Monad<Result<'U, 'Error>>`` =
-    #else
-    let inline bindInto (binder: 'T -> '``Monad<Result<'U, 'Error>>``) (source: Result<'T, 'Error>) : '``Monad<Result<'U, 'Error>>`` =
-    #endif
         source |> Result.either binder (Error >> result)
 
     /// <summary>
@@ -36,11 +32,7 @@ module Result =
     /// <param name="source">The result to bind from.</param>
     /// <returns>The resulting Task containing a result.</returns>
     /// <remarks>This is a specialized version of bindInto for Task monad.</remarks>
-    #if !NET45
     let inline bindTask ([<InlineIfLambda>]binder: 'T -> Task<Result<'U, 'Error>>) (source: Result<'T, 'Error>) : Task<Result<'U, 'Error>> =
-    #else
-    let inline bindTask (binder: 'T -> Task<Result<'U, 'Error>>) (source: Result<'T, 'Error>) : Task<Result<'U, 'Error>> =
-    #endif
         source |> Result.either binder (Error >> Task.FromResult)
 
 #endif

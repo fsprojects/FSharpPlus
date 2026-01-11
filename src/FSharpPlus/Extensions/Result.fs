@@ -159,7 +159,7 @@ module Result =
     /// A tuple with both resulting lists, Oks are in the first list.
     /// </returns>
     let partition (source: list<Result<'T, 'Error>>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER
         let rec loop ((acc1, acc2) as acc) = function
             | [] -> acc
             | x::xs ->

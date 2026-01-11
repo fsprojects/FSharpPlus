@@ -9,53 +9,23 @@ module Array =
     open System
     open FSharp.Core.CompilerServices
     open FSharpPlus.Internals.Errors
-    #if NET45 // from FSharp.Core
-    let insertAt (index: int) (value: 'T) (source: 'T array) : 'T array =
-
-        if index < 0 || index > source.Length then
-            invalidArg "index" "index must be within bounds of the array"
-
-        let length = source.Length + 1
-        let result: 'T array = Array.zeroCreate(length)
-
-        if index > 0 then
-            Array.Copy(source, result, index)
-
-        result[index] <- value
-
-        if source.Length - index > 0 then
-            Array.Copy(source, index, result, index + 1, source.Length - index)
-
-        result
-    #endif
 
     /// <summary>Adds an element to the beginning of the given array</summary>
     /// <param name="value">The element to add</param>
     /// <param name="array">The array to add to</param>
     /// <returns>A new array with the element added to the beginning.</returns>
     let cons value (array: 'T []) =
-    #if !NET45
         let array = nullArgCheck (nameof array) array
         Array.insertAt 0 value array
-    #else
-        raiseIfNull "array" array
-        insertAt 0 value array
-    #endif
 
     /// <summary>Splits the array in head and tail.</summary>
     /// <param name="array">The input array.</param>
     /// <returns>A tuple with the head and the tail of the original array.</returns>
     /// <exception cref="T:System.ArgumentException">Thrown when the input array is empty.</exception>
     let uncons (array: 'T []) =
-    #if !NET45
         let array = nullArgCheck (nameof array) array
         if Array.isEmpty array then invalidArg (nameof array) LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
         else array[0], array[1..]
-    #else
-        raiseIfNull "array" array
-        if Array.isEmpty array then invalidArg "array" LanguagePrimitives.ErrorStrings.InputSequenceEmptyString
-        else array[0], array[1..]
-    #endif
 
     /// <summary>Applies an array of functions to an array of values and concatenates them.</summary>
     /// <param name="f">The array of functions.</param>
@@ -69,11 +39,7 @@ module Array =
     /// </code>
     /// </example>
     let apply (f: ('T -> 'U) []) (x: 'T []) : 'U [] =
-        #if !NET45
         let x = nullArgCheck (nameof x) x
-        #else
-        raiseIfNull "x" x
-        #endif
 
         let lenf, lenx = Array.length f, Array.length x
         Array.init (lenf * lenx) (fun i -> let (d, r) = Math.DivRem (i, lenx) in f.[d] x.[r])
@@ -85,13 +51,8 @@ module Array =
     ///
     /// <returns>Array with values returned from mapping function.</returns>
     let lift2 (mapping: 'T1 -> 'T2 -> 'U) (array1: 'T1 []) (array2: 'T2 []) : 'U [] =
-        #if !NET45
         let array1 = nullArgCheck (nameof array1) array1
         let array2 = nullArgCheck (nameof array2) array2
-        #else
-        raiseIfNull "array1" array1
-        raiseIfNull "array2" array2
-        #endif
 
         let lenx, leny = Array.length array1, Array.length array2
         Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in mapping array1.[d] array2.[r])
@@ -105,15 +66,9 @@ module Array =
     ///
     /// <returns>Array with values returned from mapping function.</returns>
     let lift3 (mapping: 'T1 -> 'T2 -> 'T3 -> 'U) (array1: 'T1 []) (array2: 'T2 []) (array3: 'T3 []) : 'U [] =
-        #if !NET45
         let array1 = nullArgCheck (nameof array1) array1
         let array2 = nullArgCheck (nameof array2) array2
         let array3 = nullArgCheck (nameof array3) array3
-        #else
-        raiseIfNull "array1" array1
-        raiseIfNull "array2" array2
-        raiseIfNull "array3" array3
-        #endif
 
         let lenx, leny, lenz = Array.length array1, Array.length array2, Array.length array3
         let combinedFirstTwo = Array.init (lenx * leny) (fun i -> let (d, r) = Math.DivRem (i, leny) in (array1.[d], array2.[r]))
@@ -123,15 +78,10 @@ module Array =
 
     /// Concatenates all elements, using the specified separator between each element.
     let intercalate (separator: 'T []) (source: seq<'T []>) : 'T [] =
-        #if !NET45
         let separator = nullArgCheck (nameof separator) separator
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "separator" separator
-        raiseIfNull "source" source
-        #endif
 
-        #if FABLE_COMPILER || NET45
+        #if FABLE_COMPILER
         source |> Seq.intercalate separator |> Seq.toArray
         #else
         let mutable coll = new ArrayCollector<'T> ()
@@ -145,11 +95,7 @@ module Array =
 
     /// Inserts a separator element between each element in the source array.
     let intersperse element (source: 'T []) : 'T [] =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         match source with
         | [||] -> [||]
@@ -162,28 +108,18 @@ module Array =
 
     /// Creates a sequence of arrays by splitting the source array on any of the given separators.
     let split (separators: seq<'T []>) (source: 'T []) : seq<'T []> =
-        #if !NET45
         let separators = nullArgCheck (nameof separators) separators
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "separators" separators
-        raiseIfNull "source" source
-        #endif
 
         source |> Array.toSeq |> Seq.split separators |> Seq.map Seq.toArray
 
     /// Replaces a subsequence of the source array with the given replacement array.
     let replace (oldValue: 'T seq) (newValue: 'T seq) (source: 'T[]) : 'T[] =
-        #if !NET45
         let oldValue = nullArgCheck (nameof oldValue) oldValue
         let newValue = nullArgCheck (nameof newValue) newValue
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "oldValue" oldValue
-        raiseIfNull "newValue" newValue
-        raiseIfNull "source" source
-        #endif
-        #if FABLE_COMPILER || NET45
+
+        #if FABLE_COMPILER
         source |> Array.toSeq |> Seq.replace oldValue newValue |> Seq.toArray: 'T []
         #else
         let oldValueArray = oldValue |> Seq.toArray
@@ -251,13 +187,8 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let findSliceIndex (slice: 'T []) (source: 'T []) : int =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then
@@ -273,13 +204,8 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: 'T []) (source: 'T []) : int option =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         let index = Internals.FindSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
@@ -292,13 +218,8 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let findLastSliceIndex (slice: _ []) (source: _ []) : int =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         let index = Internals.FindLastSliceIndex.arrayImpl slice source
         if index = -1 then
@@ -314,13 +235,8 @@ module Array =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindLastSliceIndex (slice: 'T []) (source: 'T []) : int option =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         let index = Internals.FindLastSliceIndex.arrayImpl slice source
         if index = -1 then None else Some index
@@ -334,11 +250,7 @@ module Array =
     /// A tuple with both resulting arrays.
     /// </returns>
     let partitionMap (mapper: 'T -> Choice<'T1, 'T2>) (source: array<'T>) : array<'T1> * array<'T2> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         let (x, y) = ResizeArray (), ResizeArray ()
         Array.iter (mapper >> function Choice1Of2 e -> x.Add e | Choice2Of2 e -> y.Add e) source
@@ -348,13 +260,8 @@ module Array =
     /// to each of the elements of the two arrays pairwise.</summary>
     /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
     let map2Shortest (f: 'T1 -> 'T2 -> 'U) (a1: 'T1 []) (a2: 'T2 []) : 'U [] =
-        #if !NET45
         let a1 = nullArgCheck (nameof a1) a1
         let a2 = nullArgCheck (nameof a2) a2
-        #else
-        raiseIfNull "a1" a1
-        raiseIfNull "a2" a2
-        #endif
 
         Array.init (min a1.Length a2.Length) (fun i -> f a1.[i] a2.[i])
     
@@ -362,15 +269,10 @@ module Array =
     /// to each of the elements of the three arrays pairwise.</summary>
     /// <remark>If one array is shorter, excess elements are discarded from the right end of the longer array.</remark>
     let map3Shortest (f: 'T1 -> 'T2 -> 'T3 -> 'U) (a1: 'T1 []) (a2: 'T2 []) (a3: 'T3 []) : 'U [] =
-        #if !NET45
         let a1 = nullArgCheck (nameof a1) a1
         let a2 = nullArgCheck (nameof a2) a2
         let a3 = nullArgCheck (nameof a3) a3
-        #else
-        raiseIfNull "a1" a1
-        raiseIfNull "a2" a2
-        raiseIfNull "a3" a3
-        #endif
+
         Array.init (min a1.Length a2.Length |> min a3.Length) (fun i -> f a1.[i] a2.[i] a3.[i])
     
     /// <summary>
@@ -380,13 +282,8 @@ module Array =
     /// <param name="a2">Second input array.</param>
     /// <returns>Array with corresponding pairs of input arrays.</returns>
     let zipShortest (a1: array<'T1>) (a2: array<'T2>) : array<'T1 * 'T2> =
-        #if !NET45
         let a1 = nullArgCheck (nameof a1) a1
         let a2 = nullArgCheck (nameof a2) a2
-        #else
-        raiseIfNull "a1" a1
-        raiseIfNull "a2" a2
-        #endif
 
         Array.init (min a1.Length a2.Length) (fun i -> a1.[i], a2.[i])
 
@@ -398,15 +295,9 @@ module Array =
     /// <param name="a3">Third input array.</param>
     /// <returns>Array with corresponding tuple of input arrays.</returns>
     let zip3Shortest (a1: array<'T1>) (a2: array<'T2>) (a3: array<'T3>) : array<'T1 * 'T2 * 'T3> =
-        #if !NET45
         let a1 = nullArgCheck (nameof a1) a1
         let a2 = nullArgCheck (nameof a2) a2
         let a3 = nullArgCheck (nameof a3) a3
-        #else
-        raiseIfNull "a1" a1
-        raiseIfNull "a2" a2
-        raiseIfNull "a3" a3
-        #endif
         Array.init (min a1.Length a2.Length |> min a3.Length) (fun i -> a1.[i], a2.[i], a3.[i])
 
     /// <summary>Same as choose but with access to the index.</summary>
@@ -415,11 +306,7 @@ module Array =
     ///
     /// <returns>Array with values x for each Array value where the function returns Some(x).</returns>
     let choosei (mapping: int -> 'T -> 'U option) (source: array<'T>) : array<'U> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         let mutable i = ref -1
         let fi x =

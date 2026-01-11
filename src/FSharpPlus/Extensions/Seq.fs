@@ -11,11 +11,7 @@ module Seq =
     /// <param name="source">The sequence to add to</param>
     /// <returns>A new sequence with the element added to the beginning.</returns>
     let cons value (source: seq<'T>) : seq<'T> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
         seq { yield value; yield! source }
 
     /// <summary>Applies the given function to each element of the sequence and concatenates the results.</summary>
@@ -31,11 +27,7 @@ module Seq =
     ///
     /// <exception cref="System.ArgumentNullException">Thrown when the input sequence is null.</exception>
     let bind (mapping: 'T -> seq<'U>) (source: seq<'T>) : seq<'U> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         Seq.collect mapping source
 
@@ -51,24 +43,14 @@ module Seq =
     /// </code>
     /// </example>
     let apply (f: seq<'T -> 'U>) (x: seq<'T>) : seq<'U> =
-        #if !NET45
         let f = nullArgCheck (nameof f) f
         let x = nullArgCheck (nameof x) x
-        #else
-        raiseIfNull "f" f
-        raiseIfNull "x" x
-        #endif
         bind (fun f -> Seq.map ((<|) f) x) f
 
     /// Combines all values from the first seq with the second, using the supplied mapping function.
     let lift2 (f: 'T1 -> 'T2 -> 'U) (x1: seq<'T1>) (x2: seq<'T2>) : seq<'U> =
-        #if !NET45
         let x1 = nullArgCheck (nameof x1) x1
         let x2 = nullArgCheck (nameof x2) x2
-        #else
-        raiseIfNull "x1" x1
-        raiseIfNull "x2" x2
-        #endif
         Seq.allPairs x1 x2 |> Seq.map (fun (x, y) -> f x y)
     
 
@@ -80,15 +62,9 @@ module Seq =
     ///
     /// <returns>Seq with values returned from mapping function.</returns>
     let lift3 (f: 'T1 -> 'T2 -> 'T3 -> 'U) (x1: seq<'T1>) (x2: seq<'T2>) (x3: seq<'T3>) : seq<'U> =
-        #if !NET45
         let x1 = nullArgCheck (nameof x1) x1
         let x2 = nullArgCheck (nameof x2) x2
         let x3 = nullArgCheck (nameof x3) x3
-        #else
-        raiseIfNull "x1" x1
-        raiseIfNull "x2" x2
-        raiseIfNull "x3" x3
-        #endif
 
         Seq.allPairs x2 x3
         |> Seq.allPairs x1
@@ -107,11 +83,7 @@ module Seq =
     /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
     let foldBack folder (source: seq<'T>) (state: 'State) : 'State =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         Array.foldBack folder (Seq.toArray source) state
 
@@ -134,11 +106,7 @@ module Seq =
     ///
     /// <returns>The resulting sequence of keys tupled with an array of matching values</returns>
     let chunkBy (projection: 'T -> 'Key) (source: seq<'T>) : seq<'Key * ResizeArray<'T>> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         seq {
             use e = source.GetEnumerator ()
@@ -159,11 +127,7 @@ module Seq =
     /// Inserts a separator element between each element in the source seq.
     ///http://codebetter.com/matthewpodwysocki/2009/05/06/functionally-implementing-intersperse/
     let intersperse sep (list: seq<'T>) : seq<'T> =
-        #if !NET45
         let list = nullArgCheck (nameof list) list
-        #else
-        raiseIfNull "list" list
-        #endif
 
         seq {
             let mutable notFirst = false
@@ -174,13 +138,8 @@ module Seq =
 
     /// Inserts a separator between each element in the source sequence.
     let intercalate (separator: seq<'T>) (source: seq<#seq<'T>>) : seq<'T> =
-        #if !NET45
         let separator = nullArgCheck (nameof separator) separator
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "separator" separator
-        raiseIfNull "source" source
-        #endif
 
         seq {
             let mutable notFirst = false
@@ -191,13 +150,8 @@ module Seq =
 
     /// Creates a sequence of sequences by splitting the source sequence on any of the given separators.
     let split (separators: seq<#seq<'T>>) (source: seq<'T>) : seq<seq<'T>> =
-        #if !NET45
         let separators = nullArgCheck (nameof separators) separators
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "separators" separators
-        raiseIfNull "source" source
-        #endif
 
         let split options = seq {
             match separators |> Seq.map Seq.toList |> Seq.toList with
@@ -226,15 +180,9 @@ module Seq =
 
     /// Replaces a subsequence of the source seq with the given replacement seq.
     let replace (oldValue: seq<'T>) (newValue: seq<'T>) (source: seq<'T>) : seq<'T> =
-        #if !NET45
         let oldValue = nullArgCheck (nameof oldValue) oldValue
         let newValue = nullArgCheck (nameof newValue) newValue
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "oldValue" oldValue
-        raiseIfNull "newValue" newValue
-        raiseIfNull "source" source
-        #endif
 
         seq {
             let old = Seq.toList oldValue
@@ -266,11 +214,7 @@ module Seq =
     ///
     /// <returns>The result sequence.</returns>
     let drop count (source: seq<_>) : seq<_> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         seq {
             let mutable i = count
@@ -304,9 +248,7 @@ module Seq =
     /// <returns>The seq converted to a System.Collections.Generic.IReadOnlyList</returns>
     let toIReadOnlyList (source: seq<'T>) : IReadOnlyList<'T> =
         source 
-        #if !NET45
         |> nullArgCheck (nameof source) 
-        #endif
         |> ResizeArray |> ReadOnlyCollection :> IReadOnlyList<_>
     #endif
     #if (!FABLE_COMPILER || FABLE_COMPILER_3) && !FABLE_COMPILER_4
@@ -325,13 +267,8 @@ module Seq =
     /// The index of the slice.
     /// </returns>
     let findSliceIndex (slice: seq<'T>) (source: seq<'T>) : int =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
@@ -356,13 +293,8 @@ module Seq =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindSliceIndex (slice: seq<'T>) (source: seq<'T>) : int option =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         #if !FABLE_COMPILER
         let index = Internals.FindSliceIndex.seqImpl slice source
@@ -385,13 +317,8 @@ module Seq =
     /// The index of the slice.
     /// </returns>
     let findLastSliceIndex (slice: seq<'T>) (source: seq<'T>) : int =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         #if !FABLE_COMPILER
         let index = Internals.FindLastSliceIndex.seqImpl slice source
@@ -415,13 +342,8 @@ module Seq =
     /// The index of the slice or <c>None</c>.
     /// </returns>
     let tryFindLastSliceIndex (slice: seq<'T>) (source: seq<'T>) : int option =
-        #if !NET45
         let slice = nullArgCheck (nameof slice) slice
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "slice" slice
-        raiseIfNull "source" source
-        #endif
 
         #if !FABLE_COMPILER
         let index = Internals.FindLastSliceIndex.seqImpl slice source
@@ -438,8 +360,6 @@ module Seq =
     /// <returns>Seq with values x for each List value where the function returns Some(x).</returns>
     let choosei (mapping: int -> 'T -> 'U option) (source: seq<'T>) : seq<'U> =
         source
-        #if !NET45
         |> nullArgCheck (nameof source)
-        #endif
         |> Seq.indexed
         |> Seq.choose (fun (a, b) -> mapping a b)

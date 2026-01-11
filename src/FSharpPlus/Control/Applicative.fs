@@ -40,7 +40,7 @@ type Apply =
     static member        ``<*>`` (struct (f: Task<_>          , x: Task<'T>             ), _output: Task<'U>             , [<Optional>]_mthd: Apply) = Task.apply   f x : Task<'U>
     #endif
 
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     // Compatibility members:
     static member        ``<*>`` (f: ValueTask<_>     , x: ValueTask<'T>        , [<Optional>]_output: ValueTask<'U>        , [<Optional>]_mthd: Apply) = ValueTask.apply   f x : ValueTask<'U>
     static member        ``<*>`` (f: Async<_>         , x: Async<'T>            , [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: Apply) = Async.apply  f x : Async<'U>
@@ -140,7 +140,7 @@ type Lift2 =
     #if !FABLE_COMPILER
     static member        Lift2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Lift2) = Task.lift2  f x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Lift2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Lift2) = ValueTask.lift2  f x y
     #endif
     static member        Lift2 (f, (x                     , y                     ), _mthd: Lift2) = Async.lift2  f x y
@@ -189,7 +189,7 @@ type Lift3 =
     #if !FABLE_COMPILER
     static member        Lift3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Lift3) = Task.lift3  f x y z
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Lift3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Lift3) = ValueTask.lift3  f x y z
     #endif
     static member        Lift3 (f, (x                     , y                     , z                      ), _mthd: Lift3) = Async.lift3  f x y z

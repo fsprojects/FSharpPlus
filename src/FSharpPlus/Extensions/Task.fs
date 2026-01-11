@@ -84,11 +84,7 @@ module Task =
     /// <param name="source">The source task workflow.</param>
     /// <returns>The resulting task workflow.</returns>
     let map (mapper: 'T -> 'U) (source: Task<'T>) : Task<'U> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         if source.IsCompleted then
             match source with
@@ -106,13 +102,8 @@ module Task =
     /// <param name="task1">First task workflow.</param>
     /// <param name="task2">Second task workflow.</param>
     let lift2 (mapper: 'T1 -> 'T2 -> 'U) (task1: Task<'T1>) (task2: Task<'T2>) : Task<'U> =
-        #if !NET45
         let task1 = nullArgCheck (nameof task1) task1
         let task2 = nullArgCheck (nameof task2) task2
-        #else
-        raiseIfNull "task1" task1
-        raiseIfNull "task2" task2
-        #endif
 
         if task1.IsCompleted && task2.IsCompleted then
             match task1, task2 with
@@ -141,15 +132,9 @@ module Task =
     /// <param name="task2">Second task workflow.</param>
     /// <param name="task3">Third task workflow.</param>
     let lift3 (mapper : 'T1 -> 'T2 -> 'T3 -> 'U) (task1 : Task<'T1>) (task2 : Task<'T2>) (task3 : Task<'T3>) : Task<'U> =
-        #if !NET45
         let task1 = nullArgCheck (nameof task1) task1
         let task2 = nullArgCheck (nameof task2) task2
         let task3 = nullArgCheck (nameof task3) task3
-        #else
-        raiseIfNull "task1" task1
-        raiseIfNull "task2" task2
-        raiseIfNull "task3" task3
-        #endif
 
         if task1.IsCompleted && task2.IsCompleted && task3.IsCompleted then
             match task1, task2, task3 with
@@ -184,13 +169,8 @@ module Task =
     /// <param name="task1">First Task workflow.</param>
     /// <param name="task2">Second Task workflow.</param>
     let map2 mapper (task1: Task<'T1>) (task2: Task<'T2>) : Task<'U> =
-        #if !NET45
         let task1 = nullArgCheck (nameof task1) task1
         let task2 = nullArgCheck (nameof task2) task2
-        #else
-        raiseIfNull "task1" task1
-        raiseIfNull "task2" task2
-        #endif
 
         if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion then
             try result (mapper task1.Result task2.Result) with e -> raise e
@@ -235,15 +215,9 @@ module Task =
     /// <param name="task2">Second Task workflow.</param>
     /// <param name="task3">Third Task workflow.</param>
     let map3 mapper (task1: Task<'T1>) (task2: Task<'T2>) (task3: Task<'T3>) : Task<'U> =
-        #if !NET45
         let task1 = nullArgCheck (nameof task1) task1
         let task2 = nullArgCheck (nameof task2) task2
         let task3 = nullArgCheck (nameof task3) task3
-        #else
-        raiseIfNull "task1" task1
-        raiseIfNull "task2" task2
-        raiseIfNull "task3" task3
-        #endif
 
         if task1.Status = TaskStatus.RanToCompletion && task2.Status = TaskStatus.RanToCompletion && task3.Status = TaskStatus.RanToCompletion then
             try result (mapper task1.Result task2.Result task3.Result)
@@ -288,13 +262,8 @@ module Task =
     /// <param name="f">Task workflow returning a function</param>
     /// <param name="x">Task workflow returning a value</param>
     let apply (f: Task<'T -> 'U>) (x: Task<'T>) : Task<'U> =
-        #if !NET45
         let f = nullArgCheck (nameof f) f
         let x = nullArgCheck (nameof x) x
-        #else
-        raiseIfNull "f" f
-        raiseIfNull "x" x
-        #endif
 
         if f.IsCompleted && x.IsCompleted then
             match f, x with
@@ -317,13 +286,9 @@ module Task =
 
     /// <summary>Creates a task workflow from two workflows 'task1' and 'task2', tupling its results.</summary>
     let zipSequentially (task1: Task<'T1>) (task2: Task<'T2>) : Task<'T1 * 'T2> =
-        #if !NET45
         let task1 = nullArgCheck (nameof task1) task1
         let task2 = nullArgCheck (nameof task2) task2
-        #else
-        raiseIfNull "task1" task1
-        raiseIfNull "task2" task2
-        #endif
+
         if task1.IsCompleted && task2.IsCompleted then
             match task1, task2 with
             | Succeeded r1, Succeeded r2 -> result (r1, r2)
@@ -357,21 +322,13 @@ module Task =
 
     /// Flattens two nested tasks into one.
     let join (source: Task<Task<'T>>) : Task<'T> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         source.Unwrap()
     
     /// <summary>Creates a task workflow from 'source' workflow, mapping and flattening its result with 'f'.</summary>
     let bind (f: 'T -> Task<'U>) (source: Task<'T>) : Task<'U> =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         source |> Unchecked.nonNull |> map f |> join
     
@@ -380,11 +337,7 @@ module Task =
     /// <returns>A Task that completes when the source completes.</returns>
     /// <remarks>It can be used to convert non-generic Task to unit Task.</remarks>
     let ignore (source: Task) =
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         match source.Status with
         | TaskStatus.RanToCompletion -> result ()
@@ -450,16 +403,8 @@ module Task =
     /// <returns>The task if it is not faulted, else the result of evaluating <paramref name="fallbackThunk"/>.</returns>
     /// <remarks><paramref name="fallbackThunk"/> is not evaluated unless <paramref name="source"/> is faulted.</remarks>
     ///
-    #if !NET45
     let inline orElseWith ([<InlineIfLambda>]fallbackThunk: exn -> Task<'T>) (source: Task<'T>) : Task<'T> =
-    #else
-    let inline orElseWith (fallbackThunk: exn -> Task<'T>) (source: Task<'T>) : Task<'T> =
-    #endif
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
         tryWith (fun () -> source) fallbackThunk
 
     /// <summary>Returns <paramref name="source"/> if it is not faulted, otherwise e<paramref name="fallbackTask"/>.</summary>
@@ -469,13 +414,8 @@ module Task =
     ///
     /// <returns>The option if the option is Some, else the alternate option.</returns>
     let orElse (fallbackTask: Task<'T>) (source: Task<'T>) : Task<'T> =
-        #if !NET45
         let fallbackTask = nullArgCheck (nameof fallbackTask) fallbackTask
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "fallbackTask" fallbackTask
-        raiseIfNull "source" source
-        #endif
         orElseWith (fun _ -> fallbackTask) source
     
     /// <summary>Attempts to recover from a potentially failed task by mapping the exception to a successful result.</summary>
@@ -483,29 +423,17 @@ module Task =
     /// <param name="source">The source task.</param>
     /// <returns>A successful resulting task.</returns>
     /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
-    #if !NET45
     let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
         let source = nullArgCheck (nameof source) source
 
         tryWith (fun () -> source) (mapper >> Task.FromResult)    
-    #else
-    let inline recover (mapper: exn -> 'T) (source: Task<'T>) : Task<'T> =
-        raiseIfNull "source" source
-
-        tryWith (fun () -> source) (mapper >> result)
-    #endif
 
     /// <summary>Maps the exception of a faulted task to another exception.</summary>
     /// <param name="mapper">Mapping function from exception to exception.</param>
     /// <param name="source">The source task.</param>
     /// <returns>The resulting task.</returns>
     let mapError (mapper: exn -> exn) (source: Task<'T>) : Task<'T> =
-
-        #if !NET45
         let source = nullArgCheck (nameof source) source
-        #else
-        raiseIfNull "source" source
-        #endif
 
         if source.IsCompleted then
             match source with
@@ -527,13 +455,8 @@ module Task =
     /// <returns>The resulting Task.</returns>
     let ofResult (source: Result<'T, exn>) : Task<'T> =
         match source with
-        #if !NET45
         | Ok x -> Task.FromResult x
         | Error exn -> Task.FromException<'T> exn
-        #else
-        | Ok x -> result x
-        | Error exn -> raise exn
-        #endif
 
 
 /// Workaround to fix signatures without breaking binary compatibility.
@@ -547,20 +470,12 @@ module Task_v2 =
         /// <param name="body">The body function to run.</param>
         /// <returns>The resulting task.</returns>
         /// <remarks>This function is used to de-sugar try .. with .. blocks in Computation Expressions.</remarks>
-        #if !NET45
         let inline tryWith ([<InlineIfLambda>] compensation: exn -> Task<'T>) ([<InlineIfLambda>]body: unit -> Task<'T>) = Task.tryWith body compensation
-        #else
-        let inline tryWith (compensation: exn -> Task<'T>) (body: unit -> Task<'T>) = Task.tryWith body compensation
-        #endif
 
         /// <summary>Runs a compensation function after the body completes, regardless of whether the body completed successfully, faulted, or was canceled.</summary>
         /// <param name="compensation">The compensation function to run after the body completes.</param>
         /// <param name="body">The body function to run.</param>
         /// <returns>The resulting task.</returns>
         /// <remarks>This function is used to de-sugar try .. finally .. blocks in Computation Expressions.</remarks>
-        #if !NET45
         let inline tryFinally ([<InlineIfLambda>] compensation: unit -> unit) ([<InlineIfLambda>]body: unit -> Task<'T>) = Task.tryFinally body compensation
-        #else
-        let inline tryFinally (compensation: unit -> unit) (body: unit -> Task<'T>) = Task.tryFinally body compensation
-        #endif
 #endif

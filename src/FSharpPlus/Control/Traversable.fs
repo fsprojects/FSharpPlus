@@ -259,11 +259,7 @@ type Transpose =
     static member inline InvokeOnInstance (t: '``Traversable<'Functor<'T>>``) = (^``Traversable<'Functor<'T>>`` : (static member Transpose : _ -> _) t) : '``Functor<'Traversable<'T>>``
     
     [<EditorBrowsable(EditorBrowsableState.Never)>]
-    #if !NET45
     static member inline ForInfiniteSequences (t: seq<_>, [<InlineIfLambda>]isFailure, [<InlineIfLambda>]conversion, [<InlineIfLambda>]result) =
-    #else
-    static member inline ForInfiniteSequences (t: seq<_>, isFailure, conversion, result) =
-    #endif
         let add x y = y :: x
         let mutable go = true
         let mutable r = Unchecked.defaultof<_>

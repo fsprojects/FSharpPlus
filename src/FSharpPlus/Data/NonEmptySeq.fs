@@ -477,7 +477,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     let initInfinite initializer = 
         Seq.initInfinite initializer |> unsafeOfSeq
-#if !NET45
+
     /// <summary>Inserts an element at the specified index.</summary>
     /// <param name="index">The index at which to insert the element.</param>
     /// <param name="value">The value to insert.</param>
@@ -493,7 +493,7 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     let insertManyAt (index: int) (values: seq<'T>) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
         Seq.insertManyAt index values source |> unsafeOfSeq
-#endif
+
     /// <summary>Returns the element at the specified index.</summary>
     /// <param name="index">The index of the element to retrieve.</param>
     /// <param name="source">The input sequence.</param>
@@ -696,7 +696,6 @@ module NonEmptySeq =
     let reduceBack (reduction: 'T -> 'T -> 'T)  (source: NonEmptySeq<'T>) = 
         Seq.reduceBack reduction source
 
-#if !NET45
     /// <summary>Removes the element at the specified index.</summary>
     /// <param name="index">The index of the element to remove.</param>
     /// <param name="source">The input sequence.</param>
@@ -728,7 +727,6 @@ module NonEmptySeq =
     /// <exception cref="System.ArgumentException">Thrown when removing the items results in an empty sequence.</exception>
     let removeManyAt (index: int) (count: int) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
         Seq.removeManyAt index count source |> ofSeq
-#endif
 
     /// <summary>Creates a sequence that contains one repeated value.</summary>
     /// <param name="count">The number of elements.</param>
@@ -1043,7 +1041,6 @@ module NonEmptySeq =
     let unzip3 (source: NonEmptySeq<'T1 * 'T2 * 'T3>) : NonEmptySeq<'T1> * NonEmptySeq<'T2> * NonEmptySeq<'T3> = 
         source |> Seq.toList |> List.unzip3 |> fun (a, b, c) -> (unsafeOfSeq a, unsafeOfSeq b, unsafeOfSeq c)
 
-#if !NET45
     /// <summary>Updates the element at the specified index.</summary>
     /// <param name="index">The index of the element to update.</param>
     /// <param name="value">The new value.</param>
@@ -1051,7 +1048,6 @@ module NonEmptySeq =
     /// <returns>The result sequence.</returns>
     let updateAt (index: int) (value: 'T) (source: NonEmptySeq<'T>) : NonEmptySeq<'T> = 
         Seq.updateAt index value source |> unsafeOfSeq
-#endif
 
     /// <summary>Returns a sequence that contains the elements of the sequence for which the given function returns <c>true</c>.</summary>
     /// <param name="predicate">A function to test each element of the sequence.</param>

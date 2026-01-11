@@ -165,15 +165,9 @@ module NonEmptyList =
     /// <returns>A tuple with the head and the tail of the original list.</returns>
     /// <exception cref="T:System.ArgumentException">Thrown when the input list tail is empty.</exception>
     let uncons ({ Head = x; Tail = xs } as list) =
-    #if !NET45
         match xs with
         | [] -> invalidArg (nameof list) "The input sequence has an empty tail"
         | _  -> x, ofList xs
-    #else
-        match xs with
-        | [] -> invalidArg "list" "The input sequence has an empty tail"
-        | _  -> x, ofList xs
-    #endif
 
     /// <summary>Splits the NonEmptyList in head and tail.</summary>
     /// <param name="list">The input (non empty) list.</param>
@@ -187,15 +181,9 @@ module NonEmptyList =
     /// <exception cref="System.ArgumentException">Thrown when the tail is empty.</exception>
     /// <remarks>Throws exception for empty tail</remarks>
     let tail ({ Head = _; Tail = xs } as list) =
-    #if !NET45
         match xs with
         | [] -> invalidArg (nameof(list)) "The input sequence has an empty tail"
         | _  -> ofList xs
-    #else
-        match xs with
-        | [] -> invalidArg "list" "The input sequence has an empty tail"
-        | _  -> ofList xs
-    #endif
 
     /// <summary>Returns a new NonEmptyList of the elements trailing the first element or None.</summary>
     let tryTail { Head = _; Tail = xs } = tryOfList xs
@@ -526,7 +514,6 @@ module NonEmptyList =
     let init (count: int) (initializer: int -> 'T) : NonEmptyList<'T> = 
         Seq.init count initializer |> ofSeq
 
-#if !NET45
     /// <summary>Inserts an element at the specified index.</summary>
     /// <param name="index">The index at which to insert the element.</param>
     /// <param name="value">The value to insert.</param>
@@ -542,7 +529,6 @@ module NonEmptyList =
     /// <returns>The result list.</returns>
     let insertManyAt (index: int) (values: seq<'T>) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
         Seq.insertManyAt index values list |> ofSeq
-#endif
 
     /// <summary>Returns the element at the specified index.</summary>
     /// <param name="index">The index of the element to retrieve.</param>
@@ -707,7 +693,6 @@ module NonEmptyList =
     let inline range (start: 'T) stop = 
         create start (List.drop 1 [start..stop])
 
-#if !NET45
     /// <summary>Removes the element at the specified index.</summary>
     /// <param name="index">The index of the element to remove.</param>
     /// <param name="list">The input list.</param>
@@ -739,7 +724,6 @@ module NonEmptyList =
     /// <exception cref="System.ArgumentException">Thrown when removing the items results in an empty list.</exception>
     let removeManyAt (index: int) (count: int) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
         list |> Seq.removeManyAt index count |> ofSeq
-#endif
 
     /// <summary>Creates a list that contains one repeated value.</summary>
     /// <param name="count">The number of elements.</param>
@@ -983,7 +967,6 @@ module NonEmptyList =
     let unzip3 (list: NonEmptyList<'T1 * 'T2 * 'T3>) : NonEmptyList<'T1> * NonEmptyList<'T2> * NonEmptyList<'T3> = 
         list |> toList |> List.unzip3 |> fun (a, b, c) -> (ofList a, ofList b, ofList c)
 
-#if !NET45
     /// <summary>Updates the element at the specified index.</summary>
     /// <param name="index">The index of the element to update.</param>
     /// <param name="value">The new value.</param>
@@ -991,7 +974,6 @@ module NonEmptyList =
     /// <returns>The result list.</returns>
     let updateAt (index: int) (value: 'T) (list: NonEmptyList<'T>) : NonEmptyList<'T> = 
         Seq.updateAt index value list |> ofSeq
-#endif
 
     /// <summary>Returns a list that contains the elements of the list for which the given function returns <c>true</c>.</summary>
     /// <param name="predicate">A function to test each element of the list.</param>

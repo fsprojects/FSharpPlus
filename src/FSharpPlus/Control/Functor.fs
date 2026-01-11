@@ -22,7 +22,7 @@ type Iterate =
     static member Iterate (x: Lazy<'T>   , action) = action x.Value : unit
     static member Iterate (x: seq<'T>    , action) = Seq.iter action x
     static member Iterate (x: option<'T> , action) = Option.iter action x
-    #if !NET45 && !FABLE_COMPILER_3
+    #if !FABLE_COMPILER_3
     static member Iterate (x: voption<'T>, action) = ValueOption.iter action x
     #endif
     static member Iterate (x: list<'T>   , action) = List.iter action x
@@ -44,7 +44,7 @@ type Iterate =
     static member Iterate (x: Async<'T>            , action: 'T -> unit) = (x |> Async.map action |> Async.AsTask).Wait ()
     #endif
     static member Iterate (x: Result<'T, 'E>       , action) =
-    #if !NET45 && !FABLE_COMPILER_3
+    #if !FABLE_COMPILER_3
         Result.iter action x
     #else
         match x with
@@ -79,7 +79,7 @@ type Map =
     #if !FABLE_COMPILER
     static member Map ((x: Task<'T>            , f: 'T->'U), _mthd: Map) = Task.map f x : Task<'U>
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member Map ((x: ValueTask<'T>       , f: 'T->'U), _mthd: Map) = ValueTask.map f x : ValueTask<'U>
     #endif
     static member Map ((x: option<_>           , f: 'T->'U), _mthd: Map) = Option.map  f x
@@ -166,7 +166,7 @@ type Unzip =
     #if !FABLE_COMPILER
     static member        Unzip ((source: Task<'T * 'U>                     , _output: Task<'T> * Task<'U>                                  ) , _mthd: Unzip   ) = Task.map fst source, Task.map snd source
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Unzip ((source: ValueTask<'T * 'U>                , _output: ValueTask<'T> * ValueTask<'U>                        ) , _mthd: Unzip   ) = ValueTask.map fst source, ValueTask.map snd source
     #endif
     static member        Unzip ((source: option<'T * 'U>                   , _output: option<'T> * option<'U>                              ) , _mthd: Unzip   ) = Option.unzip source
@@ -236,10 +236,10 @@ type Zip =
     static member inline Zip ((x: Result<'T, 'Error>  , y: Result<'U, 'Error>        , _output: Result<'T * 'U, 'Error>      ), _mthd: Zip) = Result.apply2With Plus.Invoke (fun a b -> a, b) x y
     static member inline Zip ((x: Choice<'T, 'Error>  , y: Choice<'U, 'Error>        , _output: Choice<'T * 'U, 'Error>      ), _mthd: Zip) = Choice.apply2With Plus.Invoke (fun a b -> a, b) x y
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
-    #if !FABLE_COMPILER && !NET45
+    #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member Zip ((x: ValueTask<'T>              , y: ValueTask<'U>             , _output: ValueTask<'T*'U>             ), _mthd: Zip) = ValueTask.zip           x y
     #endif
 

@@ -267,7 +267,7 @@ module DList =
 
     /// Returns a list of the DList elements.
     let toList (source: DList<'T>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER
         DList<'T>.foldBack List.cons source []
     #else
         let mutable coll = new ListCollector<_> ()
@@ -277,7 +277,7 @@ module DList =
 
     /// Returns an array of the DList elements.
     let toArray (source: DList<'T>) =
-    #if FABLE_COMPILER || NET45
+    #if FABLE_COMPILER
         source :> seq<'T> |> Seq.toArray
     #else
         let mutable coll = new ArrayCollector<_> ()

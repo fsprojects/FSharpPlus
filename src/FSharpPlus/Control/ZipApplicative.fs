@@ -38,7 +38,7 @@ type Pure =
     #if !FABLE_COMPILER
     static member        Pure (_: 'T Task         , _: Pure) = fun x -> Task.FromResult x                     : 'T Task
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Pure (_: 'T ValueTask    , _: Pure) = fun (x: 'T) -> ValueTask<'T> x                 : 'T ValueTask
     #endif
     static member        Pure (x: option<'a>      , _: Pure) = Return.Return (x, Unchecked.defaultof<Return>)
@@ -86,10 +86,10 @@ type ZipApply =
     static member        ``<.>`` (struct (f: 'r -> _             , x: _ -> 'T              ), [<Optional>]_output:  'r -> 'U            , [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member inline ``<.>`` (struct (f: 'Monoid * _         , x: ('Monoid * 'T)       ), [<Optional>]_output: 'Monoid * 'U         , [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
     static member inline ``<.>`` (struct (f: struct ('Monoid * _), x: struct ('Monoid * 'T)), [<Optional>]_output: struct ('Monoid * 'U), [<Optional>]_mthd: ZipApply) = Apply.``<*>`` (struct (f, x), _output, Unchecked.defaultof<Apply>)
-    #if !FABLE_COMPILER && !NET45
+    #if !FABLE_COMPILER
     static member        ``<.>`` (struct (f: Task<_>             , x: Task<'T>             ), [<Optional>]_output: Task<'U>             , [<Optional>]_mthd: ZipApply) = Task.map2 (<|) f x
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        ``<.>`` (struct (f: ValueTask<_>        , x: ValueTask<'T>        ), [<Optional>]_output: ValueTask<'U>        , [<Optional>]_mthd: ZipApply) = ValueTask.map2 (<|) f x
     #endif
     static member        ``<.>`` (struct (f: Async<_>            , x: Async<'T>            ), [<Optional>]_output: Async<'U>            , [<Optional>]_mthd: ZipApply) : Async<'U>            = Async.map2 (<|) f x
@@ -144,10 +144,10 @@ type Map2 =
     static member        Map2 (f, (x: 'R -> 'T           , y: 'R -> 'U           ), _mthd: Map2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
     static member inline Map2 (f, (x: 'Monoid * 'T       , y: 'Monoid * 'U       ), _mthd: Map2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
     static member inline Map2 (f, (x: struct ('Monoid*'T), y: struct ('Monoid*'U)), _mthd: Map2) = Lift2.Lift2 (f, (x, y), Unchecked.defaultof<Lift2>)
-    #if !FABLE_COMPILER && !NET45
+    #if !FABLE_COMPILER
     static member        Map2 (f, (x: Task<'T>           , y: Task<'U>           ), _mthd: Map2) = Task.map2 f x y
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Map2 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      ), _mthd: Map2) = ValueTask.map2 f x y
     #endif
     static member        Map2 (f, (x                     , y                     ), _mthd: Map2) = Async.map2 f x y
@@ -191,16 +191,16 @@ type Map3 =
     static member        Map3 (f, (x: 'R -> 'T           , y: 'R -> 'U           , z: 'R -> 'V            ), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     static member inline Map3 (f, (x: 'Monoid * 'T       , y: 'Monoid * 'U       , z: 'Monoid * 'V        ), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     static member inline Map3 (f, (x: struct ('Monoid*'T), y: struct ('Monoid*'U), z: struct ('Monoid* 'T)), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
-    #if !FABLE_COMPILER && !NET45
+    #if !FABLE_COMPILER
     static member        Map3 (f, (x: Task<'T>           , y: Task<'U>           , z: Task<'V>            ), _mthd: Map3) = Task.map3 f x y z
     #endif
-    #if !NET45 && !NETSTANDARD2_0 && !FABLE_COMPILER
+    #if !NETSTANDARD2_0 && !FABLE_COMPILER
     static member        Map3 (f, (x: ValueTask<'T>      , y: ValueTask<'U>      , z: ValueTask<'V>       ), _mthd: Map3) = ValueTask.map3 f x y z
     #endif
     static member        Map3 (f, (x                     , y                     , z                      ), _mthd: Map3) = Async.map3  f x y z
     static member        Map3 (f, (x: option<_>          , y: option<_>          , z: option<_>           ), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     
-    #if !FABLE_COMPILER && !NET45
+    #if !FABLE_COMPILER
     static member        Map3 (f, (x: voption<_>         , y: voption<_>         , z: voption<_>          ), _mthd: Map3) = Lift3.Lift3 (f, (x, y, z), Unchecked.defaultof<Lift3>)
     #endif
     static member inline Map3 (f, (x: Result<'T,'Error>  , y: Result<'U,'Error>  , z: Result<'V, 'Error>  ), _mthd: Map3) = Result.apply3With Plus.Invoke f x y z
