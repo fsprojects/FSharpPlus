@@ -1,3 +1,19 @@
+#### 1.9.0  - January 11 2026
+ - Task related function fixes and improvements
+ - Enable try blocks for ValueTask
+ - Add Obj module
+ - Add some error handling functions for Tasks
+ - Add ignore to some common type extensions
+ - Add bindTask and bindInto to Result
+ - Add missing (.>) and (<.) zip-applicative operators
+ - Add Active Pattern for CI strings and AggregateException
+ - Rename non-sequential applicative CEs to zapp
+ - Fix compilation for Fable 4.27
+ - Fix several functions in ResizeArray
+ - Fix Seq.lift3
+ - Fix some XML comments
+ - Drop target framework version net45 
+ 
 #### 1.8.0  - October 28 2025
  - Add Operators for map2 (||>>) and map3 (|||>>) and flipped versions
  - Add generic sumBy function
