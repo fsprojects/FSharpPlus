@@ -390,7 +390,7 @@ module ValueTask =
     /// <param name="source">The source task.</param>
     /// <returns>A successful resulting task.</returns>
     /// <remarks>The result is always a successful task, unless the mapping function itself throws an exception.</remarks>
-    let inline recover ([<InlineIfLambda>]mapper: exn -> 'T) (source: ValueTask<'T>) : ValueTask<'T> =
+    let inline recoverWith ([<InlineIfLambda>]mapper: exn -> 'T) (source: ValueTask<'T>) : ValueTask<'T> =
         #if NET5_0_OR_GREATER
         tryWith (mapper >> ValueTask.FromResult) (fun () -> source)
         #else
