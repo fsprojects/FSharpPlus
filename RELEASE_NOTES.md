@@ -1,4 +1,5 @@
-#### 1.9.0  - January 11 2026
+#### 1.9.1  - January 11 2026
+
  - Task related function fixes and improvements
  - Enable try blocks for ValueTask
  - Add Obj module
