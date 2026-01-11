@@ -82,7 +82,7 @@ module String =
     /// 
     /// Note this is distinct from trim which trims the given characters,
     /// not white spaces.
-    let trim (source: string) =
+    let trimWhiteSpaces (source: string) =
         let source = nullArgCheck (nameof source) source
         
         source.Trim ()
@@ -154,7 +154,7 @@ module String =
         source.PadRight (totalLength, paddingChar)
 
     /// Removes all leading and trailing occurrences of specified characters from the given string.
-    let trimBoth  (trimChars: char seq) (source: string) =
+    let trim  (trimChars: char seq) (source: string) =
         let source = nullArgCheck (nameof source) source
         
         source.Trim (Seq.toArray trimChars)
