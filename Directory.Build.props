@@ -1,4 +1,5 @@
-<Project ToolsVersion="15.0">
+<Project ToolsVersion="15.0"><Import Project="/Users/tomasgrosup/code/fsharp-experiments/dotnet-fsharp/UseLocalCompiler.Directory.Build.props" />
+  
 
   <PropertyGroup>
     <RepositoryUrl>https://github.com/fsprojects/FSharpPlus</RepositoryUrl>
@@ -23,8 +24,8 @@
     <FsDocsLicenseLink>https://github.com/fsprojects/FSharpPlus/blob/master/LICENSE.md</FsDocsLicenseLink>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)/docsrc/content/img/logo.png" Pack="true" PackagePath="\"/>
-    <None Include="$(MSBuildThisFileDirectory)/README.md" Pack="true" PackagePath="\"/>
+    <None Include="$(MSBuildThisFileDirectory)/docsrc/content/img/logo.png" Pack="true" PackagePath="\" />
+    <None Include="$(MSBuildThisFileDirectory)/README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup>
