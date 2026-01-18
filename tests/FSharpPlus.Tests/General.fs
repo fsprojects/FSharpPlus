@@ -396,6 +396,18 @@ module Functor =
         Assert.IsInstanceOf<Option<Async<int>>> (Some testVal10)
         areEqual 2 (testVal10 |> Async.RunSynchronously)
 
+        let testVal11 = (+) "h" <!> dict [1, "i"; 2, "ello"]
+        CollectionAssert.AreEqual (dict [(1, "hi"); (2, "hello")], testVal11)
+
+        let testVal12 =
+            let h: IDictionary<int, string> = result "h"
+            try
+                (+) <!> h <*> dict [1, "i"; 2, "ello"]
+            with _ -> dict [0, "failure"]
+        CollectionAssert.AreEqual (dict [0, "failure"], testVal12)
+
+
+
     [<Test>]
     let mapSquared () =
         let x =

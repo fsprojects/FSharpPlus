@@ -12,24 +12,24 @@ open FSharpPlus.Internals
 
 type OfSeq =
     inherit Default1
-    
-    static member inline OfSeq ((x: seq<'t>, _: 'R), _: Default5) : 'R =
+ 
+    static member inline OfSeq ((x: seq<'t>, _: '``Foldable'<T>``), _: Default5) : '``Foldable'<T>`` =
         #if TEST_TRACE
-        Traces.add "OfSeq, Default5-seq<'t>"
+        Traces.add "OfSeq, Return+Sum<'t>"
+        #endif
+        x |> Seq.map Return.Invoke |> Sum.Invoke
+
+    static member inline OfSeq ((x: seq<'t>, _: 'R), _: Default4) : 'R =
+        #if TEST_TRACE
+        Traces.add "OfSeq, #new seq<'t>"
         #endif
         (^R : (new : seq<'t> -> ^R) x)
 
-    static member inline OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: 'R), _: Default5) : 'R =
+    static member inline OfSeq ((x: seq<KeyValuePair<'k,'v>>, _: 'R), _: Default4) : 'R =
         #if TEST_TRACE
-        Traces.add "OfSeq, Default5-seq<KeyValuePair<'k,'v>>"
+        Traces.add "OfSeq, #new seq<KeyValuePair<'k,'v>>"
         #endif
         (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x))
-
-    static member inline OfSeq ((x: seq<'t>, _: '``Foldable'<T>``), _: Default4) : '``Foldable'<T>`` =
-        #if TEST_TRACE
-        Traces.add "OfSeq, Default4-seq<'t>"
-        #endif
-        x |> Seq.map Return.Invoke |> Sum.Invoke
     
     static member        OfSeq ((x: seq<'t>                 , _: seq<'t>                         ), _: Default3) = x
     static member        OfSeq ((x: seq<'t>                 , _: ICollection<'t>                 ), _: Default3) = let d = ResizeArray () in Seq.iter d.Add x; d :> ICollection<'t>
@@ -81,10 +81,10 @@ type OfSeq =
 type OfList =
     inherit Default1
 
-    static member inline OfList ((x: list<'t>                 , _: 'R                              ), _: Default6) = (^R : (new : seq<'t> -> ^R) (List.toSeq x)) : 'R
-    static member inline OfList ((x: list<KeyValuePair<'k,'v>>, _: 'R                              ), _: Default6) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
+    static member inline OfList ((x: list<'t>                 , _: '``Foldable'<T>``               ), _: Default6) = x |> List.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
     
-    static member inline OfList ((x: list<'t>                 , _: '``Foldable'<T>``               ), _: Default5) = x |> List.map Return.Invoke |> Sum.Invoke : '``Foldable'<T>``
+    static member inline OfList ((x: list<'t>                 , _: 'R                              ), _: Default5) = (^R : (new : seq<'t> -> ^R) (List.toSeq x)) : 'R
+    static member inline OfList ((x: list<KeyValuePair<'k,'v>>, _: 'R                              ), _: Default5) = (^R : (new : seq<'k*'v> -> ^R) (Seq.map (|KeyValue|) x)) : 'R
 
     static member        OfList ((x: list<'t>                 , _: seq<'t>                         ), _: Default4) = List.toSeq x
     #if !FABLE_COMPILER
