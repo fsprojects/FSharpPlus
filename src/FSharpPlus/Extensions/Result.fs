@@ -136,6 +136,24 @@ module Result =
     /// </remarks>
     let defaultWith (defThunk: 'Error->'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | Error e -> defThunk e
 
+    /// <summary>Returns the first result if it is <c>Ok</c>, otherwise returns the second result.</summary>
+    /// <param name="alternative">The alternative result.</param>
+    /// <param name="source">The source result.</param>
+    /// <returns>The source result if it is <c>Ok</c>, otherwise the alternative result.</returns>
+    let orElse (alternative: Result<'T, 'Error>) (source: Result<'T, 'Error>) : Result<'T, 'Error> =
+        match source with
+        | Ok v -> Ok v
+        | Error _ -> alternative
+
+    /// <summary>Returns the first result if it is <c>Ok</c>, otherwise invokes the alternative thunk to obtain an alternative result.</summary>
+    /// <param name="alternativeThunk">A thunk that provides an alternative result when invoked.</param>
+    /// <param name="source">The source result.</param>
+    /// <returns>The source result if it is <c>Ok</c>, otherwise the result of invoking the alternative thunk.</returns>
+    let orElseWith (alternativeThunk: 'Error -> Result<'T, 'Error>) (source: Result<'T, 'Error>) : Result<'T, 'Error> =
+        match source with
+        | Ok v -> Ok v
+        | Error e -> alternativeThunk e
+
     /// Converts a Result<'T,'Error> to a Choice<'T,'Error>.
     let toChoice (source: Result<'T,'U>) = match source with Ok x-> Choice1Of2 x | Error x -> Choice2Of2 x
 
