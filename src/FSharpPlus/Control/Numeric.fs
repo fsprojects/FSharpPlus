@@ -100,6 +100,10 @@ type FromInt32 =
     static member        FromInt32 (_: uint64    , _: FromInt32) = fun (x: int32) -> uint64          x
     static member        FromInt32 (_: float32   , _: FromInt32) = fun (x: int32) -> float32         x
     static member        FromInt32 (_: decimal   , _: FromInt32) = fun (x: int32) -> decimal         x
+    
+    #if NET6_0_OR_GREATER
+    static member        FromInt32 (_: System.DateOnly  , _: FromInt32) = fun (x: int32) -> System.DateOnly.FromDayNumber x
+    #endif
 
     static member inline Invoke (x: int32) : 'Num =
         let inline call_2 (a: ^a, b: ^b) = ((^a or ^b) : (static member FromInt32 : _*_ -> _) b, a)
@@ -134,6 +138,10 @@ type Zero =
     inherit Default1
 
     static member        Zero (_: System.TimeSpan                , _: Zero    ) = System.TimeSpan ()
+    #if NET6_0_OR_GREATER
+    static member        Zero (_: System.DateOnly                , _: Zero    ) = System.DateOnly.MinValue
+    static member        Zero (_: System.TimeOnly                , _: Zero    ) = System.TimeOnly.MinValue
+    #endif
     static member        Zero (_: DmStruct                       , _: Zero    ) = Unchecked.defaultof<DmStruct>
     static member        Zero (_: list<'a>                       , _: Zero    ) = []   :   list<'a>
     static member        Zero (_: option<'a>                     , _: Zero    ) = None : option<'a>

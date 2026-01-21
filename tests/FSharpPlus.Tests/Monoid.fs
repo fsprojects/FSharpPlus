@@ -76,6 +76,18 @@ module Monoid =
         Assert.AreEqual (str, "FourTen")
         Assert.AreEqual (num, 6)
 
+    #if NET6_0_OR_GREATER
+    [<Test>]
+    let testDateAndTimes =
+        let d1 = DateOnly(2020, 1, 1)
+        let d2 = d1 ++ zero ++ one
+        Assert.AreEqual (DateOnly(2020, 1, 2), d2)
+
+        let t1 = TimeOnly (0, 0, 0)
+        let t2 = zero
+        Assert.AreEqual (t1, t2)
+    #endif
+
     [<Test>]
     let resultAndChoice () =
         let r1 = sum [Ok 1; Error "This is an error"; Ok 3]
