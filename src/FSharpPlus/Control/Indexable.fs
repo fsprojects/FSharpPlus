@@ -16,8 +16,10 @@ open FSharpPlus.Internals.MonadOps
 
 type Item =
     inherit Default1
+
+    static member inline InvokeOnInstance (k: 'K) (x: '``Indexable<'T>``) : 'T = (^``Indexable<'T>`` : (member get_Item : _ -> 'T) x, k) : 'T
     
-    static member inline Item (x: '``Indexable<'T>`` , k        , [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (member get_Item : _ -> 'T) x, k) : 'T
+    static member inline Item (x: '``Indexable<'T>`` , k        , [<Optional>]_impl: Default1) = Item.InvokeOnInstance k x : 'T
     static member inline Item (_: 'T when 'T: null and 'T: struct, _,         _impl: Default1) = ()
     
     static member        Item (x: string             , n        , [<Optional>]_impl: Item    ) = String.item n x
@@ -37,6 +39,12 @@ type Item =
 
 type TryItem =
     inherit Default1
+
+    static member inline TryItem (x: '``Indexable<'T>``, k, [<Optional>]_impl: Default3) =
+        try Some (Item.InvokeOnInstance k x) with
+        | :? ArgumentException -> None 
+        | _ -> reraise ()
+
     static member inline TryItem (x: '``Indexable<'T>``, k, [<Optional>]_impl: Default2) =
         let mutable r = Unchecked.defaultof< ^R>
         if (^``Indexable<'T>``: (member TryGetValue: _ * _ -> _) (x, k, &r)) then Some r else None
