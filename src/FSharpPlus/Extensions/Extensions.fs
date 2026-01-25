@@ -64,6 +64,12 @@ module Extensions =
         /// Creates a task Choice from a Choice where the Choice1Of2 case is a task.
         static member Sequential (t: Choice<Task<'T>, 'Error>) : Task<Choice<'T, 'Error>> = Choice.either (Task.map Choice1Of2) (Task.result << Choice2Of2) t
 
+        /// Creates a task option from an option where the Some case is a task.
+        static member Sequential (t: option<Task<'T>>) : Task<option<'T>> = match t with None -> Task.result None | Some task -> Task.map Some task
+
+        /// Creates a task voption from a voption where the ValueSome case is a task.
+        static member Sequential (t: voption<Task<'T>>) : Task<voption<'T>> = match t with ValueNone -> Task.result ValueNone | ValueSome task -> Task.map ValueSome task
+
     #endif
 
     #if !FABLE_COMPILER
@@ -75,6 +81,12 @@ module Extensions =
 
         /// Creates a task Choice from a Choice where the Choice1Of2 case is a task.
         static member Sequential (t: Choice<ValueTask<'T>, 'Error>) : ValueTask<Choice<'T, 'Error>> = Choice.either (ValueTask.map Choice1Of2) (ValueTask.result << Choice2Of2) t
+
+        /// Creates a task option from an option where the Some case is a task.
+        static member Sequential (t: option<ValueTask<'T>>) : ValueTask<option<'T>> = match t with None -> ValueTask.result None | Some task -> ValueTask.map Some task
+
+        /// Creates a task voption from a voption where the ValueSome case is a task.
+        static member Sequential (t: voption<ValueTask<'T>>) : ValueTask<voption<'T>> = match t with ValueNone -> ValueTask.result ValueNone | ValueSome task -> ValueTask.map ValueSome task
 
     #endif
 
@@ -233,6 +245,12 @@ module Extensions =
             match t with
             | Choice1Of2 a -> Async.Map Choice1Of2 a
             | Choice2Of2 e -> async.Return (Choice2Of2 e)
+
+        /// Creates an async option from an option where the Some case is async.
+        static member Sequential (t: Option<Async<'T>>) : Async<Option<'T>> = match t with None -> async.Return None | Some task -> Async.Map Some task
+
+        /// Creates an async voption from a voption where the ValueSome case is async.
+        static member Sequential (t: ValueOption<Async<'T>>) : Async<ValueOption<'T>> = match t with ValueNone -> async.Return ValueNone | ValueSome task -> Async.Map ValueSome task
 
         /// Creates an async Result from a Result where both cases are async.
         static member Bisequential (t: Result<Async<'T>, Async<'Error>>) : Async<Result<'T,'Error>> =
