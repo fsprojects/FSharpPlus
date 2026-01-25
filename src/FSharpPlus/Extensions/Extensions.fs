@@ -61,7 +61,7 @@ module Extensions =
         /// Creates a task Result from a Result where the Ok case is a task.
         static member Sequential (t: Result<Task<'T>, 'Error>) : Task<Result<'T, 'Error>> = Result.either (Task.map Ok) (Task.result << Error) t
 
-        /// Creates a task Result from a Result where the Ok case is a task.
+        /// Creates a task Choice from a Choice where the Choice1Of2 case is a task.
         static member Sequential (t: Choice<Task<'T>, 'Error>) : Task<Choice<'T, 'Error>> = Choice.either (Task.map Choice1Of2) (Task.result << Choice2Of2) t
 
     #endif
@@ -73,7 +73,7 @@ module Extensions =
         /// Creates a task Result from a Result where the Ok case is a task.
         static member Sequential (t: Result<ValueTask<'T>, 'Error>) : ValueTask<Result<'T, 'Error>> = Result.either (ValueTask.map Ok) (ValueTask.result << Error) t
 
-        /// Creates a task Result from a Result where the Ok case is a task.
+        /// Creates a task Choice from a Choice where the Choice1Of2 case is a task.
         static member Sequential (t: Choice<ValueTask<'T>, 'Error>) : ValueTask<Choice<'T, 'Error>> = Choice.either (ValueTask.map Choice1Of2) (ValueTask.result << Choice2Of2) t
 
     #endif
