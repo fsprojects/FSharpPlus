@@ -3,6 +3,8 @@ namespace FSharpPlus
 open System
 open FSharpPlus.Control
 
+#nowarn "0077" // Member constraints with the name 'set_Item' ...
+
 /// Generic functions and operators
 [<AutoOpenAttribute>]
 module Operators =
@@ -848,6 +850,17 @@ module Operators =
     /// </summary>
     /// <category index="16">Indexable</category>
     let inline tryItem (n: 'K) (source: '``Indexed<'T>``) : 'T option = TryItem.Invoke n source
+
+    /// <summary>
+    /// Mutates an item at the given key/index.
+    /// </summary>
+    /// <param name="item">The key/index where to set the value.</param>
+    /// <param name="value">The value to set.</param>
+    /// <param name="source">The input collection.</param>
+    /// <returns>unit</returns>
+    /// <remarks>This function requires that the source type has a mutable indexer.</remarks>
+    /// <category index="16">Indexable</category>
+    let inline setItem (item: 'K) (value: 'T) (source: ^``Indexed<'T>``) = (^``Indexed<'T>`` : (member set_Item : 'K -> 'T -> unit) (source, item, value))
 
     /// <summary>
     /// Maps with access to the index.
