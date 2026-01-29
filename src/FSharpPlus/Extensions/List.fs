@@ -395,6 +395,30 @@ module List =
         loop (list1, list2)
     #endif
 
+    
+    /// <summary>
+    /// Zip safely three lists. If one list is shorter, excess elements are discarded from the right end of the longer list.
+    /// </summary>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
+    /// <param name="list3">Third input list.</param>
+    /// <returns>List with corresponding triples of input lists.</returns>
+    let zip3Shortest (list1: list<'T1>) (list2: list<'T2>) (list3: list<'T3>) : list<'T1 * 'T2 * 'T3> =
+    #if FABLE_COMPILER
+        let rec loop acc = function
+            | (l1::l1s, l2::l2s, l3::l3s) -> loop ((l1, l2, l3)::acc) (l1s, l2s, l3s)
+            | (_, _, _)                   -> acc
+        loop [] (list1, list2, list3) |> List.rev
+    #else
+        let mutable coll = new ListCollector<'T1 * 'T2 * 'T3> ()
+        let rec loop = function
+            | ([], _, _) | (_, [], _)| (_, _, []) -> coll.Close ()
+            | (l1::l1s, l2::l2s, l3::l3s) ->
+                coll.Add (l1, l2, l3)
+                loop (l1s, l2s, l3s)
+        loop (list1, list2, list3)
+    #endif
+
     /// <summary>
     /// Chunks the list up into groups with the same projected key by applying
     /// the key-generating projection function to each element and yielding a list of 
