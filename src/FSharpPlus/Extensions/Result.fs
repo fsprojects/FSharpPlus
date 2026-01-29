@@ -4,7 +4,6 @@ namespace FSharpPlus
 [<RequireQualifiedAccess>]
 module Result =
     open FSharp.Core.CompilerServices
-    open System
     
     /// Applies the wrapped value to the wrapped function when both are Ok and returns a wrapped result or the first Error.
     /// <param name="f">The function wrapped in an Ok or an Error.</param>
@@ -15,44 +14,55 @@ module Result =
     /// <summary>If value is Ok, returns both of them tupled. Otherwise it returns the Error value twice in a tuple.</summary>
     /// <param name="source">The value.</param>
     /// <returns>The resulting tuple.</returns>
-    let unzip (source: Result<'T * 'U, 'Error>) : Result<'T, 'Error> * Result<'U, 'Error> = match source with Ok (x, y) -> Ok x, Ok y | Error e -> Error e, Error e
+    let unzip (source: Result<'T1 * 'T2, 'Error>) : Result<'T1, 'Error> * Result<'T2, 'Error> =
+        match source with Ok (x, y) -> Ok x, Ok y | Error e -> Error e, Error e
+
+    /// <summary>If value is Ok, returns all three of them tupled. Otherwise it returns the Error value three times in a tuple.</summary>
+    /// <param name="source">The value.</param>
+    /// <returns>The resulting tuple.</returns>
+    let unzip3 (source: Result<'T1 * 'T2 * 'T3, 'Error>) : Result<'T1, 'Error> * Result<'T2, 'Error> * Result<'T3, 'Error> =
+        match source with
+        | Ok (x, y, z) -> Ok x, Ok y, Ok z
+        | Error e -> Error e, Error e, Error e
     
     /// <summary>Creates a Result value from a pair of Result values.</summary>
-    /// <param name="x">The first Result value.</param>
-    /// <param name="y">The second Result value.</param>
-    ///
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
     /// <returns>The tupled value, or the first Error.</returns>
-    let zip (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) : Result<'T * 'U, 'Error> = match x, y with Ok a, Ok b -> Ok (a, b) | Error e, _ | _, Error e -> Error e
+    let zip (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) : Result<'T1 * 'T2, 'Error> =
+        match source1, source2 with
+        | Ok a, Ok b -> Ok (a, b) | Error e, _ | _, Error e -> Error e
 
     /// <summary>Creates a Result value from a three Result values.</summary>
-    /// <param name="x">The first Result value.</param>
-    /// <param name="y">The second Result value.</param>
-    /// <param name="z">The third Result value.</param>
-    ///
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <param name="source3">The third Result value.</param>
     /// <returns>The tupled value, or the first Error.</returns>
-    let zip3 (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>) : Result<'T * 'U * 'V, 'Error> = match x, y, z with Ok a, Ok b, Ok c -> Ok (a, b, c) | Error e, _, _ | _, Error e, _ | _, _, Error e -> Error e
+    let zip3 (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) (source3: Result<'T3, 'Error>) : Result<'T1 * 'T2 * 'T3, 'Error> =
+        match source1, source2, source3 with
+        | Ok a, Ok b, Ok c -> Ok (a, b, c)
+        | Error e, _, _ | _, Error e, _ | _, _, Error e -> Error e
 
     /// <summary>Creates a Result value from a pair of Result values, using a function to combine them.</summary>
-    /// <param name="f">The mapping function.</param>
-    /// <param name="x">The first Result value.</param>
-    /// <param name="y">The second Result value.</param>
-    ///
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
     /// <returns>The combined value, or the first Error.</returns>
-    let map2 f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> = match x, y with Ok a, Ok b -> Ok (f a b) | Error e, _ | _, Error e -> Error e
+    let map2 mapper (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) : Result<'T3, 'Error> =
+        match source1, source2 with
+        | Ok a, Ok b -> Ok (mapper a b)
+        | Error e, _ | _, Error e -> Error e
 
     /// <summary>Creates a Result value from three Result values, using a function to combine them.</summary>
     /// <param name="f">The mapping function.</param>
     /// <param name="x">The first Result value.</param>
     /// <param name="y">The second Result value.</param>
     /// <param name="z">The third Result value.</param>
-    ///
     /// <returns>The combined value, or the first Error.</returns>
-    let map3 f (x: Result<'T, 'Error>) (y: Result<'U, 'Error>) (z: Result<'V, 'Error>) : Result<'W, 'Error> =
-        match x, y, z with
-        | Ok a, Ok b, Ok c -> Ok(f a b c)
-        | Error e, _, _
-        | _, Error e, _
-        | _, _, Error e -> Error e
+    let map3 mapper (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) (source3: Result<'T3, 'Error>) : Result<'T4, 'Error> =
+        match source1, source2, source3 with
+        | Ok a, Ok b, Ok c -> Ok (mapper a b c)
+        | Error e, _, _ | _, Error e, _ | _, _, Error e -> Error e
 
     /// <summary>Maps both Ok and Error of a Result.</summary>
     /// <param name="errorMapper">Function to be applied to source, if it contains an Error value.</param>
@@ -71,13 +81,21 @@ module Result =
     let flatten source : Result<'T,'Error> = match source with Ok (Ok v) -> Ok v | Ok (Error e) | Error e -> Error e
     
     /// Like Result.bindError but with flipped arguments.
-    let inline catch x f = x |> function Ok v -> Ok v | Error e -> (f: 't->_) e : Result<'v,'e>
+    /// <summary>If the input value is an Ok leaves it unchanged, otherwise maps the Error value.</summary>
+    /// <param name="f">A function that takes the error and transforms it into another error.</param>
+    /// <param name="source">The source input value.</param>
+    /// <returns>A result of the same type as the input.</returns>
+    let inline catch (source: Result<'T, 'TError>) (f: 'TError -> Result<'T, 'UError>) : Result<'T, 'UError> =
+        match source with
+        | Ok v -> Ok v
+        | Error e -> f e
 
     /// <summary>If the input value is an Ok leaves it unchanged, otherwise maps the Error value and flattens the resulting nested Result.</summary>
     /// <param name="binder">A function that takes the error and transforms it into a result.</param>
     /// <param name="source">The source input value.</param>
     /// <returns>A result of the output type of the binder.</returns>
-    let inline bindError (binder: 'Error->Result<'T,'Error2>) (source: Result<'T,'Error>) = match source with Ok v -> Ok v | Error e -> binder e
+    let inline bindError (binder: 'TError -> Result<'T, 'UError>) (source: Result<'T, 'TError>) : Result<'T, 'UError> =
+        match source with Ok v -> Ok v | Error e -> binder e
 
     /// <summary><c>iterError f inp</c> executes <c>match inp with Ok _ -> () | Error x -> f x</c>.</summary>
     ///
@@ -97,16 +115,21 @@ module Result =
     /// <param name="fError">Function to be applied to source, if it contains an Error value.</param>
     /// <param name="source">The source value, containing an Ok or an Error.</param>
     /// <returns>The result of applying either functions.</returns>
-    let inline either (fOk: 'T->'U) (fError: 'Error->'U) source = match source with Ok v -> fOk v | Error e -> fError e
+    let inline either (fOk: 'T -> 'U) (fError: 'Error -> 'U) source = match source with Ok v -> fOk v | Error e -> fError e
 
-    /// Creates a safe version of the supplied function, which returns a Result<'U,exn> instead of throwing exceptions.
-    let protect (f: 'T->'U) x =
+    /// <summary>Creates a safe version of the supplied function, which wraps the exception into a Result instead of throwing it.</summary>
+    /// <param name="unsafeFunction">The function that may throw exceptions.</param>
+    /// <param name="source">The input value for the function.</param>
+    /// <returns>An Ok of the function result, or an Error of the caught exception.</returns>
+    let protect (unsafeFunction: 'T -> 'U) source : Result<'U, exn> =
         try
-            Ok (f x)
+            Ok (unsafeFunction source)
         with e -> Error e
 
-    /// Gets the 'Ok' value. If it's an 'Error' this function will throw an exception.
-    let get (source: Result<'T,'Error>) =
+    /// <summary>Gets the 'Ok' value. If it's an 'Error' this function will throw an exception.</summary>
+    /// <param name="source">The input result.</param>
+    /// <returns>The 'Ok' value.</returns>
+    let get (source: Result<'T, 'Error>) =
         match source with
         | Ok x -> x
         | Error e ->
@@ -124,7 +147,7 @@ module Result =
     /// Note: this function has since been added to FSharp.Core.
     /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
-    let defaultValue (value:'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | _ -> value
+    let defaultValue (value:'T) (result: Result<'T, 'Error>) : 'T = match result with Ok v -> v | _ -> value
 
     /// <summary>Gets the value of the result if the result is <c>Ok</c>, otherwise evaluates <paramref name="defThunk"/> and returns the result.</summary>
     ///
@@ -134,14 +157,18 @@ module Result =
     /// Note: this function has since been added to FSharp.Core.
     /// It will be removed in next major release of FSharpPlus.
     /// </remarks>
-    let defaultWith (defThunk: 'Error->'T) (result: Result<'T,'Error>) : 'T = match result with Ok v -> v | Error e -> defThunk e
+    let defaultWith (defThunk: 'Error -> 'T) (result: Result<'T, 'Error>) : 'T = match result with Ok v -> v | Error e -> defThunk e
 
-    /// Converts a Result<'T,'Error> to a Choice<'T,'Error>.
-    let toChoice (source: Result<'T,'U>) = match source with Ok x-> Choice1Of2 x | Error x -> Choice2Of2 x
+    /// Converts a Result to a Choice.
+    /// <param name="source">The input Result value.</param>
+    /// <returns>A Choice value representing the same data.</returns>
+    let toChoice (source: Result<'T, 'Error>) : Choice<'T, 'Error> = match source with Ok x -> Choice1Of2 x | Error x -> Choice2Of2 x
 
-    /// Creates a Result<'T,'Error> from a Choice<'T,'Error>.
-    let ofChoice (source: Choice<'T,'U>) = match source with Choice1Of2 x-> Ok x | Choice2Of2 x -> Error x
-    
+    /// Converts a Choice to a Result.
+    /// <param name="source">The input Choice value.</param>
+    /// <returns>A Result value representing the same data.</returns>
+    let ofChoice (source: Choice<'T, 'Error>) : Result<'T, 'Error> = match source with Choice1Of2 x -> Ok x | Choice2Of2 x -> Error x
+
     /// <summary>
     /// Creates two lists by classifying the values depending on whether they were wrapped with Ok or Error.
     /// </summary>
@@ -164,15 +191,28 @@ module Result =
         coll1.Close (), coll2.Close ()
     #endif
 
-    let apply2With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) : Result<'V,'Error> =
-        match x, y with
-        | Ok a, Ok b -> Ok (f a b)
+    /// <summary>Creates a Result value from a pair of Result values, using a function to combine errors if both are Error.</summary>
+    /// <param name="combiner">Function to combine error values.</param>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <returns>The combined value, or the combined Error.</returns>
+    let apply2With combiner (mapper: 'T1 -> 'T2 -> 'U) (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) : Result<'U, 'Error> =
+        match source1, source2 with
+        | Ok a, Ok b -> Ok (mapper a b)
         | Error e, Ok _ | Ok _, Error e -> Error e
         | Error e1, Error e2 -> Error (combiner e1 e2)
 
-    let apply3With combiner f (x: Result<'T,'Error>) (y: Result<'U,'Error>) (z: Result<'V,'Error>) : Result<'W,'Error> =
-        match x, y, z with
-        | Ok a, Ok b, Ok c -> Ok (f a b c)
+    /// <summary>Creates a Result value from three Result values, using a function to combine errors if more than one are Error.</summary>
+    /// <param name="combiner">Function to combine error values.</param>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <param name="source3">The third Result value.</param>
+    /// <returns>The combined value, or the combined Error.</returns>
+    let apply3With combiner (mapper: 'T1 -> 'T2 -> 'T3 -> 'U) (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) (source3: Result<'T3, 'Error>) : Result<'U, 'Error> =
+        match source1, source2, source3 with
+        | Ok a, Ok b, Ok c -> Ok (mapper a b c)
         | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
         | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
         | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)
