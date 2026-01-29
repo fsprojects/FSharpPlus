@@ -177,6 +177,56 @@ module Result =
         | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
         | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)
 
+    /// <summary>Creates a Result value from a pair of Result values, using a function to combine errors if both are Error.</summary>
+    /// <param name="combiner">Function to combine error values.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <returns>The tupled value, or the combined Error.</returns>
+    let zipWith combiner (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) : Result<'T1 * 'T2, 'Error> =
+        match source1, source2 with
+        | Ok a, Ok b -> Ok (a, b)
+        | Error e, Ok _ | Ok _, Error e -> Error e
+        | Error e1, Error e2 -> Error (combiner e1 e2)
+
+    /// <summary>Creates a Result value from three Result values, using a function to combine errors if more than one are Error.</summary>
+    /// <param name="combiner">Function to combine error values.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <param name="source3">The third Result value.</param>
+    /// <returns>The tupled value, or the combined Error.</returns>
+    let zip3With combiner (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) (source3: Result<'T3, 'Error>) : Result<'T1 * 'T2 * 'T3, 'Error> =
+        match source1, source2, source3 with
+        | Ok a, Ok b, Ok c -> Ok (a, b, c)
+        | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
+        | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
+        | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)
+
+    /// <summary>Creates a Result value from a pair of Result values, using a function to combine errors if both are Error.</summary>
+    /// <param name="combiner">Function to combine error values.</param>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <returns>The combined value, or the combined Error.</returns>
+    let map2With combiner mapper (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) : Result<'U, 'Error> =
+        match source1, source2 with
+        | Ok a, Ok b -> Ok (mapper a b)
+        | Error e, Ok _ | Ok _, Error e -> Error e
+        | Error e1, Error e2 -> Error (combiner e1 e2)
+
+    /// <summary>Creates a Result value from three Result values, using a function to combine errors if more than one are Error.</summary>
+    /// <param name="combiner">Function to combine error values.</param>
+    /// <param name="mapper">The mapping function.</param>
+    /// <param name="source1">The first Result value.</param>
+    /// <param name="source2">The second Result value.</param>
+    /// <param name="source3">The third Result value.</param>
+    /// <returns>The combined value, or the combined Error.</returns>
+    let map3With combiner mapper (source1: Result<'T1, 'Error>) (source2: Result<'T2, 'Error>) (source3: Result<'T3, 'Error>) : Result<'U, 'Error> =
+        match source1, source2, source3 with
+        | Ok a, Ok b, Ok c -> Ok (mapper a b c)
+        | Error e, Ok _, Ok _ | Ok _, Error e, Ok _ | Ok _, Ok _, Error e -> Error e
+        | Ok _, Error e1, Error e2 | Error e1, Ok _, Error e2 | Error e1, Error e2, Ok _ -> Error (combiner e1 e2)
+        | Error e1, Error e2, Error e3 -> Error (combiner (combiner e1 e2) e3)
+
     /// <summary>Ignores the value inside the result, if any.</summary>
     /// <param name="source">The result value.</param>
     /// <returns><c>Ok ()</c> if the result is <c>Ok</c>, <c>Error e</c> otherwise.</returns>
