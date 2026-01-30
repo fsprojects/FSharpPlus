@@ -147,6 +147,16 @@ module NonEmptyList =
     /// <returns>List with corresponding pairs of input lists.</returns>
     let zipShortest (list1: NonEmptyList<'T>) (list2: NonEmptyList<'U>) =
         { Head = (list1.Head, list2.Head); Tail = List.zipShortest list1.Tail list2.Tail }
+
+    /// <summary>
+    /// Zip safely three lists. If one list is shorter, excess elements are discarded from the right end of the longer list. 
+    /// </summary>
+    /// <param name="list1">First input list.</param>
+    /// <param name="list2">Second input list.</param>
+    /// <param name="list3">Third input list.</param>
+    /// <returns>List with corresponding triplets of input lists.</returns>
+    let zip3Shortest (list1: NonEmptyList<'T1>) (list2: NonEmptyList<'T2>) (list3: NonEmptyList<'T3>) =
+        { Head = (list1.Head, list2.Head, list3.Head); Tail = List.zip3Shortest list1.Tail list2.Tail list3.Tail }
     
     /// <summary>Adds an element to the beginning of the given list</summary>
     /// <param name="value">The element to add</param>
@@ -1013,6 +1023,9 @@ type NonEmptyList<'t> with
 
     [<EditorBrowsable(EditorBrowsableState.Never)>]
     static member Zip (x, y) = NonEmptyList.zipShortest x y
+
+    [<EditorBrowsable(EditorBrowsableState.Never)>]
+    static member Zip3 (x, y, z) = NonEmptyList.zip3Shortest x y z
     
     static member (>>=) ({Head = x; Tail = xs}, f: _->NonEmptyList<'b>) =
         let {Head = y; Tail = ys} = f x
