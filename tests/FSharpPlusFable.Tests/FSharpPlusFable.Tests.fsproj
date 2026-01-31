@@ -45,6 +45,5 @@
 		<ProjectReference Include="..\..\src\FSharpPlus\FSharpPlus.fsproj">
 			<Private>True</Private>
 		</ProjectReference>
-		<PackageReference Update="FSharp.Core" Version="6.0.6" />
 	</ItemGroup>
 </Project>
