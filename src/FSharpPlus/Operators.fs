@@ -187,6 +187,15 @@ module Operators =
     /// <category index="1">Functor</category>
     let inline zip (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) : '``ZipFunctor<'T1 * 'T2>`` = Zip.Invoke source1 source2
 
+    /// <summary>
+    /// Zips (tuple) three functors.
+    /// </summary>
+    /// <remarks>
+    /// For collections, if one collection is shorter, excess elements are discarded from the right end of the longer collection.
+    /// </remarks>
+    /// <category index="1">Functor</category>
+    let inline zip3 (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) (source3: '``ZipFunctor<'T3>``) : '``ZipFunctor<'T1 * 'T2 * 'T3>`` = Zip3.Invoke source1 source2 source3
+
     // Applicative ------------------------------------------------------------
     
     /// <summary>
