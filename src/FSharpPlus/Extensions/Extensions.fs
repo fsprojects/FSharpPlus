@@ -291,7 +291,18 @@ module Extensions =
             then None
             else accumulator.Close () |> Array.toSeq |> Some
         #endif
-            
+
+        static member Sequential (t: Result<option<'t>, 'Error>) : option<Result<'t, 'Error>> =
+            match t with
+            | Ok (Some v) -> Some (Ok v)
+            | Ok None     -> None
+            | Error e     -> Some (Error e)
+
+        static member Sequential (t: Choice<option<'t>, 'Choice2Of2>) : option<Choice<'t, 'Choice2Of2>> =
+            match t with
+            | Choice1Of2 (Some v) -> Some (Choice1Of2 v)
+            | Choice1Of2 None     -> None
+            | Choice2Of2 e        -> Some (Choice2Of2 e)
 
     type ValueOption<'t> with
 
@@ -320,6 +331,17 @@ module Extensions =
             else accumulator.Close () |> Array.toSeq |> ValueSome
         #endif
 
+        static member Sequential (t: Result<voption<'t>, 'Error>) : voption<Result<'t, 'Error>> =
+            match t with
+            | Ok (ValueSome v) -> ValueSome (Ok v)
+            | Ok ValueNone     -> ValueNone
+            | Error e          -> ValueSome (Error e)
+
+        static member Sequential (t: Choice<voption<'t>, 'Choice2Of2>) : voption<Choice<'t, 'Choice2Of2>> =
+            match t with
+            | Choice1Of2 (ValueSome v) -> ValueSome (Choice1Of2 v)
+            | Choice1Of2 ValueNone     -> ValueNone
+            | Choice2Of2 e             -> ValueSome (Choice2Of2 e)
 
     type Choice<'T1, 'T2> with
 
