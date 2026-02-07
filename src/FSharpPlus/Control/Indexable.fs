@@ -16,7 +16,8 @@ open FSharpPlus.Internals.MonadOps
 
 type Item =
     inherit Default1
-    
+
+    static member inline Item (x: '``Indexable<'T>`` , k        , [<Optional>]_impl: Default2) = (^``Indexable<'T>`` : (member GetValue : _ -> 'T) x, k) : 'T    
     static member inline Item (x: '``Indexable<'T>`` , k        , [<Optional>]_impl: Default1) = (^``Indexable<'T>`` : (member get_Item : _ -> 'T) x, k) : 'T
     static member inline Item (_: 'T when 'T: null and 'T: struct, _,         _impl: Default1) = ()
     
