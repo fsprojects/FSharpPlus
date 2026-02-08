@@ -175,6 +175,18 @@ module Operators =
     let inline iter (action: 'T->unit) (source: '``Functor<'T>``) : unit = Iterate.Invoke action source
 
     /// <summary>
+    /// Replaces a functor value with the supplied one, ignoring the original value.
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (|!>) (source: '``Functor<'T>``) (value: 'U) : '``Functor<'U>`` = Map.Invoke (fun _ -> value) source
+    
+    /// <summary>
+    /// Replaces a functor value with the supplied one, ignoring the original value.
+    /// </summary>
+    /// <category index="1">Functor</category>
+    let inline (<!|) (value: 'U) (source: '``Functor<'T>``) : '``Functor<'U>`` = Map.Invoke (fun _ -> value) source
+    
+    /// <summary>
     /// Un-zips (un-tuple) two functors.
     /// </summary>
     /// <category index="1">Functor</category>
