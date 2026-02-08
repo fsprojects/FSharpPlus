@@ -222,8 +222,6 @@ type Zip =
     static member Zip ((x: Async<'T>                  , y: Async<'U>                 , _output: Async<'T*'U>                 ), _mthd: Zip) = Async.zip               x y
     #if !FABLE_COMPILER
     static member Zip ((x: Task<'T>                   , y: Task<'U>                  , _output: Task<'T*'U>                  ), _mthd: Zip) = Task.zip                x y
-    #endif
-    #if !FABLE_COMPILER
     static member Zip ((x: ValueTask<'T>              , y: ValueTask<'U>             , _output: ValueTask<'T*'U>             ), _mthd: Zip) = ValueTask.zip           x y
     #endif
 
@@ -238,6 +236,43 @@ type Zip =
 type Zip with    
     static member inline Zip ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
     static member inline Zip ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , _output: '``ZipFunctor<'T1 * 'T2>``      ), _mthd: Default1) = Zip.InvokeOnInstance x y : '``ZipFunctor<'T1 * 'T2>``
+
+
+type Zip3 =
+    inherit Default1
+    static member        Zip3 ((x: IEnumerator<'T1>           , y: IEnumerator<'T2>           , z: IEnumerator<'T3>           , _output: IEnumerator<'T1 * 'T2 * 'T3>         ), _mthd: Zip3) = Enumerator.zip3 x y z
+    static member        Zip3 ((x: seq<'T>                    , y: seq<'U>                    , z: seq<'V>                    , _output: seq<'T*'U*'V>                        ), _mthd: Zip3) = Seq.zip3                 x y z
+    static member        Zip3 ((x: IDictionary<'K, 'T>        , y: IDictionary<'K, 'U>        , z: IDictionary<'K, 'V>        , _output: IDictionary<'K, 'T * 'U * 'V>        ), _mthd: Zip3) = Dict.zip3 x y z
+    static member        Zip3 ((x: IReadOnlyDictionary<'K, 'T>, y: IReadOnlyDictionary<'K, 'U>, z: IReadOnlyDictionary<'K, 'V>, _output: IReadOnlyDictionary<'K, 'T * 'U * 'V>), _mthd: Zip3) = IReadOnlyDictionary.zip3 x y z
+    static member        Zip3 ((x: Dictionary<'K, 'T>         , y: Dictionary<'K, 'U>         , z: Dictionary<'K, 'V>         , _output: Dictionary<'K, 'T * 'U * 'V>         ), _mthd: Zip3) = Dictionary.zip3 x y z
+    static member        Zip3 ((x: Map<'K, 'T>                , y: Map<'K, 'U>                , z: Map<'K, 'V>                , _output: Map<'K, 'T * 'U * 'V>                ), _mthd: Zip3) = Map.zip3        x y z
+    static member        Zip3 ((f: 'R -> 'T1                  , g: 'R -> 'T2                  , h: 'R -> 'T3                  , _output: 'R -> 'T1 * 'T2 * 'T3                ), _mthd: Zip3) = fun r -> (f r, g r, h r)
+    static member        Zip3 ((f: Func<'R, 'T1>              , g: Func<'R, 'T2>              , h: Func<'R, 'T3>              , _output: Func<'R, 'T1 * 'T2 * 'T3>            ), _mthd: Zip3) = Func<_,_> (fun r -> (f.Invoke r, g.Invoke r, h.Invoke r))
+    static member        Zip3 ((x: list<'T1>                  , y: list<'T2>                  , z: list<'T3>                  , _output: list<'T1 * 'T2 * 'T3>                ), _mthd: Zip3) = List.zip3Shortest       x y z
+    static member        Zip3 ((x: 'T1 []                     , y: 'T2 []                     , z: 'T3 []                     , _output: ('T1 * 'T2 * 'T3) []                 ), _mthd: Zip3) = Array.zip3Shortest      x y z
+    static member        Zip3 ((x: ResizeArray<'T1>           , y: ResizeArray<'T2>           , z: ResizeArray<'T3>           , _output: ResizeArray<'T1 * 'T2 * 'T3>         ), _mthd: Zip3) = ResizeArray.zip3Shortest x y z
+    static member        Zip3 ((x: option<'T1>                , y: option<'T2>                , z: option<'T3>                , _output: option<'T1 * 'T2 * 'T3>              ), _mthd: Zip3) = Option.zip3             x y z
+    static member        Zip3 ((x: voption<'T1>               , y: voption<'T2>               , z: voption<'T3>               , _output: voption<'T1 * 'T2 * 'T3>             ), _mthd: Zip3) = ValueOption.zip3        x y z
+    static member inline Zip3 ((x: Result<'T, 'Error>         , y: Result<'U, 'Error>         , z: Result<'V, 'Error>         , _output: Result<'T * 'U * 'V, 'Error>         ), _mthd: Zip3) = Result.apply3With Plus.Invoke (fun a b c -> a, b, c) x y z
+    static member inline Zip3 ((x: Choice<'T, 'Error>         , y: Choice<'U, 'Error>         , z: Choice<'V, 'Error>         , _output: Choice<'T * 'U * 'V, 'Error>         ), _mthd: Zip3) = Choice.apply3With Plus.Invoke (fun a b c -> a, b, c) x y z
+    static member        Zip3 ((x: Async<'T1>                 , y: Async<'T2>                 , z: Async<'T3>                 , _output: Async<'T1 * 'T2 * 'T3>               ), _mthd: Zip3) = Async.zip3              x y z
+    #if !FABLE_COMPILER
+    static member        Zip3 ((x: Task<'T1>                  , y: Task<'T2>                  , z: Task<'T3>                  , _output: Task<'T1 * 'T2 * 'T3>                ), _mthd: Zip3) = Task.zip3               x y z
+    static member        Zip3 ((x: ValueTask<'T1>             , y: ValueTask<'T2>             , z: ValueTask<'T3>             , _output: ValueTask<'T1 * 'T2 * 'T3>           ), _mthd: Zip3) = ValueTask.zip3          x y z
+    #endif
+
+    static member inline Invoke (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) (source3: '``ZipFunctor<'T3>``) =
+        let inline call_5 (a: ^a, b: ^b, c: ^c, d: ^d, e: ^e) = ((^a or ^b or ^c or ^d or ^e) : (static member Zip3 : (_*_*_*_)*_ -> _) (b, c, d, e), a)
+        let inline call (a: 'a, b: 'b, c: 'c, d: 'd) = call_5 (a, b, c, d, Unchecked.defaultof<'r>) : 'r
+        call (Unchecked.defaultof<Zip3>, source1, source2, source3) : '``ZipFunctor<'T1 * 'T2 * 'T3>``
+
+    static member inline InvokeOnInstance (source1: '``ZipFunctor<'T1>``) (source2: '``ZipFunctor<'T2>``) (source3: '``ZipFunctor<'T3>``) : '``ZipFunctor<'T1 * 'T2 * 'T3>`` =
+        ((^``ZipFunctor<'T1>`` or ^``ZipFunctor<'T2>`` or ^``ZipFunctor<'T3>`` or ^``ZipFunctor<'T1 * 'T2 * 'T3>``) : (static member Zip3 : _*_*_ -> _) source1, source2, source3)
+
+type Zip3 with
+    static member inline Zip3 ((_: ^t when ^t : null and ^t: struct, _: ^u when ^u : null and ^u: struct, _: ^v when ^v : null and ^v: struct, _output: ^r when ^r : null and ^r: struct), _mthd: Default1) = id
+    static member inline Zip3 ((x: '``ZipFunctor<'T1>``            , y: '``ZipFunctor<'T2>``            , z: '``ZipFunctor<'T3>``            , _output: '``ZipFunctor<'T1 * 'T2 * 'T3>``), _mthd: Default1) = Zip3.InvokeOnInstance x y z : '``ZipFunctor<'T1 * 'T2 * 'T3>``
+
 
 #endif
 #if !FABLE_COMPILER
