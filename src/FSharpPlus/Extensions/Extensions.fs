@@ -163,13 +163,13 @@ module Extensions =
         /// at the point where the overall async is started.
         /// </remarks>
         static member Await (task: Task<'T>) : Async<'T> =
-            Async.FromContinuations (fun (sc, ec, cc) ->
+            Async.FromContinuations (fun (sc, ec, _) ->
                 task.ContinueWith (fun (task: Task<'T>) ->
                     if task.IsFaulted then
                         let e = Unchecked.nonNull task.Exception
                         if e.InnerExceptions.Count = 1 then ec e.InnerExceptions[0]
                         else ec e
-                    elif task.IsCanceled then cc (TaskCanceledException ())
+                    elif task.IsCanceled then ec (TaskCanceledException ())
                     else sc task.Result)
                 |> ignore)
         
@@ -190,13 +190,13 @@ module Extensions =
         /// at the point where the overall async is started.
         /// </remarks>
         static member Await (task: Task) : Async<unit> =
-            Async.FromContinuations (fun (sc, ec, cc) ->
+            Async.FromContinuations (fun (sc, ec, _) ->
                 task.ContinueWith (fun (task: Task) ->
                     if task.IsFaulted then
                         let e = Unchecked.nonNull task.Exception
                         if e.InnerExceptions.Count = 1 then ec e.InnerExceptions[0]
                         else ec e
-                    elif task.IsCanceled then cc (TaskCanceledException ())
+                    elif task.IsCanceled then ec (TaskCanceledException ())
                     else sc ())
                 |> ignore)
         

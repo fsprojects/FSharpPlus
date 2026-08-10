@@ -273,6 +273,30 @@ module Task =
             Assert.AreEqual (e0, e1, "Original exception is not the same as that extracted from the Async")
             Assert.AreEqual (e1, e2, "The exception extracted from the Async is not the same as that extracted from the roundtripped Task")
 
+        [<Test>]
+        let awaitOfCancelledTaskRaisesTaskCanceledException () =
+            // A cancelled Task is surfaced through the exception continuation as a TaskCanceledException, so it can be
+            // caught with an ordinary try/with around the Await, matching C# await (fslang-suggestions #840).
+            let ct = CancellationToken true
+
+            let caughtGeneric =
+                async {
+                    try
+                        let! _ = Async.Await (Task.FromCanceled<int> ct)
+                        return false
+                    with :? TaskCanceledException -> return true }
+                |> Async.RunSynchronously
+            Assert.IsTrue (caughtGeneric, "Await of a cancelled Task<'T> should raise a TaskCanceledException catchable by try/with")
+
+            let caughtNonGeneric =
+                async {
+                    try
+                        do! Async.Await (Task.FromCanceled ct)
+                        return false
+                    with :? TaskCanceledException -> return true }
+                |> Async.RunSynchronously
+            Assert.IsTrue (caughtNonGeneric, "Await of a cancelled Task should raise a TaskCanceledException catchable by try/with")
+
     
     // This module contains tests for ComputationExpression not covered by the below TaskBuilderTests module
     module ComputationExpressionTests =

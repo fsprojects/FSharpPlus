@@ -41,8 +41,9 @@ module Async =
             let t2 = createAsync true 0 2
             let t3 = createAsync true 0 3
 
-            let c = new CancellationToken true
-            let t4 = Task.FromCanceled<int> c |> Async.Await
+            // A genuinely cancelled async: Async.Await no longer surfaces a cancelled Task as a
+            // cancellation, it raises TaskCanceledException (fslang-suggestions #840).
+            let t4 : Async<int> = Async.FromContinuations (fun (_, _, cc) -> cc (OperationCanceledException ()))
 
             let t5 = createAsync false 0 5
             let t6 = createAsync false 0 6
@@ -71,8 +72,9 @@ module Async =
             let t2 = createAsync true 10 2
             let t3 = createAsync true 30 3
 
-            let c = new CancellationToken true
-            let t4 = Task.FromCanceled<int> c |> Async.Await
+            // A genuinely cancelled async: Async.Await no longer surfaces a cancelled Task as a
+            // cancellation, it raises TaskCanceledException (fslang-suggestions #840).
+            let t4 : Async<int> = Async.FromContinuations (fun (_, _, cc) -> cc (OperationCanceledException ()))
 
             let t5 = createAsync false 20 5
             let t6 = createAsync false 10 6
