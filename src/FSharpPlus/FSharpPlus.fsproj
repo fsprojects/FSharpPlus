@@ -21,7 +21,7 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Configurations>Debug;Release;Fable;Test</Configurations>
     <Platforms>AnyCPU</Platforms>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>preview</LangVersion>
     <LangVersion Condition=" '$(Configuration)' == 'Fable' ">6.0</LangVersion>
 
     <DefineConstants Condition=" '$(Configuration)' == 'Test'">$(DefineConstants);TEST_TRACE</DefineConstants>
